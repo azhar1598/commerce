@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_DEFAULT_REGION: 'ap-south-1'
+    SITE_NAME: 'apparel-template'
+
+phases:
+  install:
+    commands:
+      - echo Installing app dependencies
+      - yarn
+  pre_build:
+    commands:
+      - echo Fetch env file
+      - aws s3 cp s3://goplinto.config.files/$SITE_NAME/.env.$STAGE .env
+  build:
+    commands:
+      - echo Building static site...
+      - yarn run build
+
+artifacts:
+  # type: zip
+  files:
+    - '**/*'
+  base-directory: build
+  discard-paths: no
+
+cache:
+  paths:
+    - './node_modules/**/*'
