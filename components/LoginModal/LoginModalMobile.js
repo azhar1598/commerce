@@ -282,6 +282,10 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
             else if (inputSignUp.password.length < 8) {
                 messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
             }
+            else if(/\s/g.test(inputSignUp.password)){
+                
+                messageAnt.error('No Blank Spaces Allowed')
+        }
 
             else {
 
@@ -418,6 +422,10 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
         else if (inputSignUp.password.length < 8) {
             messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
         }
+        else if(/\s/g.test(inputSignUp.password)){
+                
+            messageAnt.error('No Blank Spaces Allowed')
+    }
         else {
 
             const response = await resetPasswordAPI(inputSignUp, customerId)

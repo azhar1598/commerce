@@ -236,8 +236,8 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
     const handleChange = (e) => {
 
-        
         setInputSignUp({ ...inputSignUp, [e.target.name]: e.target.value })
+      
     }
 
     const handleChangeOtp = (data) => {
@@ -276,6 +276,11 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             else if (inputSignUp.password.length < 8) {
                 messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
             }
+            else if(/\s/g.test(inputSignUp.password)){
+                
+                messageAnt.error('No Blank Spaces Allowed')
+        }
+      
 
             else {
 
@@ -413,6 +418,10 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (inputSignUp.password.length < 8) {
             messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
         }
+        else if(/\s/g.test(inputSignUp.password)){
+                
+            messageAnt.error('No Blank Spaces Allowed')
+    }
         else {
 
             const response = await resetPasswordAPI(inputSignUp, customerId)

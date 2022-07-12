@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { AiFillHeart } from 'react-icons/ai'
 import { addToWishlist, deleteFromWishlist } from '../services/apiServices';
 import { message } from 'antd';
-import { getWishlistItems } from '../actions';
+import { getSearchItemsAction, getWishlistItems, searchItems } from '../actions';
 import LoginModal from './LoginModal/LoginModal';
 import { SyncOutlined } from '@ant-design/icons';
 
@@ -148,7 +148,9 @@ export const Product = (props) => {
 
     return (
         <div className={`flex flex-col w-1/2 justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer`} >
-            <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[255px] md:min-h-[255px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img`} onClick={() => { router.push(`/product/${props.itemId}`) }} />
+            <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[255px] md:min-h-[255px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img`} 
+            onClick={() => { router.push(`/product/${props.itemId}`)
+            props.dispatchSearchItems('') }} />
 
             {/* Wishlist feature for web */}
             <div className='hidden wishlist-btn  mt-[278px]  absolute bg-white pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
@@ -221,6 +223,7 @@ const mapStateToProps = (state) => ({})
 
 const mapDispatchToProps = dispatch => {
     return {
+        dispatchSearchItems: (query) => dispatch(searchItems(query)),
         // getWishlistItems: (payload) => dispatch(getWishlistItems(payload))
     }
 }

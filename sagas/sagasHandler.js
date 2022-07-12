@@ -102,6 +102,7 @@ export function* handleFetchBackendCart({ payload }) {
 }
 
 export function* handleFetchPurchaseDetails({ payload, setLoading }) {
+    console.log('purch',payload)
     try {
         if (payload) {
             const response = yield getPurchaseDetails(payload)
@@ -438,6 +439,31 @@ export function* handleCoupon(payload) {
 
             const { data } = response;
             console.log('data.messsage', data.message, payload)
+
+            if (data.message == 'Invalid Coupon Code') {
+                payload.payload.message.error(data.message)
+                payload.payload.setMsg(data.message)
+                payload.payload.setLoading(false)
+            
+              }
+              else{
+               
+                    payload.payload.message.success('Coupon Applied Successfully')
+                    payload.payload.setMsg(data.message)
+                    payload.payload.setLoading(false)
+                    payload.payload.setValidCoupon(true)
+                    if (data) {
+               
+                        const response1 = yield getPurchaseDetails(payload.payload.purchaseId)
+                        yield put(purchaseDetails(response1))
+                  
+        
+        
+                    }
+                
+                  
+              }
+          
             // if (data.message == 'Invalid Coupon Code') {
             //     payload.message.error(data.message)
             //   }
@@ -446,17 +472,16 @@ export function* handleCoupon(payload) {
             //     payload.message.success('Coupon Applied Successfully')
             //     payload.setValidCoupon(true)
             //   }
-            if (data) {
-                payload.payload.setMsg(data.message)
-
-
-            }
+          
         } else {
             console.log('coupon remove payload', payload)
             const response = yield removeCoupon(payload.orderId)
 
             const { data } = response;
             console.log('data.messsage', data.message, payload)
+            const response1 = yield getPurchaseDetails(payload.purchaseId)
+            yield put(purchaseDetails(response1))
+
             // if (data.message == 'Invalid Coupon Code') {
             //     payload.message.error(data.message)
             //   }

@@ -16,14 +16,16 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
 
   useEffect(() => {
     if (msg == 'Invalid Coupon Code') {
-      message.error(msg)
-      setLoading(false)
+      // message.error(msg)
+      // console.log('invalidddd cp')
+      // setLoading(false)
     }
-    else if (msg == undefined || msg) {
+    
+   else if (msg == undefined || msg) {
 
-      message.success('Coupon Applied Successfully')
-      setValidCoupon(true)
-      setLoading(false)
+      // message.success('Coupon Applied Successfully')
+      // setValidCoupon(true)
+      // setLoading(false)
     }
   }, [msg])
 
@@ -39,7 +41,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
     console.log('coupon', coupon)
     const orderId = Object?.keys(statePurchaseDetails?.data?.orders)[0]
     setLoading(true)
-    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon }
+    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon,purchaseId:statePurchaseDetails.data.purchaseId ,setLoading}
 
     dispatchCouponCode({ payload })
 
@@ -51,7 +53,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
     setValidCoupon(false)
     const orderId = Object?.keys(statePurchaseDetails?.data?.orders)[0]
     console.log('hellow')
-    dispatchRemoveCoupon(orderId)
+    dispatchRemoveCoupon(orderId,statePurchaseDetails.data.purchaseId)
     setMsg('')
   }
 
@@ -63,7 +65,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
         <div className='flex items-center'>
           {!billingDetails?.totalCouponSavingsAmount !=0 ?
             <>
-              <input type="text" placeholder="Enter your Coupon" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-slate-400' />
+              <input type="text" placeholder="Enter your Coupon" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-slate-400' disabled={!loading ?false:true} />
               {!loading ? <button className='p-2 px-5 ml-3' style={{
                 backgroundColor: stateStoreSettings ? stateStoreSettings.secondary_color : 'black', color: stateStoreSettings ? stateStoreSettings.navbar_color : 'white'
               }} onClick={applyCoupon}>Apply</button> : <SyncOutlined className='p-2 px-5 ml-3' style={{ fontSize: 22 }} spin />}
@@ -125,7 +127,7 @@ const mapDispatchToProps = (dispatch) => {
 
   return {
     dispatchCouponCode: (payload) => dispatch(couponApplyAction(payload)),
-    dispatchRemoveCoupon: (payload) => dispatch(removeCouponAction(payload)),
+    dispatchRemoveCoupon: (payload,purchaseId) => dispatch(removeCouponAction(payload,purchaseId)),
     fetchPurchaseDetails: (purchaseid) => dispatch(fetchPurchaseDetails(purchaseid)),
 
   }

@@ -420,6 +420,12 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                         <img src={item.primary_img ? item.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' />
                                         <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
                                             <p className='text-lg font-montSemiBold'>{item.item_name}</p>
+
+                                            {item.defaultVariantItem ? <p className='text-sm font-montMedium -mt-5'>
+                                                <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
+                                                <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                                <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
+
                                             {/* <p className='text-[#212B3680]'>{item.item_desc}</p> */}
                                             <p className='text-lg  flex items-start  font-montSemiBold'>{storeDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
                                                 <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${storeDetails?.currency_symbol} ${item.price}` : ''}</span>

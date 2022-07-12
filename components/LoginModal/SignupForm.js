@@ -55,13 +55,13 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
 
                 <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '10px',}} className='lg:w-96 w-80'>
                     {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                    <Input.Password placeholder="Enter Password" name="password" onChange={handleChange} pattern="[^\s]{8}" required autoComplete="off" bordered={false} />
+                    <Input.Password placeholder="Enter Password" name="password" onChange={handleChange}  minLength={8} maxLength={16}   required autoComplete="off" bordered={false} />
                 </div>
 
 
                 <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '10px', }} className='lg:w-96 w-80'>
                     {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                    <Input.Password placeholder="Enter Confirm Password" name="confirm_password" pattern="[^\s]{8}" onChange={handleChange} required autoComplete="off" bordered={false} />
+                    <Input.Password placeholder="Enter Confirm Password" name="confirm_password" onChange={handleChange} required autoComplete="off" bordered={false} />
                 </div>
 
                 <button className="mt-4 border login-button lg:w-96 w-80" style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color  : 'black'}`, padding: '8px', borderRadius: '5px' }} >

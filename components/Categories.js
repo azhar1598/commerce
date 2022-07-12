@@ -2,11 +2,11 @@ import { AppstoreFilled, ArrowLeftOutlined, CloseOutlined } from '@ant-design/ic
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { getCategoriesAction } from '../actions'
+import { getCategoriesAction, getSearchItemsAction, searchItems } from '../actions'
 import { getCategories } from '../services/apiServices'
 import Category from './Category'
 
-export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem}) => {
+export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem,dispatchSearchItems}) => {
 
     const [categories, setCategories] = useState([])
     const [showModal, setShowModal] = useState(false)
@@ -26,6 +26,7 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
     const handleCategory = async (id, name,subCategories) => {
 
         // document.getElementById(id).style.color = "red"
+        dispatchSearchItems('')
 
         console.log('subCategpries',subCategories,name)
 
@@ -115,7 +116,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        dispatchCategories: (payload) => dispatch(getCategoriesAction(payload))
+        dispatchCategories: (payload) => dispatch(getCategoriesAction(payload)),
+        dispatchSearchItems: (query) => dispatch(searchItems(query)),
     }
 }
 

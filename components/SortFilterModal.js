@@ -137,11 +137,11 @@ console.log('sortOrder',sortOrder,filterAndSortPayload)
       {
         isTabletOrMobile ? <div className="flex font-bold cursor-pointer" onClick={openMobileSort}>
           <BsFilterLeft size={20} className='' />
-          <p className="flex items-center "> Filter / Sort By</p>
+          <p className="flex items-center "> Filter / Sort By {sortOrder!='false'?<img src="/images/dot.png" height={5} width={5} />:''}</p>
         </div>
           : <div className="flex font-bold cursor-pointer" onClick={() => setFilterModalVisible(true)}>
             <BsFilterLeft size={20} className='' />
-            <p className="flex items-center "> Filter / Sort By {sortOrder!='false'?<img src="/images/dot.jpeg"/>:''}</p>
+            <p className="flex items-center "> Filter / Sort By  {sortOrder!='false'?<img src="/images/dot.png" height={8} width={8} />:''}</p>
           </div>
       }
 
@@ -155,7 +155,7 @@ console.log('sortOrder',sortOrder,filterAndSortPayload)
           <div className=''>
             <div className='flex justify-between pt-4 px-4'>
       
-              <h2 className='text-2xl flex '><img src="/filter.svg" className='pr-4'/>Filter / Sort </h2>
+              <h2 className='text-2xl flex '><img src="/filter.svg" className='pr-4'/>Filter / Sort  </h2>
               <p className='cursor-pointer text-xl font-thin' onClick={() => setFilterModalVisible(false)}><AiOutlineClose /></p>
             </div>
             <div className="pt-4">
@@ -259,12 +259,12 @@ console.log('sortOrder',sortOrder,filterAndSortPayload)
             <div className='mt-3 flex flex-wrap px-2 radio-custom'>
 
               <input checked={sortOrder == "false" ? true : false} onClick={handleSortOrder} className='hidden ' type="radio" id='Popularity' name="sort" value="false" />
-              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border' htmlFor="Popularity">Relevance</label>
+              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border' style={{background:sortOrder=='false'?storeSettings?.data?storeSettings.data.secondary_color:'white':'white',color:sortOrder=='false'?'white':'black'}}htmlFor="Popularity">Relevance</label>
               <input checked={sortOrder == "DESC" ? true : false} onClick={handleSortOrder} className='hidden' type="radio" id='High' name="sort" value="DESC" />
-              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border' htmlFor="High">Price (High to Low)</label>
+              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border'style={{background:sortOrder=='DESC'?storeSettings?.data?storeSettings.data.secondary_color:'white':'white',color:sortOrder=='DESC'?'white':'black'}}htmlFor="High">Price (High to Low)</label>
 
-              <input checked={sortOrder == "ASC" ? true : false} onClick={handleSortOrder} className='hidden ' type="radio" id='Low' name="sort" value="ASC" />
-              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border' htmlFor="Low">Price (Low to High)</label>
+              <input checked={sortOrder == "ASC" ? true : false}  onClick={handleSortOrder} className='hidden ' type="radio" id='Low' name="sort" value="ASC" />
+              <label className='px-2 py-2 btn-bg rounded text-black mr-1 my-2 border' style={{background:sortOrder=='ASC'?storeSettings?.data?storeSettings.data.secondary_color:'white':'white',color:sortOrder=='ASC'?'white':'black'}} htmlFor="Low">Price (Low to High)</label>
             </div>
             {Object.keys(filtersGroup).length != 0 && <h3 className='p-5 nav-bg'>Filter</h3>}
             <div>

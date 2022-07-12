@@ -501,12 +501,13 @@ export const couponApplyAction = ({ payload }) => {
     }
 }
 
-export const removeCouponAction = (orderId) => {
+export const removeCouponAction = (orderId,purchaseId) => {
 
 
     return {
         type: REMOVE_COUPON,
-        orderId: orderId
+        orderId: orderId,
+        purchaseId
     }
 }
 

@@ -56,32 +56,33 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
     useEffect(() => {
         const func = async () => {
             setLoading(true)
-         if(router.isReady){  
-              if (data?.category_id) {
-                if (data.category_id == "All Items") {
-                    getProducts()
+            if (router.isReady) {
+                if (data?.category_id) {
+                    if (data.category_id == "All Items") {
+                        getProducts()
 
+
+
+                    }
+                    else {
+                        const payload = { storeId: 'storeId', categoryId: data.category_id, subCategoryId: data.sub_category_id, page: 1, customerId, setItems, items, setLoading, sortOrder }
+
+                        dispatchCategoricalItems({ payload })
+
+
+
+                    }
+                    setPage(1)
 
                 }
                 else {
-                    const payload = { storeId: 'storeId', categoryId: data.category_id, subCategoryId: data.sub_category_id, page: 1, customerId, setItems, items, setLoading,sortOrder }
-
-                    dispatchCategoricalItems({ payload })
-
-
-
+                    console.log('router entering heare categoruca')
+                    getProducts()
                 }
-                setPage(1)
-
-            }
-            else {
-console.log('router entering heare categoruca')
-                getProducts()
             }
         }
-    }
         func()
-    }, [router.query,data?.category_id, customerId])
+    }, [router.query, data?.category_id, customerId])
 
 
 
@@ -93,7 +94,7 @@ console.log('router entering heare categoruca')
 
             if (searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0) {
 
-                const payload = { storeId: 'storeId', searchedItem: searchedItem.data, page: 1, customerId, items, setItems, setLoading ,sortOrder}
+                const payload = { storeId: 'storeId', searchedItem: searchedItem.data, page: 1, customerId, items, setItems, setLoading, sortOrder }
                 if (data?.category_id) {
                     router.push('/shop')
                 }
@@ -103,11 +104,11 @@ console.log('router entering heare categoruca')
 
             }
             else {
-           
-               if(router.isReady && !data.category_id){
-                console.log('router search')
-                getProducts()
-               }
+
+                if (router.isReady && !data.category_id) {
+                    console.log('router search')
+                    // getProducts()
+                }
             }
         }
         getSearch()
@@ -120,17 +121,17 @@ console.log('router entering heare categoruca')
 
         console.log('router is getProducts')
 
-        if (Object.keys(filterAndSortPayload).length!=0 || (filterAndSortPayload?.filter_groups? Object.keys(filterAndSortPayload.filter_groups).length!=0 :'' || filterAndSortPayload?.priceRange? Object.keys(filterAndSortPayload.priceRange).length!=0 :'')) {
-            
+        if (Object.keys(filterAndSortPayload).length != 0 || (filterAndSortPayload?.filter_groups ? Object.keys(filterAndSortPayload.filter_groups).length != 0 : '' || filterAndSortPayload?.priceRange ? Object.keys(filterAndSortPayload.priceRange).length != 0 : '')) {
+
             const payload = { storeId: stateStoreDetails.store_id, filterAndSortPayload, customerId: customerId, sortOrder, page: page, items, setItems, loading, setLoading }
 
             dispatchInitialItems({ payload })
-        }else{
+        } else {
 
 
-        const payload = { storeId: stateStoreDetails.store_id, customerId: customerId, page: 1, items, setItems, loading, setLoading }
+            const payload = { storeId: stateStoreDetails.store_id, customerId: customerId, page: 1, items, setItems, loading, setLoading }
 
-        dispatchInitialItems({ payload })
+            dispatchInitialItems({ payload })
         }
 
     }
@@ -149,35 +150,35 @@ console.log('router entering heare categoruca')
             // setPage(page + 1)
 
         }
-     
+
 
         if (data?.category_id && data?.category_id != "All Items") {
 
-            if (Object.keys(filterAndSortPayload).length!=0 || (filterAndSortPayload?.filter_groups? Object.keys(filterAndSortPayload.filter_groups).length!=0 :'' || filterAndSortPayload?.priceRange? Object.keys(filterAndSortPayload.priceRange).length!=0 :'')) {
-                const payload = { storeId: 'storeId', categoryId: data.category_id,sortOrder, subCategoryId: data.sub_category_id, page: page, customerId, setItems, items }
-    
+            if (Object.keys(filterAndSortPayload).length != 0 || (filterAndSortPayload?.filter_groups ? Object.keys(filterAndSortPayload.filter_groups).length != 0 : '' || filterAndSortPayload?.priceRange ? Object.keys(filterAndSortPayload.priceRange).length != 0 : '')) {
+                const payload = { storeId: 'storeId', categoryId: data.category_id, sortOrder, subCategoryId: data.sub_category_id, page: page, customerId, setItems, items }
+
                 dispatchCategoricalItems({ payload })
             }
-         
-else{
-            // console.log('filterAndSortPayload',filterAndSortPayload,Object.keys(filterAndSortPayload.filter_groups).length)
-            const payload = { storeId: 'storeId', categoryId: data.category_id,sortOrder, subCategoryId: data.sub_category_id, page: page, customerId, setItems, items }
-            dispatchCategoricalItems({ payload })
-}
+
+            else {
+                // console.log('filterAndSortPayload',filterAndSortPayload,Object.keys(filterAndSortPayload.filter_groups).length)
+                const payload = { storeId: 'storeId', categoryId: data.category_id, sortOrder, subCategoryId: data.sub_category_id, page: page, customerId, setItems, items }
+                dispatchCategoricalItems({ payload })
+            }
         }
         else {
 
-            if (Object.keys(filterAndSortPayload).length!=0 || (filterAndSortPayload?.filter_groups? Object.keys(filterAndSortPayload.filter_groups).length!=0 :'' || filterAndSortPayload?.priceRange? Object.keys(filterAndSortPayload.priceRange).length!=0 :'')) {
+            if (Object.keys(filterAndSortPayload).length != 0 || (filterAndSortPayload?.filter_groups ? Object.keys(filterAndSortPayload.filter_groups).length != 0 : '' || filterAndSortPayload?.priceRange ? Object.keys(filterAndSortPayload.priceRange).length != 0 : '')) {
                 const payload = { storeId: stateStoreDetails.store_id, filterAndSortPayload, customerId: customerId, sortOrder, page: page, items, setItems, loading, setLoading }
-    
+
                 dispatchInitialItems({ payload })
             }
 
-else{
+            else {
 
-            const payload = { storeId: stateStoreDetails.store_id, customerId: customerId, page: page, items, setItems }
-            dispatchInitialItems({ payload })
-}
+                const payload = { storeId: stateStoreDetails.store_id, customerId: customerId, page: page, items, setItems }
+                dispatchInitialItems({ payload })
+            }
         }
 
 
@@ -192,26 +193,26 @@ else{
     useEffect(() => {
         // getShopProducts({ storeId, filterAndSortPayload, sortOrder, user })
 
-        if(Object.keys(filterAndSortPayload).length != 0){
- 
-
-        if (data?.category_id && data?.category_id != "All Items") {
-            const payload = { storeId: 'storeId', categoryId: data.category_id,sortOrder, subCategoryId: data.sub_category_id, page: 1, customerId, setItems, items,setLoading }
-            dispatchCategoricalItems({ payload })
-        }else{
-            const payload = { storeId: stateStoreDetails.store_id, filterAndSortPayload, customerId: customerId, sortOrder, page: 1, items, setItems, loading, setLoading }
-        dispatchInitialItems({ payload })
-        }
+        if (Object.keys(filterAndSortPayload).length != 0) {
 
 
-        console.log('router filter ands ort ',filterAndSortPayload)
+            if (data?.category_id && data?.category_id != "All Items") {
+                const payload = { storeId: 'storeId', categoryId: data.category_id, sortOrder, subCategoryId: data.sub_category_id, page: 1, customerId, setItems, items, setLoading }
+                dispatchCategoricalItems({ payload })
+            } else {
+                const payload = { storeId: stateStoreDetails.store_id, filterAndSortPayload, customerId: customerId, sortOrder, page: 1, items, setItems, loading, setLoading }
+                dispatchInitialItems({ payload })
+            }
+
+
+            console.log('router filter ands ort ', filterAndSortPayload)
 
         }
 
     }, [filterAndSortPayload])
 
 
-
+    console.log('searchedItem.length', searchedItem)
 
     return (
         <>
@@ -261,10 +262,10 @@ else{
                         :
                         <div className='flex flex-col lg:mt-24 md:mt-24 lg:pl-0 md:pl-0 '>
                             <div className='flex justify-between  lg:w-full'>
-                                <p className='hidden lg:flex lg:-mt-12 px-6 text-lg font-montSemiBold'>{Object.keys(data).length != 0 && data.constructor === Object ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' :  searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0?`search results for ${searchedItem.data}` : 'All Items'}</p>
+                                <p className='hidden lg:flex lg:-mt-12 px-6 text-lg font-montSemiBold'>{Object.keys(data).length != 0 && data.constructor === Object ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `search results for ${searchedItem.data}` : 'All Items'}</p>
                                 <div className='absolute -mt-9 right-4 lg:pl-0 lg:flex lg:-mt-12 lg:pr-28 '>
                                     <SortFilterModal filterAndSortPayload={filterAndSortPayload}
-                                        setFilterAndSortPayload={setFilterAndSortPayload} sortOrder={sortOrder} serSortOrder={setSortOrder} handleSortOrder={handleSortOrder} storeSettings={storeSettings}  setLoading={setLoading}/>
+                                        setFilterAndSortPayload={setFilterAndSortPayload} sortOrder={sortOrder} serSortOrder={setSortOrder} handleSortOrder={handleSortOrder} storeSettings={storeSettings} setLoading={setLoading} />
                                 </div>
                             </div>
 
