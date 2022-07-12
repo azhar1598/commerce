@@ -1,0 +1,7 @@
+<svg id="my_orders" data-name="my orders" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="Rectangle_1840" data-name="Rectangle 1840" width="24" height="24" fill="none"/>
+  <g id="Group_1220" data-name="Group 1220">
+    <path id="Path_4065" data-name="Path 4065" d="M14,2H6A2.006,2.006,0,0,0,4,4V20a2.006,2.006,0,0,0,2,2H18a2.006,2.006,0,0,0,2-2V8ZM6,20V4h7V8h5V20Z" fill="#242424"/>
+    <path id="Path_4066" data-name="Path 4066" d="M7,13.4h8V15H7Zm0-3.2h8v1.6H7ZM7,7h5.6V8.6H7Z" transform="translate(1 3)" fill="#242424"/>
+  </g>
+</svg>
