@@ -130,14 +130,18 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
           <p className={`text-[16px]`} style={router.pathname == '/' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Home</p>
         </div>
 
-        <div className={`flex flex-col `} onClick={() => { router.push('/shop') }}>
+        <div className={`flex flex-col `} 
+        // onClick={() => { router.push('/shop') }}
+        >
           <ShopFilled className='text-2xl' style={router.pathname == '/shop' || router.pathname?.includes('/product') ?
             { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 ease-in' } : { transition: 'all .5s ease-out' }} />
           <p className={`text-[16px] `} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Shop</p>
         </div>
-        <div className='flex flex-col' onClick={() => {
-          customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
-        }}>
+        <div className='flex flex-col' 
+        // onClick={() => {
+        //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
+        // }}
+        >
           {/* <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} /> */}
           <HeartFilled className='text-[#212B36] text-2xl' style={router.pathname == '/account/wishlist' ?
             { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
@@ -190,10 +194,18 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
                 </div>
                 <div>
                   <h3 className='text-xl font-montMedium text-white'>Account</h3>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}>My Orders</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' onClick={() => router.push('/cart')}>My Cart</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}>Orders</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}>Saved Address</p>
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
+                  >My Orders</p>
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  // onClick={() => router.push('/cart')}
+                  >My Cart</p>
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
+                  >Orders</p>
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
+                  >Saved Address</p>
                 </div>
 
 

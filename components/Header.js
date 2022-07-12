@@ -169,7 +169,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
             {isLoggedIn.data?.customer_id ?
                 <Menu style={{ width: '200px' }} >
 
-                    <Menu.Item>
+                    {/* <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
                             My Orders
                         </Link>
@@ -193,15 +193,16 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         <p onClick={() => setIsModalVisible(true)} passHref>
                             <p >Logout</p>
                         </p>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </Menu> :
                 <Menu>
-                    <Menu.Item>
+                    {/* <Menu.Item>
                         <p onClick={showModal} passHref>
                             <p>Log In / Sign Up</p>
                         </p>
-                    </Menu.Item>
-                </Menu>}
+                    </Menu.Item> */}
+                </Menu>
+                }
         </>
     );
 
@@ -309,7 +310,9 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                          <li>|</li>
                         <li className='text-sm cursor-pointer px-2' style={{
                             color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }} onClick={() => { router.push('/shop') }}>
+                        }} 
+                        // onClick={() => { router.push('/shop') }}
+                        >
                             Shop
                         </li>
                         <li>|</li>
@@ -340,10 +343,16 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         <FaUserAlt className='ml-12 cursor-pointer' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
                     </Dropdown>
                     <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
-                    {isLoggedIn.data?.customer_id ? <Link href="/account/wishlist">
+                    {isLoggedIn.data?.customer_id ? <Link href="/"
+                    // href="/account/wishlist"
+                    >
                         <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                    </Link> : <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} onClick={showModal} />}
-                    <Link href="/cart">
+                    </Link> : <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }}
+                    //  onClick={showModal}
+                      />}
+                    <Link href="/"
+                    // href="/cart"
+                    >
                         <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
                             <FaShoppingBag className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
                         </Badge>
