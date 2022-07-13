@@ -260,7 +260,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                     {loading ?
                         <Skeleton />
                         :
-                        <div className='flex flex-col lg:mt-24 md:mt-24 lg:pl-0 md:pl-0 '>
+                        <div className='flex flex-col lg:mt-24 md:mt-24 lg:px-32  md:pl-0'>
                             <div className='flex justify-between  lg:w-full'>
                                 <p className='hidden lg:flex lg:-mt-12 px-6 text-lg font-montSemiBold'>{Object.keys(data).length != 0 && data.constructor === Object ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `search results for ${searchedItem.data}` : 'All Items'}</p>
                                 <div className='absolute -mt-9 right-4 lg:pl-0 lg:flex lg:-mt-12 lg:pr-28 '>

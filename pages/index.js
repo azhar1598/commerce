@@ -17,6 +17,7 @@ import {BsSquare} from 'react-icons/Bs'
 import { useRouter } from "next/router";
 import { ConfigProvider } from 'antd';
 import PageWrapper from '../components/PageWrapper/PageWrapper'
+import Categories from '../components/Categories'
 
 
 
@@ -131,8 +132,11 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
         <>
           {/* Web View Banner */}
           <div className='hidden lg:block'>
+
+          <Categories />
+
             <div className=''>
-              <div className='mt-32  w-full '>
+              <div className='mt-36  w-full '>
 
               {/* enableAutoPlay */}
                 <ECarousel itemPosition={consts.START}  autoPlaySpeed={1500} itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
@@ -170,13 +174,15 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
 
           {/* Web View New Arrivals and Featured Products */}
-          {newArrivals.length != 0 ?
-            <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28'>
+
+
+            {newArrivals.length != 0 ?
+            <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
               <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special menus</p>
-              <div className='bg-white p-2 flex items-center justify-between w-full'>
+              <div className='bg-white p-2 flex items-center justify-between w-full '>
                 <ECarousel itemPosition={consts.START} itemsToShow={4} itemPadding={[0, 0]} renderArrow={myArrow} renderPagination={({ pages, activePage, onClick }) => {
                   return (
-                    <div direction="row">
+                    <div direction="row ">
                       {pages.map(page => {
                         const isActivePage = activePage === page
                         return (
@@ -186,16 +192,25 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                     </div>
                   )
                 }}>
+
                   {newArrivals.map((a, index) => {
                     return (<>
                       {a.item_status == 'AVAILABLE' ?
-                        <div maxWidth="50%" className='flex flex-col ml-2' key={index}>
-                          <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-96 h-72 lg:h-[55vh] md:72 md:h-[55vh] bg-white cursor-pointer' onClick={() => { router.push(`/product/${a.item_id}`) }} />
-                        </div>
-                        :
-                        <div maxWidth="50%" className='flex flex-col ml-2' key={index}>
-                          <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p>
-                          <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-96 h-72 lg:h-[55vh] md:72 md:h-[55vh] bg-white cursor-pointer' />
+                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+
+                          <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className=' h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' onClick={() => { router.push(`/product/${a.item_id}`) }} />
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
+
+                        </div> :
+                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+                          {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
+                          <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}} onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
+          
                         </div>
                       }
                     </>
@@ -206,7 +221,8 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
 
               </div>
-            </div> : ''}
+            </div>
+            : ''}
 
 
 

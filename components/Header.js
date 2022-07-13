@@ -295,7 +295,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
 
             {/* Web View and Tablet View*/}
-            <div className='hidden shadow-2xl fixed w-full lg:flex md:flex items-center top-0 justify-around p-5  pl-28 pr-28 mb-4' style={{ zIndex: 1000, backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`}}>
+            <div className='hidden  fixed w-full lg:flex md:flex items-center top-0 justify-around p-5  pl-28 pr-28 mb-4' style={{ zIndex: 1000, backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`}}>
                 <div className='flex items-center w-1/4 max-w-1/2 '>
                     <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 max-h-[72px] max-w-20' onClick={() => { router.push('/') }} />
                  <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
@@ -311,7 +311,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         <li className='text-sm cursor-pointer px-2' style={{
                             color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
                         }} 
-                        // onClick={() => { router.push('/shop') }}
+                        onClick={() => { router.push('/shop') }}
                         >
                             Shop
                         </li>

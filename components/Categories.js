@@ -68,13 +68,26 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
     return (
         <>
             {/* Web View Categories */}
-            <div className='hidden lg:flex md:flex flex-col mt-8 lg:ml-28  md:ml-28  p-5 border-r-2 border-slate-300 w-[15vw] max-w-[15vw] min-w-[15vw] '>
-                <p className='font-montBold text-lg'>Categories</p>
-                <p className='cursor-pointer pl-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
+            {/* <div className='hidden lg:flex md:flex flex-col mt-8 lg:ml-28  md:ml-28  p-5 border-r-2 border-slate-300 w-[15vw] max-w-[15vw] min-w-[15vw] '> */}
+                {/* <p className='font-montBold text-lg'>Categories</p> */}
+                {/* <p className='cursor-pointer pl-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
                 {categories.map(item =>
                     <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} categories={categories} subCategories={item.subCategories} handleSubCategory={handleSubCategory} categoryKey={categoryKey} />
-                )}
-            </div>
+                )} */}
+            {/* </div> */}
+
+            <div className='flex items-end justify-between w-full  bg-white -mt-12 fixed z-[1000] px-32 pt-3'>
+                    <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p>
+                    
+                    
+                    
+                        {categories.map(item =>
+                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} />
+                        )}
+                    </div>
+
+
+     
             <div className='lg:hidden md:hidden flex'>
                 <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{color:stateStoreSettings?.data?stateStoreSettings?.data?.secondary_color:'white'}}/>
                 {console.log('data.subcateg',data.sub_category_name,data?.category_id!='All Items',data.sub_category_name != undefined )}

@@ -20,7 +20,7 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
             {/* Web View */}
             <div className='hidden lg:block md:block -ml-4 '>
                 <div className='pl-6 '>
-                 <p id={id} className={`${categoryKey==id && data?.category_id==categoryKey ? 'font-montSemiBold':'font-montRegular'} cursor-pointer `} style={categoryKey==id && data?.category_id==categoryKey ? {color: stateStoreSettings?stateStoreSettings?.secondary_color :'black'}:{color:'black'}} onClick={() => { handleCategory(id, name,subCategories) }}>{name}</p>
+                 <p id={id} className={`${categoryKey==id && data?.category_id==categoryKey ? 'font-montMedium':'font-montMedium'} cursor-pointer `} style={categoryKey==id && data?.category_id==categoryKey ? {color: stateStoreSettings?stateStoreSettings?.secondary_color :'black'}:{color:'black'}} onClick={() => { handleCategory(id, name,subCategories) }}>{name}</p>
 
                     {categoryKey == id && subCategories?.map(item =>
                         <p className='cursor-pointer pl-5' style={data?.sub_category_id == item.sub_category_id ? { color: stateStoreSettings?stateStoreSettings?.secondary_color :'black'} : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}>{item.sub_category_name}</p>
