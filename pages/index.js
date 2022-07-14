@@ -13,7 +13,7 @@ import ECarousel, { consts } from 'react-elastic-carousel'
 import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, UpSquareOutlined } from '@ant-design/icons'
 import { Skeleton } from 'antd';
 import { FaCircle } from 'react-icons/fa'
-import {BsSquare} from 'react-icons/Bs'
+import { BsSquare } from 'react-icons/Bs'
 import { useRouter } from "next/router";
 import { ConfigProvider } from 'antd';
 import PageWrapper from '../components/PageWrapper/PageWrapper'
@@ -75,7 +75,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
   }, [])
 
   const myArrow = ({ type, onClick, isEdge }) => {
-    const pointer = type === consts.PREV ? <LeftOutlined  style={{ fontSize: '14px',fontWeight:800 }} /> : <RightOutlined style={{ fontSize: '14px',fontWeight:800 }} />
+    const pointer = type === consts.PREV ? <LeftOutlined style={{ fontSize: '14px', fontWeight: 800 }} /> : <RightOutlined style={{ fontSize: '14px', fontWeight: 800 }} />
     return (
       <button onClick={onClick} disabled={isEdge}>
         {pointer}
@@ -136,25 +136,25 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
           {/* Web View Banner */}
           <div className='hidden lg:block'>
 
-          <Categories />
+            <Categories />
 
             <div className=''>
               <div className='mt-36  w-full '>
 
- 
-                <ECarousel itemPosition={consts.START}  autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
+
+                <ECarousel itemPosition={consts.START} autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
                   return (
                     <div direction="row" style={{ display: 'flex' }}>
                       {pages.map(page => {
                         const isActivePage = activePage === page
                         return (
-                          <MinusOutlined 
+                          <MinusOutlined
                             key={page}
                             onClick={() => onClick(page)}
                             active={isActivePage}
-                            style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`,  fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
+                            style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
                           />
-                          )
+                        )
                       })}
                     </div>
                   )
@@ -169,26 +169,30 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
               </div>
               <div className='absolute -mt-40 w-full' >
-              <button className=' align-center ml-[43vw] p-3 text-lg rounded font-montMedium border-[#959595] text-[#FFFFFF] g-white bg-opacity-40 backdrop-blur-lg rounded drop-shadow-lg px-12' onClick={()=>{router.push('/shop')}}
-            >Explore Now </button>
+                <button className=' align-center ml-[43vw] p-3 text-lg rounded font-montMedium border-[#959595] text-[#FFFFFF] g-white bg-opacity-40 backdrop-blur-lg rounded drop-shadow-lg px-12' onClick={() => { router.push('/shop') }}
+                >Explore Now </button>
               </div>
             </div>
           </div>
 
-          <div className='hidden lg:flex justify-around  mt-24'>
-         
-           <div className=''>
-           <CompletedSteps/>
-           <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Easy to Order</p>
-           </div>
-           <div className=''>
-            <InNoTime/>
-            <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Faster Delivery</p>
+          <div className='hidden lg:flex justify-around  mt-8 '>
+            <div className='absolute pl-32 pr-32' >
+
+              <img src="/Path 1.svg" />
+            </div>
+
+            <div className=''>
+              <CompletedSteps />
+              <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Easy to Order</p>
             </div>
             <div className=''>
-            <EasyToOrder/>
-            <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Best Quality</p>
-        
+              <InNoTime />
+              <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Faster Delivery</p>
+            </div>
+            <div className=''>
+              <EasyToOrder />
+              <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Best Quality</p>
+
             </div>
           </div>
 
@@ -196,7 +200,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
           {/* Web View New Arrivals and Featured Products */}
 
 
-            {newArrivals.length != 0 ?
+          {newArrivals.length != 0 ?
             <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
               <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special menus</p>
               <div className='bg-white p-2 flex items-center justify-between w-full '>

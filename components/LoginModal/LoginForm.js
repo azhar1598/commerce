@@ -9,7 +9,7 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
 
     return (
         <>
-            <p className='hidden lg:block text-xl border-b-2 border-slate-300 pb-3 w-full font-montSemiBold '>Log in</p>
+            <p className='hidden lg:block text-xl text-white border-b-2 border-slate-300 pb-3 w-full font-montMedium p-4 ' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`}}>Log in</p>
             <div className='flex  mt-4 w-full pl-8'>
                 <p
                     style={method == 'PHONE' ? { background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: 'white', paddingLeft: '8px', paddingRight: '8px', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', paddingLeft: '8px', paddingRight: '8px', border: `2px solid ${storeSettings.data ? storeSettings.data.secondary_color : ''}` }}

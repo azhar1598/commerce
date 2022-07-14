@@ -11,7 +11,7 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
 
     return (
         <>
-            <p className='lg:block text-xl border-b-2 border-slate-300 pb-3 w-full font-montSemiBold hidden'>Sign up</p>
+            <p className='lg:block text-xl border-b-2 border-slate-300 pb-3 w-full font-montMedium hidden p-4 text-white'  style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`}}>Sign up</p>
 
             <form onSubmit={(e) => { handleAuth(e, method,value,"SIGNUP") }} id="form" className="font-montRegular" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 

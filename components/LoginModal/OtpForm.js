@@ -24,9 +24,9 @@ function OtpForm({ handleAuth, handleChangeOtp, OTP, inputSignUp, handleProceed,
     return (
         <form onSubmit={verifyOtp && !verifyAccount ? handleForgotPasswordAuth : handleProceed} className='lg:p-0 p-8'>
 
-            <p className="font-montSemiBold text-xl border-b-2 border-slate-100 mb-2 pb-2 ">Verify OTP</p>
+            <p className="font-montMedium text-xl border-b-2 border-slate-100 mb-2 pb-2 p-4 text-white"  style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`}}>Verify OTP</p>
 
-            <div className='flex flex-col items-start justify-center w-full' >
+            <div className='flex flex-col items-start justify-center w-full p-8' >
                 <p> OTP has been Sent to {inputSignUp?.method}</p>
                 <p className=" cursor-pointer" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}` }} onClick={change}>Change</p>
                 {/* <div style={{ border: '1px solid grey', padding: '8px', marginTop: '10px', borderRadius: '3px' }}>

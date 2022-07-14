@@ -129,6 +129,14 @@ input[type="number"] {
   /* background: green; */
 }
 
+.ant-modal-body{
+  padding: 0px !important;
+}
+
+.anticon svg{
+  /* color:white */
+}
+
 .ant-menu-title-content {
   color: black;
 }
@@ -168,6 +176,8 @@ a {
   text-overflow: ellipsis;
   
 }
+
+
 
 
 @media only screen and (min-width: 600px) {
