@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { CloseOutlined, HeartFilled, MenuOutlined, SearchOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
+import { CloseOutlined, HeartFilled, MenuOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
 import { Badge, Dropdown, Menu, message } from 'antd'
 import { useRouter } from 'next/router'
 import LoginModal from './LoginModal/LoginModal'
 import Link from 'next/link'
 import { FaUserAlt, FaShoppingBag } from 'react-icons/fa'
+import { IoIosCart } from 'react-icons/io';
 import { customerDetails, getStoreDetails, hideCartAction, mobileSearchAction, searchItems } from '../actions'
 import Modal from 'antd/lib/modal/Modal'
 import ContactUs from './ContactUs'
@@ -169,12 +170,12 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
             {isLoggedIn.data?.customer_id ?
                 <Menu style={{ width: '200px' }} >
 
-                    {/* <Menu.Item>
+                    {/*  <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
                             My Orders
                         </Link>
                     </Menu.Item>
-                    <Menu.Item>
+                   <Menu.Item>
                         <Link href={`/account/wishlist`} passHref>
                             Wishlist
                         </Link>
@@ -188,19 +189,19 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         <Link href={`/account/savedPlaces`} passHref>
                             Saved Places
                         </Link>
-                    </Menu.Item>
+                    </Menu.Item>*/}
                     <Menu.Item>
                         <p onClick={() => setIsModalVisible(true)} passHref>
                             <p >Logout</p>
                         </p>
-                    </Menu.Item> */}
+                    </Menu.Item> 
                 </Menu> :
                 <Menu>
-                    {/* <Menu.Item>
+                    <Menu.Item>
                         <p onClick={showModal} passHref>
                             <p>Log In / Sign Up</p>
                         </p>
-                    </Menu.Item> */}
+                    </Menu.Item>
                 </Menu>
                 }
         </>
@@ -354,7 +355,9 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                     // href="/cart"
                     >
                         <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
-                            <FaShoppingBag className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
+                            {/* <ShoppingCartOutlined  className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} /> */}
+
+                            <IoIosCart className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '27px', cursor: 'pointer' }}/>
                         </Badge>
                     </Link>
                 </div>

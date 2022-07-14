@@ -5,14 +5,17 @@ import { connect } from 'react-redux'
 import { getCategoriesAction, getSearchItemsAction, searchItems } from '../actions'
 import { getCategories } from '../services/apiServices'
 import Category from './Category'
+import { DownOutlined, SmileOutlined } from '@ant-design/icons';
+import { Dropdown, Menu, Space } from 'antd';
 
-export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem,dispatchSearchItems}) => {
+export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems }) => {
 
     const [categories, setCategories] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [categoryKey, setCategoryKey] = useState()
+    const[closeSubCategory,setCloseSubCategory]=useState(false)
     const router = useRouter()
-    const data=router.query
+    const data = router.query
 
     useEffect(() => {
         fetchCategories()
@@ -23,18 +26,26 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
         dispatchCategories({ payload })
     }
 
-    const handleCategory = async (id, name,subCategories) => {
+    const handleCategory = async (id, name, subCategories) => {
 
         // document.getElementById(id).style.color = "red"
-        dispatchSearchItems('')
+        // dispatchSearchItems('')
 
-        console.log('subCategpries',subCategories,name)
+
+        console.log('subCategpries', subCategories, name)
 
         setCategoryKey(id)
 
-    
-        if(subCategories ||subCategories==undefined){
-            router.push(`/shop/?category_id=${id}&category_name=${name}&${subCategories!=[] && subCategories!=undefined?`sub_category_id=${subCategories[0]?.sub_category_id}&sub_category_name=${subCategories[0]?.sub_category_name}`:``}`)
+
+        if (subCategories || subCategories == undefined) {
+            subCategories.length==0 && router.push(`/shop/?category_id=${id}&category_name=${name}`)
+
+// if you want to add default subcategory then copy below code and paste  or attachin line 41
+
+            // {*/  &${subCategories != [] && subCategories != undefined ? `sub_category_id=${subCategories[0]?.sub_category_id}&
+            
+            // sub_category_name=${subCategories[0]?.sub_category_name}` : ``}
+            
             setShowModal(false)
         }
 
@@ -58,6 +69,7 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
 
     const handleSubCategory = (categoryId, subCategoryId, subCategoryName) => {
         setShowModal(!showModal)
+        
         router.push(`/shop/?category_id=${categoryId}&sub_category_id=${subCategoryId}&sub_category_name=${subCategoryName}`)
     }
 
@@ -65,35 +77,72 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
         setShowModal(!showModal)
     }
 
+    const menu = (
+
+        <Menu>
+            {categories.map((item, index) =>
+
+                index >= 6 && <Menu.Item>
+                    <p onClick={() => { handleCategory(item.category_id, item.category_name,item.subCategories) }}>{item.category_name}</p>
+                </Menu.Item>
+            )}
+        </Menu>
+
+    )
+
+
+
+
+
     return (
         <>
             {/* Web View Categories */}
             {/* <div className='hidden lg:flex md:flex flex-col mt-8 lg:ml-28  md:ml-28  p-5 border-r-2 border-slate-300 w-[15vw] max-w-[15vw] min-w-[15vw] '> */}
-                {/* <p className='font-montBold text-lg'>Categories</p> */}
-                {/* <p className='cursor-pointer pl-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
+            {/* <p className='font-montBold text-lg'>Categories</p> */}
+            {/* <p className='cursor-pointer pl-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
                 {categories.map(item =>
                     <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} categories={categories} subCategories={item.subCategories} handleSubCategory={handleSubCategory} categoryKey={categoryKey} />
                 )} */}
             {/* </div> */}
 
-            <div className='flex items-end justify-between w-full  bg-white -mt-12 fixed z-[1000] px-32 pt-3'>
-                    <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p>
-                    
-                    
-                    
-                        {categories.map(item =>
-                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} />
-                        )}
-                    </div>
+            <div className='hidden lg:flex items-end justify-between w-full  bg-white -mt-12  fixed z-[1000] px-32 pt-3'>
+                {/* <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
+
+                {categories.map((item, key) => {
+                    if (key <= 5) {
+                        return (
+                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} keyLimit={key} categories={categories} closeSubCategory={closeSubCategory} setCloseSubCategory={setCloseSubCategory}/>
+                        )
+                    }
+                    else {
+                        return (
+                            key == 6 && <Dropdown overlay={menu}>
+                                <a onClick={(e) => e.preventDefault()}>
+                                    <div className='flex '>
+                                        <p className='text-black font-montMedium'>Others</p>
+                                        <DownOutlined className='px-2 pt-1 text-black'/>
+                                    </div>
+                                </a>
+                            </Dropdown>
+                        )
 
 
-     
+
+                    }
+                }
+
+                )}
+
+            </div>
+
+
+
             <div className='lg:hidden md:hidden flex'>
-                <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{color:stateStoreSettings?.data?stateStoreSettings?.data?.secondary_color:'white'}}/>
-                {console.log('data.subcateg',data.sub_category_name,data?.category_id!='All Items',data.sub_category_name != undefined )}
-                <p className='  mt-[100px] pl-1 text-sm font-montMedium'>{Object.keys(data).length != 0 && data.constructor === Object 
-                 ?data?.category_id!='All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name:'All Items' :  searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0?`Search Results` : 'All Items'}</p>
-                
+                <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.secondary_color : 'white' }} />
+                {console.log('data.subcateg', data.sub_category_name, data?.category_id != 'All Items', data.sub_category_name != undefined)}
+                <p className='  mt-[100px] pl-1 text-sm font-montMedium'>{Object.keys(data).length != 0 && data.constructor === Object
+                    ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `Search Results` : 'All Items'}</p>
+
             </div>
 
             {/* Mobile view Categories */}
@@ -105,10 +154,10 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
                         <p className='text-lg mt-4 px-4 font-montSemiBold '>Categories</p>
                     </div>
                     <div className='flex bg-gray-100 h-20 overflow-scroll px-2'>
-                    <p className='mt-6 min-w-[80px] cursor-pointer pl-2 px-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
-                    
-                    
-                    
+                        <p className='mt-6 min-w-[80px] cursor-pointer pl-2 px-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
+
+
+
                         {categories.map(item =>
                             <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} />
                         )}
@@ -121,8 +170,8 @@ export const Categories = ({ dispatchCategories,stateStoreSettings ,searchedItem
 }
 
 const mapStateToProps = (state) => {
-    return{
-        stateStoreSettings:state.storeSettingsReducer,
+    return {
+        stateStoreSettings: state.storeSettingsReducer,
         searchedItem: state.searchItemsReducer,
     }
 }

@@ -18,6 +18,9 @@ import { useRouter } from "next/router";
 import { ConfigProvider } from 'antd';
 import PageWrapper from '../components/PageWrapper/PageWrapper'
 import Categories from '../components/Categories'
+import EasyToOrder from '../components/svgComponents/EasyToOrder'
+import CompletedSteps from '../components/svgComponents/CompletedSteps'
+import InNoTime from '../components/svgComponents/InNoTime'
 
 
 
@@ -72,7 +75,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
   }, [])
 
   const myArrow = ({ type, onClick, isEdge }) => {
-    const pointer = type === consts.PREV ? <LeftCircleFilled style={{ fontSize: '24px' }} /> : <RightCircleFilled style={{ fontSize: '24px' }} />
+    const pointer = type === consts.PREV ? <LeftOutlined  style={{ fontSize: '14px',fontWeight:800 }} /> : <RightOutlined style={{ fontSize: '14px',fontWeight:800 }} />
     return (
       <button onClick={onClick} disabled={isEdge}>
         {pointer}
@@ -138,8 +141,8 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
             <div className=''>
               <div className='mt-36  w-full '>
 
-              {/* enableAutoPlay */}
-                <ECarousel itemPosition={consts.START}  autoPlaySpeed={1500} itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
+ 
+                <ECarousel itemPosition={consts.START}  autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
                   return (
                     <div direction="row" style={{ display: 'flex' }}>
                       {pages.map(page => {
@@ -166,9 +169,26 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
               </div>
               <div className='absolute -mt-40 w-full' >
-              <button className=' align-center ml-[43vw] p-3 text-lg rounded font-montMedium border-[#959595] text-[#FFFFFF] g-white bg-opacity-40 backdrop-blur-lg rounded drop-shadow-lg px-12' 
+              <button className=' align-center ml-[43vw] p-3 text-lg rounded font-montMedium border-[#959595] text-[#FFFFFF] g-white bg-opacity-40 backdrop-blur-lg rounded drop-shadow-lg px-12' onClick={()=>{router.push('/shop')}}
             >Explore Now </button>
               </div>
+            </div>
+          </div>
+
+          <div className='hidden lg:flex justify-around  mt-24'>
+         
+           <div className=''>
+           <CompletedSteps/>
+           <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Easy to Order</p>
+           </div>
+           <div className=''>
+            <InNoTime/>
+            <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Faster Delivery</p>
+            </div>
+            <div className=''>
+            <EasyToOrder/>
+            <p className='font-montSemiBold text-sm text-[#0000007F]  text-center'>Best Quality</p>
+        
             </div>
           </div>
 
@@ -196,21 +216,21 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                   {newArrivals.map((a, index) => {
                     return (<>
                       {a.item_status == 'AVAILABLE' ?
-                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
 
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className=' h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' onClick={() => { router.push(`/product/${a.item_id}`) }} />
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+                          {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p> */}
 
                         </div> :
-                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
                           {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+                          {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
                           <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}} onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
-          
+           */}
                         </div>
                       }
                     </>
@@ -246,21 +266,21 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                   {featured.map((a, index) => {
                     return (<>
                       {a.item_status == 'AVAILABLE' ?
-                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
 
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className=' h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' onClick={() => { router.push(`/product/${a.item_id}`) }} />
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+                          {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
+                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p> */}
 
                         </div> :
-                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded shadow-lg bg-gray-100 max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
                           {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
-                          <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
+                          {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
                           <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}} onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p>
-          
+           */}
                         </div>
                       }
                     </>

@@ -8,6 +8,8 @@ import Skeleton from './Skeleton'
 import { getCategoricalItemCount, getCategoricalItemCountAction, getCategoricalItemsAction, getCategorycalItemsAction, getInitialItemsAction, getSearchItemsAction, getWishlistDetails, getWishlistItems, searchItems } from '../actions'
 import SortFilterModal from './SortFilterModal'
 import NoSearchFound from './svgComponents/NoSearchFound'
+import List from './svgComponents/List'
+import Grid from './svgComponents/Grid'
 
 export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateStoreDetails, stateWishlistItems, dispatchCategoricalItems, dispatchCategoricalItemCount, dispatchSearchItems, dispatchInitialItems, storeSettings, searchItemLocal }) => {
 
@@ -19,6 +21,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
     const [loading, setLoading] = useState(true)
     const [filterAndSortPayload, setFilterAndSortPayload] = useState({})
     const [sortOrder, setSortOrder] = useState("false")
+    const [grid, setGrid] = useState(true)
 
     const router = useRouter()
     const data = router.query
@@ -214,6 +217,15 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
 
     console.log('searchedItem.length', searchedItem)
 
+
+    const handleLayout = (layout) => {
+        if (layout == 'grid')
+            setGrid(true)
+        else {
+            setGrid(false)
+        }
+    }
+
     return (
         <>
 
@@ -258,15 +270,29 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                 <>
 
                     {loading ?
-                        <Skeleton />
+                    <div className='ml-80'>
+                            <Skeleton grid={grid}/>
+                    </div>
                         :
-                        <div className='flex flex-col lg:mt-24 md:mt-24 lg:px-32  md:pl-0'>
-                            <div className='flex justify-between  lg:w-full'>
+                        <div className='flex flex-col lg:mt-8  lg:ml-80  md:pl-0'>
+                            {/* <div className='flex justify-between  lg:w-full'>
                                 <p className='hidden lg:flex lg:-mt-12 px-6 text-lg font-montSemiBold'>{Object.keys(data).length != 0 && data.constructor === Object ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `search results for ${searchedItem.data}` : 'All Items'}</p>
                                 <div className='absolute -mt-9 right-4 lg:pl-0 lg:flex lg:-mt-12 lg:pr-28 '>
                                     <SortFilterModal filterAndSortPayload={filterAndSortPayload}
                                         setFilterAndSortPayload={setFilterAndSortPayload} sortOrder={sortOrder} serSortOrder={setSortOrder} handleSortOrder={handleSortOrder} storeSettings={storeSettings} setLoading={setLoading} />
                                 </div>
+                            </div> */}
+
+
+                            <div className='hidden  right-4 lg:pl-0 lg:flex  lg:justify-end w-full  '>
+
+                                <div className={`px-2 h-4  cursor-pointer`} onClick={() => { handleLayout('list') }}  >
+                                    <List secondaryColor={storeSettings?.data?.secondary_color ? storeSettings?.data?.secondary_color : "black"} grid={grid} />
+                                </div>
+                                <div className={`px-2 h-4 pr-20 cursor-pointer`} onClick={() => { handleLayout('grid') }} >
+                                    <Grid secondaryColor={storeSettings?.data?.secondary_color ? storeSettings?.data?.secondary_color : "black"} grid={grid} />
+                                </div>
+
                             </div>
 
                             <InfiniteScroll
@@ -274,10 +300,11 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                                 next={getMoreProducts}
                                 hasMore={noMore}
                                 loader={
-                                    <Skeleton />
+                                    <Skeleton grid={grid}/>
                                 }
                             >
-                                <div className='p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
+
+                                {grid ? <div className='p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
                                     {items.map((item, index) => {
                                         return (
                                             <>
@@ -285,16 +312,48 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                                                     <>
                                                         {console.log('item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1', item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : '')}
 
-                                                        <Product image={item.primary_img !== '' || null ? item.primary_img : item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : ''} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} wishlistId={item.wishlistId} customerId={customerId} dispatchWishlist={dispatchWishlist} wishlistPage={false} stateStoreDetails={stateStoreDetails} wishlist={wishlist} setWishlist={setWishlist} stateWishlistItems={stateWishlistItems} setNoMore={setNoMore} />
+                                                        <Product image={item.primary_img !== '' || null ? item.primary_img : item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : ''} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} wishlistId={item.wishlistId} customerId={customerId} dispatchWishlist={dispatchWishlist} wishlistPage={false} stateStoreDetails={stateStoreDetails} wishlist={wishlist} setWishlist={setWishlist} stateWishlistItems={stateWishlistItems} setNoMore={setNoMore} grid={grid}/>
                                                     </> :
-                                                    ''}
+                                                    ''
+
+
+                                                }
                                             </>
                                         )
                                     }
                                     )}
                                 </div>
 
+                                    :
+                                    <div className='p-2 flex flex-col items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
+                                        {items.map((item, index) => {
+                                            return (
+                                                <>
+                                                    {item.item_status == 'AVAILABLE' ?
+                                                        <>
+                                                            {console.log('item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1', item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : '')}
+
+                                                            <Product image={item.primary_img !== '' || null ? item.primary_img : item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : ''} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} wishlistId={item.wishlistId} customerId={customerId} dispatchWishlist={dispatchWishlist} wishlistPage={false} stateStoreDetails={stateStoreDetails} wishlist={wishlist} setWishlist={setWishlist} stateWishlistItems={stateWishlistItems} setNoMore={setNoMore} grid={grid}/>
+                                                        </> :
+                                                        ''}
+                                                </>
+                                            )
+                                        }
+                                        )}
+                                    </div>
+                                }
+
+
+
+
+
                             </InfiniteScroll>
+
+
+
+
+
+
                         </div>
 
                     }

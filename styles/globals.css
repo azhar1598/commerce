@@ -147,7 +147,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    scroll-behavior: smooth
+    scroll-behavior: smooth;
+    scrollbar-color: red !important;
 }
 
 a {
@@ -158,6 +159,17 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.item-description-list{
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+
+
 @media only screen and (min-width: 600px) {
 .item-description{
     display: -webkit-box;
@@ -168,12 +180,13 @@ a {
     
 }
 .wishlist-btn {
-  display: none;
-}
-
-.wishlist-btn:hover {
+  /* display: none; */
   display: inline-block;
 }
+
+/* .wishlist-btn:hover {
+  display: inline-block;
+} */
 
 /* custom scrollbar */
 ::-webkit-scrollbar {
