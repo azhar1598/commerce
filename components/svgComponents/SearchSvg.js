@@ -12,8 +12,8 @@ function SearchSvg({navbarColor,mobile}) {
 
 <svg xmlns="http://www.w3.org/2000/svg" width="23.207" height={mobile?"27.0":"17.207"} viewBox="0 0 28.491 29.06">
   <g id="Group_1758" data-name="Group 1758" transform="translate(-1454.556 -45.497)">
-    <path id="Path_4" data-name="Path 4" d="M25.331,14.916A10.416,10.416,0,1,1,14.916,4.5,10.416,10.416,0,0,1,25.331,14.916Z" transform="translate(1452.056 42.997)" fill="none" stroke={mobile?'#fff':navbarColor} stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
-    <path id="Path_5" data-name="Path 5" d="M30.637,30.729l-5.662-5.754" transform="translate(1449.581 41)" fill={navbarColor} stroke={mobile?'#fff':navbarColor} stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+    <path id="Path_4" dataName="Path 4" d="M25.331,14.916A10.416,10.416,0,1,1,14.916,4.5,10.416,10.416,0,0,1,25.331,14.916Z" transform="translate(1452.056 42.997)" fill="none" stroke={mobile?'#fff':navbarColor} strokeLinecap="round" strokeLinejoin="round" stroke-width="4"/>
+    <path id="Path_5" data-name="Path 5" d="M30.637,30.729l-5.662-5.754" transform="translate(1449.581 41)" fill={navbarColor} stroke={mobile?'#fff':navbarColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="4"/>
   </g>
 </svg>
 

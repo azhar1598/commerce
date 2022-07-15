@@ -16,10 +16,16 @@ import { addToWishlist, deleteFromWishlist, getVariantByItemId } from '../../ser
 import Magnify from '../../components/Magnify';
 import LoginModal from '../../components/LoginModal/LoginModal';
 import PageWrapper from '../../components/PageWrapper/PageWrapper';
+import { useRef } from "react";
+
+
+
+
 const { Option } = Select;
 
 const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist }) => {
     const [active, setActive] = useState(0)
+    const ref = useRef(null);
     const [highlightDefault, setHighLightDefault] = useState([])
     const [selectedVariantStyle, setSelectedVariantStyle] = useState([])
     const [keepVariants, setKeepVariants] = useState([])
@@ -40,6 +46,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
     console.log('wishlistId', initialState?.data?.wishlistId, wishlistId)
+
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+      },[]);
 
     useEffect(() => {
         const condition=()=>{
@@ -918,7 +928,20 @@ quantity=15
 
             :
             <div className='flex justify-center items-center bg-white h-screen'>
-                <Spin size="large" />
+                {/* <Spin size="large" /> */}
+
+                <lottie-player
+          id="firstLottie"
+          ref={ref}
+          autoplay
+          
+          loop
+          mode="normal"
+          src="/loader.json"
+          style={{ width: "100px", height: "100px" }}
+        ></lottie-player>
+
+ 
             </div>
 
     );

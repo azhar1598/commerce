@@ -41,6 +41,9 @@ class MyDocument extends Document {
                 <Head>
                     <title>{seo ? seo.seo_title : store ? store?.store_name : 'GoPlinto'}</title>
                     <link rel="shortcut icon" href={store ? store.logo_img_url : 'https://www.goplinto.com/assets/images/goplinto-logo-white-480x97.png'} type="image/x-icon" />
+
+
+                    
                     <meta name="description" content={seo ? seo?.seo_desc : store ? store.store_desc : 'GoPlinto'} />
 
                     <meta property="og:title" content={seo ? seo.seo_title : store ? store?.store_name : 'GoPlinto'}></meta>

@@ -131,7 +131,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
           {/* <div className="border border-blue-100 shadow rounded-md lg:h-[75vh]  lg:mb-16   md:max-w-[24vw] lg:mt-12  p-3 min-w-[95vw]" > */}
             <div className="animate-pulse mt-8 flex space-x-4 ">
               <div className="flex-1 space-y-6 py-5">
-                <div className="rounded bg-slate-700 lg:h-56 lg:h-[70vh]"></div>
+                <div className="rounded bg-slate-300 lg:h-56 lg:h-[70vh]"></div>
         
            
               </div>
@@ -232,7 +232,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                   {newArrivals.map((a, index) => {
                     return (<>
                       {a.item_status == 'AVAILABLE' ?
-                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2  p-2 rounded border border-blue-100 shadow-xl bg-white max-h-[55vh]' key={index}>
 
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className=' h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' onClick={() => { router.push(`/product/${a.item_id}`) }} />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4 ' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
@@ -240,7 +240,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                           <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg  item-name item-description text-[#000000BF]' style={{color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`}}  onClick={() => { router.push(`/product/${a.item_id}`) }} >Starting At Just <br/>₹ {a.sale_price}<span></span></p> */}
 
                         </div> :
-                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
+                        <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow-xl bg-white max-h-[55vh]' key={index}>
                           {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
