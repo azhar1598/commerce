@@ -125,7 +125,19 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
         <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
       </Head> */}
       {loading ?
-        <div className='p-3 lg:px-28 mt-24'>
+        <div className='p-4 mt-12'>
+
+
+          {/* <div className="border border-blue-100 shadow rounded-md lg:h-[75vh]  lg:mb-16   md:max-w-[24vw] lg:mt-12  p-3 min-w-[95vw]" > */}
+            <div className="animate-pulse mt-8 flex space-x-4 ">
+              <div className="flex-1 space-y-6 py-5">
+                <div className="rounded bg-slate-700 lg:h-56 lg:h-[70vh]"></div>
+        
+           
+              </div>
+            </div>
+          {/* </div> */}
+
           <Skeleton active paragraph={{ rows: 7 }} title='hello' />
           <Skeleton active paragraph={{ rows: 7 }} title='hello' />
           <Skeleton active paragraph={{ rows: 7 }} title='hello' />
