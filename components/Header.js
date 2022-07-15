@@ -330,10 +330,12 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
                     </ul>
                     <div className=" p-1 flex flex-row items-center w-[30vw]
-                    mr-4 -mt-1" style={{ backgroundColor: rgbaBackground ,boxShadow:`0px 0px 0px 1px ${customBorder}`}} >
+                    mr-4 -mt-1" style={{ backgroundColor: 'white' ,boxShadow:`0px 0px 0px 1px ${customBorder}`}} >
 
-                        <input type="text" placeholder="Search" name="input" value={input.input} className="w-full  text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{ color: `${storeSettings.data ? 'gray' : 'black'}`, backgroundColor: rgbaColor }} />
-                    <SearchSvg navbarColor={storeSettings.data ? 'gray':'black'}/>
+                        <input type="text" placeholder="Search" name="input" value={input.input} className="w-full  text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{ color: `${storeSettings.data ? 'gray' : 'black'}`, 
+                        // backgroundColor: rgbaColor 
+                        }} />
+                    <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black':''}/>
                         {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
                     </div>
                 </div>

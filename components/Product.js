@@ -155,7 +155,8 @@ export const Product = (props) => {
            <div className='p-2  border border-blue-100 shadow min-h-[50vh] max-h-[65vh]'>
             <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`} 
             onClick={() => { router.push(`/product/${props.itemId}`)
-            props.dispatchSearchItems('') }} />
+            // props.dispatchSearchItems('') 
+            }} />
 
             {/* Wishlist feature for web  Use it later}
             {/* <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
