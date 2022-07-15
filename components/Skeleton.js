@@ -14,7 +14,7 @@ function Skeleton(props) {
 
                                 <div className="animate-pulse flex space-x-4">
                                    
-                                         <div className="rounded bg-slate-700 lg:h-56 w-[16vw] lg:ml-3 md:ml-7"></div>          
+                                         <div className="rounded bg-slate-300 lg:h-56 w-[16vw] lg:ml-3 md:ml-7"></div>          
                                          <div className="flex-1 space-y-6 py-1">
                                         <div className="h-2 bg-slate-200 rounded"></div>
                                         <div className="space-y-3">
@@ -83,14 +83,14 @@ function Skeleton(props) {
                         <div className="border border-blue-100 shadow rounded-md p-4 mb-2 w-[45vw]    mx-auto  justify-between custom-style" key={index}>
                             <div className="animate-pulse flex space-x-8">
                                 <div className="flex-1 space-y-6 py-2">
-                                    <div className="rounded bg-slate-700 lg:h-56 w-[35vw] h-24 lg:ml-3 md:ml-7"></div>
+                                    <div className="rounded bg-slate-300 lg:h-56 w-[35vw] h-24 lg:ml-3 md:ml-7"></div>
 
                                     <div className="space-y-1">
                                         <div Name="grid grid-cols-3 gap-4">
-                                            <div className="h-2 bg-slate-700 rounded col-span-2 mb-2"></div>
+                                            <div className="h-2 bg-slate-300 rounded col-span-2 mb-2"></div>
 
                                         </div>
-                                        <div className="h-2 bg-slate-700 rounded"></div>
+                                        <div className="h-2 bg-slate-300 rounded"></div>
                                     </div>
                                 </div>
                             </div>

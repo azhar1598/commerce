@@ -189,7 +189,7 @@ export const Product = (props) => {
 
             {/* W ishlist feature for mobile*/}
 
-            <div className='lg:hidden  absolute pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '170px' }}>
+            {/* <div className='lg:hidden  absolute pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '170px' }}>
                 <div className='lg:hidden flex md:flex items-end justify-end ' onClick={() => {
 
                     !props.wishlistPage ? props.customerId ? !loadingWishlist?handleWishlist(props.itemId, props.isWishlisted):'' : router.push('account/user/login') : removeFromWishlist(props.entryId)
@@ -201,7 +201,7 @@ export const Product = (props) => {
                         <AiFillHeart id={`m+${props.itemId}`} className={`${wishlistId ? 'text-red-500' : ''} text-xl mr-3`} />}
 
                 </div>
-            </div>
+            </div> */}
 
             {/* End of wishlist feature for mobile */}
 
@@ -234,7 +234,7 @@ export const Product = (props) => {
         }} />
 
         {/* Wishlist feature for web */}
-        <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
+        {/* <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
             {!loadingWishlist ?
                 <div className='hidden lg:flex md:flex items-center justify-center  ' onClick={() => {
 
@@ -251,19 +251,19 @@ export const Product = (props) => {
 
 
                     {/* <button className='capitalize '>{!props.wishlistPage ? 'ADD TO WISHLIST' : 'Remove'}</button> */}
-                </div>
+                {/* </div>
                 :
                 <div className='w-52 ml-64 -pt-3'>
                     <SyncOutlined spin />
                 </div>}
-        </div>
+        </div> */} 
 
         {/* End of wishlist feature for web */}
 
 
 
         {/* W ishlist feature for mobile*/}
-
+{/* 
         <div className='lg:hidden  absolute pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '170px' }}>
             <div className='lg:hidden flex md:flex items-end justify-end ' onClick={() => {
 
@@ -276,7 +276,7 @@ export const Product = (props) => {
                     <AiFillHeart id={`m+${props.itemId}`} className={`${wishlistId ? 'text-red-500' : ''} text-xl mr-3`} />}
 
             </div>
-        </div>
+        </div> */}
 
         {/* End of wishlist feature for mobile */}
 

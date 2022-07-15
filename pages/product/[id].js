@@ -579,8 +579,8 @@ quantity=15
                             </div>)
                                 : ""
                             }
-
-                            {isDesktopOrLaptop ?
+{/* Temporary Comment  */}
+                         {/*   {isDesktopOrLaptop ?
                                 <div className='flex'>
                                     <div className="flex items-center space-x-5">
                                         {
@@ -682,8 +682,8 @@ quantity=15
                                                         }).qty + 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.4', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
                                                     </div>}
                                         {/* <div className="text-emerald-500 py-2 px-2 border border-slate-300 text-sm cursor-pointer flex items-center"><HeartOutlined /><span className="px-2">Add to Wishlist</span></div> */}
-                                    </div>
-                                    {!loadingWishlist ? wishlistId ?
+                                    {/* </div> */}
+                                    {/* {!loadingWishlist ? wishlistId ?
 
                                         <div onClick={() => handleWishlist(initialState?.data.item_id)} className="text-lg py-2 px-7 cursor-pointer mt-3 text-[#212B36] flex items-start" ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartFilled style={{ fontSize: '24px', color: 'red' }} /></span>ADDED TO WISHLIST</div>
                                         :
@@ -693,8 +693,8 @@ quantity=15
                                             <SyncOutlined spin />
                                         </div>}
                                 </div>
-                                : ""
-                            }
+                                : "" */}
+                            {/* } */}
                         </div>
                     </div>
                     {initialState.spec?.length ? <>
