@@ -1,7 +1,7 @@
 
 
 import Head from 'next/head'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { getBannerImagesAction, getFeaturedProductsAction, getNewArrivalsAction, getSocialProfileAction, getStoreDetails, getStoreDisplaySettings } from '../actions'
