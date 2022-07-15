@@ -13,7 +13,6 @@ import ECarousel, { consts } from 'react-elastic-carousel'
 import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, UpSquareOutlined } from '@ant-design/icons'
 import { Skeleton } from 'antd';
 import { FaCircle } from 'react-icons/fa'
-import { BsSquare } from 'react-icons/Bs'
 import { useRouter } from "next/router";
 import { ConfigProvider } from 'antd';
 import PageWrapper from '../components/PageWrapper/PageWrapper'
