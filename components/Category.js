@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useRouter } from 'next/router'
+import { CaretDownOutlined } from '@ant-design/icons'
 
 
 export const Category = ({ name, id, handleCategory, handleSubCategory, categories, subCategories, categoryKey, openCategorySidebar, stateStoreSettings, closeSubCategory, setCloseSubCategory }) => {
@@ -20,7 +21,7 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
         <>
             {/* Web View */}
             <div className='hidden lg:flex flex-col md:block -ml-4 '>
-                <div className='flex'>
+                <div className='flex '>
                     <p id={id} className={`${categoryKey == id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onClick={() => { handleCategory(id, name, subCategories) }} onMouseEnter={() => {
                         if (subCategories.length != 0) {
                             handleCategory(id, name, subCategories)
@@ -31,6 +32,9 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
                     
                     
                     >{name}</p>
+                    <div className='-mt-1 px-2'>
+                    <CaretDownOutlined style={categoryKey == id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} />
+                    </div>
 
 
 

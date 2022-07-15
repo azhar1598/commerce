@@ -13,6 +13,7 @@ import ContactUs from './ContactUs'
 import { configConsumerProps } from 'antd/lib/config-provider'
 import absoluteUrl from 'next-absolute-url'
 import SearchSvg from './svgComponents/SearchSvg'
+import { FaSearch } from 'react-icons/fa';
 
 
 
@@ -272,7 +273,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
                 <MenuOutlined style={{ color: 'white' }} onClick={showHamburger} />
                 <div className='flex items-center justify-between '>
-                    <div className="  p-2 flex flex-row items-center " >
+                    <div className="  p-2 flex flex-row items-center rounded " >
                         <input type="text" placeholder="Search" name="input" value={input.input} className={`  text-white outline-none text-[19px]`} style={stateMobileSearch ? { background: storeSettings.data ? storeSettings.data.primary_color : 'black', borderBottom: '2px solid white', width: '75vw', transition: 'all .5s linear' } : { display: 'none', outline: 'none', transition: 'all .5s ease-out', width: '55vw' }} onChange={handleChange} autoComplete="off" />
                         <SearchOutlined
                             //  className={`text-gray-900 ${stateMobileSearch ? 'mr-5' : ''}`} 
@@ -308,7 +309,9 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                     <ul className='flex items-center mt-2 ml-5 w-[20vw] justify-around  text-[#212B36] ' style={{
                         color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
                     }}>
-                         <li>|</li>
+                         <li className='opacity-50' style={{
+                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                        }}>|</li>
                         <li className='text-sm cursor-pointer px-2' style={{
                             color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
                         }} 
@@ -316,12 +319,20 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         >
                             Shop
                         </li>
-                        <li>|</li>
-                        <li className='text-sm cursor-pointer px-2' onClick={() => setContactUsVisible(true)} >
+                        <li className='opacity-50' style={{
+                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                        }} >|</li>
+                        <li className='text-sm cursor-pointer px-2'style={{
+                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                        }}  onClick={() => setContactUsVisible(true)} >
                             About
                         </li>
-                        <li>|</li>
-                        <li className='text-sm cursor-pointer px-2' onClick={() => setContactUsVisible(true)} >
+                        <li className='opacity-50'  style={{
+                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                        }}>|</li>
+                        <li className='text-sm cursor-pointer px-2' style={{
+                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                        }} onClick={() => setContactUsVisible(true)} >
                             Contact Us
                         </li>
 
@@ -330,11 +341,12 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
                     </ul>
                     <div className=" p-1 flex flex-row items-center w-[30vw]
-                    mr-4 -mt-1" style={{ backgroundColor: 'white' ,boxShadow:`0px 0px 0px 1px ${customBorder}`}} >
+                    mr-4 -mt-1 rounded" style={{ backgroundColor: 'white' ,boxShadow:`0px 0px 0px 1px ${customBorder}`}} >
 
                         <input type="text" placeholder="Search" name="input" value={input.input} className="w-full  text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{ color: `${storeSettings.data ? 'gray' : 'black'}`, 
                         // backgroundColor: rgbaColor 
                         }} />
+            
                     <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black':''}/>
                         {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
                     </div>

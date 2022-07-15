@@ -45,7 +45,7 @@ const ContactUs = ({ contactUsVisible, setContactUsVisible, storeDetails, storeI
                                 <p className='text-center font-montMedium'>{storeDetails?.store_type}</p>
                             </div>
                         </div>
-                        <div className='p-7 col-span-3' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white` }}>
+                        <div className='p-7 col-span-3' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white` }}>
                             <p className='text-xl font-montSemiBold'>CONTACT US</p>
                             <div className='text-white space-y-5 pl-4'>
                                 {storeDetails?.address ? <div>

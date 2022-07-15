@@ -161,7 +161,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                 }}>
                   {banners.map((a, index) =>
                     <div maxWidth="100%" className='flex flex-col ' key={index}>
-                      <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[100vw] h-[65vh] bg-white' />
+                      <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[100vw] h-[75vh] bg-white' />
 
                     </div>
                   )}

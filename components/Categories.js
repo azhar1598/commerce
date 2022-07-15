@@ -1,4 +1,4 @@
-import { AppstoreFilled, ArrowLeftOutlined, CloseOutlined } from '@ant-design/icons'
+import { AppstoreFilled, ArrowLeftOutlined, CaretDownOutlined, CloseOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
@@ -120,7 +120,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                                 <a onClick={(e) => e.preventDefault()}>
                                     <div className='flex '>
                                         <p className='text-black font-montMedium'>Others</p>
-                                        <DownOutlined className='px-2 pt-1 text-black'/>
+                                        <CaretDownOutlined className='px-2 pt-1 ' style={{color:'black'}}/>
                                     </div>
                                 </a>
                             </Dropdown>
