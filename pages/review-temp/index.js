@@ -14,7 +14,7 @@ import ReviewTracker from '../../components/ReviewTracker'
 import StoreStatus from '../../components/svgComponents/StoreStatus'
 
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails,storeDisplaySettings }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings }) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
 
@@ -28,9 +28,34 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const [enableBulkAPI, setEnableBulkAPI] = useState(true)
     const [validCoupon, setValidCoupon] = useState(false)
     const [paymentAdded, setPaymentAdded] = useState(false)
-    
-  const[storeClosed,setStoreClosed]=useState(false)
-  const[payReview,setPayReview]=useState(true)
+
+    const [storeClosed, setStoreClosed] = useState(false)
+    const [payReview, setPayReview] = useState(true)
+
+    const [minQtyMsg, setMinQtyMsg] = useState(false)
+    const [minProduct, setMinProduct] = useState()
+
+
+    useEffect(() => {
+        cart.map(item => {
+            console.log('mappingitem', item, item.inventoryDetails?.min_order_quantity > item.qty)
+            if (item.defaultVariantItem?.inventory_details > item.qty) {
+                setMinQtyMsg(true)
+                setMinProduct(item.item_name)
+                console.log('mapping')
+            }
+            else {
+                if (item?.inventoryDetails?.min_order_quantity > item.qty) {
+                    setMinQtyMsg(true)
+                    setMinProduct(item.item_name)
+                    console.log('mapping')
+                }
+                else {
+                    // setMinQtyMsg(false)
+                }
+            }
+        })
+    }, [cart])
 
 
 
@@ -70,7 +95,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         setUseWallet(false)
 
 
-       
+
     }
 
     useEffect(() => {
@@ -87,23 +112,23 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     }, [isTabletOrMobile])
 
-    const walletChange =async (e) => {
+    const walletChange = async (e) => {
 
         console.log(e.target.checked)
         if (e.target.checked) {
             setPaymentMethod('ONL')
             setUseWallet(true)
-            if(paymentMethod=='COD'){
-            const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-            if (response) {
-                setPaymentAdded(true)
+            if (paymentMethod == 'COD') {
+                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                if (response) {
+                    setPaymentAdded(true)
 
-                fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                }
             }
-            }
-           
-          
-          
+
+
+
         }
         else {
             setPaymentMethod(paymentMethod)
@@ -184,28 +209,89 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
-    const handleDecreaseQuantity = (itemid, qty) => {
+    const handleDecreaseQuantity = (item, qty) => {
 
-        console.log('item id', itemid)
         const data = readyCartData(cart)
+        item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+
+        if (item.defaultVariantItem) {
+
+            const filter = cart.filter((c) => {
+                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem_variant_item_id) {
+                    return c
+                }
+            })
+    
+            // important
+            if (qty == 0) {
+                removeFromCart(Number(item.variant_item_id))
+    
+            }
+            else {
+    
+                if (filter[0].qty <= item.defaultVariantItem.inventoryDetails?.min_order_quantity) {
+    
+    
+                    message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventoryDetails?.min_order_quantity}`)
+                    // setMinQtyMsg(true)
+                    setMinProduct(item.item_name)
+    
+    
+                }
+                else {
+                    adjustQty(item.item_id, qty)
+                    setMinQtyMsg(false)
+    
+                }
+            }
+        } else {
+            const filter = cart.filter((c) => {
+                if (c.item_id == item.item_id) {
+                    return c
+                }
+            })
+
+            // important
+            if (qty == 0) {
+                removeFromCart(Number(item.item_id))
+
+            }
+            else {
+
+                if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
 
 
-        if (qty == 0) {
-            removeFromCart(Number(itemid))
+                    message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+                    // setMinQtyMsg(true)
+                    setMinProduct(item.item_name)
+
+
+                }
+                else {
+                    adjustQty(item.item_id, qty)
+                    setMinQtyMsg(false)
+
+                }
+            }
 
         }
-        else {
-
-            console.log('itemmmid', itemid, qty)
-
-            adjustQty(itemid, qty)
-        }
 
 
 
 
-        // const data = readyCartData(cart)
-        // fetchBackendCart('userDetails.data?.customer_id,', 'storeDetails.group_id', data)
+
+
+        // if (checkout.backendCart?.purchase_id || state) {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', checkout.backendCart?.purchase_id, data)
+
+        // }
+        // else {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', undefined, data)
+
+        // }
+
+
+        // fetchBackendCart('customerDetails.data?.customer_id,', 'storeDetails.group_id', data)
     }
 
     const readyCartData = function (arr) {
@@ -232,6 +318,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     const handleIncreaseQuantity = (item) => {
 
+        console.log('itenmmmm', item)
 
         if (item.defaultVariantItem) {
 
@@ -272,9 +359,12 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 if (filter[0].qty >= quantity) {
                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
-                    adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+                    // adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
                 }
                 else {
+                    if (filter[0].qty + 1 >= item.defaultVariantItem.inventoryDetails?.min_order_quantity) {
+                        setMinQtyMsg(false)
+                    }
                     adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
                 }
             }
@@ -285,15 +375,18 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         }
         else {
             // item without variant
-
-
+            console.log('item without variant', item)
 
             let quantity = 0
-            const value = item?.inventory_details
+            const value = item?.inventoryDetails
 
+            console.log('valuee', value)
             if (value != null) {
 
                 if (value?.inventory_quantity == null) {
+
+
+
                     if (value?.max_order_quantity == null)
                         quantity = 15
                     else {
@@ -327,27 +420,25 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
                 })
 
+                // important
+
                 if (filter[0].qty >= quantity) {
                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
-                    adjustQty(item.item_id, item.qty)
+
+                    // adjustQty(item.item_id, item.qty)
                 }
                 else {
+                    console.log('filter[0].qty+1', filter[0].qty + 1)
+                    if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
+                        setMinQtyMsg(false)
+                    }
                     adjustQty(item.item_id, item.qty + 1)
                 }
             }
             else {
                 message.error('Sorry, You Cannot add more items')
             }
-
-
-
-
-
-
-
-
-
         }
 
     }
@@ -355,15 +446,15 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     const handleWalletChange = async (e) => {
 
-        if(storeDisplaySettings?.data?.is_payment_accepted=="Y"){
-        stateWallet?.customer_wallet_balance != 0 ? walletChange(e) : ''
-        const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-        if (response) {
-            setPaymentAdded(true)
+        if (storeDisplaySettings?.data?.is_payment_accepted == "Y") {
+            stateWallet?.customer_wallet_balance != 0 ? walletChange(e) : ''
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+            if (response) {
+                setPaymentAdded(true)
+            }
+        } else {
+            // setStoreClosed(true)
         }
-    }else{
-        // setStoreClosed(true)
-    }
 
     }
 
@@ -388,18 +479,18 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         <div className='bg-white h-32 mb-1 flex items-center p-8  w-full'>
                             <Radio.Group onChange={handlePaymentChange} value={paymentMethod}>
                                 <Space direction="vertical" className="leading-9">
-                                    <Radio value='ONL' className='font-montSemiBold' style={{color:storeDisplaySettings?.data?.is_payment_accepted != 'Y'?'gray':'black',fontSize:'16px'}}>Online Payment {
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"":
-                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y'?<span className='text-red-500 px-2'>Not Accepting Online Payments</span>:''}</Radio>
-                                    <Radio value='COD' style={{color:storeDisplaySettings?.data?.is_cod_accepted != 'Y'?'gray':'black',fontSize:'16px'}} className={`font-montSemiBold inline text-[16px]`}>Pay on Delivery {
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"":
-                                    
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y'?<span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span>:''}</Radio>
+                                    <Radio value='ONL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px' }}>Online Payment {
+                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                            storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
+                                    <Radio value='COD' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px' }} className={`font-montSemiBold inline text-[16px]`}>Pay on Delivery {
+                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+
+                                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
 
                                 </Space>
                             </Radio.Group>
-                            
-                      
+
+
                         </div>
                         {/* <div className='bg-white h-32 flex items-center p-8 mb-1 w-full'>
                     <Radio.Group onChange={handleChange} value={value}>
@@ -415,13 +506,13 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                     handleWalletChange(e)
 
 
-                                }} defaultChecked={false} checked={useWallet} style={{color:storeDisplaySettings?.data?.is_payment_accepted != 'Y'?'gray':'black'}}><span className=' font-montSemiBold' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
+                                }} defaultChecked={false} checked={useWallet} style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black' }}><span className=' font-montSemiBold' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
                             </div>
                             <p className=' font-montSemiBold flex items-center'><WalletFilled style={{ color: 'gray', paddingRight: '4px' }} />Balance <span className='text-green-500'>{storeDetails?.currency_symbol} {stateWallet?.customer_wallet_balance}</span></p>
 
                         </div>
                         <p className='text-red-500 text-[16px] pt-2'>{
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"Not Accepting Any Payments at the Moment":""}</p>
+                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "Not Accepting Any Payments at the Moment" : ""}</p>
 
                         <p className='hidden lg:block md:block font-montSemiBold mt-8 text-[#212B36]'>Review Order</p>
 
@@ -450,7 +541,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                             {checkout.backendCart?.purchase_id != undefined ?
                                                 <div className='flex justify-between items-center gap-6' >
                                                     <div className='border border-gray-400 space-x-4 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id, item.qty - 1)} className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span onClick={() =>  handleDecreaseQuantity(item, item.qty - 1)}  className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
                                                         <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{item.qty}</span>
                                                         <span onClick={() => { handleIncreaseQuantity(item) }}
 
@@ -476,7 +567,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         <div className='flex flex-col justify-center gap-3'>
 
 
-                            <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'} paymentMethod/>
+                            <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'} paymentMethod />
                             <p className='text-base text-center text-sm'>Store is not accepting this payment method at the moment</p>
                         </div>
 
@@ -484,7 +575,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                     <div className='mt-16 w-96'>
                         <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} />
-                        <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={true} wallet={useWallet} walletAmount={stateWallet?.customer_wallet_balance} paymentMethod={paymentMethod} final={false} storeDisplaySettings={storeDisplaySettings} payReview={payReview}/>
+                        <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={true} wallet={useWallet} walletAmount={stateWallet?.customer_wallet_balance} paymentMethod={paymentMethod} final={false} storeDisplaySettings={storeDisplaySettings} payReview={payReview} />
                     </div>
 
 
@@ -502,7 +593,7 @@ const mapStateToProps = (state) => ({
     customerDetails: state.customerDetailsReducer,
     stateWallet: state.walletReducer?.data,
     storeDetails: state.storeDetailsReducer?.data,
-    storeDisplaySettings:state.storeDisplaySettingsReducer
+    storeDisplaySettings: state.storeDisplaySettingsReducer
 })
 
 

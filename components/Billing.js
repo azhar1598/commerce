@@ -16,7 +16,7 @@ import encUtf8 from "crypto-js/enc-utf8";
 import aes from "crypto-js/aes";
 import StoreStatus from './svgComponents/StoreStatus'
 
-export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid }) => {
+export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid ,minQtyMsg,minProduct}) => {
 
   const router = useRouter()
   const [paymentData, setPaymentData] = useState({})
@@ -88,7 +88,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
   const handleProceed = async (device) => {
 
-    setloader(true)
+
 
     if (customerDetails.data?.customer_id) {
       // const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
@@ -97,6 +97,13 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
       // we dont need choose Delivery
       // const chooseDelivery = await setDeliveryAddressFlag(address.purchaseDetails.data.purchaseId,'Y')
+
+
+console.log('billing minQtyMsg',minQtyMsg)
+
+
+if(!minQtyMsg || minQtyMsg==undefined){
+  setloader(true)
       if (device == 'mobile') {
         if (!shippingAdded){
       if(purchaseInvalid==''){
@@ -144,10 +151,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           }
       }
     }
+    else{
+      message.error(`Please Check Minimum Quantity of ${minProduct}`)
+    }
+  }
     else {
       setloader(false)
       message.error('Something is wrong with address')
     }
+  
+ 
     // }
     // else {
     //   setloader(false)
