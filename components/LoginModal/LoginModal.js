@@ -11,6 +11,7 @@ import { customerLogIn, customerSignUp, forgotPasswordAPI, resetPasswordAPI, ver
 import ResetPassword from './ResetPassword';
 import { useFirebase } from '../../firebase/useFirebase';
 import create from '@ant-design/icons/lib/components/IconFont';
+import Message from '../Message/Message';
 
 function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisible, showModal, storeId, customerDetails, customerDetailsReducer, dispatchForgotPassword, dispatchResetPassword, dispatchCustomerSignUp, dispatchCustomerLogin, dispatchForgotOtp,
     dispatchVerifyOtp }) {
@@ -38,6 +39,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     const [message, setMessage] = useState('')
     const [verifyAccount, setVerifyAccount] = useState(false)
     const [disable, setDisable] = useState(false)
+    const [customMessage, setCustomMessage] = useState(false)
 
     const [fcmToken, setFcmToken] = useState('')
 
@@ -83,7 +85,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message == "Email is already taken") {
             setLoading(false)
             console.log('Em consol', message)
-            messageAnt.error(message)
+            // messageAnt.error(message)
             setMessage('')
 
         }
@@ -91,7 +93,12 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message === "Successful logged in") {
             // setOtp(true)
             // setLoginMethod('email')    
-            messageAnt.success('Logged In Successfully ')
+            // messageAnt.success('Logged In Successfully ')
+            // <Message visible={customMessage} message={message} error={false} success={true}/>
+
+            // setTimeout(() => {
+            //     setCustomMessage(false)
+            // }, [2000])
             setMessage('')
             // customerDetails(response.data.customerDetails)
             setVisible(false)
@@ -123,13 +130,13 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             dispatchForgotPassword({ payload })
 
             // customerDetails(response.data.customerDetails)
-            messageAnt.error('Please Verify Your Account')
+            // messageAnt.error('Please Verify Your Account')
             setLoading(false)
         }
         else if (message == "OTP verification successful" && createAccount) {
 
 
-            message && messageAnt.success('successfully verified acdcount')
+            // message && messageAnt.success('successfully verified acdcount')
             setOTP('')
 
             setLoading(false)
@@ -237,7 +244,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     const handleChange = (e) => {
 
         setInputSignUp({ ...inputSignUp, [e.target.name]: e.target.value })
-      
+
     }
 
     const handleChangeOtp = (data) => {
@@ -276,11 +283,11 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             else if (inputSignUp.password.length < 8) {
                 messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
             }
-            else if(/\s/g.test(inputSignUp.password)){
-                
+            else if (/\s/g.test(inputSignUp.password)) {
+
                 messageAnt.error('No Blank Spaces Allowed')
-        }
-      
+            }
+
 
             else {
 
@@ -410,18 +417,18 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     const handleResetPassword = async (e) => {
         e.preventDefault()
 
-
+// consoled messageAnt Temprarily
 
         if (inputSignUp.password != inputSignUp.confirm_password) {
-            messageAnt.error("Password and Confirm Password doesn't match ")
+            // messageAnt.error("Password and Confirm Password doesn't match ")
         }
         else if (inputSignUp.password.length < 8) {
-            messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+            // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
         }
-        else if(/\s/g.test(inputSignUp.password)){
-                
-            messageAnt.error('No Blank Spaces Allowed')
-    }
+        else if (/\s/g.test(inputSignUp.password)) {
+
+            // messageAnt.error('No Blank Spaces Allowed')
+        }
         else {
 
             const response = await resetPasswordAPI(inputSignUp, customerId)
@@ -433,7 +440,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                 setLoading(false)
                 setVisible(false)
                 // setMessage('Password changed succesfully')
-                messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
+                // messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
             }
             else {
                 messageAnt.error(response.data.message)
@@ -453,7 +460,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         setMethod(data)
     }
 
-    console.log('disable',disable)
+    console.log('disable', disable)
 
     return (
         <div className=''>
@@ -481,7 +488,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                                 <LoginForm handleAuth={handleAuth} handleChange={handleChange} handleClick={handleClick} disabled={disabled} method={method} handleLoginMethod={handleLoginMethod} handleForgotPassword={handleForgotPassword} forgotPassword={forgotPassword} handleForgotPasswordChange={handleForgotPasswordChange} />
                                 : <SignupForm handleAuth={handleAuth} handleChange={handleChange} handleClick={handleClick} method={method} storeSettings={storeSettings} handleLoginMethod={handleLoginMethod} inputSignUp={inputSignUp} />
                             : resetPassword ? <ResetPassword handleResetPassword={handleResetPassword} handleChange={handleChange} /> :
-                                <OtpForm handleChangeOtp={handleChangeOtp} inputSignUp={inputSignUp} handleProceed={handleProceed} handleAuth={handleAuth} method={method} inputOtp={inputOtp} OTP={OTP} change={change} auth={auth} verifyOtp={verifyOtp} handleForgotPassword={handleForgotPassword} handleForgotPasswordAuth={handleForgotPasswordAuth} verifyAccount={verifyAccount} disable={disable}/> :
+                                <OtpForm handleChangeOtp={handleChangeOtp} inputSignUp={inputSignUp} handleProceed={handleProceed} handleAuth={handleAuth} method={method} inputOtp={inputOtp} OTP={OTP} change={change} auth={auth} verifyOtp={verifyOtp} handleForgotPassword={handleForgotPassword} handleForgotPasswordAuth={handleForgotPasswordAuth} verifyAccount={verifyAccount} disable={disable} /> :
                         <Error msg={msg} />
                     :
                     <div className="flex items-center justify-center bg-transparent" style={{ minHeight: '32vh' }}>

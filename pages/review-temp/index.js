@@ -45,6 +45,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
                 if (response) {
                     setPaymentAdded(true)
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
                 }
             }
             else {
@@ -57,6 +58,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
                 if (response) {
                     setPaymentAdded(true)
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
                 }
             }
             else {
@@ -85,12 +87,23 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     }, [isTabletOrMobile])
 
-    const walletChange = (e) => {
+    const walletChange =async (e) => {
 
         console.log(e.target.checked)
         if (e.target.checked) {
             setPaymentMethod('ONL')
             setUseWallet(true)
+            if(paymentMethod=='COD'){
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+            if (response) {
+                setPaymentAdded(true)
+
+                fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+            }
+            }
+           
+          
+          
         }
         else {
             setPaymentMethod(paymentMethod)
