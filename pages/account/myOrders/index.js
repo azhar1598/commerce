@@ -129,7 +129,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                             <>
                                 {orders.length != 0 ?
                                     orders.map((item, index) =>
-                                        <div className='w-full' key={index}>
+                                        <div className='w-full mt-5' key={index}>
                                             <div className='border-2 border-[#00000028] '>
                                                 <div className='flex p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
 
@@ -157,13 +157,13 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                             return (<>
                                                                 {index == 0 ?
                                                                     <>
-                                                                        <p className='text-[#212B36]   font-montSemiBold w-56 break-words '>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
+                                                                        <p className='text-[#212B36]   font-montSemiBold w-96 break-words '>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
                                                                         <p className='text-[#212B3680] '></p>
                                                                     </> : ''}
                                                             </>
                                                             )
                                                         })}
-                                                        <p className={`ml-6 ${item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? `text-green-500` : item.orderStatus === "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? `text-red-500` : `text-black`} text-md font-montSemiBold`}>{item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? "Delivered" : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? "Order Confirmed" : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? "Out for delivery" : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? "Order Cancelled" : "Order Placed"}</p>
+                                                        <p className={` ${item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? `text-green-500` : item.orderStatus === "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? `text-red-500` : `text-black`} text-md font-montSemiBold`}>{item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? "Delivered" : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? "Order Confirmed" : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? "Out for delivery" : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? "Order Cancelled" : "Order Placed"}</p>
 
 
 
