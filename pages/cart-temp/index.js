@@ -82,13 +82,33 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     }, [cart, customerDetails])
 
 
-        useEffect(() => {
-            cart.map(item => {
-                console.log('mappingitem', item, item.inventoryDetails?.min_order_quantity > item.qty)
-                if (item.defaultVariantItem?.inventory_details > item.qty) {
-                    setMinQtyMsg(true)
-                    setMinProduct(item.item_name)
-                    console.log('mapping')
+    useEffect(() => {
+        cart.map(item => {
+            console.log('mappingitem', item, item.inventoryDetails?.min_order_quantity > item.qty)
+            if (item.defaultVariantItem) {
+
+                if (item?.defaultVariantItem.inventory_details?.min_order_quantity > item?.defaultVariantItem?.inventory_details?.inventory_quantity) {
+                    if (item.defaultVariantItem?.inventory_details?.inventory_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+
+                } else {
+                    if (item.defaultVariantItem?.inventory_details?.min_order_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+                }
+            }
+            else {
+                if (item?.inventoryDetails?.min_order_quantity > item?.inventoryDetails?.inventory_quantity) {
+                    if (item?.inventoryDetails?.inventory_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
                 }
                 else {
                     if (item?.inventoryDetails?.min_order_quantity > item.qty) {
@@ -96,12 +116,13 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         setMinProduct(item.item_name)
                         console.log('mapping')
                     }
-                    else {
-                        // setMinQtyMsg(false)
-                    }
                 }
-            })
-        }, [cart])
+                // else {
+                // setMinQtyMsg(false)
+                // }
+            }
+        })
+    }, [cart])
 
     useEffect(() => {
         if (checkout.backendCart?.purchase_id && !enableBulkAPI) {
@@ -155,38 +176,61 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const handleDecreaseQuantity = (item, qty) => {
 
         const data = readyCartData(cart)
-        item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+        // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
 
         if (item.defaultVariantItem) {
 
             const filter = cart.filter((c) => {
-                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem_variant_item_id) {
+                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
                     return c
                 }
             })
-    
+
             // important
             if (qty == 0) {
                 removeFromCart(Number(item.variant_item_id))
-    
+
             }
             else {
-    
-                if (filter[0].qty <= item.defaultVariantItem.inventoryDetails?.min_order_quantity) {
-    
-    
-                    message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventoryDetails?.min_order_quantity}`)
-                    // setMinQtyMsg(true)
-                    setMinProduct(item.item_name)
-    
-    
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+
+
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
                 }
                 else {
-                    adjustQty(item.item_id, qty)
-                    setMinQtyMsg(false)
-    
+             
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        console.log('qqtty',qty)
+                        adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
                 }
+
+
             }
+
+
         } else {
             const filter = cart.filter((c) => {
                 if (c.item_id == item.item_id) {
@@ -200,20 +244,38 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
             }
             else {
+                if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
 
-                if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
-
-
-                    message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
-                    // setMinQtyMsg(true)
-                    setMinProduct(item.item_name)
+                    if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
 
 
-                }
-                else {
-                    adjustQty(item.item_id, qty)
-                    setMinQtyMsg(false)
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
 
+
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                } else {
+
+                    if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
+
+
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
                 }
             }
 
@@ -303,18 +365,69 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         return c
                     }
                 })
-                console.log('fffilter', filter)
-                if (filter[0].qty >= quantity) {
-                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                // console.log('fffilter', filter)
+                // if (filter[0].qty >= quantity) {
+                //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
-                    // adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
-                }
-                else {
-                    if (filter[0].qty + 1 >= item.defaultVariantItem.inventoryDetails?.min_order_quantity) {
-                        setMinQtyMsg(false)
+                //     // adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+                // }
+                // else {
+                //     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                //         setMinQtyMsg(false)
+                //     }
+                //     adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                // }
+
+
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+                    if (filter[0].qty < item.item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
                     }
-                    adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+                    if (filter[0].qty >= quantity) {
+                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
                 }
+
+                else {
+
+
+
+                    if (filter[0].qty < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
+
+                }
+
+
+
             }
             else {
                 message.error('Sorry, You Cannot add more items')
@@ -370,28 +483,61 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                 // important
 
-                if (filter[0].qty >= quantity) {
-                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
 
+                    if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                        adjustQty(item.item_id, item.qty + 1)
 
-                    // adjustQty(item.item_id, item.qty)
-                }
-                else {
-                    console.log('filter[0].qty+1', filter[0].qty + 1)
-                    if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
-                        setMinQtyMsg(false)
                     }
-                    adjustQty(item.item_id, item.qty + 1)
+
+                    if (filter[0].qty >= quantity) {
+                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.item_id, item.qty + 1)
+                    }
+                }
+
+                else {
+
+
+
+                    if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                        adjustQty(item.item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.item_id, item.qty + 1)
+                    }
                 }
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                message.error('Sorry, You cannot add more items')
             }
         }
 
     }
 
-    console.log('Object.keys(checkout.backendCart).length!=0', Object.keys(checkout), Object.keys(checkout).length, Object.keys(checkout).length == 0)
+
+
 
 
 

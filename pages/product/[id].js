@@ -1,4 +1,7 @@
 
+import React, { useEffect, useState } from 'react'
+import { useRouter } from "next/router";
+
 import { connect } from 'react-redux'
 import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems } from "../../actions";
 import { Image, message, Rate, Spin, Tooltip, Space, Carousel } from 'antd';
@@ -7,19 +10,28 @@ import ReactPlayer from 'react-player'
 import { useMediaQuery } from 'react-responsive'
 // import ReactImageMagnify from 'react-image-magnify';
 import { HeartOutlined, ArrowLeftOutlined, HeartFilled, Loading3QuartersOutlined, LoadingOutlined, SyncOutlined, } from '@ant-design/icons'
-import { Select } from 'antd';
-import React, { useEffect, useState } from 'react'
-import { useRouter } from "next/router";
-import Head from 'next/head';
-import { useRef } from "react";
+
 
 import { addToWishlist, deleteFromWishlist, getVariantByItemId } from '../../services/apiServices';
 import Magnify from '../../components/Magnify';
 import LoginModal from '../../components/LoginModal/LoginModal';
 import PageWrapper from '../../components/PageWrapper/PageWrapper';
-const { Option } = Select;
+
+
 
 const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist }) => {
+
+
+
+    const router = useRouter();
+    const { id } = router.query;
+
+    const [loadingWishlist, setLoadingWishlist] = useState(false)
+    // const [page, setPage] = useState(2)
+    const [minQtyMsg, setMinQtyMsg] = useState(false)
+
+
+
     const [active, setActive] = useState(0)
     const [highlightDefault, setHighLightDefault] = useState([])
     const [selectedVariantStyle, setSelectedVariantStyle] = useState([])
@@ -29,24 +41,13 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [wishlist, setWishlist] = useState([])
     const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist)
     const [visible, setVisible] = useState(false)
-    const [wishlistId, setWishlistId] = useState(initialState?.data?.wishlistId)
-    const [loadingWishlist, setLoadingWishlist] = useState(false)
-    const [noMoreWishlist, setNoMoreWishlist] = useState()
-    const [page, setPage] = useState(2)
-    const [minQtyMsg, setMinQtyMsg] = useState(false)
-    const ref = useRef(null);
+    const [wishlistId, setWishlistId] = useState()
+
+
+    // 75:5  Error: React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render This is because you made it like this     const [wishlistId, setWishlistId] = useState(initialState?.data?.wishlist), rather this is the solution const [wishlistId, setWishlistId] = useState()
 
 
 
-    const router = useRouter();
-    const { id } = router.query;
-
-
-    console.log('wishlistId', initialState?.data?.wishlistId, wishlistId)
-
-    useEffect(() => {
-        import("@lottiefiles/lottie-player");
-      },[]);
 
 
     useEffect(() => {
@@ -57,38 +58,21 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                 fetchSpecification(id);
                 fetchAdditionalInfo(id);
                 fetchRelatedItems(id)
-
                 getStoreDetails(router.query.storeId);
             }
         }
         condition()
     }, [id])
 
-    useEffect(() => {
-        if (initialState?.defaultVariantItem) {
+    // useEffect(() => {
 
-            const defaultVar = Object.keys(initialState.defaultVariantItem).map(key => {
-                if (key.includes("variant_value")) {
-                    return initialState.defaultVariantItem[key]
-                }
-            }).filter(Boolean)
-
-            const selectedDefaultVariant = defaultVar.map(e => e.variant_value_id)
-            setSelectedVariantStyle(selectedDefaultVariant)
-
-        }
-    }, [initialState?.defaultVariantItem, initialState.data])
+    // }, [initialState?.defaultVariantItem, initialState.data])
 
 
 
-    useEffect(() => {
 
-        console.log('initialState?.data?.wishlistId', initialState?.data?.wishlistId)
-        if (initialState?.data?.wishlistId) {
-            setWishlistId(initialState?.data?.wishlistId)
-        }
 
-    }, [initialState?.data?.wishlistId == undefined])
+
 
 
     useEffect(() => {
@@ -99,7 +83,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
             console.log('selected cart item', item, item.defaultVariantItem != null && item.defaultVariantItem?.variant_item_id == initialState.defaultVariantItem?.variant_item_id, item.item_id == initialState.data?.item_id)
 
-            if (item.defaultVariantItem != null && item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+            if (item.defaultVariantItem != null && item.defaultVariantItem.variant_item_id == initialState?.defaultVariantItem?.variant_item_id) {
 
 
                 console.log('selected te def', item)
@@ -120,16 +104,60 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         if (selectedItem?.qty < initialState.data?.inventoryDetails?.min_order_quantity || selectedItem?.qty < initialState.defaultVariantItem?.inventoryDetails?.min_order_quantity) {
             console.log('initialState.data', initialState.data)
             setMinQtyMsg(true)
-            !isDesktopOrLaptop && message.error(`Minimum Quantity is ${initialState.defaultVariantItem ? initialState.defaultVariantItem?.inventoryDetails?.min_order_quantity : initialState.data?.inventoryDetails?.min_order_quantity}`)
+            !isDesktopOrLaptop && message.error(`Minimum Quantity is ${initialState.defaultVariantItem ? item.defaultVariantItem?.inventory_details?.min_order_quantity>item.defaultVariantItem?.inventory_details?.inventory_quantity?item.defaultVariantItem?.inventory_details?.inventory_quantity:item.defaultVariantItem?.inventory_details?.min_order_quantity : initialState.data?.inventoryDetails?.min_order_quantity> initialState.data?.inventoryDetails?.inventory_quantity? initialState.data?.inventoryDetails?.inventory_quantity:initialState.data?.inventoryDetails?.min_order_quantity}`)
             //
         }
         else {
             setMinQtyMsg(false)
         }
 
+
+
+
     }, [initialState?.defaultVariantItem, initialState.data, cart])
 
-    console.log('initailStattatat', initialState)
+    useEffect(() => {
+        if (initialState?.defaultVariantItem) {
+
+            const defaultVar = Object.keys(initialState.defaultVariantItem).map(key => {
+                if (key.includes("variant_value")) {
+                    return initialState.defaultVariantItem[key]
+                }
+            }).filter(Boolean)
+
+            const selectedDefaultVariant = defaultVar.map(e => e.variant_value_id)
+            setSelectedVariantStyle(selectedDefaultVariant)
+
+        }
+    }, [initialState?.defaultVariantItem, initialState.data])
+
+
+
+
+
+    useEffect(() => {
+
+        if (initialState?.data?.wishlistId) {
+            setWishlistId(initialState?.data?.wishlistId)
+        }
+
+    }, [initialState?.data?.wishlistId == undefined])
+
+
+
+    const colorVariants = ["COLOUR",
+        "COLOURS",
+        "COLOR",
+        "COLORS",
+        "SHADE",
+        "SHADES",
+        "Colr",
+        "Color",
+        "color"
+    ]
+
+
+
 
 
 
@@ -144,16 +172,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-    const colorVariants = ["COLOUR",
-        "COLOURS",
-        "COLOR",
-        "COLORS",
-        "SHADE",
-        "SHADES",
-        "Colr",
-        "Color",
-        "color"
-    ]
+
 
 
     const handleDecressQuantity = (itemid, qty) => {
@@ -232,29 +251,33 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             else if (item.inventoryDetails.inventory_quantity == 0) {
                 // message.error('Sorry,The Item is not available at the moment')
                 quantity = 0
+                console.log('item.inventoryDetails.inventory_quantity == 0', item.inventoryDetails.inventory_quantity == 0)
 
 
             }
             else if (item.inventoryDetails.inventory_quantity != 0) {
+                console.log('item.inventoryDetails.inventory_quantity != 0', item.inventoryDetails.inventory_quantity != 0)
 
                 if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
                     quantity = item.inventoryDetails?.max_order_quantity
+                    console.log('item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity', item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity)
                 }
+                // else {
+                //     if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                //         // message.error('Sorry,The Item is not available at the moment')
+                //         // quantity = 0
+                //     }
                 else {
-                    if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
-                        // message.error('Sorry,The Item is not available at the moment')
-                        quantity = 0
-                    }
-                    else {
-                        quantity = item.inventoryDetails?.inventory_quantity
-                    }
+
+                    quantity = item.inventoryDetails?.inventory_quantity
                 }
+                // }
             }
             if (quantity > 0) {
                 addToCart(item)
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                message.error('Sorry, sYou Cannot add more items')
             }
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
             // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
@@ -707,14 +730,58 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                 }
                                                                             })
 
-                                                                            if (filter[0].qty >= quantity) {
-                                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
-                                                                                item.qty = item.qty - 1
-                                                                                return item
+                                                                            // if (filter[0].qty >= quantity) {
+                                                                            //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                            //     item.qty = item.qty - 1
+                                                                            //     return item
+                                                                            // }
+                                                                            // else {
+                                                                            //     return item
+                                                                            // }
+
+
+
+                                                                            if (value.inventory_quantity < value.min_order_quantity) {
+                                                                                
+                                                                                if (filter[0].qty < value.inventory_quantity) {
+                                                                                    return item
+
+                                                                                }
+
+                                                                                else if (filter[0].qty >= quantity) {
+                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    item.qty = item.qty - 1
+
+                                                                                    return item
+                                                                                }
+                                                                                else {
+
+                                                                                    return item
+                                                                                }
                                                                             }
+
                                                                             else {
-                                                                                return item
+                                                                                if (filter[0].qty < value.min_order_quantity) {
+                                                                                    return item
+
+                                                                                }
+
+                                                                                else if (filter[0].qty >= quantity) {
+                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    item.qty = item.qty - 1
+
+                                                                                    return item
+                                                                                }
+                                                                                else {
+
+                                                                                    return item
+                                                                                }
                                                                             }
+
+
+
+
+
                                                                         }
                                                                         else {
                                                                             message.error('Sorry, You Cannot add more items')
@@ -747,15 +814,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
                                                                                 quantity = item.inventoryDetails?.max_order_quantity
                                                                             }
-                                                                            else {
-                                                                                if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
-                                                                                    // message.error('Sorry,The Item is not available at the moment')
-                                                                                    quantity = 0
-                                                                                }
-                                                                                else {
-                                                                                    quantity = item.inventoryDetails?.inventory_quantity
-                                                                                }
+
+                                                                            else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                                                                                // message.error('Sorry,The Item is not available at the moment')
+                                                                                quantity = item.inventoryDetails.inventory_quantity
                                                                             }
+                                                                            else {
+                                                                                quantity = item.inventoryDetails?.inventory_quantity
+                                                                            }
+                                                                            // }
                                                                         }
 
 
@@ -770,25 +837,47 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             })
 
 
-                                                                            console.log('golier', filter[0].qty < item.inventoryDetails?.min_order_quantity)
+                                                                         
 
-                                                                            if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
+                                                                            if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
 
+                                                                                if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                                                                                    return item
 
+                                                                                }
 
-                                                                                return item
+                                                                                else if (filter[0].qty >= quantity) {
+                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    item.qty = item.qty - 1
 
+                                                                                    return item
+                                                                                }
+                                                                                else {
+
+                                                                                    return item
+                                                                                }
                                                                             }
-                                                                            else if (filter[0].qty >= quantity) {
-                                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
-                                                                                item.qty = item.qty - 1
 
-                                                                                return item
-                                                                            }
                                                                             else {
+                                                                                if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                                                                                    return item
 
-                                                                                return item
+                                                                                }
+
+                                                                                else if (filter[0].qty >= quantity) {
+                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    item.qty = item.qty - 1
+
+                                                                                    return item
+                                                                                }
+                                                                                else {
+
+                                                                                    return item
+                                                                                }
                                                                             }
+
+
+
 
 
                                                                             // addToCart(item)
@@ -834,7 +923,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-                            {minQtyMsg && initialState?.data.item_status == 'AVAILABLE' ? <p className='text-red-500 font-montMedium'> <i>{`${initialState.defaultVariantItem ? `**Minimum Quatity is ${initialState.defaultVariantItem.inventoryDetails.min_order_quantity}` : `**Minimum Quantity is ${initialState?.data && initialState.data.inventoryDetails?.min_order_quantity}`}`}</i></p> : ''}
+                            {minQtyMsg && initialState?.data.item_status == 'AVAILABLE' ? <p className='text-red-500 font-montMedium'> <i>{`${initialState.defaultVariantItem ? `**Minimum Quatity is ${initialState.defaultVariantItem.inventoryDetails.min_order_quantity}` : `**Minimum Quantity is ${initialState?.data &&
+
+                                initialState.data.inventoryDetails?.inventory_quantity < initialState.data.inventoryDetails?.min_order_quantity ? initialState.data.inventoryDetails?.inventory_quantity : initialState.data.inventoryDetails?.min_order_quantity}`}`}</i></p> : ''}
                         </div>
 
                     </div>
@@ -986,117 +1077,63 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                             }
                                         }).qty}</span>
                                         <span onClick={() => adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
-                                            if (initialState.defaultVariantItem) {
-                                                if (item.defaultVariantItem) {
-                                                    if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                        let quantity = 0
-                                                        const value = item?.defaultVariantItem?.inventory_details
+                                          if (initialState.defaultVariantItem) {
+                                            if (item.defaultVariantItem) {
+                                                if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                    let quantity = 0
+                                                    const value = item?.defaultVariantItem?.inventory_details
 
-                                                        if (value?.inventory_quantity == null) {
-                                                            if (value?.max_order_quantity == null)
-                                                                quantity = 15
-                                                            else {
-
-                                                                quantity = value.max_order_quantity
-
-                                                            }
-                                                            // if(maxmin)
-                                                        }
-                                                        else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                            quantity = value.inventory_quantity
-                                                            console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
-                                                        }
-                                                        else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                            quantity = value.inventory_quantity
-                                                            console.log('value?.max_order_quantity > value?.inventory_quantity',)
-
-                                                        }
-                                                        else if (value?.max_order_quantity < value?.inventory_quantity) {
+                                                    if (value?.inventory_quantity == null) {
+                                                        if (value?.max_order_quantity == null)
+                                                            quantity = 15
+                                                        else {
 
                                                             quantity = value.max_order_quantity
-                                                            console.log('value?.max_order_quantity < value?.inventory_quantity',)
+
                                                         }
-
-                                                        if (quantity > 0) {
-
-                                                            const filter = cart.filter((c) => {
-                                                                if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
-                                                                    return c
-                                                                }
-                                                            })
-
-                                                            if (filter[0].qty >= quantity) {
-                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
-                                                                item.qty = item.qty - 1
-                                                                return item
-                                                            }
-                                                            else {
-                                                                return item
-                                                            }
-                                                        }
-                                                        else {
-                                                            message.error('Sorry, You Cannot add more items')
-                                                        }
-
+                                                        // if(maxmin)
+                                                    }
+                                                    else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                                                        quantity = value.inventory_quantity
+                                                        console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+                                                    }
+                                                    else if (value?.max_order_quantity > value?.inventory_quantity) {
+                                                        quantity = value.inventory_quantity
+                                                        console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
                                                     }
-                                                }
-                                            }
-                                            else {
-                                                if (initialState.data) {
-                                                    let quantity
-                                                    console.log('itemsms', item)
-                                                    if (initialState.data.item_id == item.item_id) {
-                                                        if (item.inventoryDetails == null) {
+                                                    else if (value?.max_order_quantity < value?.inventory_quantity) {
 
-                                                            // addToCart(item)
-                                                            console.log('')
-                                                            quantity = 15
-                                                            // if(maxmin)
-                                                        }
-                                                        else if (item.inventoryDetails.inventory_quantity == 0) {
-                                                            // message.error('Sorry,The Item is not available at the moment')
-                                                            quantity = 0
+                                                        quantity = value.max_order_quantity
+                                                        console.log('value?.max_order_quantity < value?.inventory_quantity',)
+                                                    }
 
+                                                    if (quantity > 0) {
 
-                                                        }
-                                                        else if (item.inventoryDetails.inventory_quantity != 0) {
-
-                                                            if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
-                                                                quantity = item.inventoryDetails?.max_order_quantity
+                                                        const filter = cart.filter((c) => {
+                                                            if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                                                                return c
                                                             }
-                                                            else {
-                                                                if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
-                                                                    // message.error('Sorry,The Item is not available at the moment')
-                                                                    quantity = 0
-                                                                }
-                                                                else {
-                                                                    quantity = item.inventoryDetails?.inventory_quantity
-                                                                }
-                                                            }
-                                                        }
+                                                        })
 
-
-                                                        if (quantity > 0) {
+                                                        // if (filter[0].qty >= quantity) {
+                                                        //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                        //     item.qty = item.qty - 1
+                                                        //     return item
+                                                        // }
+                                                        // else {
+                                                        //     return item
+                                                        // }
 
 
 
-                                                            const filter = cart.filter((c) => {
-                                                                if (c.item_id == item.item_id) {
-                                                                    return c
-                                                                }
-                                                            })
-
-
-                                                            console.log('golier', filter[0].qty < item.inventoryDetails?.min_order_quantity)
-
-                                                            if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
-
-
-
+                                                        if (value.inventory_quantity < value.min_order_quantity) {
+                                                            
+                                                            if (filter[0].qty < value.inventory_quantity) {
                                                                 return item
 
                                                             }
+
                                                             else if (filter[0].qty >= quantity) {
                                                                 message.error(`Sorry, You Cannot add more than ${quantity} items`)
                                                                 item.qty = item.qty - 1
@@ -1107,29 +1144,149 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                                 return item
                                                             }
-
-
-                                                            // addToCart(item)
-                                                            // return item
                                                         }
-                                                        // else {
-                                                        //     message.error('Sorry, You Cannot add more items')
-                                                        // }
-                                                        // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
-                                                        // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+
+                                                        else {
+                                                            if (filter[0].qty < value.min_order_quantity) {
+                                                                return item
+
+                                                            }
+
+                                                            else if (filter[0].qty >= quantity) {
+                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                item.qty = item.qty - 1
+
+                                                                return item
+                                                            }
+                                                            else {
+
+                                                                return item
+                                                            }
+                                                        }
+
+
+
 
 
                                                     }
+                                                    else {
+                                                        message.error('Sorry, You Cannot add more items')
+                                                    }
+
+
                                                 }
-
-
-                                                // else if (item.item_id == id) {
-                                                //     return item
-                                                // }
-
-
-
                                             }
+                                        }
+                                        else {
+                                            if (initialState.data) {
+                                                let quantity
+                                                console.log('itemsms', item)
+                                                if (initialState.data.item_id == item.item_id) {
+                                                    if (item.inventoryDetails == null) {
+
+                                                        // addToCart(item)
+                                                        console.log('')
+                                                        quantity = 15
+                                                        // if(maxmin)
+                                                    }
+                                                    else if (item.inventoryDetails.inventory_quantity == 0) {
+                                                        // message.error('Sorry,The Item is not available at the moment')
+                                                        quantity = 0
+
+
+                                                    }
+                                                    else if (item.inventoryDetails.inventory_quantity != 0) {
+
+                                                        if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
+                                                            quantity = item.inventoryDetails?.max_order_quantity
+                                                        }
+
+                                                        else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                                                            // message.error('Sorry,The Item is not available at the moment')
+                                                            quantity = item.inventoryDetails.inventory_quantity
+                                                        }
+                                                        else {
+                                                            quantity = item.inventoryDetails?.inventory_quantity
+                                                        }
+                                                        // }
+                                                    }
+
+
+                                                    if (quantity > 0) {
+
+
+
+                                                        const filter = cart.filter((c) => {
+                                                            if (c.item_id == item.item_id) {
+                                                                return c
+                                                            }
+                                                        })
+
+
+                                                     
+
+                                                        if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+
+                                                            if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                                                                return item
+
+                                                            }
+
+                                                            else if (filter[0].qty >= quantity) {
+                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                item.qty = item.qty - 1
+
+                                                                return item
+                                                            }
+                                                            else {
+
+                                                                return item
+                                                            }
+                                                        }
+
+                                                        else {
+                                                            if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                                                                return item
+
+                                                            }
+
+                                                            else if (filter[0].qty >= quantity) {
+                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                item.qty = item.qty - 1
+
+                                                                return item
+                                                            }
+                                                            else {
+
+                                                                return item
+                                                            }
+                                                        }
+
+
+
+
+
+                                                        // addToCart(item)
+                                                        // return item
+                                                    }
+                                                    // else {
+                                                    //     message.error('Sorry, You Cannot add more items')
+                                                    // }
+                                                    // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
+                                                    // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+
+
+                                                }
+                                            }
+
+
+                                            // else if (item.item_id == id) {
+                                            //     return item
+                                            // }
+
+
+
+                                        }
                                         }).qty + 1)}
 
 
@@ -1157,20 +1314,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
             :
             <div className='flex justify-center items-center bg-white h-screen'>
-                {/* <Spin size="large" /> */}
-
-                <lottie-player
-                    id="firstLottie"
-                    ref={ref}
-                    autoplay
-
-                    loop
-                    mode="normal"
-                    src="/loader.json"
-                    style={{ width: "100px", height: "100px" }}
-                ></lottie-player>
-
-
+                <Spin size="large" />
             </div>
 
     );
@@ -1207,4 +1351,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageWrapper(Index)); 
+export default connect(mapStateToProps, mapDispatchToProps)(PageWrapper(Index));

@@ -254,7 +254,10 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                                         item.customizationDetails?.variant_item_attributes?.variant_value_2?.variant_value_name : ''},
 
                                                 </p>}
-                                                <p className='text-lg font-montSemiBold'>{storeDetails?.currency_symbol} {item.itemPrice}</p>
+                                                <p className='text-lg font-montSemiBold'>{storeDetails?.currency_symbol} 
+                                                
+                                                
+                                                {item.customizationDetails?item.customizationDetails.sale_price:item.itemPrice}</p>
 
                                             </div>
                                         </div>
