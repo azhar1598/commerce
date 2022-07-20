@@ -88,7 +88,7 @@ console.log('ss',steps)
             </div >
             {
                 details?.orderStatus &&
-                <div className="mt-4 w-full border-t-2 border-[#00000] h-full">
+                <div className="mt-4 w-full h-full">
                     <div className=" px-4 my-4  w-full flex justify-end  items-center  ">
                         {/* {
                             details.orderStatus !== "CANCELLED_BY_CUSTOMER" ?

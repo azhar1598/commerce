@@ -56,14 +56,16 @@ export const Profile = ({ customerDetails, customerDetailsAction ,storeSettings,
             </div>
             <Link href={`/account/myOrders`} >
                 <div className={`flex items-baseline  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/myOrders' || router.pathname.includes('/account/orderDetails/') ? { color: '#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
-                    <ShoppingFilled />
+                    {/* <ShoppingFilled /> */}
+                    <img src="/Icon ionic-ios-paper.svg"/>
                     <p className='pl-8 text-sm'>My orders</p>
                 </div>
             </Link>
 
             <Link href={`/account/wishlist`} >
                 <div className={`flex items-baseline  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wishlist' || router.pathname.includes('/account/wishlist/') ? { color: '#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
-                    <HeartFilled />
+                    {/* <HeartFilled /> */}
+                    <img src="/Icon metro-heart.svg"/>
                     <p className='pl-8 text-sm'>Wishlist</p>
                 </div>
             </Link>
@@ -77,7 +79,7 @@ export const Profile = ({ customerDetails, customerDetailsAction ,storeSettings,
             </Link>
             <Link href={`/account/savedPlaces`} >
                 <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/savedPlaces' ? { color: '#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }} >
-                    <ImLocation />
+                   <img src="/Icon awesome-map-marked-alt.svg"/>
                     <p className='pl-8 text-sm'>Saved Places</p>
                 </div>
             </Link>

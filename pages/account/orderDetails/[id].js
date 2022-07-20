@@ -11,6 +11,7 @@ import moment from 'moment'
 import Stepper from '../../../components/stepper'
 import Head from 'next/head';
 import PageWrapper from '../../../components/PageWrapper/PageWrapper'
+import { useRef } from "react"
 
 
 const { Step } = Steps;
@@ -32,6 +33,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
     const [isReturnActive, setIsReturnActive] = useState(false)
     const [isCancelled, setIsCancelled] = useState(false)
     const [cancelLoader, setCancelLoader] = useState(false)
+    const ref = useRef(null);
 
 
     const steps = [
@@ -108,6 +110,11 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
         setValue()
         setOrderItemId([])
     };
+
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+    }, []);
+
 
 
 
@@ -227,26 +234,28 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                     <>
 
                         <div className='flex flex-col w-full lg:mr-24'>
-                            <div className='bg-white lg:pl-8 lg:p-3 md:p-3 flex items-center justify-between text-left lg:ml-5 w-full border-b-4 border-slate-[200]'>
+                            <div className='bg-white lg:pl-8 flex items-center justify-between text-left lg:ml-5 w-full '>
                                 <div className='lg:w-1/2 flex mt-6 lg:mt-0'>
                                     <Link href='/account/myOrders'>
-                                        <ArrowLeftOutlined className='text-black text-lg mr-4' />
+                                        <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4' />
                                     </Link>
-                                    <p className='text-black font-montSemiBold'>Order Details</p>
+                                    {/* <p className='text-black font-montSemiBold'>Order Details</p> */}
+                                    <p className='text-black text-lg font-montBold lg:mt-3 mt-6'>Order Id  #{orderDetails.orderId}</p>
+                         
                                 </div>
-                                <p className='text-[#212B3680] font-montSemiBold lg:mt-0 mt-6'>Order ID - # {orderDetails.orderId}</p>
+                                {/* <p className='text-[#212B3680] font-montSemiBold lg:mt-0 mt-6'>Order ID - # {orderDetails.orderId}</p> */}
                             </div>
                             <div className=' flex flex-col lg:items-start lg:justify-around justify-between  lg:ml-5 min-h-96  md:ml-5 w-full  cursor-pointer'>
                                 {/* Web View Tracker */}
 
 
-                                <div className=' w-full bg-white border-b-2 border-slate-[200]'>
+                                <div className=' w-full flex flex-wrap lg:p-4 lg:px-12 lg:justify-between  bg-white '>
                                     {/* Object.values(orderDetails.orderItems).map(item => */}
                                     {orderDetails?.orderItems && Object?.values(orderDetails?.orderItems)?.map((item, index) =>
-                                        <div className='flex lg:items-start  lg:pl-8  p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
-                                            <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-28 h-44 min-w-28 max-w-28' />
-                                            <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
-                                                <p className='text-lg font-montSemiBold w-56 lg:w-96   break-words'>{item.itemName}</p>
+                                        <div className='flex lg:items-start lg border-2 w-[32vw] border-[#00000028]  lg:pl-8  p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
+                                            <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-36 min-w-36 max-w-36 border border-blue-100 shadow ' />
+                                            <div className='flex flex-col items-start w-full ml-3 lg: '>
+                                                <p className='text- font-montSemiBold w-56 lg:w-72   break-words'>{item.itemName}</p>
                                                 {item.customizationDetails && <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
                                                     item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},
 
@@ -264,7 +273,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                     )}
                                 </div>
 
-                                <div className='hidden lg:block md:block p-12 lg:w-full mt-4 bg-white border-b-2 border-slate-[200]'>
+                                <div className='hidden lg:block md:block p-12 lg:w-full bg-white '>
                                     {/* <Steps direction="horizontal" size="small" current={orderStatus}>
                                         <Step title="Order Placed" description="" />
                                         <Step title="Order accepted by the seller" description="" />
@@ -272,6 +281,10 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                         <Step title="Out for Delivery" description="" />
                                         <Step title="Delivered" description="" />
                                     </Steps> */}
+
+<p className='text-black text-lg font-montBold '>Order Status</p>
+                         
+                            
 
                                     <Stepper vertical={false} steps={orderDetails.orderStatus == 'CANCELLED_BY_CUSTOMER' || orderDetails.orderStatus =='ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={orderDetails} />
                                 </div>
@@ -366,9 +379,20 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
                     </>
                     :
-                    <div className='flex h-96 items-center justify-center'>
-                        <Spin />
-                    </div>}
+                    <div className='h-96 flex items-center justify-center'>
+
+
+                    <lottie-player
+                        id="firstLottie"
+                        ref={ref}
+                        autoplay
+
+                        loop
+                        mode="normal"
+                        src="/loader.json"
+                        style={{ width: "100px", height: "100px" }}
+                    ></lottie-player>
+                </div>}
             </div>
 
            

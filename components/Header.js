@@ -171,7 +171,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
             {isLoggedIn.data?.customer_id ?
                 <Menu style={{ width: '200px' }} >
 
-                    {/*  <Menu.Item>
+                      <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
                             My Orders
                         </Link>
@@ -190,7 +190,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                         <Link href={`/account/savedPlaces`} passHref>
                             Saved Places
                         </Link>
-                    </Menu.Item>*/}
+                    </Menu.Item>
                     <Menu.Item>
                         <p onClick={() => setIsModalVisible(true)} passHref>
                             <p >Logout</p>
@@ -303,9 +303,10 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
                  <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] ' onClick={() => { router.push('/') }} />
 
-                    <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
+                    {/* <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
                         color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                    }} onClick={() => { router.push('/') }} >{storeDetailsReducer?.data?.store_name.toUpperCase()}</p>
+                    }} onClick={() => { router.push('/') }} >{storeDetailsReducer?.data?.store_name.toUpperCase()}</p> */}
+                    <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`}>Appparal</p>
                 </div>
 
                 <div className='flex w-full  items-center justify-between font-montSemiBold'>
