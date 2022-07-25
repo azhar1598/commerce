@@ -209,7 +209,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
                 }
                 else {
-             
+
                     if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
 
 
@@ -220,7 +220,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                     else {
-                        console.log('qqtty',qty)
+                        console.log('qqtty', qty)
                         adjustQty(item.defaultVariantItem.variant_item_id, qty)
                         setMinQtyMsg(false)
 
@@ -483,7 +483,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                 // important
 
-                if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
 
                     if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
                         adjustQty(item.item_id, item.qty + 1)
@@ -509,7 +509,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
-                    if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                    if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
                         adjustQty(item.item_id, item.qty + 1)
 
                     }
@@ -554,17 +554,41 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             {cart.length != 0 ?
                 <div className='lg:bg-[#F6F6F6] lg:mt-24 md:-mt-4 lg:h-full md:h-screen flex flex-col lg:flex-row md:flex-row items-start lg:p-2 md:p-2 lg:min-h-screen'>
 
-                    <div className='mt-24 lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0'>
-                        <p className='hidden lg:block md:block font-montSemiBold text-lg '>Shopping Bag <span className='text-gray-500 font-montRegular '>({cart.length} {cart.length > 1 ? 'items' : 'item'})</span></p>
-                        <div className='flex flex-col bg-white w-full justify-between items-start'>
+                    <div className='mt-24 lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
+                        <p className='hidden lg:block md:block font-montBold text-2xl py-6 px-5'>Cart<span className='text-gray-500 font-montSemiBold text-lg px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
+                        <div className='flex flex-col bg-white w-full justify-between items-start px-5 lg:mb-12'>
 
                             {
                                 cart.map((item, idx) =>
-                                    <div className='flex items-start text-left w-full border-b-2 border-slate-300  lg:pl-8 p-3 md:pl-8 lg:pt-3 md:pt-3' key={idx}>
-                                        <img src={item?.primary_img ? item?.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' onClick={() => {
+                                    <div className='flex items-start text-left w-full border-2 border-slate-300 mb-2 rounded lg:pl-8 px-3 pb-2 md:pl-8 lg: md:pt-3' key={idx}>
+                                       <div className='flex flex-col item-center'>
+                                       <img src={item?.primary_img ? item?.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow ' onClick={() => {
                                             fetchItemDetails('', '')
                                             router.push(`/product/${item.item_id}`)
                                         }} />
+
+                                        {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
+                                            <div className='flex -mt-5  gap-4 ' >
+                                                <div className='border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                                    <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                    <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
+
+                                                    <span onClick={() => { handleIncreaseQuantity(item) }}
+
+                                                        className={`px-4  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                </div>
+                                                {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+
+                                            </div>
+                                            :
+                                            <div className=' w-full  flex items-center justify-center'>
+
+                                                <SyncOutlined style={{ fontSize: 24 }} spin />
+                                            </div>}
+                                       </div>
+
+
+
                                         <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24' >
                                             <p className='text-lg font-montSemiBold ' onClick={() => {
                                                 fetchItemDetails('', '')
@@ -580,27 +604,10 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                                 <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${stateStoreDetails?.currency_symbol} ${item.price}` : ''}</span>
                                                 <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${stateStoreDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
                                             </p>
-                                            {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
-                                                <div className='flex justify-between items-center gap-6' >
-                                                    <div className='border border-gray-400 space-x-6 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
-                                                        <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{item.qty}</span>
 
-                                                        <span onClick={() => { handleIncreaseQuantity(item) }}
-
-                                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
-                                                    </div>
-                                                    {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
-
-                                                </div>
-                                                :
-                                                <div className=' w-1/3 flex items-center justify-center'>
-
-                                                    <SyncOutlined style={{ fontSize: 24 }} spin />
-                                                </div>}
 
                                         </div>
-                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
+                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
                                     </div>
 
                                 )}
@@ -612,6 +619,9 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     </div>
 
                 </div> :
+
+
+
                 <div className='flex flex-col lg:mt-24 items-center justify-center p-24 '>
 
                     {/* <img src="./images/undraw_empty_cart_co35.png" className='lg:h-80' /> */}

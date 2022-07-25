@@ -370,8 +370,8 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                     </Link> : <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }}
                     //  onClick={showModal}
                     />}
-                    <Link href="/"
-                    // href="/cart"
+                    <Link href="/cart"
+                    // 
                     >
                         <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
                             {/* <ShoppingCartOutlined  className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} /> */}

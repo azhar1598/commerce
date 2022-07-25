@@ -16,7 +16,7 @@ import encUtf8 from "crypto-js/enc-utf8";
 import aes from "crypto-js/aes";
 import StoreStatus from './svgComponents/StoreStatus'
 
-export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid ,minQtyMsg,minProduct}) => {
+export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid, minQtyMsg, minProduct }) => {
 
   const router = useRouter()
   const [paymentData, setPaymentData] = useState({})
@@ -30,7 +30,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
   const [codModalVisible, setCodModalVisible] = useState(false)
   const [razorpayKey, setRazorPayKey] = useState(null)
 
-  const[storeClosed,setStoreClosed]=useState(false)
+  const [storeClosed, setStoreClosed] = useState(false)
 
   const decryptRazorPayKey = (RZPAccessKey) => {
     // console.log("widgets from", RZPAccessKey)
@@ -99,68 +99,68 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       // const chooseDelivery = await setDeliveryAddressFlag(address.purchaseDetails.data.purchaseId,'Y')
 
 
-console.log('billing minQtyMsg',minQtyMsg)
+      console.log('billing minQtyMsg', minQtyMsg)
 
 
-if(!minQtyMsg || minQtyMsg==undefined){
-  setloader(true)
-      if (device == 'mobile') {
-        if (!shippingAdded){
-      if(purchaseInvalid==''){
-          router.push('/address')
-      }
-      else{
-        message.error(purchaseInvalid)
-        setloader(false)
-      }
-        }
-        else {
-          if (address.defaultAddress) {
-            const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
-            if (response) {
-              setloader(false)
-              router.push('/review-mobile')
+      if (!minQtyMsg || minQtyMsg == undefined) {
+        setloader(true)
+        if (device == 'mobile') {
+          if (!shippingAdded) {
+            if (purchaseInvalid == '') {
+              router.push('/address')
             }
-          } else {
-            setloader(false)
-            message.error('Please Add the Address')
-          }
-        }
-      }
-      else {
-        if (!shippingAdded) {
-          if (purchaseInvalid == '') {
-            router.push('/address')
-          }
-          else{
-            setloader(false)
-            message.error(purchaseInvalid)
-          }
-        }
-        else
-          if (address.defaultAddress) {
-            const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
-            if (response) {
+            else {
+              message.error(purchaseInvalid)
               setloader(false)
-              router.push('/review')
             }
           }
           else {
-            setloader(false)
-            message.error('Please Add the Address')
+            if (address.defaultAddress) {
+              const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
+              if (response) {
+                setloader(false)
+                router.push('/review-mobile')
+              }
+            } else {
+              setloader(false)
+              message.error('Please Add the Address')
+            }
           }
+        }
+        else {
+          if (!shippingAdded) {
+            if (purchaseInvalid == '') {
+              router.push('/address')
+            }
+            else {
+              setloader(false)
+              message.error(purchaseInvalid)
+            }
+          }
+          else
+            if (address.defaultAddress) {
+              const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
+              if (response) {
+                setloader(false)
+                router.push('/review')
+              }
+            }
+            else {
+              setloader(false)
+              message.error('Please Add the Address')
+            }
+        }
+      }
+      else {
+        message.error(`Please Check Minimum Quantity of ${minProduct}`)
       }
     }
-    else{
-      message.error(`Please Check Minimum Quantity of ${minProduct}`)
-    }
-  }
     else {
       setloader(false)
       message.error('Something is wrong with address')
     }
-  
- 
+
+
     // }
     // else {
     //   setloader(false)
@@ -179,7 +179,7 @@ if(!minQtyMsg || minQtyMsg==undefined){
       router.push(
         {
           pathname: '/review-mobile/final',
-          query:{wallet}
+          query: { wallet }
 
         }
 
@@ -343,17 +343,17 @@ if(!minQtyMsg || minQtyMsg==undefined){
     setCodModalVisible(true)
   }
 
-  console.log('wallet review mobile purchasLoading',wallet, purchaseLoading)
+  console.log('wallet review mobile purchasLoading', wallet, purchaseLoading)
 
   return (
     <>
       {customerDetails.data?.customer_id ?
         <>
-          <div className='hidden lg:flex md:flex flex-col items-center w-[100vw] -mt-4 mb-20 lg:mt-0 lg:mb-20 md:mt-0 md:mb-20 lg:w-full md:w-full '>
-            <p className='bg-white font-montSemiBold placeholder p-2 w-full border-b-2 border-slate-100 mt-12 mb-0'>Billing Details</p>
+          <div className='hidden lg:flex md:flex flex-col items-center w-[100vw] -mt-4  lg:bg-white  md:mt-0  lg:w-full md:w-full '>
+            <p className='bg-white font-montSemiBold placeholder p-2  w-full  mt-12 lg:mt-4 text-lg lg:px-5 mb-0'>Billing Details</p>
             <div className='bg-white p-2 w-full h-84'>
               {checkout != undefined ?
-                <div className='bg-white p-2 w-full'>
+                <div className='bg-white p-2 w-full font-montMedium'>
                   <div className='flex items-start w-full'>
                     {review ? <p className='text-sm font-montSemiBold w-[3000px]'>Shipping to <span className='font-montRegular   text-[12px]'>{address?.defaultAddress?.full_name}, {address?.defaultAddress?.address_line_1}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
                     </span> </p>
@@ -365,7 +365,7 @@ if(!minQtyMsg || minQtyMsg==undefined){
                   </div>
                   {/* <p className='text-sm font-montSemiBold'>Get all items before:</p> */}
                   <div className='flex items-center justify-between px-2 p-1 '>
-                    <p>items</p>
+                    <p>items Total</p>
                     <p className='font-semibold text-black'>{stateStoreDetails?.currency_symbol} {billingDetails?.totalOrderAmount}</p>
                   </div>
                   {billingDetails?.totalDeliveryCharge ? <div className='flex items-center justify-between px-2 p-1'>
@@ -396,8 +396,8 @@ if(!minQtyMsg || minQtyMsg==undefined){
                     <p>Tax Amount</p>
                     <p className='font-semibold'>+ {stateStoreDetails?.currency_symbol} {billingDetails?.totalTaxAmount}</p>
                   </div> : ''}
-                  <div className='flex items-center justify-between border-t-2 border-slate-100  px-2 p-1'>
-                    <p>Total</p>
+                  <div className='flex items-center justify-between border-dashed border-t-2 border-slate-100  px-2 p-1 font-montSemiBold text-lg'>
+                    <p>Total Amount</p>
                     <p className='font-semibold'>{stateStoreDetails?.currency_symbol} {wallet ? walletAmount > billingDetails?.calculatedPurchaseTotal ? 0.00 : billingDetails?.calculatedPurchaseTotal - walletAmount : billingDetails?.calculatedPurchaseTotal}</p>
                   </div>
                 </div> :
@@ -405,15 +405,27 @@ if(!minQtyMsg || minQtyMsg==undefined){
                   <Spin />
                 </div>}
             </div>
-            {checkout != undefined ? !loader ? <button className='p-2 w-72 mt-4 ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? showModal() : 
-              stateStoreDetails.is_open_today!="Y"?setStoreClosed(true):
-              !review ? handleProceed() : paymentMethod == 'COD' ? handleCodModal() : handlePayment() }} disabled={loader ? true : false}>{customerDetails.data?.customer_id ? 'PROCEED TO PAYMENT' : 'LOGIN TO CHECKOUT'}</button> : <Spin /> : ''}
+
 
             {paymentData.rzpOrderId && <OnlinePayment paymentData={paymentData} store={'storeDetails'} setPaymentData={setPaymentData} purchaseId={address.purchaseDetails.data.purchaseId} customerId={customerDetails.data?.customer_id} wallet={wallet} walletAmount={walletAmount} razorpayKey={razorpayKey}></OnlinePayment>}
 
 
 
           </div>
+          <div className=''>
+            <img src="/billing-wave.png" />
+
+          </div>
+
+          <div className='flex items-center justify-center w-full'>
+            {checkout != undefined ? !loader ? <button className='p-2 w-72 mt-4  ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => {
+              !customerDetails.data?.customer_id ? showModal() :
+                stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) :
+                  !review ? handleProceed() : paymentMethod == 'COD' ? handleCodModal() : handlePayment()
+            }} disabled={loader ? true : false}>{customerDetails.data?.customer_id ? 'PROCEED TO PAYMENT' : 'LOGIN TO CHECKOUT'}</button> : <Spin /> : ''}
+          </div>
+
+
         </> :
         <button className='p-2 w-72 mt-4 hidden lg:block' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={!customerDetails.data?.customer_id ? showModal : !review ? handleProceed : paymentMethod == 'COD' ? handleCodModal : handlePayment}>LOGIN TO CHECKOUT</button>
       }
@@ -498,7 +510,7 @@ if(!minQtyMsg || minQtyMsg==undefined){
           <div className=" w-1/2  pt-1  h-12 pr-2 mr-2   text-center font-montSemiBold text-  cursor-pointer" style={{ color: `${storeSettings.data ? 'black' : 'black'}`, background: `white` }}><p className='mb-0 font-montRegular'>{billingDetails?.itemCount} Items In bag</p>Total {stateStoreDetails?.currency_symbol} {billingDetails?.calculatedPurchaseTotal}</div> : ''}
 
           {checkout != undefined ? !loader ?
-            <button className={` flex items-center justify-center text-lg h-12  ${final ? ' w-full' : 'w-44'} text-center font-montSemiBold`} style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? router.push('/account/user/login') : stateStoreDetails.is_open_today!="Y"?setStoreClosed(true): !review ? handleProceed('mobile') : final ? paymentMethod == 'COD' ? handleCodModal() : handlePayment('mobile') : handleProceedMobile() }}>{customerDetails.data?.customer_id ? 'PROCEED' : 'LOGIN'}</button> : <Spin /> : <Spin />}</> :
+            <button className={` flex items-center justify-center text-lg h-12  ${final ? ' w-full' : 'w-44'} text-center font-montSemiBold`} style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? router.push('/account/user/login') : stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) : !review ? handleProceed('mobile') : final ? paymentMethod == 'COD' ? handleCodModal() : handlePayment('mobile') : handleProceedMobile() }}>{customerDetails.data?.customer_id ? 'PROCEED' : 'LOGIN'}</button> : <Spin /> : <Spin />}</> :
           ''}
 
         {paymentData.rzpOrderId && <OnlinePayment paymentData={paymentData} store={'storeDetails'} setPaymentData={setPaymentData} purchaseId={address.purchaseDetails.data.purchaseId} customerId={customerDetails.data?.customer_id} razorpayKey={razorpayKey}></OnlinePayment>}
@@ -626,12 +638,12 @@ if(!minQtyMsg || minQtyMsg==undefined){
       {/* {Modal When Store is Closed} */}
 
       <Modal title="" visible={storeClosed} onCancel={() => setStoreClosed(false)} footer={null}>
-      
+
 
         <div className='flex flex-col justify-center gap-3'>
-      
 
-          <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'}/>
+
+          <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'} />
           <p className='text-base text-center text-sm'>Store is offline and unable to take your order at the moment. You can try to Contact Us to know more.</p>
         </div>
 

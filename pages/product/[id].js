@@ -845,7 +845,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                                          
 
-                                                                            if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                                                                            if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
 
                                                                                 if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
                                                                                     return item
@@ -865,7 +865,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             }
 
                                                                             else {
-                                                                                if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                                                                                if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
                                                                                     return item
 
                                                                                 }

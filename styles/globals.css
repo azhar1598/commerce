@@ -36,6 +36,48 @@
 }
 
 
+.wave-billing {
+  background-color: red;
+  height: 10px;
+  color: #fff;
+  padding: 8px;
+  padding-bottom: 50px; /*h*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-billing:before,
+.wave-billing:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 25px; /*h/2*/
+  height: 50px; /*h*/
+  background: radial-gradient(closest-side, #fff, #fff 50%, transparent 50%);
+  /*or farthest-side*/
+  background-size: 50px 50px; /*h h*/
+  background-position: 10 25px; /*0 h/2*/
+  background-repeat: repeat-x;
+}
+
+.wave-billing:after {
+  background: radial-gradient(
+    closest-side,
+    transparent,
+    transparent 50%,
+    #fff 50%
+  );
+  /*or farthest-side*/
+  background-size: 50px 50px; /*h h*/
+  background-position: 25px -25px; /*h/2 -h/2*/
+  background-repeat: repeat-x;
+  bottom: -25px;
+}
 
 
 

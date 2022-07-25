@@ -61,7 +61,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
   return (<>
     {stateCustomerId ?
       <div className='hidden lg:block bg-white p-4 -mt-20 lg:mt-0 md:mt-0'>
-        <p className='font-montSemiBold'>Have a Coupon?</p>
+        <p className='font-montSemiBold text-lg'>Have a Coupon?</p>
         <div className='flex items-center'>
           {!billingDetails?.totalCouponSavingsAmount !=0 ?
             <>
