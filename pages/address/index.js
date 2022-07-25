@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, LoadingOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, DeleteFilled, EditFilled, LoadingOutlined, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { message, Modal, Popconfirm, Radio, Spin, Space } from 'antd'
 import { data } from 'autoprefixer'
 import Link from 'next/link'
@@ -235,65 +235,83 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 <div className='bg-white   flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
-                                        <Space direction="vertical" className="leading">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '1px solid gray', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
+                                        <div  className="leading gap-0 ">
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
                                                 storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
                                                     storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '1px solid gray', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
                                                 storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
 
                                                     storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
 
-                                        </Space>
+                                        </div>
                                     </Radio.Group>
                                 </div>
 
                                 {deliveryMethod == 'DELIVERY' ?
                                     <>
-                                        <p className='text-black font-montBold  text-lg bg-white mx-5 w-full pt-7 px-8'  >Select Delivery Address</p>
+                                        <p className='text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
                                         <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
                                             {
                                                 stateAddress ?
                                                     !showAddressMobile ?
-                                                        <div className='lg:flex flex-wrap lg:mb-0 mb-48'>
+                                                        <div className='lg:flex flex-wrap lg:justify-start lg:w-full lg:mb-0 mb-48'>
 
                                                             {stateAddress?.map(item =>
-                                                                <div className='flex w-full lg:w-1/2 md:w-1/2 lg:justify-start md:justify-start lg:border-none md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
-                                                                    <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
-                                                                        <Radio className='font-montSemiBold' value={item.address_id}></Radio>
-                                                                    </Radio.Group>
-                                                                    <div className='flex flex-col'>
-                                                                        <p className='text-lg'>{item.address_tag}</p>
-                                                                        <p className='text-sm'>{item.full_name}</p>
-                                                                        <p className='text-sm'>{item.city},{item.address_line_1},{item.address_line_2}, {item.zip_code}</p>
-                                                                        <p className='text-sm'>+91 {item.phone}</p>
-                                                                        <div className='flex'>
-                                                                            <Popconfirm
-                                                                                placement="topRight"
-                                                                                title="Are you Sure, You Want to Delete this Address?"
-                                                                                onConfirm={() => deleteAddress(item.address_id)}
-                                                                                okText="Yes"
-                                                                                cancelText="No"
-                                                                            >
-                                                                                <button className="bg-white border-r pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
-                                                                            </Popconfirm>
-                                                                            <button className="bg-white  pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, }} onClick={() => {
-                                                                                setAddNewAddress(!addNewAddress)
-                                                                                editAddress(item)
-                                                                            }} >Edit</button>
+                                                                <div className='lg:flex flex-col items-start px-2 py-2'>
+                                                                    <div className='flex w-full lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
+                                                                        <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
+                                                                <Radio className='font-montSemiBold' value={item.address_id}></Radio>
+                                                            </Radio.Group>
+                                                                        <div className='flex flex-col'>
+                                                                            <div className='flex items-start'>
+                                                                                <p className='text-lg'>{item.address_tag}</p>
+                                                                                <EditFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, paddingLeft: '2px', paddingTop: '2px' }} />
+                                                                                <button className="bg-white  pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, }} onClick={() => {
+                                                                                    setAddNewAddress(!addNewAddress)
+                                                                                    editAddress(item)
+                                                                                }} >Edit</button>
+                                                                            </div>
+                                                                            <p className='text-sm'>{item.full_name}</p>
+                                                                            <p className='text-sm item-city'>{item.city},{item.address_line_1},{item.address_line_2}, {item.zip_code}</p>
+                                                                            <p className='text-sm'>+91 {item.phone}</p>
+                                                                            <div className='flex'>
+
+
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+
+{/* 
+                                                                    <Popconfirm
+                                                                        placement="topRight"
+                                                                        title="Are you Sure, You Want to Delete this Address?"
+                                                                        onConfirm={() => deleteAddress(item.address_id)}
+                                                                        okText="Yes"
+                                                                        cancelText="No"
+                                                                    >
+                                                                        <div className='flex items-center'>
+                                                                            <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
+                                                                            <button className="bg-white lg:py-6 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
+                                                                        </div>
+                                                                    </Popconfirm> */}
+
+
+
+
+
                                                                 </div>
                                                             )}
+                                                            <button className='hidden  md:block mt-6 mb-12 w-full lg:flex lg:items-start lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}><span><PlusCircleOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '27px', paddingRight: '6px' }} /></span> Add new Address </button>
 
-
-                                                        </div> : '' : <div className='h-72 flex justify-center w-full items-center'>
+                                                        </div> : '' :
+                                                    <div className='h-72 flex justify-center w-full items-center'>
                                                         <Spin />
                                                     </div>}
                                         </div>
 
-
-                                        <button className='hidden lg:block md:block mt-6 mb-12 w-full lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ border: `2px solid ${storeSettings.data ? storeSettings.data.primary_color : "black"}`, borderStyle: 'dashed', width: '220px' }}>Add new Address <span><PlusOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '20px', paddingLeft: '6px' }} /></span></button>
+{/* 
+                                        <button className='hidden lg:block md:block mt-6 mb-12 w-full lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ border: `2px solid ${storeSettings.data ? storeSettings.data.primary_color : "black"}`, borderStyle: 'dashed', width: '220px' }}>Add new Address <span><PlusOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '20px', paddingLeft: '6px' }} /></span></button> */}
                                     </> :
 
                                     <div className='bg-white flex w-full px-24 py-12 mx-5'>
@@ -313,115 +331,115 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                             // /* Add Address Web View */
                             <>
-                                {!isTabletOrMobile &&
-                                    <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border-b-4 border-slate-[200] ' >
-                                        <div className='cursor-pointer' onClick={() => {
-                                            setAddNewAddress(!addNewAddress)
-                                            if (edit) {
-                                                Object.entries(edit).forEach(
-                                                    ([name, value]) => setValue(name, ''));
-                                                setEdit()
-                                            }
-                                        }}>
-                                            {/* /account/user` */}
-                                            {addNewAddress && <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />}
+                            {!isTabletOrMobile &&
+                                <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full ' >
+                                    <div className='cursor-pointer' onClick={() => {
+                                        setAddNewAddress(!addNewAddress)
+                                        if (edit) {
+                                            Object.entries(edit).forEach(
+                                                ([name, value]) => setValue(name, ''));
+                                            setEdit()
+                                        }
+                                    }}>
+                                        {/* /account/user` */}
+                                        {addNewAddress && <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />}
+                                    </div>
+                                    <p className='text-black font-montBold mt-3 text-lg' >{`${edit ? `Edit Address` : `Add a New Address`}`}</p>
+                                </div>}
+
+                            <div className=" hidden lg:block md:block bg-white w-full lg:ml-5 md:ml-5 lg:pl-8 lg:p-3 md:lg-8 md:p-3 ">
+
+
+                                {/* form */}
+                                <div className='px-6'>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        {/* input fields */}
+                                        <div className='space-y-2 my-2'>
+                                            <label htmlFor="" className='block'>Country*</label>
+                                            <select className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.country ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} {...register("country", { required: true })} >
+                                                <option value="India">India</option>
+                                            </select>
                                         </div>
-                                        <p className='text-black font-montRegular mt-3 text-lg' >{`${edit ? `Edit Address` : `Add a New Address`}`}</p>
-                                    </div>}
-
-                                <div className=" hidden lg:block md:block bg-white w-full lg:ml-5 md:ml-5 lg:pl-8 lg:p-3 md:lg-8 md:p-3 ">
-
-
-                                    {/* form */}
-                                    <div className='p-6'>
-                                        <form onSubmit={handleSubmit(onSubmit)}>
-                                            {/* input fields */}
+                                        <div className='space-y-2 my-2'>
+                                            <label htmlFor="" className='block'>Name*</label>
+                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.full_name ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Full Name" {...register("full_name", { required: true })} />
+                                        </div>
+                                        <div className='space-y-2 my-2'>
+                                            <label htmlFor="" className='block'>Mobile Number* <span className='text-xs'>(Commonly Used to Assist Delivery)</span></label>
+                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.phone ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your 10 Digit Mobile Number" {...register("phone", {
+                                                required: true, pattern: {
+                                                    value: /[1-9]{1}[0-9]{9}/,
+                                                    message: 'Please enter a valid Phone number',
+                                                }
+                                            })} />
+                                            {errors ? <p className='text-red-500'>{errors?.phone?.message}</p> : ""}
+                                        </div>
+                                        <div className='space-y-2 my-2'>
+                                            <label htmlFor="" className='block'>Flat No. , House No. / House Name, Road No.*</label>
+                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_1 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Address" {...register("address_line_1", { required: true })} />
+                                        </div>
+                                        <div className='lg:grid lg:grid-cols-2 lg:space-x-6'>
                                             <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Country*</label>
-                                                <select className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.country ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} {...register("country", { required: true })} >
-                                                    <option value="India">India</option>
-                                                </select>
+                                                <label htmlFor="" className='block'>Colony, Area, Street, Village*</label>
+                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_2 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="More Address Details" {...register("address_line_2", { required: true })} />
                                             </div>
                                             <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Name*</label>
-                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.full_name ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Full Name" {...register("full_name", { required: true })} />
+                                                <label htmlFor="" className='block'>Land Mark <span className='text-xs'>(optional)</span></label>
+                                                <input className='w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500' type="text" placeholder="e.g - Near 9 to 9 Super Market" {...register("land_mark", { required: false })} />
                                             </div>
-                                            <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Mobile Number* <span className='text-xs'>(Commonly Used to Assist Delivery)</span></label>
-                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.phone ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your 10 Digit Mobile Number" {...register("phone", {
+                                        </div>
+                                        <div className='lg:grid lg:grid-cols-4 lg:space-x-6'>
+                                            <div className='col-span-2'>
+                                                <div className='space-y-2 my-2'>
+                                                    <label htmlFor="" className='block'>State*</label>
+                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.state ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your State" {...register("state", { required: true })} />
+                                                </div>
+                                            </div>
+                                            <div className='space-y-2 my-2 col-span-1'>
+                                                <label htmlFor="" className='block'>District*</label>
+                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.city ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your District" {...register("city", { required: true })} />
+                                            </div>
+
+                                            <div className='space-y-2 my-2 col-span-1'>
+                                                <label htmlFor="" className='block'>Pin*</label>
+                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.zip_code ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Area Pin" {...register("zip_code", {
                                                     required: true, pattern: {
-                                                        value: /[1-9]{1}[0-9]{9}/,
-                                                        message: 'Please enter a valid Phone number',
+                                                        value: /^[0-9]+$/,
+                                                        message: 'Please enter numbers only',
                                                     }
                                                 })} />
-                                                {errors ? <p className='text-red-500'>{errors?.phone?.message}</p> : ""}
+                                                {errors ? <p className='text-red-500 '>{errors?.zip_code?.message}</p> : ""}
                                             </div>
-                                            <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Flat No. , House No. / House Name, Road No.*</label>
-                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_1 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Address" {...register("address_line_1", { required: true })} />
-                                            </div>
-                                            <div className='lg:grid lg:grid-cols-2 lg:space-x-6'>
-                                                <div className='space-y-2 my-2'>
-                                                    <label htmlFor="" className='block'>Colony, Area, Street, Village*</label>
-                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_2 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="More Address Details" {...register("address_line_2", { required: true })} />
-                                                </div>
-                                                <div className='space-y-2 my-2'>
-                                                    <label htmlFor="" className='block'>Land Mark <span className='text-xs'>(optional)</span></label>
-                                                    <input className='w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500' type="text" placeholder="e.g - Near 9 to 9 Super Market" {...register("land_mark", { required: false })} />
-                                                </div>
-                                            </div>
-                                            <div className='lg:grid lg:grid-cols-4 lg:space-x-6'>
-                                                <div className='col-span-2'>
-                                                    <div className='space-y-2 my-2'>
-                                                        <label htmlFor="" className='block'>State*</label>
-                                                        <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.state ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your State" {...register("state", { required: true })} />
-                                                    </div>
-                                                </div>
-                                                <div className='space-y-2 my-2 col-span-1'>
-                                                    <label htmlFor="" className='block'>District*</label>
-                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.city ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your District" {...register("city", { required: true })} />
-                                                </div>
+                                        </div>
 
-                                                <div className='space-y-2 my-2 col-span-1'>
-                                                    <label htmlFor="" className='block'>Pin*</label>
-                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.zip_code ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Area Pin" {...register("zip_code", {
-                                                        required: true, pattern: {
-                                                            value: /^[0-9]+$/,
-                                                            message: 'Please enter numbers only',
-                                                        }
-                                                    })} />
-                                                    {errors ? <p className='text-red-500 '>{errors?.zip_code?.message}</p> : ""}
-                                                </div>
+                                        <div className='space-y-2 my-2'>
+                                            {/* <p className='m-0 p-0'>Address Type</p> */}
+                                            {/* <div className='flex gap-3'> */}
+                                            <div className='flex gap-1 items-center'>
+
+                                                <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Home" />
+                                                <label htmlFor="">Home Address <span className='text-xs'>(product will be delivered between 7 am to 9 pm)</span></label>
                                             </div>
+                                            <div className='flex gap-1 items-center'>
 
-                                            <div className='space-y-2 my-2'>
-                                                {/* <p className='m-0 p-0'>Address Type</p> */}
-                                                {/* <div className='flex gap-3'> */}
-                                                <div className='flex gap-1 items-center'>
-
-                                                    <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Home" />
-                                                    <label htmlFor="">Home Address <span className='text-xs'>(product will be delivered between 7 am to 9 pm)</span></label>
-                                                </div>
-                                                <div className='flex gap-1 items-center'>
-
-                                                    <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Work" />
-                                                    <label htmlFor="">Office / Work Address <span className='text-xs'>(product will be delivered between 10 am to 6 pm)</span></label>
-                                                </div>
-                                                {/* </div> */}
+                                                <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Work" />
+                                                <label htmlFor="">Office / Work Address <span className='text-xs'>(product will be delivered between 10 am to 6 pm)</span></label>
                                             </div>
-                                            {/* buttons */}
-                                            {/* <div className="flex justify-between mt-3"> */}
-                                            {/* <Button loading={loading}> */}
-                                            {!loading && <input className='border  py-3 px-11 mt-3 text-base  cursor-pointer' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white` }} type="submit" value={`${!edit ? 'SAVE ADDRESS' : 'EDIT ADDRESS'}`} />}
-                                            {loading && <span className='ml-3'><LoadingOutlined style={{ fontSize: 24 }} spin /></span>}
-                                            {/* </Button> */}
-                                            {/* <button className='p-3 bg-red-500 w-5/12 rounded' onClick={() => setIsModalVisible(false)}>Cancel</button> */}
                                             {/* </div> */}
-                                        </form>
-                                    </div>
-
+                                        </div>
+                                        {/* buttons */}
+                                        {/* <div className="flex justify-between mt-3"> */}
+                                        {/* <Button loading={loading}> */}
+                                        {!loading && <input className='border  py-3 px-11 mt-3 text-base  cursor-pointer' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white` }} type="submit" value={`${!edit ? 'SAVE ADDRESS' : 'EDIT ADDRESS'}`} />}
+                                        {loading && <span className='ml-3'><LoadingOutlined style={{ fontSize: 24 }} spin /></span>}
+                                        {/* </Button> */}
+                                        {/* <button className='p-3 bg-red-500 w-5/12 rounded' onClick={() => setIsModalVisible(false)}>Cancel</button> */}
+                                        {/* </div> */}
+                                    </form>
                                 </div>
-                            </>
+
+                            </div>
+                        </>
 
                         }
 
