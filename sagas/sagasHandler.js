@@ -1,35 +1,35 @@
-import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems,setShopWidgets, getShopSeoSuccess } from "../actions";
-import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI,handleGetShopWidgets, handleSEO } from "../services/apiServices";
+import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems, setShopWidgets, getShopSeoSuccess } from "../actions";
+import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI } from "../services/apiServices";
 import { put } from "redux-saga/effects"
 import store from "../config/store";
 import wishlistActionType, { FETCH_FILTER_GROUPS } from "../constants/actionTypes";
 
 //widgets
-export function* onGetShopWidgets({payload}) {
-        try {
-            // const res = yield fetcher('GET', `?r=stores/get-all-widget-integrations&storeId=${payload}`);
-            const res = yield handleGetShopWidgets(payload);
-            if(res.data){
-                yield put(setShopWidgets(res.data))
-            }
-
-        } catch (error) {
-            // yield put(errorOnProductDetailPage(error))
+export function* onGetShopWidgets({ payload }) {
+    try {
+        // const res = yield fetcher('GET', `?r=stores/get-all-widget-integrations&storeId=${payload}`);
+        const res = yield handleGetShopWidgets(payload);
+        if (res.data) {
+            yield put(setShopWidgets(res.data))
         }
+
+    } catch (error) {
+        // yield put(errorOnProductDetailPage(error))
+    }
 
 }
 //seo
-export function* onGetShopSeo({payload}) {
-        try {
-            // const res = yield fetcher('GET', `?r=stores/get-all-widget-integrations&storeId=${payload}`);
-            const res = yield handleSEO(payload);
-            if(res.data){
-                yield put(getShopSeoSuccess(res.data))
-            }
-
-        } catch (error) {
-            console.log(error)
+export function* onGetShopSeo({ payload }) {
+    try {
+        // const res = yield fetcher('GET', `?r=stores/get-all-widget-integrations&storeId=${payload}`);
+        const res = yield handleSEO(payload);
+        if (res.data) {
+            yield put(getShopSeoSuccess(res.data))
         }
+
+    } catch (error) {
+        console.log(error)
+    }
 
 }
 
@@ -62,6 +62,44 @@ export function* handleStoreSettings() {
     }
 
 }
+
+
+export function* handleDeliveryMethod(data) {
+
+console.log('type',data)
+
+    try {
+        if (data.type == 'SET_PARCEL') {
+            const response = yield setParcelAPI(data.payload)
+         console.log('data.payload',data.payload)
+            
+            // const response1 = yield getPurchaseDetails(data.payload)
+            // yield put(purchaseDetails(response1))
+
+            const response1 = yield getPurchaseDetails(data.payload)
+            yield put(purchaseDetails(response1))
+
+
+        }
+        else {
+            const response = yield setDeliveryAPI(data.payload)
+            const response1 = yield getPurchaseDetails(data.payload)
+            yield put(purchaseDetails(response1))
+           
+            // const response1 = yield getPurchaseDetails(data.payload)
+            // yield put(purchaseDetails(response1))
+
+            
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+
+
 
 export function* handleStoreDisplaySettings() {
 
@@ -102,7 +140,7 @@ export function* handleFetchBackendCart({ payload }) {
 }
 
 export function* handleFetchPurchaseDetails({ payload, setLoading }) {
-    console.log('purch',payload)
+    console.log('purch', payload)
     try {
         if (payload) {
             const response = yield getPurchaseDetails(payload)
@@ -431,7 +469,7 @@ export function* handleWallet({ type, payload }) {
 
 export function* handleCoupon(payload) {
 
-    console.log('ytype',payload,payload.type,payload.payload)
+    console.log('ytype', payload, payload.type, payload.payload)
 
     try {
         if (payload.type == 'COUPON_APPLY') {
@@ -444,26 +482,26 @@ export function* handleCoupon(payload) {
                 payload.payload.message.error(data.message)
                 payload.payload.setMsg(data.message)
                 payload.payload.setLoading(false)
-            
-              }
-              else{
-               
-                    payload.payload.message.success('Coupon Applied Successfully')
-                    payload.payload.setMsg(data.message)
-                    payload.payload.setLoading(false)
-                    payload.payload.setValidCoupon(true)
-                    if (data) {
-               
-                        const response1 = yield getPurchaseDetails(payload.payload.purchaseId)
-                        yield put(purchaseDetails(response1))
-                  
-        
-        
-                    }
-                
-                  
-              }
-          
+
+            }
+            else {
+
+                payload.payload.message.success('Coupon Applied Successfully')
+                payload.payload.setMsg(data.message)
+                payload.payload.setLoading(false)
+                payload.payload.setValidCoupon(true)
+                if (data) {
+
+                    const response1 = yield getPurchaseDetails(payload.payload.purchaseId)
+                    yield put(purchaseDetails(response1))
+
+
+
+                }
+
+
+            }
+
             // if (data.message == 'Invalid Coupon Code') {
             //     payload.message.error(data.message)
             //   }
@@ -472,7 +510,7 @@ export function* handleCoupon(payload) {
             //     payload.message.success('Coupon Applied Successfully')
             //     payload.setValidCoupon(true)
             //   }
-          
+
         } else {
             console.log('coupon remove payload', payload)
             const response = yield removeCoupon(payload.orderId)
@@ -490,7 +528,7 @@ export function* handleCoupon(payload) {
             //     payload.message.success('Coupon Applied Successfully')
             //     payload.setValidCoupon(true)
             //   }
-        
+
 
         }
 

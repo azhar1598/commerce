@@ -91,7 +91,7 @@ function ImageMagnifier({
 
 function App({ src }) {
     return (
-        <div className="App">
+        <div className="App border border-blue-100 shadow ">
             <ImageMagnifier
                 width={"30vw"}
                 height={"60vh"}
@@ -121,7 +121,7 @@ const Magnify = ({ images = [], alt = 'goplinto product image' }) => {
                     {
                         [...images].map((item, i) => (
                             <div className="w-20 h-20 overflow-hidden rounded-md cursor-pointer" key={i} onClick={() => setActiveImage(i)}>
-                            {item!=null?  <img className={`w-full h-full object-cover ${activeImage != i && 'opacity-60'}`} src={item} alt={alt} />:''}
+                            {item!=null?  <img className={`w-full h-full object-cover  ${activeImage != i && 'opacity-60'}`} src={item} alt={alt} />:''}
                             </div>
                         ))
                     }
@@ -134,7 +134,7 @@ const Magnify = ({ images = [], alt = 'goplinto product image' }) => {
                         <App src={`${images[activeImage] || 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'}`} />
                         :
                         <>
-                            <img className="w-full h-full" src={images[activeImage]} alt={alt} onClick={() => setOpenSlider(true)} />
+                            <img className="w-full h-full " src={images[activeImage]} alt={alt} onClick={() => setOpenSlider(true)} />
                             <div className='w-full py-4 flex space-x-2 justify-center'>
                                 {
                                     images.map((item, i) => (

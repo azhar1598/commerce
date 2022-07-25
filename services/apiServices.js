@@ -181,6 +181,13 @@ export const setDeliveryAddressFlag = (purchaseId, flag) =>
 export const convenienceFlag = (purchaseId, flag) =>
     callAPI('GET', `orders/set-convenience-flag&purchaseId=${purchaseId}&flagStatus=${flag}`)
 
+    export const setParcelAPI=(purchaseId)=>
+    callAPI('GET',`orders/set-parcel&purchaseId=${purchaseId}&flagStatus=Y`)
+
+    export const setDeliveryAPI=(purchaseId)=>
+    callAPI('GET',`orders/set-delivery&purchaseId=${purchaseId}&flagStatus=N`)
+    
+
 export const couponApply = (payload) =>
     callAPI('GET', `orders/validate-coupon&storeId=${payload.storeId}&couponCode=${payload.coupon}&orderId=${payload.orderId}&customerId=${payload.customerId}`)
 

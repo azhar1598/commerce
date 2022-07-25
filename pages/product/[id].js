@@ -587,7 +587,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : '').map((key, idx) => {
                                                             console.log('key', key, idx)
 
-                                                            return (<img className='w-[20px] min-h-96 h-96 max-h-96 rounded' key={key} src={key ? key : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`} alt="" />)
+                                                            return (<img className='w-[20px] min-h-96 h-96 max-h-96 rounded ' key={key} src={key ? key : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`} alt="" />)
                                                         })
 
                                                     }
