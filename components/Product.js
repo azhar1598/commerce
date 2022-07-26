@@ -721,8 +721,10 @@ export const Product = (props) => {
                         {/* End of wishlist feature for mobile */}
 
 
-                        <div className='hidden lg:block'>
-                            <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-72 item-name item-description lg:h-16' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
+                        <div className='hidden lg:flex items-start'>
+                        {props.isVeg?<img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2'/>
+                        :<img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2'/>}
+                            <p className=' font-montMedium mt-1 ml- text-[16px] lg:text-lg lg:w-72 item-name item-description lg:h-[60px]' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
                         </div>
 
                         <div className='lg:hidden'>
@@ -730,8 +732,8 @@ export const Product = (props) => {
                         </div>
 
                         {/* <p className='hidden font-montRegular text-sm -mt-5 item-description' onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p> */}
-                        <div className='flex justify-between'>
-                            <p className='-mt-3 lg:w-[17vw] md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
+                        <div className='flex justify-between '>
+                            <p className='-mt-3 lg:w-[17vw]  md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                                 <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
                                 <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
                                 {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}

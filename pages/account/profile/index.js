@@ -43,7 +43,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                         <p className='text-slate-500 text-sm font-montMedium'>Name</p>
                         <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px' }} className='lg:w-[40vw] w-80 '>
                             {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                            <Input placeholder="Enter Your Name" name="name" onChange={handleChange} required autoComplete="off" bordered={false} />
+                            <Input placeholder="Enter Your Name" name="name" defaultValue={customerDetails?.data?.full_name ? customerDetails?.data.full_name : 'User'} onChange={handleChange} required autoComplete="off" bordered={false} />
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                         <p className='text-slate-500 text-sm font-montMedium'>Phone Number</p>
                         <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px' }} className='lg:w-[40vw] w-80 '>
                             {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                            <Input placeholder="Enter Your Name" name="name" onChange={handleChange} required autoComplete="off" bordered={false} />
+                            <Input placeholder="Enter Your Name" name="Phone Number" defaultValue={customerDetails?.data?.phone} onChange={handleChange} required autoComplete="off" bordered={false} />
                         </div>
                     </div>
 
@@ -59,11 +59,11 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                         <p className='text-slate-500 text-sm font-montMedium'>Mail ID</p>
                         <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px' }} className='lg:w-[40vw] w-80 '>
                             {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                            <Input placeholder="Enter Your Name" name="name" onChange={handleChange} required autoComplete="off" bordered={false} />
+                            <Input placeholder="Email" name="Email" defaultValue={customerDetails?.data?.email_id} onChange={handleChange} required autoComplete="off" bordered={false} />
                         </div>
                     </div>
 
-                    <p className='btn-bg text-white text-base mr-10 px-5 py-2 rounded cursor-pointer inline  w-24' style={{ backgroundColor: storeSettings? storeSettings.secondary_color : 'black' }}>Update</p>
+                    {/* <p className='btn-bg text-white text-base mr-10 px-5 py-2 rounded cursor-pointer inline  w-24' style={{ backgroundColor: storeSettings? storeSettings.secondary_color : 'black' }}>Update</p> */}
 
 
                 </div>
