@@ -16,7 +16,7 @@ import encUtf8 from "crypto-js/enc-utf8";
 import aes from "crypto-js/aes";
 import StoreStatus from './svgComponents/StoreStatus'
 
-export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid, minQtyMsg, minProduct }) => {
+export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid, minQtyMsg, minProduct, deliveryMethod }) => {
 
   const router = useRouter()
   const [paymentData, setPaymentData] = useState({})
@@ -137,20 +137,33 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               message.error(purchaseInvalid)
             }
           }
-          else
-            if (address.defaultAddress) {
-              const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
-              if (response) {
+          else if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
+
+            if (deliveryMethod == 'DELIVERY') {
+              if (address.defaultAddress) {
+                const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
+                if (response) {
+                  setloader(false)
+                  router.push('/review')
+                }
+              }
+              else {
                 setloader(false)
-                router.push('/review')
+                message.error('Please Add the Address')
               }
             }
-            else {
+            else if (deliveryMethod == 'PARCEL') {
               setloader(false)
-              message.error('Please Add the Address')
+              router.push('/review')
             }
+           
+          }
+          else{
+            setloader(false)
+            message.error('Please Choose Delivery Method')
+          }
+          }
         }
-      }
       else {
         message.error(`Please Check Minimum Quantity of ${minProduct}`)
       }
@@ -351,9 +364,9 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         <>
           <div className='hidden lg:flex md:flex flex-col items-center w-[100vw] -mt-4  lg:bg-white  md:mt-0  lg:w-full md:w-full '>
             <p className='bg-white font-montSemiBold placeholder p-2  w-full  mt-12 lg:mt-4 text-lg lg:px-5 mb-0'>Billing Details</p>
-            <div className='bg-white p-2 w-full h-84'>
+            <div className='bg-white p-2 w-full  h-84'>
               {checkout != undefined ?
-                <div className='bg-white p-2 w-full font-montMedium'>
+                <div className='bg-white p-2 w-full  font-montMedium'>
                   <div className='flex items-start w-full'>
                     {review ? <p className='text-sm font-montSemiBold w-[3000px]'>Shipping to <span className='font-montRegular   text-[12px]'>{address?.defaultAddress?.full_name}, {address?.defaultAddress?.address_line_1}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
                     </span> </p>
@@ -401,7 +414,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                     <p className='font-semibold'>{stateStoreDetails?.currency_symbol} {wallet ? walletAmount > billingDetails?.calculatedPurchaseTotal ? 0.00 : billingDetails?.calculatedPurchaseTotal - walletAmount : billingDetails?.calculatedPurchaseTotal}</p>
                   </div>
                 </div> :
-                <div className='flex items-center mt-28 justify-center'>
+                <div className='flex items-center mt-28 lg:w-full lg:min-w-[400px] justify-center'>
+
                   <Spin />
                 </div>}
             </div>

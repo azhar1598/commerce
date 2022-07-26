@@ -300,38 +300,38 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             }
             else {
                 if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
-              
-                if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
+
+                    if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
 
 
-                    message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
-                    // setMinQtyMsg(true)
-                    setMinProduct(item.item_name)
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
 
 
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                } else {
+
+                    if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
+
+
+                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
                 }
-                else {
-                    adjustQty(item.item_id, qty)
-                    setMinQtyMsg(false)
-
-                }
-            }else{
-                
-                if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
-
-
-                    message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
-                    // setMinQtyMsg(true)
-                    setMinProduct(item.item_name)
-
-
-                }
-                else {
-                    adjustQty(item.item_id, qty)
-                    setMinQtyMsg(false)
-
-                }
-            }
             }
 
         }
@@ -377,7 +377,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
-  
+
     const handleIncreaseQuantity = (item) => {
 
 
@@ -614,27 +614,48 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             </Head> */}
 
             <div className='mt-20 lg:mt-24 lg:flex lg:flex-col  md:-mt-4  bg-[#F6F6F6]  lg:pl-16 md:pl-32 lg:p-8 md:p-8'>
-                <div className='hidden lg:block'>
+                {/* <div className='hidden lg:block'>
                     <ReviewTracker storeSettings={storeSettings} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} paymentAdded={paymentAdded} useWallet={useWallet} />
-                </div>
+                </div> */}
 
 
                 <div className='bg-[#F6F6F6] lg:h-full lg:min-h-screen md:h-full flex flex-col lg:flex-row md:flex-row items-start md:-mt-4 lg:p-2 md:p-2'>
 
-                    <div className='mt-24 lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml-12 lg:mr-36 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer '>
-                        <p className='hidden lg;block md:block font-montSemiBold text-lg text-[#212B36]'>Select Payment Method</p>
-                        <div className='bg-white h-32 mb-1 flex items-center p-8  w-full'>
+                    <div className='mt-24 lg:bg-white lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml- lg:mr-12  w-full lg:w-full border-b-2 border-slate-[200] cursor-pointer '>
+                        <p className='hidden lg;block md:block font-montBold pt-6 px-10 text-lg text-[#212B36]'>Choose Payment Method</p>
+                        <div className='bg-white   flex items-center px-8 pt-2 w-full'>
                             <Radio.Group onChange={handlePaymentChange} value={paymentMethod}>
-                                <Space direction="vertical" className="leading-9">
-                                    <Radio value='ONL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px' }}>Online Payment {
+                                <div className="leading gap-0 ">
+                                    <Radio value='ONL' className='font-montSemiBold gap-5' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pay Online {
                                         storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                            storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                    <Radio value='COD' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px' }} className={`font-montSemiBold inline text-[16px]`}>Pay on Delivery {
+                                            storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}
+                                        <div className=' bg-white flex items-center justify-between pt-5 w-full'>
+
+                                            <div className='-mt-4'>
+                                                {/* disabled={stateWallet?.customer_wallet_balance && paymentMethod=='ONL' !=0?false:true} */}
+                                                <Checkbox onChange={(e) => {
+                                                    handleWalletChange(e)
+
+
+                                                }} defaultChecked={false} checked={useWallet} style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black' }}><span className=' font-montMedium text-sm' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
+                                            </div>
+                                            <p className=' font-montMedium flex items-center text-sm'>(Balance <span className='text-green-500 text-sm'>{storeDetails?.currency_symbol} {stateWallet?.customer_wallet_balance})</span></p>
+
+                                        </div>
+
+                                    </Radio>
+
+
+
+                                    <Radio value='COD' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px] gap-5`}>Pay on Delivery {
                                         storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
 
-                                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}
+                                            <p className=' font-montMedium flex items-center text-sm py-4'>(wallet money can't be used for cash on delivery.)</p>
+                                            
+                                            </Radio>
 
-                                </Space>
+                                </div>
                             </Radio.Group>
 
 
@@ -645,7 +666,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     </Radio.Group>
                 </div> */}
 
-                        <div className='bg-white flex items-center justify-between px-8 pt-5 w-full'>
+                        <div className='lg:hidden bg-white flex items-center justify-between px-8 pt-5 w-full'>
 
                             <div className='-mt-4'>
                                 {/* disabled={stateWallet?.customer_wallet_balance && paymentMethod=='ONL' !=0?false:true} */}
@@ -661,47 +682,48 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         <p className='text-red-500 text-[16px] pt-2'>{
                             storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "Not Accepting Any Payments at the Moment" : ""}</p>
 
-                        <p className='hidden lg:block md:block font-montSemiBold mt-8 text-[#212B36]'>Review Order</p>
+                        {/* <p className='hidden lg:block md:block font-montSemiBold mt-8 text-[#212B36]'>Review Order</p> */}
 
                         <div className='flex flex-col bg-white w-full justify-between items-start'>
 
                             {
-                                cart.map((item, idx) =>
-                                    <div className='flex items-start text-left w-full border-b-2 border-slate-300  lg:pl-8 p-3 md:pl-8 lg:pt-3 md:pt-3' key={idx}>
-                                        <img src={item.primary_img ? item.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' />
-                                        <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
-                                            <p className='text-lg font-montSemiBold'>{item.item_name}</p>
+                                cart.map((item, idx) => <></>
+                                    // No need of cart list here
+                                    // <div className='flex items-start text-left w-full border-b-2 border-slate-300  lg:pl-8 p-3 md:pl-8 lg:pt-3 md:pt-3' key={idx}>
+                                    //     <img src={item.primary_img ? item.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' />
+                                    //     <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
+                                    //         <p className='text-lg font-montSemiBold'>{item.item_name}</p>
 
-                                            {item.defaultVariantItem ? <p className='text-sm font-montMedium -mt-5'>
-                                                <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
-                                                <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
-                                                <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
+                                    //         {item.defaultVariantItem ? <p className='text-sm font-montMedium -mt-5'>
+                                    //             <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
+                                    //             <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                    //             <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
 
-                                            {/* <p className='text-[#212B3680]'>{item.item_desc}</p> */}
-                                            <p className='text-lg  flex items-start  font-montSemiBold'>{storeDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
-                                                <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${storeDetails?.currency_symbol} ${item.price}` : ''}</span>
-                                                <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${storeDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
+                                    //         {/* <p className='text-[#212B3680]'>{item.item_desc}</p> */}
+                                    //         <p className='text-lg  flex items-start  font-montSemiBold'>{storeDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
+                                    //             <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${storeDetails?.currency_symbol} ${item.price}` : ''}</span>
+                                    //             <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${storeDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
 
-                                            </p>
+                                    //         </p>
 
 
-                                            {checkout.backendCart?.purchase_id != undefined ?
-                                                <div className='flex justify-between items-center gap-6' >
-                                                    <div className='border border-gray-400 space-x-4 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() =>  handleDecreaseQuantity(item, item.qty - 1)}  className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
-                                                        <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{item.qty}</span>
-                                                        <span onClick={() => { handleIncreaseQuantity(item) }}
+                                    //         {checkout.backendCart?.purchase_id != undefined ?
+                                    //             <div className='flex justify-between items-center gap-6' >
+                                    //                 <div className='border border-gray-400 space-x-4 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                    //                     <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                    //                     <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{item.qty}</span>
+                                    //                     <span onClick={() => { handleIncreaseQuantity(item) }}
 
-                                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
-                                                    </div>
-                                                    {/* <div onClick={() => removeFromCart(item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
-                                                </div> :
-                                                <div className=' w-1/3 flex items-center justify-center'>
-                                                    <SyncOutlined style={{ fontSize: 24 }} spin />
-                                                </div>}
-                                        </div>
-                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
-                                    </div>
+                                    //                         className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                    //                 </div>
+                                    //                 {/* <div onClick={() => removeFromCart(item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+                                    //             </div> :
+                                    //             <div className=' w-1/3 flex items-center justify-center'>
+                                    //                 <SyncOutlined style={{ fontSize: 24 }} spin />
+                                    //             </div>}
+                                    //     </div>
+                                    //     <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
+                                    // </div>
 
                                 )}
                         </div>
@@ -720,8 +742,8 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                     </Modal>
 
-                    <div className='mt-16 w-96'>
-                        <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} />
+                    <div className='mt-4 w-96 mr-20'>
+                        {/* <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} /> */}
                         <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={true} wallet={useWallet} walletAmount={stateWallet?.customer_wallet_balance} paymentMethod={paymentMethod} final={false} storeDisplaySettings={storeDisplaySettings} payReview={payReview} />
                     </div>
 

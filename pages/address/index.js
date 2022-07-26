@@ -544,8 +544,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                     </div>
                 </div>
                 <div className='  lg:block md:block mt-0 w-96'>
-                    <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} />
-                    <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={false} shippingAdded={true} final={false} showAddressMobile={showAddressMobile} />
+                    {/* <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} /> */}
+                    <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={false} shippingAdded={true} deliveryMethod={deliveryMethod} final={false} showAddressMobile={showAddressMobile} />
                 </div>
 
 
