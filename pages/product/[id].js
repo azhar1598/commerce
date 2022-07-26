@@ -181,7 +181,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-    const handleDecressQuantity = (itemid, qty) => {
+    const handleDecreaseQuantity = (itemid, qty) => {
 
         if (qty == 0) {
             removeFromCart(Number(itemid))
@@ -196,9 +196,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const itemAddToCart = (item) => {
 
         let quantity = 0
-
-
-
 
         if (initialState.defaultVariantItem) {
 
@@ -670,7 +667,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                 !cart.find(item => initialState.defaultVariantItem ? item.defaultVariantItem?.variant_item_id == initialState.defaultVariantItem.variant_item_id : item.item_id == id) ? <div onClick={() => itemAddToCart(initialState.data)} className="text-lg py-2 px-7 border cursor-pointer mt-3" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>ADD TO BAG</div>
                                                     :
                                                     <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecressQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                                        <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                                             if (initialState.defaultVariantItem) {
                                                                 if (item.defaultVariantItem) {
                                                                     if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
@@ -1053,7 +1050,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                     <div onClick={() => itemAddToCart(initialState.data)} className="mt-2 py-2 px-2 border text-center text- cursor-pointer w-1/2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>ADD TO BAG</div>
                                     :
                                     <div className='border space-x-2  flex items-center justify-between w-1/2 m-auto' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                        <span onClick={() => handleDecressQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                        <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                             if (initialState.defaultVariantItem) {
                                                 if (item.defaultVariantItem) {
                                                     if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {

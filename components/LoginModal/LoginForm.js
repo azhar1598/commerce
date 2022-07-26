@@ -9,12 +9,12 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
 
     return (
         <>
-            <p className='hidden lg:block text-xl text-white border-b-2 border-slate-300 pb-3 w-full font-montMedium p-4 ' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`}}>Log in</p>
+            <p className='hidden lg:block text-xl text-white border-b-2 border-slate-300 pb-3 w-full font-montMedium p-4 px-12' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`}}>Log in</p>
             <div className='flex  mt-4 w-full pl-8'>
-                <p
-                    style={method == 'PHONE' ? { background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: 'white', paddingLeft: '8px', paddingRight: '8px', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', paddingLeft: '8px', paddingRight: '8px', border: `2px solid ${storeSettings.data ? storeSettings.data.secondary_color : ''}` }}
+                <p className='font-montMedium text-sm'  
+                    style={method != 'PHONE' ? { color: 'gray', paddingLeft: '8px', paddingRight: '8px', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', marginLeft: '38px', paddingRight: '8px', }}
                     onClick={() => { handleLoginMethod('PHONE') }}>Phone number</p>
-                <p style={method == 'EMAIL' ? { background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: 'white', paddingLeft: '8px', paddingRight: '8px', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', paddingLeft: '8px', paddingRight: '8px', border: `2px solid ${storeSettings.data ? storeSettings.data.secondary_color : ''}` }} onClick={() => { handleLoginMethod('EMAIL') }}>Email</p>
+                <p  className='font-montMedium text-sm'  style={method != 'EMAIL' ? {  color: 'gray', paddingLeft: '8px', paddingRight: '8px', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', paddingLeft: '18px', paddingRight: '8px', }} onClick={() => { handleLoginMethod('EMAIL') }}>Email</p>
             </div>
             <form onSubmit={(e) => { forgotPassword ? handleForgotPassword(e, method, value) : handleAuth(e, method, value, 'LOGIN') }} id="form" className="font-montRegular" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 

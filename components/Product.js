@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { AiFillHeart } from 'react-icons/ai'
 import { addToWishlist, deleteFromWishlist } from '../services/apiServices';
 import { message } from 'antd';
-import { getSearchItemsAction, getWishlistItems, searchItems } from '../actions';
+import { addToCart, adjustQty, getSearchItemsAction, getWishlistItems, removeFromCart, searchItems } from '../actions';
 import LoginModal from './LoginModal/LoginModal';
 import { SyncOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
@@ -18,6 +18,8 @@ export const Product = (props) => {
 
     const [noMoreWishlist, setNoMoreWishlist] = useState()
     const [page, setPage] = useState(2)
+    const [minQtyMsg, setMinQtyMsg] = useState(false)
+    const [minProduct, setMinProduct] = useState()
 
     const [visible, setVisible] = useState(false)
     const showModal = () => {
@@ -135,17 +137,34 @@ export const Product = (props) => {
     }
 
 
-    
+
+
+
+
+
+    const removeFromWishlist = (primaryKey) => {
+
+
+        console.log('primaryKey', primaryKey)
+
+        const payload = { primaryKey, setState: props.setState, state: props.state, message }
+        props.deleteItemFromWishlist({ payload })
+
+    }
+
+
 
     const itemAddToCart = (item) => {
 
+        console.log('item', item)
+
         let quantity = 0
 
-        if (initialState.defaultVariantItem) {
+        if (item.defaultVariantItem) {
 
 
 
-            item['defaultVariantItem'] = initialState.defaultVariantItem;
+            item['defaultVariantItem'] = props.initialState.defaultVariantItem;
 
             const value = item?.defaultVariantItem?.inventory_details
 
@@ -175,7 +194,7 @@ export const Product = (props) => {
             }
 
             if (quantity > 0) {
-                addToCart(item)
+                props.addToCart(item)
             }
             else {
                 message.error('Sorry, You Cannot add more items')
@@ -191,7 +210,7 @@ export const Product = (props) => {
             console.log('itemsms', item)
             if (item.inventoryDetails == null) {
 
-                // addToCart(item)
+                // props.addToCart(item)
                 quantity = 15
                 // if(maxmin)
             }
@@ -221,10 +240,10 @@ export const Product = (props) => {
                 // }
             }
             if (quantity > 0) {
-                addToCart(item)
+                props.addToCart(item)
             }
             else {
-                message.error('Sorry, sYou Cannot add more items')
+                message.error('Sorry, You Cannot add more items')
             }
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
             // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
@@ -233,38 +252,421 @@ export const Product = (props) => {
         }
     }
 
-    const handleDecreaseQuantity = (itemid, qty) => {
 
+
+    // const handleDecreaseQuantity = (item, qty) => {
+
+    //     const data = readyCartData(cart)
+    //     // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+
+    //     if (item.defaultVariantItem) {
+
+    //         const filter = props.cart.filter((c) => {
+    //             if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
+    //                 return c
+    //             }
+    //         })
+
+    //         // important
+    //         if (qty == 0) {
+    //             props.removeFromCart(Number(item.variant_item_id))
+
+    //         }
+    //         else {
+    //             if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+    //                 if (filter[0].qty <= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+
+
+    //                     message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+    //                     // setMinQtyMsg(true)
+    //                     setMinProduct(item.item_name)
+    //                 }
+
+
+    //                 else {
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, qty)
+    //                     setMinQtyMsg(false)
+
+    //                 }
+    //             }
+    //             else {
+
+    //                 if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+
+    //                     message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+    //                     // setMinQtyMsg(true)
+    //                     setMinProduct(item.item_name)
+    //                 }
+
+
+    //                 else {
+    //                     console.log('qqtty', qty)
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, qty)
+    //                     setMinQtyMsg(false)
+
+    //                 }
+    //             }
+
+
+    //         }
+
+
+    //     } else {
+    //         const filter = props.cart.filter((c) => {
+    //             if (c.item_id == item.item_id) {
+    //                 return c
+    //             }
+    //         })
+
+    //         // important
+    //         if (qty == 0) {
+    //             props.removeFromCart(Number(item.item_id))
+
+    //         }
+    //         else {
+    //             if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+    //                 if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
+
+
+    //                     message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+    //                     // setMinQtyMsg(true)
+    //                     setMinProduct(item.item_name)
+
+
+    //                 }
+    //                 else {
+    //                     props.adjustQty(item.item_id, qty)
+    //                     setMinQtyMsg(false)
+
+    //                 }
+    //             } else {
+
+    //                 if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
+
+
+    //                     message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+    //                     // setMinQtyMsg(true)
+    //                     setMinProduct(item.item_name)
+
+
+    //                 }
+    //                 else {
+    //                     props.adjustQty(item.item_id, qty)
+    //                     setMinQtyMsg(false)
+
+    //                 }
+    //             }
+    //         }
+
+    //     }
+
+
+
+
+
+
+    //     // if (checkout.backendCart?.purchase_id || state) {
+    //     //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', checkout.backendCart?.purchase_id, data)
+
+    //     // }
+    //     // else {
+    //     //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', undefined, data)
+
+    //     // }
+
+
+    //     // fetchBackendCart('customerDetails.data?.customer_id,', 'storeDetails.group_id', data)
+    // }
+
+    // const handleIncreaseQuantity = (item) => {
+
+
+    //     console.log('itenmmmm', item)
+
+    //     if (item.defaultVariantItem) {
+
+    //         let quantity = 0
+    //         const value = item?.defaultVariantItem?.inventory_details
+
+    //         if (value?.inventory_quantity == null) {
+    //             if (value?.max_order_quantity == null)
+    //                 quantity = 15
+    //             else {
+    //                 quantity = value.max_order_quantity
+    //             }
+    //             // if(maxmin)
+    //         }
+    //         else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+    //             quantity = value.inventory_quantity
+    //             console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+    //         }
+    //         else if (value?.max_order_quantity > value?.inventory_quantity) {
+    //             quantity = value.inventory_quantity
+    //             console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+    //         }
+    //         else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+    //             quantity = value.max_order_quantity
+    //             console.log('value?.max_order_quantity < value?.inventory_quantity',)
+    //         }
+
+    //         if (quantity > 0) {
+    //             console.log('cartt', cart)
+    //             const filter = props.cart.filter((c) => {
+    //                 if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
+    //                     return c
+    //                 }
+    //             })
+    //             // console.log('fffilter', filter)
+    //             // if (filter[0].qty >= quantity) {
+    //             //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+    //             //     // props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+    //             // }
+    //             // else {
+    //             //     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+    //             //         setMinQtyMsg(false)
+    //             //     }
+    //             //     props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+    //             // }
+
+
+    //             if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+    //                 if (filter[0].qty < item.item.defaultVariantItem.inventory_details?.inventory_quantity) {
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+    //                 }
+
+    //                 if (filter[0].qty >= quantity) {
+    //                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+    //                     // adjustQty(item.item_id, item.qty)
+    //                 }
+    //                 else {
+    //                     console.log('filter[0].qty+1', filter[0].qty + 1)
+    //                     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+    //                         setMinQtyMsg(false)
+    //                     }
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+    //                 }
+    //             }
+
+    //             else {
+
+
+
+    //                 if (filter[0].qty < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+    //                 }
+
+    //                 if (filter[0].qty >= quantity) {
+    //                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+    //                     // props.adjustQty(item.item_id, item.qty)
+    //                 }
+    //                 else {
+    //                     console.log('filter[0].qty+1', filter[0].qty + 1)
+    //                     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+    //                         setMinQtyMsg(false)
+    //                     }
+    //                     props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+    //                 }
+
+    //             }
+
+
+
+    //         }
+    //         else {
+    //             message.error('Sorry, You Cannot add more items')
+    //         }
+
+    //     }
+    //     else {
+    //         // item without variant
+    //         console.log('item without variant', item)
+
+    //         let quantity = 0
+    //         const value = item?.inventoryDetails
+
+    //         console.log('valuee', value)
+    //         if (value != null) {
+
+    //             if (value?.inventory_quantity == null) {
+
+
+
+    //                 if (value?.max_order_quantity == null)
+    //                     quantity = 15
+    //                 else {
+    //                     quantity = value?.max_order_quantity
+    //                 }
+    //                 // if(maxmin)
+    //             }
+    //             else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+    //                 quantity = value?.inventory_quantity
+    //                 console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+    //             }
+    //             else if (value?.max_order_quantity > value?.inventory_quantity) {
+    //                 quantity = value.inventory_quantity
+    //                 console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+    //             }
+    //             else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+    //                 quantity = value.max_order_quantity
+    //                 console.log('value?.max_order_quantity < value?.inventory_quantity',)
+    //             }
+    //         } else {
+    //             quantity = 15
+    //         }
+
+    //         if (quantity > 0) {
+    //             console.log('cartt', props.cart)
+    //             const filter = props.cart.filter((c) => {
+    //                 if (c.item_id == item.item_id) {
+    //                     return c
+    //                 }
+    //             })
+
+    //             // important
+
+    //             if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+    //                 if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+    //                     props.adjustQty(item.item_id, item.qty + 1)
+
+    //                 }
+
+    //                 if (filter[0].qty >= quantity) {
+    //                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+    //                     // props.adjustQty(item.item_id, item.qty)
+    //                 }
+    //                 else {
+    //                     console.log('filter[0].qty+1', filter[0].qty + 1)
+    //                     if (filter[0].qty + 1 >= item.inventoryDetails?.inventory_quantity) {
+    //                         setMinQtyMsg(false)
+    //                     }
+    //                     props.adjustQty(item.item_id, item.qty + 1)
+    //                 }
+    //             }
+
+    //             else {
+
+
+
+    //                 if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
+    //                     props.adjustQty(item.item_id, item.qty + 1)
+
+    //                 }
+
+    //                 if (filter[0].qty >= quantity) {
+    //                     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+    //                     // props.adjustQty(item.item_id, item.qty)
+    //                 }
+    //                 else {
+    //                     console.log('filter[0].qty+1', filter[0].qty + 1)
+    //                     if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
+    //                         setMinQtyMsg(false)
+    //                     }
+    //                     props.adjustQty(item.item_id, item.qty + 1)
+    //                 }
+    //             }
+    //         }
+    //         else {
+    //             message.error('Sorry, You cannot add more items')
+    //         }
+    //     }
+
+    // }
+
+    // const readyCartData = function (arr) {
+
+    //     const key = 'store_id'
+    //     return arr.reduce(function (rv, x) {
+
+    //         (rv[x[key]] = rv[x[key]] || []).push({
+    //             item_id: x.item_id,
+    //             barcode_id: null,
+    //             quantity: x.qty,
+    //             variant_item_id: x.defaultVariantItem?.variant_item_id | null,
+    //         });
+    //         return rv;
+    //     }, {});
+    // };
+
+
+
+
+
+
+    const handleDecressQuantity = (itemid, qty) => {
         if (qty == 0) {
-            removeFromCart(Number(itemid))
+            props.removeFromCart(itemid)
         }
         else {
-            adjustQty(itemid, qty)
+            props.adjustQty(itemid, qty)
         }
     }
 
+    const handleIncreseQuantity = (inventory, itemid, qty) => {
+        let quantity = 0
+        let value = null
+        // console.log("logging when add to cart", initialState.defaultVariantItem)
+        if (inventory != null) {
+            value = inventory
+        }
+        // console.log("logging when add to cart 2", value)
+        if (value != null) {
+            if (value?.inventory_quantity == null) {
+                if (value.max_order_quantity == null)
+                    quantity = 15
+                else {
 
+                    quantity = value.max_order_quantity
 
-
-    const removeFromWishlist = (primaryKey) => {
-
-
-        console.log('primaryKey', primaryKey)
-
-        const payload = { primaryKey, setState: props.setState, state: props.state, message }
-        props.deleteItemFromWishlist({ payload })
-
+                }
+                // if(maxmin)
+            }
+            else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                quantity = value.inventory_quantity
+            }
+            else if (value?.max_order_quantity > value?.inventory_quantity) {
+                quantity = value.inventory_quantity
+            }
+            else if (value?.max_order_quantity < value?.inventory_quantity) {
+                quantity = value.max_order_quantity
+            }
+        } else {
+            quantity = 15
+        }
+        if (qty <= quantity) {
+            props.adjustQty(itemid, qty)
+        }
+        else {
+            message.error('Sorry, You Cannot add more items')
+        }
     }
-
 
 
     return (
 
         <>
             {props.grid ?
-                <div className={`flex flex-col w-1/2 items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer  `} >
+                <div className={`flex flex-col w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer  `} >
 
-                    <div className='p-2 lg:flex lg:flex-col  border border-blue-100 shadow min-h-[50vh] max-h-[50vh]'>
+                    <div className='p-2 lg:flex lg:flex-col  w-[300px] min-w-[300px] max-w-[300px]  border border-blue-100 shadow min-h-[50vh] max-h-[50vh]'>
                         <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`}
                             onClick={() => {
                                 router.push(`/product/${props.itemId}`)
@@ -335,7 +737,29 @@ export const Product = (props) => {
                                 {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
                             </p>
                             <div className=' font-montSemiBold text-xl text-white -' >
-                              <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+                                {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+ */}
+
+
+                                {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+
+                                  
+                                    <div className='mt-2 absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
+                                        <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
+                                    </div>
+                                    :
+                                    <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+
+                                    
+                                }
+
+
+
+
+
                             </div>
 
                         </div>
@@ -432,11 +856,11 @@ export const Product = (props) => {
 
 const mapStateToProps = state => {
     return {
-        
+
         storeSettings: state.storeSettingsReducer,
         initialState: state.itemDetailsReducer,
         cart: state.cartReducer.cart,
-  
+
     }
 }
 
@@ -445,6 +869,7 @@ const mapDispatchToProps = dispatch => {
         dispatchSearchItems: (query) => dispatch(searchItems(query)),
         addToCart: (data) => dispatch(addToCart(data)),
         adjustQty: (itemid, value) => dispatch(adjustQty(itemid, value)),
+        removeFromCart: (itemid) => dispatch(removeFromCart(itemid)),
         // getWishlistItems: (payload) => dispatch(getWishlistItems(payload))
     }
 }
