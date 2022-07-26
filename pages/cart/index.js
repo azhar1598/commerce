@@ -590,10 +590,12 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24' >
-                                            <p className='text-lg font-montSemiBold ' onClick={() => {
+                                            <p className='text-lg font-montSemiBold flex' onClick={() => {
                                                 fetchItemDetails('', '')
                                                 router.push(`/product/${item.item_id}`)
-                                            }}>{item.item_name}</p>
+                                            }}> {item.is_veg=="Y"?<img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2'/>
+                                            :<img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2'/>}
+                                                {item.item_name}</p>
                                             {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
                                                 <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
                                                 <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}

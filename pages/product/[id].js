@@ -604,7 +604,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                         {/* product information */}
                         <div className='lg:my-0 my-4'>
                             {/* title */}
-                            <h2 className="text-gray-800 text-xl font-montSemiBold " >{initialState.data ? initialState.data.item_name : ""}</h2>
+                            <h2 className="text-gray-800 text-xl font-montSemiBold flex" >   {initialState.data ? initialState.data.is_veg=="Y"?<img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2'/>
+                        :<img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2'/>:''}
+                        {initialState.data ? initialState.data.item_name : ""}</h2>
 
 
                             {/* price */}
