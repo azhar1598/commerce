@@ -332,7 +332,8 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                                 }
                             >
 
-                                {grid ? <div className='p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
+                                {grid ? 
+                                <div className='p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
                                     {items.map((item, index) => {
                                         return (
                                             <>
@@ -361,7 +362,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                                                         <>
                                                             {console.log('item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1', item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : '')}
 
-                                                            <Product image={item.primary_img !== '' || null ? item.primary_img : item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : ''} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} wishlistId={item.wishlistId} customerId={customerId} dispatchWishlist={dispatchWishlist} wishlistPage={false} stateStoreDetails={stateStoreDetails} wishlist={wishlist} setWishlist={setWishlist} stateWishlistItems={stateWishlistItems} setNoMore={setNoMore} grid={grid} />
+                                                            <Product image={item.primary_img !== '' || null ? item.primary_img : item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : ''} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} wishlistId={item.wishlistId} customerId={customerId} dispatchWishlist={dispatchWishlist} wishlistPage={false} stateStoreDetails={stateStoreDetails} wishlist={wishlist} setWishlist={setWishlist} stateWishlistItems={stateWishlistItems} setNoMore={setNoMore} grid={grid} item={item} isVeg={item.is_veg=="Y"?true:false}/>
                                                         </> :
                                                         ''}
                                                 </>

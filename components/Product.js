@@ -843,6 +843,36 @@ export const Product = (props) => {
                             <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span>
                         </p>
 
+                        <div className='flex justify-between '>
+                          
+                            <div className=' font-montSemiBold text-xl text-white -' >
+                                {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+ */}
+
+
+                                {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+
+                                  
+                                    <div className='   border rounded border-red-600   l-mt-5 mr-3 rounded shadow  w-44  mt-4 font-montMedium text-sm flex items-center bg-white h-10' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`pl-4  text-2xl cursor-pointer`}>-</span>
+                                        <span className='text-black font-montMedium text-sm px-12'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
+                                    </div>
+                                    :
+                                    <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-10 py-2  mt-4 font-montMedium text-sm' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
+
+                                    
+                                }
+
+
+
+
+
+                            </div>
+
+                        </div>
+
 
 
                     </div>
