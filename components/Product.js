@@ -848,14 +848,14 @@ export const Product = (props) => {
 
                     <div className='flex-col px-12'>
                         <div className='hidden lg:block'>
-                            <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
+                            <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? {  } : {}}>{props.name}<span></span></p>
                         </div>
 
                         <div className='lg:hidden'>
                             <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg lg:w-72 item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
                         </div>
 
-                        <p className='leading-loose font-montMedium text-sm -mt-5 w-auto item-description-list' onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
+                        <p className={`leading-loose font-montMedium text-sm -mt-5 w-auto ${props.wishlistPage?'item-description':'item-description-list'}`} onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
                         <p className='-mt-3 leading-loose lg:w-[17vw] md:w-[13vw] flex justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                             <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
                             <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
@@ -879,7 +879,7 @@ export const Product = (props) => {
                                         <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
-                                    <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-10 py-2  mt-4 font-montMedium text-sm' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
+                                    <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage?'px-6 py-2 w-44':"px-10 py-2 "}  mt-4 font-montMedium text-sm`} onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
 
 
                                 }
