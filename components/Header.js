@@ -14,6 +14,7 @@ import { configConsumerProps } from 'antd/lib/config-provider'
 import absoluteUrl from 'next-absolute-url'
 import SearchSvg from './svgComponents/SearchSvg'
 import { FaSearch } from 'react-icons/fa';
+import HeartIcon from './svgComponents/HeartIcon'
 
 
 
@@ -171,12 +172,12 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
             {isLoggedIn.data?.customer_id ?
                 <Menu style={{ width: '200px' }} >
 
-                      <Menu.Item>
+                    <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
                             My Orders
                         </Link>
                     </Menu.Item>
-                   <Menu.Item>
+                    <Menu.Item>
                         <Link href={`/account/wishlist`} passHref>
                             Wishlist
                         </Link>
@@ -301,7 +302,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                 <div className='flex items-center w-1/4 max-w-1/2 '>
                     {/* <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] max-w-20' onClick={() => { router.push('/') }} /> */}
 
-                 <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] ' onClick={() => { router.push('/') }} />
+                    <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] ' onClick={() => { router.push('/') }} />
 
                     {/* <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
                         color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
@@ -363,13 +364,21 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                         <FaUserAlt className='ml-12 cursor-pointer' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
                     </Dropdown>
                     <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
-                    {isLoggedIn.data?.customer_id ? <Link href="/"
-                    // href="/account/wishlist"
-                    >
-                        <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                    </Link> : <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }}
-                    //  onClick={showModal}
-                    />}
+                    <div className='cursor-pointer ml-12'>
+                        {isLoggedIn.data?.customer_id ?
+                            <Link href="/account/wishlist"
+                            >
+                           <div>
+                           <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl ' />
+                           </div>
+                            </Link> : <div  onClick={showModal}>
+                                <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl '
+
+                                />
+
+                            </div>
+                        }
+                    </div>
                     <Link href="/cart"
                     // 
                     >

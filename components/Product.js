@@ -899,11 +899,12 @@ export const Product = (props) => {
                                     }}>
                                         {props.wishlistPage ?
 
-                                            <AiFillHeart id={props.itemId} className={`text-red-500 text-xl mr-3`} />
+                                            // <AiFillHeart id={props.itemId} className={`text-red-500 text-xl mr-3`} />
+                                            <HeartIcon fill={'red'} id={props.itemId} className={`text-red-500 text-xl mr-3 shadow-xl text-lg`} />
                                             :
                                             <HeartIcon fill={wishlistId ? '#FF4141' : '#0000007F'} id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-[#0000007F] shadow-xl'} text-lg`} />
                                         }
-                                        <button className='capitalize font-montMedium text-[#0000007F]'>{!props.wishlistPage ? wishlistId ? 'Added to wishlist' : 'Add to wishlist' : 'Remove'}</button>
+                                        <button className='capitalize font-montMedium text-[#0000007F]'>{!props.wishlistPage ? wishlistId ? 'Added to wishlist' : 'Add to wishlist' : 'Added to wishlist'}</button>
                                     </div>
                                     :
                                     <div className='w-52  ml-20 -pt-3'>

@@ -640,7 +640,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       <Modal title="Order Confirm" visible={codModalVisible} onCancel={() => setCodModalVisible(false)} footer={null}>
         <p className='text-xl text-center font-montSemiBold'>Proceed?</p>
         <p className='text-base text-center'>Confirm Your Order For Cash On Delivery</p>
-        <div className='flex justify-center gap-3'>
+        <div className='flex justify-center gap-3 pb-4'>
           <button onClick={() => setCodModalVisible(false)} className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
           <button onClick={handlePayment} className='w-4/12 py-2 rounded' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, }}>Confirm</button>
         </div>

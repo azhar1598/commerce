@@ -422,7 +422,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
                     </div>
                 </> : */}
-                    {orderDetails?.orderStatus == "PAYMENT_COMPLETED" ? <>
+                    {orderDetails?.orderStatus == "PAYMENT_COMPLETED" ? <div className='px-10'>
                         <p className='font-montSemiBold py-2'>Why are you cancelling this order ?</p>
                         <div className='flex flex-col'>
                             <Radio.Group onChange={onChange} value={value}>
@@ -439,12 +439,12 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                             <button className='px-28 mt-4 font-montSemiBold py-2  mb-10' style={stateStoreSettings ? { background: stateStoreSettings?.secondary_color, color: stateStoreSettings?.navbar_color } : { background: 'black', color: 'white' }} onClick={() => handleCancelReason()}>Cancel</button>:<Spin style={{marginTop:'20px',marginBottom:'20px'}} />}
 
                         </div>
-                    </> :
-                        <>
+                    </div> :
+                        <div className='px-10'>
                             <p className='font-montSemiBold py-2 h-44 text-center mt-12  justify-center'>Order can’t be canceled after confirmation, please reach out to <span style={{ color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'red' }}>{storeDetails?.primary_phone}</span></p>
 
 
-                        </>}
+                        </div>}
 
                     {/* } */}
                 </Modal>

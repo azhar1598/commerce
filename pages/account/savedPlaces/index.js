@@ -264,6 +264,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                     <button className='hidden  md:block mt-6 mb-12 w-full lg:flex lg:items-start lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}><span><PlusCircleOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '27px', paddingRight: '6px' }} /></span> Add new Address </button>
 
                                                 </div> : '' :
+
                                             <div className='h-96 flex items-center justify-center'>
 
 

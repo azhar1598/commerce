@@ -10,6 +10,7 @@ import Profile from '../../../components/Profile'
 import WishlistImage from '../../../components/svgComponents/WishlistImage'
 import Link from 'next/link'
 import { ArrowLeftOutlined } from '@ant-design/icons'
+import { useRef } from "react"
 
 
 export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlistItems, deleteItemFromWishlist }) => {
@@ -19,6 +20,12 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
     const [page, setPage] = useState(2)
     const [state, setState] = useState(false)
     const [loading, setLoading] = useState(true)
+    
+    const ref = useRef(null);
+
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+    }, []);
 
 
 
@@ -51,7 +58,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                 <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
             </Head> */}
                 <Profile />
-                <div className='flex flex-col w-full lg:mr-24 md:mr-24 '>
+                <div className='flex flex-col lg:w-[62vw] bg-white w-full lg:mr-24 md:mr-24 lg:ml-8  '>
                     {/* {wishlist.length>0 ? <p className='text-lg font-montSemiBold lg:px-32 mt-8'>Wishlist <span className='text-gray-400 font-montRegular'>( {wishlist.length} Items )</span></p> : ''} */}
 
                     <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
@@ -66,25 +73,42 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
 
                     {loading ?
                         <>
-                            <div className='flex items-center justify-center h-96  '><Spin className='' /></div>
+                            :
+
+
+                            <div className='h-96 flex items-center justify-center'>
+
+
+                                <lottie-player
+                                    id="firstLottie"
+                                    ref={ref}
+                                    autoplay
+
+                                    loop
+                                    mode="normal"
+                                    src="/loader.json"
+                                    style={{ width: "100px", height: "100px" }}
+                                ></lottie-player>
+                            </div>
                         </>
 
                         :
                         wishlist.length > 0 ?
-                            <div className='flex flex-col lg:mt-4 md:mt-4 lg:px-2  md:px-0 '>
+                            <div className='flex flex-col -ml-1 w-[64vw] lg:px-2  md:px-0  '>
 
 
                                 <InfiniteScroll
                                     dataLength={wishlist?.length}
                                     next={getMoreProducts}
                                     hasMore={noMoreWishlist}
+                                    style={{ overflow: 'hidden' }}
                                     loader={
                                         <Skeleton />
                                     }
                                 >
                                     <div className='p-2 flex bg-white lg:ml-4 flex-col flex-wrap items-start w-full lg:w-full mb-24 '>
                                         {wishlist.map((item, index) =>
-                                            <Product image={item.primary_img} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} customerId={customerDetails.customer_id} entryId={item.entry_id} wishlistPage='true' stateStoreDetails={storeDetails} deleteItemFromWishlist={deleteItemFromWishlist} setState={setState} state={state} grid={false} item={item}/>
+                                            <Product image={item.primary_img} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} customerId={customerDetails.customer_id} entryId={item.entry_id} wishlistPage='true' stateStoreDetails={storeDetails} deleteItemFromWishlist={deleteItemFromWishlist} setState={setState} state={state} grid={false} item={item} />
                                         )}
                                     </div>
 
