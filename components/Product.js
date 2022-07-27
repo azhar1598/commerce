@@ -8,6 +8,8 @@ import { addToCart, adjustQty, getSearchItemsAction, getWishlistItems, removeFro
 import LoginModal from './LoginModal/LoginModal';
 import { SyncOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
+import HeartIcon from './svgComponents/HeartIcon';
+import { useRef } from "react"
 
 export const Product = (props) => {
 
@@ -20,12 +22,19 @@ export const Product = (props) => {
     const [page, setPage] = useState(2)
     const [minQtyMsg, setMinQtyMsg] = useState(false)
     const [minProduct, setMinProduct] = useState()
+    const ref = useRef(null);
 
     const [visible, setVisible] = useState(false)
     const showModal = () => {
         console.log('asdasdhelloy')
         setVisible(true);
     }
+
+
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+    }, []);
+
 
 
     console.log('wishlistId', props.wishlistId, props.customerId, wishlistId)
@@ -673,6 +682,41 @@ export const Product = (props) => {
                                 // props.dispatchSearchItems('') 
                             }} />
 
+
+                        <div className=' lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
+                            {!loadingWishlist ? <div className='lg:block flex md:flex items-start justify-start ' onClick={() => {
+
+                                !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : router.push('account/user/login') : removeFromWishlist(props.entryId)
+                            }}>
+                                {props.wishlistPage ?
+
+                                    <AiFillHeart id={`m+${props.itemId}`} className={`text-red-500 text-xl mr-3`} />
+                                    :
+                                    <HeartIcon fill={wishlistId ? '#FF4141' : '#0000007F'} id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-[#0000007F] shadow-xl'} text-lg`} />
+                                }
+                            </div>
+                                :
+                                !wishlistId ? <div className='-mt-16 -ml-4  flex items-center justify-center'>
+                                    <lottie-player
+                                        id="firstLottie"
+                                        ref={ref}
+                                        autoplay
+                                        loop
+                                        mode="normal"
+                                        src="/fireworks.json"
+                                        style={{ width: "200px", height: "130px" }}
+                                    ></lottie-player>
+                                </div> :
+                                    <div className='-mt-2 ml-2'>
+                                        <SyncOutlined spin />
+                                    </div>
+
+                            }
+                        </div>
+
+
+
+
                         {/* Wishlist feature for web  Use it later}
             {/* <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
                 {!loadingWishlist ?
@@ -722,8 +766,8 @@ export const Product = (props) => {
 
 
                         <div className='hidden lg:flex items-start'>
-                        {props.isVeg?<img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2'/>
-                        :<img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2'/>}
+                            {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2' />
+                                : <img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2' />}
                             <p className=' font-montMedium mt-1 ml- text-[16px] lg:text-lg lg:w-72 item-name item-description lg:h-[60px]' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
                         </div>
 
@@ -746,7 +790,7 @@ export const Product = (props) => {
                                 {props.cart.find(product => product.item_id == props.item.item_id) ?
 
 
-                                  
+
                                     <div className='mt-2 absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
                                         <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
@@ -755,7 +799,7 @@ export const Product = (props) => {
                                     :
                                     <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
 
-                                    
+
                                 }
 
 
@@ -779,32 +823,7 @@ export const Product = (props) => {
                             // props.dispatchSearchItems('') 
                         }} />
 
-                    {/* Wishlist feature for web */}
-                    {/* <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
-            {!loadingWishlist ?
-                <div className='hidden lg:flex md:flex items-center justify-center  ' onClick={() => {
 
-                    !props.wishlistPage ? props.customerId ? handleWishlist(props.itemId) : showModal() : removeFromWishlist(props.entryId)
-                }}>
-                    {props.wishlistPage ?
-
-                        <AiFillHeart id={props.itemId} className={`text-red-500 text-xl mr-3`} />
-                        :
-                        <AiFillHeart id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-white shadow-2xl'} text-xl ml-60`} />
-
-
-                    }
-
-
-                    {/* <button className='capitalize '>{!props.wishlistPage ? 'ADD TO WISHLIST' : 'Remove'}</button> */}
-                    {/* </div>
-                :
-                <div className='w-52 ml-64 -pt-3'>
-                    <SyncOutlined spin />
-                </div>}
-        </div> */}
-
-                    {/* End of wishlist feature for web */}
 
 
 
@@ -843,8 +862,8 @@ export const Product = (props) => {
                             <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span>
                         </p>
 
-                        <div className='flex justify-between '>
-                          
+                        <div className='flex justify-start items-center '>
+
                             <div className=' font-montSemiBold text-xl text-white -' >
                                 {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
  */}
@@ -853,7 +872,7 @@ export const Product = (props) => {
                                 {props.cart.find(product => product.item_id == props.item.item_id) ?
 
 
-                                  
+
                                     <div className='   border rounded border-red-600   l-mt-5 mr-3 rounded shadow  w-44  mt-4 font-montMedium text-sm flex items-center bg-white h-10' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
                                         <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`pl-4  text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-12'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
@@ -862,7 +881,7 @@ export const Product = (props) => {
                                     :
                                     <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-10 py-2  mt-4 font-montMedium text-sm' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
 
-                                    
+
                                 }
 
 
@@ -870,6 +889,46 @@ export const Product = (props) => {
 
 
                             </div>
+
+                            {/* Wishlist feature for web */}
+                            <div className='hidden wishlist-btn   pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '' }}>
+                                {!loadingWishlist ?
+                                    <div className='hidden lg:flex md:flex items-center justify-center ml-16 ' onClick={() => {
+
+                                        !props.wishlistPage ? props.customerId ? handleWishlist(props.itemId) : showModal() : removeFromWishlist(props.entryId)
+                                    }}>
+                                        {props.wishlistPage ?
+
+                                            <AiFillHeart id={props.itemId} className={`text-red-500 text-xl mr-3`} />
+                                            :
+                                            <HeartIcon fill={wishlistId ? '#FF4141' : '#0000007F'} id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-[#0000007F] shadow-xl'} text-lg`} />
+                                        }
+                                        <button className='capitalize font-montMedium text-[#0000007F]'>{!props.wishlistPage ? wishlistId ? 'Added to wishlist' : 'Add to wishlist' : 'Remove'}</button>
+                                    </div>
+                                    :
+                                    <div className='w-52  ml-20 -pt-3'>
+                                        {/* <SyncOutlined spin /> */}
+
+
+                                        {!wishlistId ? <div className='-mt-24 -ml-36 flex items-center justify-center'>
+                                            <lottie-player
+                                                id="firstLottie"
+                                                ref={ref}
+                                                autoplay
+                                                loop
+                                                mode="normal"
+                                                src="/fireworks.json"
+                                                style={{ width: "200px", height: "130px" }}
+                                            ></lottie-player>
+                                        </div> :
+                                            <div className='ml-16'>
+                                                <SyncOutlined spin />
+                                            </div>
+                                        }
+                                    </div>}
+                            </div>
+
+                            {/* End of wishlist feature for web */}
 
                         </div>
 
