@@ -11,6 +11,7 @@ import { customerLogIn, customerSignUp, forgotPasswordAPI, resetPasswordAPI, ver
 import ResetPassword from './ResetPassword';
 import { useFirebase } from '../../firebase/useFirebase';
 import create from '@ant-design/icons/lib/components/IconFont';
+import { toast, ToastContainer } from 'react-toastify';
 
 function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisible, showModal, storeId, customerDetails, customerDetailsReducer, dispatchForgotPassword, dispatchResetPassword, dispatchCustomerSignUp, dispatchCustomerLogin, dispatchForgotOtp,
     dispatchVerifyOtp }) {
@@ -86,6 +87,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             setLoading(false)
             console.log('Em consol', message)
             messageAnt.error(message)
+
             setMessage('')
 
         }
@@ -93,7 +95,18 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message === "Successful logged in") {
             // setOtp(true)
             // setLoginMethod('email')    
-            messageAnt.success('Logged In Successfully ')
+         
+            toast('Logged In Successfully ', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
+            
             setMessage('')
             setLoginLoader(false)
             // customerDetails(response.data.customerDetails)
@@ -127,6 +140,9 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
             // customerDetails(response.data.customerDetails)
             messageAnt.error('Please Verify Your Account')
+         
+
+
             setLoading(false)
         }
         else if (message == "OTP verification successful" && createAccount) {
@@ -495,6 +511,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                     </div>
                 }
             </Modal>
+            <ToastContainer />
         </div>
     )
 }

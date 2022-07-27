@@ -4,12 +4,13 @@ import { useRouter } from "next/router";
 import { AiFillHeart } from 'react-icons/ai'
 import { addToWishlist, deleteFromWishlist } from '../services/apiServices';
 import { message } from 'antd';
-import { addToCart, adjustQty, getSearchItemsAction, getWishlistItems, removeFromCart, searchItems } from '../actions';
+import { addToCart, adjustQty, fetchItemDetails, getSearchItemsAction, getWishlistItems, removeFromCart, searchItems } from '../actions';
 import LoginModal from './LoginModal/LoginModal';
 import { SyncOutlined } from '@ant-design/icons';
 import { useMediaQuery } from 'react-responsive';
 import HeartIcon from './svgComponents/HeartIcon';
 import { useRef } from "react"
+import { toast, ToastContainer } from 'react-toastify';
 
 export const Product = (props) => {
 
@@ -120,7 +121,19 @@ export const Product = (props) => {
             const response = await addToWishlist('storeId', props.customerId, itemId)
             if (response.data) {
 
-                message.success('Added to Wishlist')
+                // message.success('Added to Wishlist')
+
+                // toast("Added to Wishlist");
+
+                toast('Added to Wishlist', {
+                    position: "bottom-right",
+                    autoClose: 500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 console.log('response', response.data)
 
                 // setHeartIcon(true)
@@ -132,7 +145,17 @@ export const Product = (props) => {
         else {
             const response = await deleteFromWishlist(wishlistId)
 
-            message.success('Removed from wishlist')
+            // message.success('Removed from wishlist')
+
+            toast('Removed From Wishlist', {
+                position: "bottom-right",
+                autoClose: 500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
             setWishlistId('')
             setLoadingWishlist(false)
             // fetchItemDetails(stateCustomerDetails?.data?.customer_id, id);
@@ -668,6 +691,14 @@ export const Product = (props) => {
         }
     }
 
+    const handlePush=()=>{
+        props.fetchItemDetails('','')
+        props.dispatchSearchItems('')
+        router.push(`/product/${props.itemId}`) 
+    
+
+    }
+
 
     return (
 
@@ -678,7 +709,8 @@ export const Product = (props) => {
                     <div className='p-2 lg:flex lg:flex-col  w-[300px] min-w-[300px] max-w-[300px]  border border-blue-100 shadow min-h-[50vh] max-h-[50vh]'>
                         <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`}
                             onClick={() => {
-                                router.push(`/product/${props.itemId}`)
+                                handlePush()
+                       
                                 // props.dispatchSearchItems('') 
                             }} />
 
@@ -941,6 +973,7 @@ export const Product = (props) => {
 
 
             }
+            <ToastContainer />
 
         </>
     )
@@ -962,6 +995,7 @@ const mapDispatchToProps = dispatch => {
         addToCart: (data) => dispatch(addToCart(data)),
         adjustQty: (itemid, value) => dispatch(adjustQty(itemid, value)),
         removeFromCart: (itemid) => dispatch(removeFromCart(itemid)),
+        fetchItemDetails: (customerId, itemId) => dispatch(fetchItemDetails(customerId, itemId)),
         // getWishlistItems: (payload) => dispatch(getWishlistItems(payload))
     }
 }

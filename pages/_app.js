@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react';
 import GoogleAnalytics from '../components/GoogleAnalytics/GoogleAnalytics'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
