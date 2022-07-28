@@ -704,9 +704,9 @@ export const Product = (props) => {
 
         <>
             {props.grid ?
-                <div className={`flex flex-col w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer  `} >
+                <div className={`flex flex-col lg:w-1/2 w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer  `} >
 
-                    <div className='p-2 lg:flex lg:flex-col  w-[300px] min-w-[300px] max-w-[300px]  border border-blue-100 shadow min-h-[50vh] max-h-[50vh]'>
+                    <div className='p-2 lg:flex lg:flex-col  lg:w-[300px] lg:min-w-[300px] lg:max-w-[300px]  border border-blue-100 shadow lg:min-h-[50vh] lg:max-h-[50vh]'>
                         <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`}
                             onClick={() => {
                                 handlePush()
@@ -715,7 +715,7 @@ export const Product = (props) => {
                             }} />
 
 
-                        <div className=' lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
+                        <div className='hidden lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
                             {!loadingWishlist ? <div className='lg:block flex md:flex items-start justify-start ' onClick={() => {
 
                                 !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : showModal() : removeFromWishlist(props.entryId)
@@ -823,7 +823,7 @@ export const Product = (props) => {
 
 
 
-                                    <div className='mt-2 absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                    <div className='mt-2 hidden lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
                                         <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
                                         <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
@@ -847,7 +847,7 @@ export const Product = (props) => {
 
                 :
                 // List Layout
-                <div className={`flex  w-full  ${!props.wishlistPage ? `lg:w-full` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer`} >
+                <div className={`hidden lg:flex  w-full  ${!props.wishlistPage ? `lg:w-full` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer`} >
                     <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[280px] lg:max-h-[280px] md:min-h-[275px] lg:min-w-[300px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img border border-blue-100 shadow `}
                         onClick={() => {
                             router.push(`/product/${props.itemId}`)

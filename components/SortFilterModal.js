@@ -152,7 +152,7 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
           onRequestClose={() => setFilterModalVisible(false)}
           style={customStyles}
         > */}
-        <div className='mt-12'>
+        <div className='mt-12 hidden lg:block'>
           {/* <div className='flex justify-between pt-4 px-4'>
 
             <h2 className='text-2xl flex '><img src="/filter.svg" className='pr-4' />Filter / Sort  </h2>

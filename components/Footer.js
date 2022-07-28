@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { MdAccountCircle } from 'react-icons/md'
 import { connect } from 'react-redux'
+import HomeIcon from '../components/svgComponents/HomeIcon'
+import ShopIcon from '../components/svgComponents/ShopIcon'
+
+import UserAltIcon from '../components/svgComponents/UserAltIcon'
 
 import call from "../public/footer/Call.svg"
 import location from '../public/footer/Location.svg';
@@ -17,9 +21,9 @@ import LoginModal from './LoginModal/LoginModal'
 import { customerDetails, getShopWidgets, getStoreDetails, getStoreDisplaySettings, getStoreSettings } from '../actions'
 import { ConfigProvider } from 'antd'
 
-function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialProfile, customerDetails, storeSettings,
-  dispatchStoreDisplaySettings,getStoreDetails
-   }) {
+function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialProfile, customerDetails, storeSettings,
+  dispatchStoreDisplaySettings, getStoreDetails
+}) {
 
   const router = useRouter()
 
@@ -62,26 +66,26 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
   console.log("originalDomain", domain)
   useEffect(() => {
     var myDynamicManifest = {
-        "name": `${storeDetails?.store_name}`,
-        "short_name": `${storeDetails?.store_name}`,
-        "description": `${storeDetails?.store_name}`,
-        "display": "standalone",
-        "scope": `${origin}`,
-        "start_url": `${origin}`,
-        "background_color": "#ffffff",
-        "theme_color": "#ffffff",
-        "icons": [{
-            "src": `${storeDetails?.logo_img_url}`,
-            "sizes": "512x512",
-            "type": "image/png"
-        }]
+      "name": `${storeDetails?.store_name}`,
+      "short_name": `${storeDetails?.store_name}`,
+      "description": `${storeDetails?.store_name}`,
+      "display": "standalone",
+      "scope": `${origin}`,
+      "start_url": `${origin}`,
+      "background_color": "#ffffff",
+      "theme_color": "#ffffff",
+      "icons": [{
+        "src": `${storeDetails?.logo_img_url}`,
+        "sizes": "512x512",
+        "type": "image/png"
+      }]
     }
     const stringManifest = JSON.stringify(myDynamicManifest);
     const blob = new Blob([stringManifest], { type: 'application/json' });
     const manifestURL = URL.createObjectURL(blob);
     document.querySelector('#my-manifest-placeholder').setAttribute('href', manifestURL);
 
-}, [storeDetails])
+  }, [storeDetails])
 
   useEffect(() => {
     let other = []
@@ -123,34 +127,47 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
       {/* footer for mobile */}
       <div className='lg:hidden md:hidden flex items-center justify-between pt-6  px-4 bg-white w-full h-16 bottom-0 fixed border-y-2 border-slate-400' style={{ zIndex: 10000 }}>
 
-        <div className={`flex flex-col `} onClick={() => { router.push('/') }}>
-          <HomeFilled className={`text-2xl`} style={router.pathname == '/' ?
-            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
+        <div className={`flex flex-col items-center`} onClick={() => { router.push('/') }}>
+          <div>
 
-          <p className={`text-[16px]`} style={router.pathname == '/' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Home</p>
+            <HomeIcon secondaryColor={router.pathname == '/' ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black' : ''} />
+          </div>
+
+          {/* // style={router.pathname == '/' ? */}
+            {/* //   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
+
+            <p className={`text-[12px] font-montMedium`} style={router.pathname == '/' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Home</p>
         </div>
 
-        <div className={`flex flex-col `} 
-        // onClick={() => { router.push('/shop') }}
+        <div className={`flex flex-col items-center`}
+        onClick={() => { router.push('/shop') }}
         >
-          <ShopFilled className='text-2xl' style={router.pathname == '/shop' || router.pathname?.includes('/product') ?
-            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 ease-in' } : { transition: 'all .5s ease-out' }} />
-          <p className={`text-[16px] `} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Shop</p>
+          {/* <ShopFilled className='text-2xl' */}
+<ShopIcon secondaryColor={router.pathname == '/shop' || router.pathname?.includes('/product') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#b4b4b4' : '#B4B4B4'} />
+
+
+
+            {/* style={router.pathname == '/shop' || router.pathname?.includes('/product') ?
+              { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 ease-in' } : { transition: 'all .5s ease-out' }} /> */}
+          <p className={`text-[12px] font-montMedium`} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }} >Shop</p>
         </div>
-        <div className='flex flex-col' 
+        <div className='flex flex-col'
         // onClick={() => {
         //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
         // }}
         >
           {/* <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} /> */}
           <HeartFilled className='text-[#212B36] text-2xl' style={router.pathname == '/account/wishlist' ?
-            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
-          <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }}>Wishlist</p>
+            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
+          <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Wishlist</p>
         </div>
-        <div className={`flex flex-col `} onClick={() => { router.push('/account/user') }}>
-          <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
-            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
-          <p className='text-[16px] ' style={router.pathname?.includes('/account/user') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }}>User</p>
+        <div className={`flex flex-col items-center`} onClick={() => { router.push('/account/user') }}>
+
+        <UserAltIcon secondaryColor={router.pathname?.includes('/account/user') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
+
+          {/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
+            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
+          <p className='text-[12px] font-montMedium ' style={router.pathname?.includes('/account/user') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>User</p>
         </div>
 
 
@@ -158,11 +175,13 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
 
       {/* footer for web */}
 
-      <div className='hidden lg:block md:block  w-full' style={{ backgroundColor: stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}}>
+      <div className='hidden lg:block md:block  w-full' style={{ backgroundColor: stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black' }}>
 
-        <div className='px-20 py-2 ' style={{ backgroundColor:'rgba(0,0,0,0.7)'
+        <div className='px-20 py-2 ' style={{
+          backgroundColor: 'rgba(0,0,0,0.7)'
           //  `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`
-           , bottom: '0px !important' }}>
+          , bottom: '0px !important'
+        }}>
           <div className='grid grid-cols-6 py-12 '>
             {/* store info */}
             <div className='col-span-1 text-white'>
@@ -194,16 +213,16 @@ function Footer({getShopWidgets, stateStoreSettings, storeDetails, stateSocialPr
                 </div>
                 <div>
                   <h3 className='text-xl font-montMedium text-white'>Account</h3>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
                   // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
                   >My Orders</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
                   // onClick={() => router.push('/cart')}
                   >My Cart</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
                   // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
                   >Orders</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer' 
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
                   // onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
                   >Saved Address</p>
                 </div>
