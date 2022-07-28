@@ -15,6 +15,7 @@ import pbkdf2 from "crypto-js/pbkdf2";
 import encUtf8 from "crypto-js/enc-utf8";
 import aes from "crypto-js/aes";
 import StoreStatus from './svgComponents/StoreStatus'
+import { toast, ToastContainer } from 'react-toastify'
 
 export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid, minQtyMsg, minProduct, deliveryMethod }) => {
 
@@ -110,7 +111,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               router.push('/address')
             }
             else {
-              message.error(purchaseInvalid)
+              // message.error(purchaseInvalid)
+              toast(purchaseInvalid, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
               setloader(false)
             }
           }
@@ -123,7 +133,18 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               }
             } else {
               setloader(false)
-              message.error('Please Add the Address')
+              // message.error('Please Add the Address')
+
+              toast('Please Add the Address', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
             }
           }
         }
@@ -134,7 +155,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             }
             else {
               setloader(false)
-              message.error(purchaseInvalid)
+              // message.error(purchaseInvalid)
+              toast(purchaseInvalid, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
             }
           }
           else if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
@@ -149,7 +179,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               }
               else {
                 setloader(false)
-                message.error('Please Add the Address')
+                // message.error('Please Add the Address')
+                toast('Please Add the Address', {
+                  position: "bottom-right",
+                  autoClose: 1000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  });
               }
             }
             else if (deliveryMethod == 'PARCEL') {
@@ -160,17 +199,44 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           }
           else{
             setloader(false)
-            message.error('Please Choose Delivery Method')
+            // message.error('Please Choose Delivery Method')
+            toast('Please Choose Delivery Method', {
+              position: "bottom-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
           }
           }
         }
       else {
-        message.error(`Please Check Minimum Quantity of ${minProduct}`)
+        // message.error(`Please Check Minimum Quantity of ${minProduct}`)
+        toast(`Please Check Minimum Quantity of ${minProduct}`, {
+          position: "bottom-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       }
     }
     else {
       setloader(false)
-      message.error('Something is wrong with address')
+      // message.error('Something is wrong with address')
+      toast('Something is wrong with address', {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
 
 
@@ -200,7 +266,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       dispatchPaymentMethod(paymentMethod)
     }
     else {
-      message.error('Please Add the payment Method')
+      // message.error('Please Add the payment Method')
+      toast('Please Add the payment Method', {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
   }
 
@@ -305,7 +380,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       }
     }
     else {
-      message.error('Please Add the Payment Method')
+      // message.error('Please Add the Payment Method')
+      toast('Please Add the Payment Method', {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
       setloader(false)
     }
 
@@ -332,7 +416,18 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     const response = await editAddressAPI(customerDetails.data.customer_id, address.address_id, address)
 
     if (response) {
-      message.success(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+      // message.success(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+      toast(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+
+
       setLoading(false)
       setEditVisible(false)
       //  defaultAddressAction(edit)
@@ -346,7 +441,16 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
     }
     else {
-      message.error('Something is wrong')
+      // message.error('Something is wrong')
+      toast('Something is wrong', {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
       setLoading(false)
     }
 
@@ -662,7 +766,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         </div>
 
       </Modal>
-
+      <ToastContainer />
 
     </>
   )

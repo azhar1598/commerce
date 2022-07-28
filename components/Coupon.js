@@ -41,7 +41,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
     console.log('coupon', coupon)
     const orderId = Object?.keys(statePurchaseDetails?.data?.orders)[0]
     setLoading(true)
-    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon,purchaseId:statePurchaseDetails.data.purchaseId ,setLoading}
+    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon,purchaseId:statePurchaseDetails.data.purchaseId ,setLoading,toast}
 
     dispatchCouponCode({ payload })
 
@@ -65,7 +65,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
         <div className='flex items-center'>
           {!billingDetails?.totalCouponSavingsAmount !=0 ?
             <>
-              <input type="text" placeholder="Enter your Coupon" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-slate-400' disabled={!loading ?false:true} />
+              <input type="text" placeholder="Enter Coupon/Promo Code Here" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-dashed border-[#00BAC8]' disabled={!loading ?false:true} />
               {!loading ? <button className='p-2 px-5 ml-3' style={{
                 backgroundColor: stateStoreSettings ? stateStoreSettings.secondary_color : 'black', color: stateStoreSettings ? stateStoreSettings.navbar_color : 'white'
               }} onClick={applyCoupon}>Apply</button> : <SyncOutlined className='p-2 px-5 ml-3' style={{ fontSize: 22 }} spin />}

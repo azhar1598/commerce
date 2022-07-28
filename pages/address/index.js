@@ -14,6 +14,7 @@ import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import Head from 'next/head';
 import ReviewTracker from '../../components/ReviewTracker'
+import { toast, ToastContainer } from 'react-toastify'
 
 export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction }) => {
 
@@ -115,7 +116,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         setLoading(true);
         const payload = {
             customerId: customerDetails.data.customer_id, addressId
-            , address, setLoading, bool, setBool, message, edit
+            , address, setLoading, bool, setBool, message, edit,toast
         }
         if (!edit) {
             addAddressAction({ payload })
@@ -152,7 +153,16 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     const deleteAddress = async (addressId) => {
         const response = await removeAddress(customerDetails.data.customer_id, addressId)
         if (response) {
-            message.success('Address Deleted Successfully');
+            // message.success('Address Deleted Successfully');
+            toast('Address Deleted Successfully', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
             setBool(!bool)
             // addressData(customerDetails.data.customer_id)
         }
@@ -271,6 +281,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                                     setAddNewAddress(!addNewAddress)
                                                                                     editAddress(item)
                                                                                 }} >Edit</button>
+                                                                                
                                                                             </div>
                                                                             <p className='text-sm'>{item.full_name}</p>
                                                                             <p className='text-sm item-city'>{item.city},{item.address_line_1},{item.address_line_2}, {item.zip_code}</p>
@@ -538,7 +549,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                             </div>
                             : ''}
-
+    <ToastContainer />
 
 
                     </div>

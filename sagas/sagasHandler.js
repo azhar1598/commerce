@@ -607,12 +607,34 @@ export function* handleAddress({ type, payload }) {
 
         try {
             if (response) {
-                payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+                // payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+
+                payload.toast(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+
                 payload.setLoading(false)
                 payload.setBool(!payload.bool)
             }
             else {
-                payload.message.error('Something is wrong')
+                // payload.message.error('Something is wrong')
+
+                payload.toast('Something is wrong', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
                 payload.setLoading(false)
             }
         }
@@ -625,12 +647,33 @@ export function* handleAddress({ type, payload }) {
 
         try {
             if (response) {
-                payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+                // payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
+
+                payload.toast(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+
+
                 payload.setLoading(false)
                 payload.setBool(!payload.bool)
             }
             else {
-                payload.message.error('Something is wrong')
+                // payload.message.error('Something is wrong')
+                payload.toast('Something is wrong', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 payload.setLoading(false)
             }
         }
