@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { CloseOutlined, HeartFilled, MenuOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
-import { Badge, Dropdown, Menu, message } from 'antd'
+import { Badge, Dropdown, Menu } from 'antd'
 import { useRouter } from 'next/router'
 import LoginModal from './LoginModal/LoginModal'
 import Link from 'next/link'
@@ -15,6 +15,7 @@ import absoluteUrl from 'next-absolute-url'
 import SearchSvg from './svgComponents/SearchSvg'
 import { FaSearch } from 'react-icons/fa';
 import HeartIcon from './svgComponents/HeartIcon'
+import { toast, ToastContainer } from 'react-toastify'
 
 
 
@@ -45,8 +46,20 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
     const handleLogout = () => {
         setIsModalVisible(false)
         customerDetails()
-        message.success('Logged Out Successfully')
+
+      
+        
+        toast('Logged Out Successfully ', {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         router.push('/')
+        setVisible(true)
     }
 
     const { origin } = absoluteUrl()
@@ -99,6 +112,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
     }
 
     const showModal = () => {
+        console.log('show')
         setVisible(true);
     }
 
@@ -298,97 +312,62 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
 
             {/* Web View and Tablet View*/}
-            <div className='hidden  fixed w-full lg:flex md:flex items-center top-0 justify-around p-5  pl-28 pr-28 mb-4' style={{ zIndex: 1000, backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>
-                <div className='flex items-center w-1/4 max-w-1/2 '>
-                    {/* <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] max-w-20' onClick={() => { router.push('/') }} /> */}
+            <div className='hidden fixed top-0  lg:flex md:flex items-center justify-around w-full py-4 px-28 z-[1000]' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>
+                <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer' height={70} width={70}  onClick={() => { router.push('/') }}/>
+         
+              <p className={` text-xl font-montSemiBold cursor-pointer mt-5`} onClick={() => { router.push('/') }} style={{
+                    color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                }}>{storeDetailsReducer?.data?.store_name.toUpperCase()}</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}   onClick={() => { router.push('/shop') }}>Shop</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>About</p>
+                <p className='font-montMedium mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>Contact us</p>
+              
+                <div className="flex items-center rounded p-1 w-[25vw] mx-10" style={{ backgroundColor: 'white', boxShadow: `0px 0px 0px 1px ${customBorder}` }} >
 
-                    <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 -mt-5 min-h-[70px] max-h-[70px] ' onClick={() => { router.push('/') }} />
+                    <input type="text" placeholder="Search" name="input" value={input.input} className="w-full text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{
+                        color: `${storeSettings.data ? 'gray' : 'black'}`,
+                        // backgroundColor: rgbaColor 
+                    }} />
 
-                    {/* <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
-                        color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                    }} onClick={() => { router.push('/') }} >{storeDetailsReducer?.data?.store_name.toUpperCase()}</p> */}
-                    <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`}>Appparal</p>
+                    <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black' : ''} />
+                    {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
                 </div>
+            <div className='flex items-center '>
+            <Dropdown overlay={menu} placement="bottomCenter" arrow >
+                    <FaUserAlt className='' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
+                </Dropdown>
 
-                <div className='flex w-full  items-center justify-between font-montSemiBold'>
-                    <ul className='flex items-center mt-2 ml-5 w-[20vw] justify-around  text-[#212B36] ' style={{
-                        color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                    }}>
-                        <li className='opacity-50' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }}>|</li>
-                        <li className='text-sm cursor-pointer px-2' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }}
-                            onClick={() => { router.push('/shop') }}
+                <div className='cursor-pointer px-12'>
+                    {isLoggedIn.data?.customer_id ?
+                        <Link href="/account/wishlist"
                         >
-                            Shop
-                        </li>
-                        <li className='opacity-50' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }} >|</li>
-                        <li className='text-sm cursor-pointer px-2' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }} onClick={() => setContactUsVisible(true)} >
-                            About
-                        </li>
-                        <li className='opacity-50' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }}>|</li>
-                        <li className='text-sm cursor-pointer px-2' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }} onClick={() => setContactUsVisible(true)} >
-                            Contact Us
-                        </li>
-
-
-
-
-                    </ul>
-                    <div className=" p-1 flex flex-row items-center w-[30vw]
-                    mr-4 -mt-1 rounded" style={{ backgroundColor: 'white', boxShadow: `0px 0px 0px 1px ${customBorder}` }} >
-
-                        <input type="text" placeholder="Search" name="input" value={input.input} className="w-full  text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{
-                            color: `${storeSettings.data ? 'gray' : 'black'}`,
-                            // backgroundColor: rgbaColor 
-                        }} />
-
-                        <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black' : ''} />
-                        {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
-                    </div>
-                </div>
-
-                <div className='flex items-center justify-center w-1/4 text-lg text-[#212B36]'>
-
-                    <Dropdown overlay={menu} placement="bottomCenter" arrow >
-                        <FaUserAlt className='ml-12 cursor-pointer' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                    </Dropdown>
-                    <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
-                    <div className='cursor-pointer ml-12'>
-                        {isLoggedIn.data?.customer_id ?
-                            <Link href="/account/wishlist"
-                            >
-                           <div>
-                           <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl ' />
-                           </div>
-                            </Link> : <div  onClick={showModal}>
-                                <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl '
-
-                                />
-
+                            <div>
+                                <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl ' />
                             </div>
-                        }
-                    </div>
-                    <Link href="/cart"
-                    // 
-                    >
-                        <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
-                            {/* <ShoppingCartOutlined  className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} /> */}
+                        </Link> : <div onClick={showModal}>
+                            <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl '
 
-                            <IoIosCart className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '27px', cursor: 'pointer' }} />
-                        </Badge>
-                    </Link>
+                            />
+
+                        </div>
+                    }
                 </div>
+
+                <Link href="/cart"
+                // 
+                >
+                    <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
+                        {/* <ShoppingCartOutlined  className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} /> */}
+
+                        <IoIosCart className='' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '27px', cursor: 'pointer' }} />
+                    </Badge>
+                </Link>
+            </div>
+
+
             </div>
 
             <Modal visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
@@ -400,8 +379,9 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                 </div>
 
             </Modal>
-
+            <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
             <ContactUs contactUsVisible={contactUsVisible} setContactUsVisible={setContactUsVisible} />
+            <ToastContainer />
 
         </div>
     )

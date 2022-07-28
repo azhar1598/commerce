@@ -718,7 +718,7 @@ export const Product = (props) => {
                         <div className=' lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
                             {!loadingWishlist ? <div className='lg:block flex md:flex items-start justify-start ' onClick={() => {
 
-                                !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : router.push('account/user/login') : removeFromWishlist(props.entryId)
+                                !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : showModal() : removeFromWishlist(props.entryId)
                             }}>
                                 {props.wishlistPage ?
 

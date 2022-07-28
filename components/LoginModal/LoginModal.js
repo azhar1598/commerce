@@ -86,7 +86,18 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message == "Email is already taken") {
             setLoading(false)
             console.log('Em consol', message)
-            messageAnt.error(message)
+            // messageAnt.error(message)
+               
+            toast(message, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
 
             setMessage('')
 
@@ -139,7 +150,16 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             dispatchForgotPassword({ payload })
 
             // customerDetails(response.data.customerDetails)
-            messageAnt.error('Please Verify Your Account')
+            // messageAnt.error('Please Verify Your Account')
+            toast('Please Verify Your Account', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
          
 
 
@@ -148,7 +168,18 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message == "OTP verification successful" && createAccount) {
 
 
-            message && messageAnt.success('successfully verified acdcount')
+            message &&
+            //  messageAnt.success('successfully verified acdcount')
+            toast('successfully verified account', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
             setOTP('')
 
             setLoading(false)
@@ -158,7 +189,19 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         }
 
         else if (message != '') {
-            message && messageAnt.error(message)
+            message &&
+            //  messageAnt.error(message)
+            toast(message, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
+
             setMessage('')
             if (!forgotPassword) {
                 setForgotPassword(false)
@@ -288,18 +331,58 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             setVerifyAccount(true)
 
             if (inputSignUp.method.length < 10) {
-                messageAnt.error("Please enter valid 10 digit phone number")
+                // messageAnt.error("Please enter valid 10 digit phone number")
+                toast('Please enter valid 10 digit phone number', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+
             }
 
             else if (inputSignUp.password != inputSignUp.confirm_password) {
-                messageAnt.error("Password and Confirm Password doesn't match ")
+                // messageAnt.error("Password and Confirm Password doesn't match ")
+                toast("Password and Confirm Password doesn't match", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
             else if (inputSignUp.password.length < 8) {
-                messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+                // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+                toast("Password strength is weak, please maintain atleast 8 characters", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
+                
             }
             else if(/\s/g.test(inputSignUp.password)){
                 
-                messageAnt.error('No Blank Spaces Allowed')
+                // messageAnt.error('No Blank Spaces Allowed')
+                toast("No Blank Spaces Allowed", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
         }
       
 
@@ -408,18 +491,50 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
 
         if (OTP.length < 5) {
-            messageAnt.error('Please Fill the OTP')
+            // messageAnt.error('Please Fill the OTP')
+            toast('Please Fill the OTP', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
         }
         else {
             const response = await verifyOtpAPI('storeId', customerId, OTP, method)
             if (response.data.message == 'successfully verified account') {
-                messageAnt.success(response.data.message)
+                // messageAnt.success(response.data.message)
+
+                toast(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
                 customerDetails(response.data.customerDetails)
                 setVisible(false)
                 // handleClose()
             }
             else {
-                messageAnt.error(response.data.message)
+                // messageAnt.error(response.data.message)
+
+                
+                toast(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 customerDetails()
             }
         }
@@ -435,14 +550,43 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
 
         if (inputSignUp.password != inputSignUp.confirm_password) {
-            messageAnt.error("Password and Confirm Password doesn't match ")
+            // messageAnt.error("Password and Confirm Password doesn't match ")
+
+            toast("Password and Confirm Password doesn't match ", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
         else if (inputSignUp.password.length < 8) {
-            messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+            // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+            toast("Password strength is weak, please maintain atleast 8 characters", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
         else if(/\s/g.test(inputSignUp.password)){
                 
-            messageAnt.error('No Blank Spaces Allowed')
+            // messageAnt.error('No Blank Spaces Allowed')
+            toast("No Blank Spaces Allowed", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
     }
         else {
 
@@ -455,10 +599,28 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                 setLoading(false)
                 setVisible(false)
                 // setMessage('Password changed succesfully')
-                messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
+                // messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
+                toast(`${response.data.message} & Successfully LoggedIn`, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
             else {
-                messageAnt.error(response.data.message)
+                // messageAnt.error(response.data.message)
+                toast(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 setForgotPassword(false)
                 setLoading(false)
             }

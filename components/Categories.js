@@ -7,13 +7,14 @@ import { getCategories } from '../services/apiServices'
 import Category from './Category'
 import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import { Dropdown, Menu, Space } from 'antd';
+import SubMenu from 'antd/lib/menu/SubMenu'
 
 export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems }) => {
 
     const [categories, setCategories] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [categoryKey, setCategoryKey] = useState()
-    const[closeSubCategory,setCloseSubCategory]=useState(false)
+    const [closeSubCategory, setCloseSubCategory] = useState(false)
     const router = useRouter()
     const data = router.query
 
@@ -38,14 +39,14 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
 
         if (subCategories || subCategories == undefined) {
-            subCategories.length==0 && router.push(`/shop/?category_id=${id}&category_name=${name}`)
+            subCategories.length == 0 && router.push(`/shop/?category_id=${id}&category_name=${name}`)
 
-// if you want to add default subcategory then copy below code and paste  or attachin line 41
+            // if you want to add default subcategory then copy below code and paste  or attachin line 41
 
             // {*/  &${subCategories != [] && subCategories != undefined ? `sub_category_id=${subCategories[0]?.sub_category_id}&
-            
+
             // sub_category_name=${subCategories[0]?.sub_category_name}` : ``}
-            
+
             setShowModal(false)
         }
 
@@ -69,7 +70,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
     const handleSubCategory = (categoryId, subCategoryId, subCategoryName) => {
         setShowModal(!showModal)
-        
+
         router.push(`/shop/?category_id=${categoryId}&sub_category_id=${subCategoryId}&sub_category_name=${subCategoryName}`)
     }
 
@@ -83,7 +84,16 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
             {categories.map((item, index) =>
 
                 index >= 6 && <Menu.Item>
-                    <p onClick={() => { handleCategory(item.category_id, item.category_name,item.subCategories) }}>{item.category_name}</p>
+                    <p onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }}>{item.category_name}</p>
+                    {item.subCategories.map(product =>
+
+                      {item.category_id==product.category_id &&  <SubMenu key={product.category_id} title={product.category_name} onTitleClick={() => {
+                            handleSubCategory(product.category_id, product.category_name)
+                        }}
+                        >
+                            <Menu.Item key={product.sub_category_id}>{product.sub_category_name}</Menu.Item>
+                        </SubMenu>}
+                    )}
                 </Menu.Item>
             )}
         </Menu>
@@ -105,13 +115,13 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 )} */}
             {/* </div> */}
 
-            <div className='hidden lg:flex items-end justify-between w-full  bg-white -mt-12  fixed z-[1000] px-32 pt-3'>
+            <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname=='/shop'?'-mt-11':'-mt-16'}  fixed z-[1000] px-32 pt-3`}>
                 {/* <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
 
                 {categories.map((item, key) => {
                     if (key <= 5) {
                         return (
-                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} keyLimit={key} categories={categories} closeSubCategory={closeSubCategory} setCloseSubCategory={setCloseSubCategory}/>
+                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} keyLimit={key} categories={categories} closeSubCategory={closeSubCategory} setCloseSubCategory={setCloseSubCategory} />
                         )
                     }
                     else {
@@ -120,7 +130,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                                 <a onClick={(e) => e.preventDefault()}>
                                     <div className='flex '>
                                         <p className='text-black font-montMedium'>Others</p>
-                                        <CaretDownOutlined className='px-2 pt-1 ' style={{color:'black'}}/>
+                                        <CaretDownOutlined className='px-2 pt-1 ' style={{ color: 'black' }} />
                                     </div>
                                 </a>
                             </Dropdown>
