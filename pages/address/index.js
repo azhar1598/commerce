@@ -268,7 +268,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                         <div className='lg:flex flex-wrap lg:justify-start lg:w-full lg:mb-0 mb-48'>
 
                                                             {stateAddress?.map(item =>
-                                                                <div className='lg:flex flex-col items-start px-2 py-2'>
+                                                                <div className='lg:flex flex-col items-start px-2 py-2' key={item.address_tag}>
                                                                     <div className='flex w-full lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
                                                                         <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
                                                                 <Radio className='font-montSemiBold' value={item.address_id}></Radio>
@@ -281,7 +281,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                                     setAddNewAddress(!addNewAddress)
                                                                                     editAddress(item)
                                                                                 }} >Edit</button>
-                                                                                
+
                                                                             </div>
                                                                             <p className='text-sm'>{item.full_name}</p>
                                                                             <p className='text-sm item-city'>{item.city},{item.address_line_1},{item.address_line_2}, {item.zip_code}</p>

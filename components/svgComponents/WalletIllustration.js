@@ -61,7 +61,7 @@ function WalletIllustration({ navbarColor, secondaryColor, mobile, grid }) {
                         <path id="Path_4691" data-name="Path 4691" d="M414.011,270.768l4.086,1.362c6.389,11.8,9.1,27.468,8.738,46.362l-7.258,84.861H407.7l-8.69-94.539L383.69,344.3,394.9,403.353,383.69,404.5,361.11,343.088l15.726-71.371,37.176-.95Z" transform="translate(-307.718 -170.64)" fill="#2f2e41" />
                     </g>
                 </g>
-                <text id="ADD_MONEY" data-name="ADD MONEY" transform="translate(1623.815 364.406)" fill="#fff" font-size="9" font-family="Montserrat-Regular, Montserrat" letter-spacing="0.024em"><tspan x="-30" y="0">ADD MONEY</tspan></text>
+                <text id="ADD_MONEY" data-name="ADD MONEY" transform="translate(1623.815 364.406)" fill="#fff" fontSize="9" fontFamily="Montserrat-Regular, Montserrat" letterSpacing="0.024em"><tspan x="-30" y="0">ADD MONEY</tspan></text>
                 <path id="Rectangle_2191" data-name="Rectangle 2191" d="M0,0H146.11a0,0,0,0,1,0,0V27.642a0,0,0,0,1,0,0H27.642A27.642,27.642,0,0,1,0,0V0A0,0,0,0,1,0,0Z" transform="translate(1450.338 584.443)" fill="#fff" />
             </g>
         </svg>

@@ -651,7 +651,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                         storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
 
                                             storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}
-                                            <p className=' font-montMedium flex items-center text-sm py-4'>(wallet money can't be used for cash on delivery.)</p>
+                                            <p className=' font-montMedium flex items-center text-sm py-4'>(wallet money cant be used for cash on delivery.)</p>
                                             
                                             </Radio>
 
