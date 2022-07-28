@@ -133,7 +133,7 @@ export const Product = (props) => {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    });
+                });
                 console.log('response', response.data)
 
                 // setHeartIcon(true)
@@ -155,7 +155,7 @@ export const Product = (props) => {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
+            });
             setWishlistId('')
             setLoadingWishlist(false)
             // fetchItemDetails(stateCustomerDetails?.data?.customer_id, id);
@@ -691,11 +691,11 @@ export const Product = (props) => {
         }
     }
 
-    const handlePush=()=>{
-        props.fetchItemDetails('','')
+    const handlePush = () => {
+        props.fetchItemDetails('', '')
         props.dispatchSearchItems('')
-        router.push(`/product/${props.itemId}`) 
-    
+        router.push(`/product/${props.itemId}`)
+
 
     }
 
@@ -704,13 +704,13 @@ export const Product = (props) => {
 
         <>
             {props.grid ?
-                <div className={`flex flex-col lg:w-1/2 w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer  `} >
+                <div className={`flex flex-col w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  lg:p-2 cursor-pointer  `} >
 
-                    <div className='p-2 lg:flex lg:flex-col  lg:w-[300px] lg:min-w-[300px] lg:max-w-[300px]  border border-blue-100 shadow lg:min-h-[50vh] lg:max-h-[50vh]'>
+                    <div className='p-2 lg:flex lg:flex-col h-[50vh] lg:w-[300px] lg:min-w-[300px] lg:max-w-[300px]  border border-blue-100 shadow lg:min-h-[50vh] lg:max-h-[50vh]'>
                         <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`}
                             onClick={() => {
                                 handlePush()
-                       
+
                                 // props.dispatchSearchItems('') 
                             }} />
 
@@ -804,17 +804,17 @@ export const Product = (props) => {
                         </div>
 
                         <div className='lg:hidden'>
-                            <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg lg:w-72 item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
+                            <p className='font-montMedium mt-2 text-[14px] h-10  item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
                         </div>
 
                         {/* <p className='hidden font-montRegular text-sm -mt-5 item-description' onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p> */}
                         <div className='flex justify-between '>
-                            <p className='-mt-3 lg:w-[17vw]  md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
+                            <p className='h-12 -mt-3 lg:w-[17vw]  md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                                 <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
                                 <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
                                 {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
                             </p>
-                            <div className=' font-montSemiBold text-xl text-white -' >
+                            <div className='hidden lg:block font-montSemiBold text-xl text-white -' >
                                 {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
  */}
 
@@ -823,7 +823,7 @@ export const Product = (props) => {
 
 
 
-                                    <div className='mt-2 hidden lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                    <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
                                         <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
                                         <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
@@ -839,8 +839,37 @@ export const Product = (props) => {
 
 
                             </div>
-
                         </div>
+
+
+                        <div className='lg:hidden  font-montSemiBold text-xl text-white -' >
+                                {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+ */}
+
+
+                                {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+
+
+                                    <div className='-mt-6 border rounded border-red-600 font-montSemiBold h-10  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={` text-2xl px-4 cursor-pointer`}>-</span>
+                                        <span className='text-black font-montMedium text-sm px-7'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3  text-xl cursor-pointer'>+</span>
+                                    </div>
+                                    :
+                                    <p className='w-[37px] -mt-5 ml-32 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+
+
+                                }
+
+
+
+
+
+                            </div>
+
+
+
                     </div>
                     <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
                 </div>
@@ -880,14 +909,14 @@ export const Product = (props) => {
 
                     <div className='flex-col px-12'>
                         <div className='hidden lg:block'>
-                            <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? {  } : {}}>{props.name}<span></span></p>
+                            <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? {} : {}}>{props.name}<span></span></p>
                         </div>
 
                         <div className='lg:hidden'>
                             <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg lg:w-72 item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
                         </div>
 
-                        <p className={`leading-loose font-montMedium text-sm -mt-5 w-auto ${props.wishlistPage?'item-description':'item-description-list'}`} onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
+                        <p className={`leading-loose font-montMedium text-sm -mt-5 w-auto ${props.wishlistPage ? 'item-description' : 'item-description-list'}`} onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
                         <p className='-mt-3 leading-loose lg:w-[17vw] md:w-[13vw] flex justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                             <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
                             <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
@@ -911,7 +940,7 @@ export const Product = (props) => {
                                         <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
-                                    <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage?'px-6 py-2 w-44':"px-10 py-2 "}  mt-4 font-montMedium text-sm`} onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
+                                    <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage ? 'px-6 py-2 w-44' : "px-10 py-2 "}  mt-4 font-montMedium text-sm`} onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>
 
 
                                 }
