@@ -848,7 +848,7 @@ export const Product = (props) => {
                 :
                 // List Layout
                 <div className={`flex  w-full  ${!props.wishlistPage ? `lg:w-full` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer`} >
-                    <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[255px] lg:max-h-[255px] md:min-h-[255px] lg:min-w-[300px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img border border-blue-100 shadow `}
+                    <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[280px] lg:max-h-[280px] md:min-h-[275px] lg:min-w-[300px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img border border-blue-100 shadow `}
                         onClick={() => {
                             router.push(`/product/${props.itemId}`)
 
