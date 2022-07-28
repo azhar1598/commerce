@@ -1,4 +1,4 @@
-import { CloseOutlined, LoadingOutlined, SyncOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, CloseOutlined, LeftOutlined, LeftSquareOutlined, LoadingOutlined, SyncOutlined } from '@ant-design/icons'
 import { message, Spin } from 'antd'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
@@ -554,38 +554,48 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             {cart.length != 0 ?
                 <div className='lg:bg-[#F6F6F6] lg:mt-24 md:-mt-4 lg:h-full md:h-screen flex flex-col lg:flex-row md:flex-row items-start lg:p-2 md:p-2 lg:min-h-screen'>
 
-                    <div className='mt-24 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
+                    <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
                         <p className='hidden lg:block md:block font-montBold text-2xl py-6 px-5'>Cart<span className='text-gray-500 font-montSemiBold text-lg px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
-                        <div className='flex flex-col bg-white w-full justify-between items-start px-5 lg:mb-12'>
+
+                        <div className=' px-5 flex items-start border-b-2 border-slate-200 w-full mb-2'>
+                            <LeftOutlined className='mt-2 pr-2' />
+
+                            <p className=' lg:hidden font-montBold text-lg mt-1 '>Cart <span className='text-gray-500 font-montMedium text-sm px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
+                        </div>
+
+
+
+
+                        <div className='hidden lg:flex flex-col bg-white w-full justify-between items-start px-5 lg:mb-12'>
 
                             {
                                 cart.map((item, idx) =>
                                     <div className='flex items-start text-left w-full border-2 border-slate-300 mb-2 rounded lg:pl-8 px-3 pb-2 md:pl-8 lg: md:pt-3' key={idx}>
-                                       <div className='flex flex-col item-center'>
-                                       <img src={item?.primary_img ? item?.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow ' onClick={() => {
-                                            fetchItemDetails('', '')
-                                            router.push(`/product/${item.item_id}`)
-                                        }} />
+                                        <div className='flex flex-col item-center'>
+                                            <img src={item?.primary_img ? item?.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow ' onClick={() => {
+                                                fetchItemDetails('', '')
+                                                router.push(`/product/${item.item_id}`)
+                                            }} />
 
-                                        {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
-                                            <div className='flex -mt-5  gap-4 ' >
-                                                <div className='border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                    <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
-                                                    <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
+                                            {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
+                                                <div className='flex -mt-5  gap-4 ' >
+                                                    <div className='border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
 
-                                                    <span onClick={() => { handleIncreaseQuantity(item) }}
+                                                        <span onClick={() => { handleIncreaseQuantity(item) }}
 
-                                                        className={`px-4  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                            className={`px-4  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                    </div>
+                                                    {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+
                                                 </div>
-                                                {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+                                                :
+                                                <div className=' w-full  flex items-center justify-center'>
 
-                                            </div>
-                                            :
-                                            <div className=' w-full  flex items-center justify-center'>
-
-                                                <SyncOutlined style={{ fontSize: 24 }} spin />
-                                            </div>}
-                                       </div>
+                                                    <SyncOutlined style={{ fontSize: 24 }} spin />
+                                                </div>}
+                                        </div>
 
 
 
@@ -593,8 +603,8 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                             <p className='text-lg font-montSemiBold flex' onClick={() => {
                                                 fetchItemDetails('', '')
                                                 router.push(`/product/${item.item_id}`)
-                                            }}> {item.is_veg=="Y"?<img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2'/>
-                                            :<img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2'/>}
+                                            }}> {item.is_veg == "Y" ? <img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2' />
+                                                : <img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2' />}
                                                 {item.item_name}</p>
                                             {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
                                                 <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
@@ -614,6 +624,70 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                                 )}
                         </div>
+
+
+                        <div className=' lg:hidden flex  flex-col w-full justify-between items-start  lg:mb-12'>
+                            {
+                                cart.map((item, idx) =>
+                                    <div className='flex items-start text-left w-full border-b-2 border-slate-300 mb-2 rounded  pb-2 : md:pt-3' key={idx}>
+                                        <div className='flex flex-col px-2 item-center'>
+                                            <img src={item?.primary_img ? item?.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow ' onClick={() => {
+                                                fetchItemDetails('', '')
+                                                router.push(`/product/${item.item_id}`)
+                                            }} />
+
+
+                                        </div>
+                                        <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24' >
+                                        <div className='flex'>
+                                        {item.is_veg == "Y" ? <img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2' />
+                                                : <img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2' />}
+                                            <p className='text-sm font-montMedium flex item-city' onClick={() => {
+                                                fetchItemDetails('', '')
+                                                router.push(`/product/${item.item_id}`)
+                                            }}> 
+                                                {item.item_name}</p>
+                                        </div>
+                                            {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
+                                                <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
+                                                <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                                <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
+                                            <p className='text-[#212B3680] hidden'>{item.item_desc}</p>
+                                            <p className='text-lg font-montSemiBold flex items-start -mt-3'>{stateStoreDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
+
+                                                <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${stateStoreDetails?.currency_symbol} ${item.price}` : ''}</span>
+                                                <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${stateStoreDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
+                                            </p>
+
+
+                                            {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
+                                                <div className='flex -mt-5  gap-4 mt-5 ' >
+                                                    <div className='border border-gray-400 space-x-4 mb-2 w-40 ml-2 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-6   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
+
+                                                        <span onClick={() => { handleIncreaseQuantity(item) }}
+
+                                                            className={`px-6  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                    </div>
+                                                    {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+
+                                                </div>
+                                                :
+                                                <div className=' w-full  flex items-center justify-center'>
+
+                                                    <SyncOutlined style={{ fontSize: 24 }} spin />
+                                                </div>}
+
+
+                                        </div>
+                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
+                                    </div>
+
+                                )}
+                        </div>
+
+
                     </div>
                     <div className=' lg:block md:block mt-16  lg:ml-16 w-96'>
                         <Coupon storeSettings={storeSettings} validCoupon={validCoupon} orderId={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} purchaseInvalid={purchaseInvalid} billingDetails={checkout.purchaseDetails?.data} />

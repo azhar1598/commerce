@@ -530,12 +530,12 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
 
           </div>
-          <div className=''>
+          <div className='hidden lg:block'>
             <img src="/billing-wave.png" />
 
           </div>
 
-          <div className='flex items-center justify-center w-full'>
+          <div className='hidden lg:flex items-center justify-center w-full'>
             {checkout != undefined ? !loader ? <button className='p-2 w-72 mt-4  ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => {
               !customerDetails.data?.customer_id ? showModal() :
                 stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) :

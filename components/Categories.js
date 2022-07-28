@@ -148,9 +148,9 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
 
             <div className='lg:hidden md:hidden flex'>
-                <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.secondary_color : 'white' }} />
+                {/* <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.secondary_color : 'white' }} /> */}
                 {console.log('data.subcateg', data.sub_category_name, data?.category_id != 'All Items', data.sub_category_name != undefined)}
-                <p className='  mt-[100px] pl-1 text-sm font-montMedium'>{Object.keys(data).length != 0 && data.constructor === Object
+                <p className='  mt-[80px] pl-2 text-lg font-montSemiBold'>{Object.keys(data).length != 0 && data.constructor === Object
                     ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `Search Results` : 'All Items'}</p>
 
             </div>

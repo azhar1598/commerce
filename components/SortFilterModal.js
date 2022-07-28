@@ -135,9 +135,9 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
     <div>
 
       {
-        isTabletOrMobile ? <div className="flex font-bold cursor-pointer" onClick={openMobileSort}>
-          <BsFilterLeft size={20} className='' />
-          <p className="flex items-center "> Filter / Sort By {sortOrder != 'false' ? <img src="/images/dot.png" height={5} width={5} /> : ''}</p>
+        isTabletOrMobile ? <div className="flex   cursor-pointer " onClick={openMobileSort}>
+          {/* <BsFilterLeft size={20} className='' /> */}
+          <p className="flex items-center font-montSemiBold border border-slate-300 px-2 rounded p-2 -mt-3"> Sort  |  Filter {sortOrder != 'false' ? <img src="/images/dot.png" height={5} width={5} /> : ''}</p>
         </div>
           : <div className="flex font-bold cursor-pointer" onClick={() => setFilterModalVisible(true)}>
             {/* <BsFilterLeft size={20} className='' /> */}
