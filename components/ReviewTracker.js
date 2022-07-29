@@ -3,24 +3,24 @@ import { connect } from 'react-redux'
 import reviewMobile from '../pages/review-mobile'
 import {useRouter} from 'next/router'
 
-export const ReviewTracker = ({ storeSettings, addPaymentMethod, reviewOrder, orderPlaced, paymentAdded, useWallet }) => {
+export const ReviewTracker = ({ storeSettings, addPaymentMethod, reviewOrder, orderPlaced, paymentAdded, useWallet,deliveryMethod }) => {
 
 const router=useRouter()
 
     return (
         <div>
-            <div className='lg:hidden fixed w-full flex items-center justify-center' style={{ background: storeSettings ? storeSettings.data?.secondary_color : 'black', paddingBottom: '10px' }}>
+            <div className='lg:hidden fixed w-full flex items-center justify-center' style={{ background: storeSettings ? storeSettings.data?.primary_color : 'black', paddingBottom: '10px' }}>
                 <div className='flex items-center'>
                     <div className='flex flex-col justify-center items-center '>
-                        {addPaymentMethod ?
+                        {deliveryMethod ?
                             <div className='max-w-6 w-6 -mt-3'>
                                 <img src="/images/success_tick.svg" alt="" />
                             </div> :
                             <p className='flex items-center  justify-center border-2  border-white rounded-xl w-6 h-[25px]' >
-                                <span className=' relative bg-white h-2 w-2 border rounded-full'></span>
+                                <span className=' relative bg-white h-2 w-2 border rounded-full shadow-3xl'></span>
                             </p>
                         }
-                        <p className='text-[10px] fontMontRegular absolute mt-14 text-white w-20 text-center '>Add Payment Method</p>
+                        <p className='text-[10px] fontMontRegular absolute mt-14 text-white w-20 text-center '>Add Address</p>
                     </div>
                     <p className='text-white text-2xl mt-3 px-2 '>---------</p>
 

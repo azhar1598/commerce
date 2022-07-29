@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useRouter } from 'next/router'
@@ -114,14 +114,16 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                 <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
             </Head> */}
             <Profile />
-            <div className='flex flex-col w-full mt-20 lg:mt-0 lg:mr-24 md:mr-24'>
-                <div className='bg-white pl-4 p-3 lg:pl-8 lg md:pl-8 md:p-3 flex lg:flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
-                    <div className='lg:hidden block'>
-                        <Link href='/account/user'>
-                            <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4' />
-                        </Link>
+            <div className='flex flex-col w-full mt-16 lg:mt-0 lg:mr-24 md:mr-24'>
+                <div className='bg-white pl-4 p-3 lg:pl-8 lg md:pl-8 md:p-3 flex flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
+                    <div className='flex '>
+                        <div className='lg:hidden block'>
+                            <Link href='/account/user'>
+                                <LeftOutlined className='text-slate-300 text-lg mr-4 ' />
+                            </Link>
+                        </div>
+                        <p className='text-black font-montSemiBold lg:font-montBold text-lg lg:mt-4'>My Orders</p>
                     </div>
-                    <p className='text-black font-montBold text-xl mt-4'>My Orders</p>
 
                     <div className='flex flex-col items-center  justify-between  w-full  cursor-pointer mb-24' >
 
@@ -129,9 +131,10 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                             <>
                                 {orders.length != 0 ?
                                     orders.map((item, index) =>
-                                        <div className='w-full mt-5' key={index}>
+                                        <div className='lg:w-full mt-5' key={index}>
                                             <div className='border-2 border-[#00000028] '>
-                                                <div className='flex p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
+
+                                                <div className='flex pl-8 p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
 
 
                                                     {Object.keys(item.orderItems).map((key, index) => {
@@ -139,7 +142,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                             {index == 0 ?
 
                                                                 <div className={`${Object.keys(item.orderItems).length > 1 ? `blur-sm` : ``}`}>
-                                                                    <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-28 h-28 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow ' />
+                                                                    <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-full min-w-96 min-h-96 h-12 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow ' />
 
                                                                 </div> : ''}
 
@@ -170,14 +173,15 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
 
                                                     </div>
-
-                                                    <RightOutlined className='text-[#00000028] text-lg  self-center' />
+                                                    <div className='lg:block hidden '>
+                                                        <RightOutlined className='text-[#00000028] text-lg  self-center' />
+                                                    </div>
                                                 </div>
-                                               <div className='py-3'>
-                                               <Stepper vertical={false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
-                                               </div>
+                                                <div className='lg:block hidden py-3'>
+                                                    <Stepper vertical={false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
+                                                </div>
 
-                                                
+
 
                                             </div>
                                         </div>

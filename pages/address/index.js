@@ -116,7 +116,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         setLoading(true);
         const payload = {
             customerId: customerDetails.data.customer_id, addressId
-            , address, setLoading, bool, setBool, message, edit,toast
+            , address, setLoading, bool, setBool, message, edit, toast
         }
         if (!edit) {
             addAddressAction({ payload })
@@ -162,7 +162,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
+            });
             setBool(!bool)
             // addressData(customerDetails.data.customer_id)
         }
@@ -206,6 +206,11 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
             {/* <div className='hidden lg:block'>
                 <ReviewTracker storeSettings={storeSettings} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
             </div> */}
+
+            <div className='lg:hidden absolute fixed -mt-20 z-[300000]'>
+                <ReviewTracker storeSettings={storeSettings} deliveryMethod={deliveryMethod=='PARCEL' || deliveryMethod=='DELIVERY' ?true:false} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
+            </div>
+
             <div className='  lg:flex   md:-mt-4  bg-[#F6F6F6] md:p-8'>
 
                 <div className='lg:w-[55vw]   lg:mr-24 md:mr-24'>
@@ -221,7 +226,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 <p className='block lg:hidden text-black font-montSemiBold mt-3 text-lg' >{!addNewAddress ? 'Delivery Method' : 'Add New Address'}</p>
 
-                                
+
                             </div>
 
                             : ''}
@@ -249,7 +254,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 <div className='bg-white hidden   lg:flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
-                                        <div  className="leading gap-0 ">
+                                        <div className="leading gap-0 ">
                                             <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
                                                 storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
                                                     storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
@@ -265,11 +270,11 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
-                                        <div  className="leading gap-0 w-full flex items-center flex-col ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px',width:"90vw",marginLeft:'-13px' }}>Dine-in {
+                                        <div className="leading gap-0 w-full flex items-center flex-col ">
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in {
                                                 storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
                                                     storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9',  padding: '10px', paddingTop: '20px', paddingBottom: '20px',width:"90vw",marginLeft:'-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
                                                 storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
 
                                                     storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
@@ -281,19 +286,24 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 {deliveryMethod == 'DELIVERY' ?
                                     <>
-                                        <p className='text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
-                                        <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
+                                        <p className='lg:block hidden text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
+
+
+                                        <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
+
+
+                                        <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 -mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
                                             {
                                                 stateAddress ?
                                                     !showAddressMobile ?
                                                         <div className='lg:flex flex-wrap lg:justify-start lg:w-full lg:mb-0 mb-48'>
 
                                                             {stateAddress?.map(item =>
-                                                                <div className='lg:flex flex-col items-start px-2 py-2' key={item.address_tag}>
+                                                                <div className='lg:flex flex-col items-start px-2 lg:py-2' key={item.address_tag}>
                                                                     <div className='flex w-full lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
                                                                         <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
-                                                                <Radio className='font-montSemiBold' value={item.address_id}></Radio>
-                                                            </Radio.Group>
+                                                                            <Radio className='font-montSemiBold' value={item.address_id}></Radio>
+                                                                        </Radio.Group>
                                                                         <div className='flex flex-col'>
                                                                             <div className='flex items-start'>
                                                                                 <p className='text-lg'>{item.address_tag}</p>
@@ -314,7 +324,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                         </div>
                                                                     </div>
 
-{/* 
+                                                                    {/* 
                                                                     <Popconfirm
                                                                         placement="topRight"
                                                                         title="Are you Sure, You Want to Delete this Address?"
@@ -342,153 +352,153 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                     </div>}
                                         </div>
 
-{/* 
+                                        {/* 
                                         <button className='hidden lg:block md:block mt-6 mb-12 w-full lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ border: `2px solid ${storeSettings.data ? storeSettings.data.primary_color : "black"}`, borderStyle: 'dashed', width: '220px' }}>Add new Address <span><PlusOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '20px', paddingLeft: '6px' }} /></span></button> */}
                                     </> :
 
-                                  <>
-                                    <div className='hidden bg-white lg:flex w-full px-24 py-12 mx-5'>
-                                        <img src="/chef.png" className='h-60 w-48 ' />
-                                        <p className='text-2xl font-montBold w-[500px] ml-36 mr-24 mt-12 z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
-                                        <div className='absolute rounded-full h-44 w-44' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '275px' }}></div>
+                                    <>
+                                        <div className='hidden bg-white lg:flex w-full px-24 py-12 mx-5'>
+                                            <img src="/chef.png" className='h-60 w-48 ' />
+                                            <p className='text-2xl font-montBold w-[500px] ml-36 mr-24 mt-12 z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
+                                            <div className='absolute rounded-full h-44 w-44' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '275px' }}></div>
 
 
-                                        <div className='absolute rounded-full h-20 w-20' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '495px' }}></div>
+                                            <div className='absolute rounded-full h-20 w-20' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '495px' }}></div>
 
 
-                                        <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '495px', marginTop: '100px' }}></div>
-                                    </div>
+                                            <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '495px', marginTop: '100px' }}></div>
+                                        </div>
 
 
-                                    <div className='lg:hidden bg-white flex w-full px- py-12 mx-5 -ml-1'>
-                                        <img src="/chef.png" className='h-40  ' />
-                                        <p className='text-lg font-montBold w-[300px]  z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
-                                        <div className='absolute rounded-full h-44' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '' }}></div>
+                                        <div className='lg:hidden bg-white flex w-full px- py-12 mx-5 -ml-1'>
+                                            <img src="/chef.png" className='h-40 mx-12 ' />
+                                            <p className='text-lg font-montBold w-[300px] -ml-8  z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
+                                            <div className='absolute rounded-full h-60 w-30' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '120px' }}></div>
 
 
-                                        <div className='absolute rounded-full h-20 w-20' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '80px' }}></div>
+                                            <div className='absolute rounded-full h-20 w-20' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '180px' }}></div>
 
 
-                                        <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '80px', marginTop: '100px' }}></div>
-                                    </div>
-                                  
-                                  
-                                  </>
+                                            <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '250px', marginTop: '100px' }}></div>
+                                        </div>
+
+
+                                    </>
 
                                 } </>
                             :
 
                             // /* Add Address Web View */
                             <>
-                            {!isTabletOrMobile &&
-                                <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full ' >
-                                    <div className='cursor-pointer' onClick={() => {
-                                        setAddNewAddress(!addNewAddress)
-                                        if (edit) {
-                                            Object.entries(edit).forEach(
-                                                ([name, value]) => setValue(name, ''));
-                                            setEdit()
-                                        }
-                                    }}>
-                                        {/* /account/user` */}
-                                        {addNewAddress && <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />}
-                                    </div>
-                                    <p className='text-black font-montBold mt-3 text-lg' >{`${edit ? `Edit Address` : `Add a New Address`}`}</p>
-                                </div>}
+                                {!isTabletOrMobile &&
+                                    <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full ' >
+                                        <div className='cursor-pointer' onClick={() => {
+                                            setAddNewAddress(!addNewAddress)
+                                            if (edit) {
+                                                Object.entries(edit).forEach(
+                                                    ([name, value]) => setValue(name, ''));
+                                                setEdit()
+                                            }
+                                        }}>
+                                            {/* /account/user` */}
+                                            {addNewAddress && <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />}
+                                        </div>
+                                        <p className='text-black font-montBold mt-3 text-lg' >{`${edit ? `Edit Address` : `Add a New Address`}`}</p>
+                                    </div>}
 
-                            <div className=" hidden lg:block md:block bg-white w-full lg:ml-5 md:ml-5 lg:pl-8 lg:p-3 md:lg-8 md:p-3 ">
+                                <div className=" hidden lg:block md:block bg-white w-full lg:ml-5 md:ml-5 lg:pl-8 lg:p-3 md:lg-8 md:p-3 ">
 
 
-                                {/* form */}
-                                <div className='px-6'>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        {/* input fields */}
-                                        <div className='space-y-2 my-2'>
-                                            <label htmlFor="" className='block'>Country*</label>
-                                            <select className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.country ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} {...register("country", { required: true })} >
-                                                <option value="India">India</option>
-                                            </select>
-                                        </div>
-                                        <div className='space-y-2 my-2'>
-                                            <label htmlFor="" className='block'>Name*</label>
-                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.full_name ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Full Name" {...register("full_name", { required: true })} />
-                                        </div>
-                                        <div className='space-y-2 my-2'>
-                                            <label htmlFor="" className='block'>Mobile Number* <span className='text-xs'>(Commonly Used to Assist Delivery)</span></label>
-                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.phone ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your 10 Digit Mobile Number" {...register("phone", {
-                                                required: true, pattern: {
-                                                    value: /[1-9]{1}[0-9]{9}/,
-                                                    message: 'Please enter a valid Phone number',
-                                                }
-                                            })} />
-                                            {errors ? <p className='text-red-500'>{errors?.phone?.message}</p> : ""}
-                                        </div>
-                                        <div className='space-y-2 my-2'>
-                                            <label htmlFor="" className='block'>Flat No. , House No. / House Name, Road No.*</label>
-                                            <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_1 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Address" {...register("address_line_1", { required: true })} />
-                                        </div>
-                                        <div className='lg:grid lg:grid-cols-2 lg:space-x-6'>
+                                    {/* form */}
+                                    <div className='px-6'>
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            {/* input fields */}
                                             <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Colony, Area, Street, Village*</label>
-                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_2 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="More Address Details" {...register("address_line_2", { required: true })} />
+                                                <label htmlFor="" className='block'>Country*</label>
+                                                <select className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.country ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} {...register("country", { required: true })} >
+                                                    <option value="India">India</option>
+                                                </select>
                                             </div>
                                             <div className='space-y-2 my-2'>
-                                                <label htmlFor="" className='block'>Land Mark <span className='text-xs'>(optional)</span></label>
-                                                <input className='w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500' type="text" placeholder="e.g - Near 9 to 9 Super Market" {...register("land_mark", { required: false })} />
+                                                <label htmlFor="" className='block'>Name*</label>
+                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.full_name ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Full Name" {...register("full_name", { required: true })} />
                                             </div>
-                                        </div>
-                                        <div className='lg:grid lg:grid-cols-4 lg:space-x-6'>
-                                            <div className='col-span-2'>
-                                                <div className='space-y-2 my-2'>
-                                                    <label htmlFor="" className='block'>State*</label>
-                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.state ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your State" {...register("state", { required: true })} />
-                                                </div>
-                                            </div>
-                                            <div className='space-y-2 my-2 col-span-1'>
-                                                <label htmlFor="" className='block'>District*</label>
-                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.city ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your District" {...register("city", { required: true })} />
-                                            </div>
-
-                                            <div className='space-y-2 my-2 col-span-1'>
-                                                <label htmlFor="" className='block'>Pin*</label>
-                                                <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.zip_code ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Area Pin" {...register("zip_code", {
+                                            <div className='space-y-2 my-2'>
+                                                <label htmlFor="" className='block'>Mobile Number* <span className='text-xs'>(Commonly Used to Assist Delivery)</span></label>
+                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.phone ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your 10 Digit Mobile Number" {...register("phone", {
                                                     required: true, pattern: {
-                                                        value: /^[0-9]+$/,
-                                                        message: 'Please enter numbers only',
+                                                        value: /[1-9]{1}[0-9]{9}/,
+                                                        message: 'Please enter a valid Phone number',
                                                     }
                                                 })} />
-                                                {errors ? <p className='text-red-500 '>{errors?.zip_code?.message}</p> : ""}
+                                                {errors ? <p className='text-red-500'>{errors?.phone?.message}</p> : ""}
                                             </div>
-                                        </div>
-
-                                        <div className='space-y-2 my-2'>
-                                            {/* <p className='m-0 p-0'>Address Type</p> */}
-                                            {/* <div className='flex gap-3'> */}
-                                            <div className='flex gap-1 items-center'>
-
-                                                <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Home" />
-                                                <label htmlFor="">Home Address <span className='text-xs'>(product will be delivered between 7 am to 9 pm)</span></label>
+                                            <div className='space-y-2 my-2'>
+                                                <label htmlFor="" className='block'>Flat No. , House No. / House Name, Road No.*</label>
+                                                <input className={`w-full lg:w-6/12 border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_1 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Address" {...register("address_line_1", { required: true })} />
                                             </div>
-                                            <div className='flex gap-1 items-center'>
-
-                                                <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Work" />
-                                                <label htmlFor="">Office / Work Address <span className='text-xs'>(product will be delivered between 10 am to 6 pm)</span></label>
+                                            <div className='lg:grid lg:grid-cols-2 lg:space-x-6'>
+                                                <div className='space-y-2 my-2'>
+                                                    <label htmlFor="" className='block'>Colony, Area, Street, Village*</label>
+                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.address_line_2 ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="More Address Details" {...register("address_line_2", { required: true })} />
+                                                </div>
+                                                <div className='space-y-2 my-2'>
+                                                    <label htmlFor="" className='block'>Land Mark <span className='text-xs'>(optional)</span></label>
+                                                    <input className='w-full border border-gray-300 p-2 rounded focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500' type="text" placeholder="e.g - Near 9 to 9 Super Market" {...register("land_mark", { required: false })} />
+                                                </div>
                                             </div>
+                                            <div className='lg:grid lg:grid-cols-4 lg:space-x-6'>
+                                                <div className='col-span-2'>
+                                                    <div className='space-y-2 my-2'>
+                                                        <label htmlFor="" className='block'>State*</label>
+                                                        <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.state ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your State" {...register("state", { required: true })} />
+                                                    </div>
+                                                </div>
+                                                <div className='space-y-2 my-2 col-span-1'>
+                                                    <label htmlFor="" className='block'>District*</label>
+                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.city ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Select Your District" {...register("city", { required: true })} />
+                                                </div>
+
+                                                <div className='space-y-2 my-2 col-span-1'>
+                                                    <label htmlFor="" className='block'>Pin*</label>
+                                                    <input className={`w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-1 ${errors.zip_code ? 'focus:ring-red-600 focus:border-red-600' : 'focus:ring-sky-500 focus:border-sky-500'}`} type="text" placeholder="Enter Your Area Pin" {...register("zip_code", {
+                                                        required: true, pattern: {
+                                                            value: /^[0-9]+$/,
+                                                            message: 'Please enter numbers only',
+                                                        }
+                                                    })} />
+                                                    {errors ? <p className='text-red-500 '>{errors?.zip_code?.message}</p> : ""}
+                                                </div>
+                                            </div>
+
+                                            <div className='space-y-2 my-2'>
+                                                {/* <p className='m-0 p-0'>Address Type</p> */}
+                                                {/* <div className='flex gap-3'> */}
+                                                <div className='flex gap-1 items-center'>
+
+                                                    <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Home" />
+                                                    <label htmlFor="">Home Address <span className='text-xs'>(product will be delivered between 7 am to 9 pm)</span></label>
+                                                </div>
+                                                <div className='flex gap-1 items-center'>
+
+                                                    <input {...register("address_tag", { required: true })} name='address_tag' defaultChecked={true} type="radio" value="Work" />
+                                                    <label htmlFor="">Office / Work Address <span className='text-xs'>(product will be delivered between 10 am to 6 pm)</span></label>
+                                                </div>
+                                                {/* </div> */}
+                                            </div>
+                                            {/* buttons */}
+                                            {/* <div className="flex justify-between mt-3"> */}
+                                            {/* <Button loading={loading}> */}
+                                            {!loading && <input className='border  py-3 px-11 mt-3 text-base  cursor-pointer' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white` }} type="submit" value={`${!edit ? 'SAVE ADDRESS' : 'EDIT ADDRESS'}`} />}
+                                            {loading && <span className='ml-3'><LoadingOutlined style={{ fontSize: 24 }} spin /></span>}
+                                            {/* </Button> */}
+                                            {/* <button className='p-3 bg-red-500 w-5/12 rounded' onClick={() => setIsModalVisible(false)}>Cancel</button> */}
                                             {/* </div> */}
-                                        </div>
-                                        {/* buttons */}
-                                        {/* <div className="flex justify-between mt-3"> */}
-                                        {/* <Button loading={loading}> */}
-                                        {!loading && <input className='border  py-3 px-11 mt-3 text-base  cursor-pointer' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white` }} type="submit" value={`${!edit ? 'SAVE ADDRESS' : 'EDIT ADDRESS'}`} />}
-                                        {loading && <span className='ml-3'><LoadingOutlined style={{ fontSize: 24 }} spin /></span>}
-                                        {/* </Button> */}
-                                        {/* <button className='p-3 bg-red-500 w-5/12 rounded' onClick={() => setIsModalVisible(false)}>Cancel</button> */}
-                                        {/* </div> */}
-                                    </form>
-                                </div>
+                                        </form>
+                                    </div>
 
-                            </div>
-                        </>
+                                </div>
+                            </>
 
                         }
 
@@ -587,7 +597,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                             </div>
                             : ''}
-    <ToastContainer />
+                        <ToastContainer />
 
 
                     </div>

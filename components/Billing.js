@@ -16,6 +16,7 @@ import encUtf8 from "crypto-js/enc-utf8";
 import aes from "crypto-js/aes";
 import StoreStatus from './svgComponents/StoreStatus'
 import { toast, ToastContainer } from 'react-toastify'
+import { useMediaQuery } from 'react-responsive'
 
 export const Billing = ({ customerDetails, billingDetails, checkout, address, review, paymentMethod, clearCart, storeSettings, addAddressAction, defaultAddressAction, shippingAdded, wallet, walletAmount, final, dispatchPaymentMethod, showAddressMobile, stateStoreDetails, purchaseLoading, purchaseInvalid, minQtyMsg, minProduct, deliveryMethod }) => {
 
@@ -30,6 +31,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
   const [edit, setEdit] = useState()
   const [codModalVisible, setCodModalVisible] = useState(false)
   const [razorpayKey, setRazorPayKey] = useState(null)
+
+  const isTabletOrMobile = useMediaQuery({ query: ' (max-width: 992px)' })
 
   const [storeClosed, setStoreClosed] = useState(false)
 
@@ -112,7 +115,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             }
             else {
               // message.error(purchaseInvalid)
-              toast(purchaseInvalid, {
+              toast.error(purchaseInvalid, {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -120,32 +123,82 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
+              });
               setloader(false)
             }
           }
           else {
-            if (address.defaultAddress) {
-              const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
-              if (response) {
+
+
+
+             if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
+
+              if (deliveryMethod == 'DELIVERY') {
+                if (address.defaultAddress) {
+                  const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
+                  if (response) {
+                    setloader(false)
+                    router.push('/review-mobile')
+                  }
+                }
+                else {
+                  setloader(false)
+                  // message.error('Please Add the Address')
+                  toast.error('Please Add the Address', {
+                    position: `${isTabletOrMobile?'top-center':'bottom-right'}`,
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                }
+              }
+              else if (deliveryMethod == 'PARCEL') {
                 setloader(false)
                 router.push('/review-mobile')
               }
-            } else {
+  
+            }
+            else {
               setloader(false)
-              // message.error('Please Add the Address')
-
-              toast('Please Add the Address', {
-                position: "bottom-right",
+              // message.error('Please Choose Delivery Method')
+              toast.error('Please Choose Delivery Method', {
+                position: `${isTabletOrMobile?'top-center':'bottom-right'}`,
                 autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
-
+                style:{marginTop:'80px'}
+              });
             }
+
+
+            
+            // if (address.defaultAddress) {
+            //   const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
+            //   if (response) {
+            //     setloader(false)
+            //     router.push('/review-mobile')
+            //   }
+            // } else {
+            //   setloader(false)
+            //   // message.error('Please Add the Address')
+
+            //   toast.error('Please Add the Address', {
+            //     position: "bottom-right",
+            //     autoClose: 1000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //   });
+
+            // }
           }
         }
         else {
@@ -156,7 +209,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             else {
               setloader(false)
               // message.error(purchaseInvalid)
-              toast(purchaseInvalid, {
+              toast.error(purchaseInvalid, {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -164,7 +217,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                });
+              });
             }
           }
           else if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
@@ -180,7 +233,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               else {
                 setloader(false)
                 // message.error('Please Add the Address')
-                toast('Please Add the Address', {
+                toast.error('Please Add the Address', {
                   position: "bottom-right",
                   autoClose: 1000,
                   hideProgressBar: false,
@@ -188,19 +241,19 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   pauseOnHover: true,
                   draggable: true,
                   progress: undefined,
-                  });
+                });
               }
             }
             else if (deliveryMethod == 'PARCEL') {
               setloader(false)
               router.push('/review')
             }
-           
+
           }
-          else{
+          else {
             setloader(false)
             // message.error('Please Choose Delivery Method')
-            toast('Please Choose Delivery Method', {
+            toast.error('Please Choose Delivery Method', {
               position: "bottom-right",
               autoClose: 1000,
               hideProgressBar: false,
@@ -208,13 +261,14 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-              });
-          }
+              style:{zIndex:500000}
+            });
           }
         }
+      }
       else {
         // message.error(`Please Check Minimum Quantity of ${minProduct}`)
-        toast(`Please Check Minimum Quantity of ${minProduct}`, {
+        toast.error(`Please Check Minimum Quantity of ${minProduct}`, {
           position: "bottom-right",
           autoClose: 1000,
           hideProgressBar: false,
@@ -222,13 +276,13 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
       }
     }
     else {
       setloader(false)
       // message.error('Something is wrong with address')
-      toast('Something is wrong with address', {
+      toast.error('Something is wrong with address', {
         position: "bottom-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -236,7 +290,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
     }
 
 
@@ -253,21 +307,21 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
   const handleProceedMobile = async () => {
 
-    console.log('helloww')
     if (paymentMethod) {
-      router.push(
-        {
-          pathname: '/review-mobile/final',
-          query: { wallet }
+      // router.push(
+      //   {
+      //     pathname: '/review-mobile/final',
+      //     query: { wallet }
+      //   }
+      // )
 
-        }
+      handlePayment()
 
-      )
       dispatchPaymentMethod(paymentMethod)
     }
     else {
       // message.error('Please Add the payment Method')
-      toast('Please Add the payment Method', {
+      toast.error('Please Add the payment Method', {
         position: "bottom-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -275,7 +329,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
     }
   }
 
@@ -289,8 +343,6 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       const response = await initiatePayment(address.purchaseDetails.data.purchaseId)
       // }
 
-      console.log
-
       if (response.data) {
         const { customerId, purchaseId, discountedPurchaseTotal, currencyCode, totalSavings, orders } = response.data;
         const orderIds = Object.keys(orders)
@@ -301,7 +353,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         const successInfo = { totalSavings, orderIds }
 
         if (wallet) {
-          console.log('helllow')
+          
           if (walletAmount < billingDetails?.calculatedPurchaseTotal) {
 
             if (paymentMethod == 'COD') {
@@ -381,7 +433,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     }
     else {
       // message.error('Please Add the Payment Method')
-      toast('Please Add the Payment Method', {
+      toast.error('Please Add the Payment Method', {
         position: "bottom-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -389,7 +441,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       setloader(false)
     }
 
@@ -417,7 +469,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
     if (response) {
       // message.success(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`)
-      toast(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+      toast.error(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
         position: "bottom-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -425,7 +477,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
 
 
       setLoading(false)
@@ -442,7 +494,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     }
     else {
       // message.error('Something is wrong')
-      toast('Something is wrong', {
+      toast.error('Something is wrong', {
         position: "bottom-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -450,7 +502,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       setLoading(false)
     }
 
@@ -519,7 +571,6 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   </div>
                 </div> :
                 <div className='flex items-center mt-28 lg:w-full lg:min-w-[400px] justify-center'>
-
                   <Spin />
                 </div>}
             </div>
@@ -766,7 +817,9 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         </div>
 
       </Modal>
-      <ToastContainer />
+<div className='mt-24 z-[500000]'>
+<ToastContainer />
+</div>
 
     </>
   )
