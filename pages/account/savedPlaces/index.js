@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, DeleteFilled, DeleteOutlined, EditFilled, LoadingOutlined, PlusCircleFilled, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, DeleteFilled, DeleteOutlined, EditFilled, LeftOutlined, LoadingOutlined, PlusCircleFilled, PlusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { message, Modal, Popconfirm, Radio, Spin } from 'antd'
 import { data } from 'autoprefixer'
 import Link from 'next/link'
@@ -179,26 +179,26 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                 <div className='lg:w-[55vw]   lg:mr-24 md:mr-24'>
                     <div className='flex flex-col lg:[50vw] w-full lg:mr-24 md:mr-24 '>
                         {!showAddressMobile && isTabletOrMobile ?
-                            <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
-                                <div className='cursor-pointer' onClick={() => { router.push('/cart') }}>
+                            <div className='bg-white pl-4 mt-16 lg:mt-0 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border border-blue-100 shadow '>
+                                <div className='cursor-pointer' onClick={() => { router.push('/account/user') }}>
                                     {/* /account/user` */}
-                                    <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />
+                                    <LeftOutlined className='text-black text-lg mr-4 mt-7 ' />
                                 </div>
                                 {/* onClick={() => !addNewAddress ? setAddNewAddress(!addNewAddress) : setAddNewAddress(!addNewAddress)} */}
-                                <p className='text-black font-montSemiBold mt-3 text-lg' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
+                                <p className='text-black font-montSemiBold lg:mt-3  text-lg mt-6' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
                             </div>
 
                             : ''}
 
                         {!showAddressMobile ?
-                            <div className='lg:hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full ' onClick={handleDisplayMobileAddress} >
+                            <div className='lg:hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full   z-[400000] bottom-0 fixed border border-blue-100 shadow ' onClick={handleDisplayMobileAddress} >
                                 <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
                                 <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
                             </div>
                             :
                             <div className=' bg-white p-3 flex items-baseline  w-full border-b-4 border-slate-[200]' onClick={edit ? handleEditMobileAddress : handleDisplayMobileAddress} >
                                 <ArrowLeftOutlined className='text-black text-lg mr-4' />
-                                <p className='text-black font-montSemiBold'>{edit ? `Edit Address` : `Add New Address`}</p>
+                                <p className='text-black font-montSemiBold lg:mt-0 mt-20'>{edit ? `Edit Address` : `Add New Address`}</p>
                             </div>}
 
                         {!addNewAddress ?
@@ -210,7 +210,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                     </div>
                                     <p className='text-black font-montBold mt-3 text-lg' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
                                 </div>}
-                                <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:ml-5 md:ml-5 w-full bg-white border-b-2 border-slate-[200] cursor-pointer  lg:pb-3'>
+                                <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:ml-5 md:ml-5 w-full bg-white w-[100vw] border-b-2 border-slate-[200] cursor-pointer  lg:pb-3 '>
                                     {
                                         stateAddress ?
                                             !showAddressMobile ?
@@ -242,18 +242,20 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                             </div>
 
 
-                                                            <Popconfirm
-                                                                placement="topRight"
-                                                                title="Are you Sure, You Want to Delete this Address?"
-                                                                onConfirm={() => deleteAddress(item.address_id)}
-                                                                okText="Yes"
-                                                                cancelText="No"
-                                                            >
-                                                                <div className='flex items-center'>
-                                                                    <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                                                    <button className="bg-white lg:py-6 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
-                                                                </div>
-                                                            </Popconfirm>
+                                                            <div className='hidden lg:block'>
+                                                                <Popconfirm
+                                                                    placement="topRight"
+                                                                    title="Are you Sure, You Want to Delete this Address?"
+                                                                    onConfirm={() => deleteAddress(item.address_id)}
+                                                                    okText="Yes"
+                                                                    cancelText="No"
+                                                                >
+                                                                    <div className='flex items-center'>
+                                                                        <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
+                                                                        <button className="bg-white lg:py-6 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
+                                                                    </div>
+                                                                </Popconfirm>
+                                                            </div>
 
 
 
@@ -403,7 +405,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                         {/* Add Address Mobile View */}
                         {showAddressMobile ?
                             <div className="lg:hidden md:hidden bg-white w-full lg:ml-5 md:ml-5 lg:pl-8 lg:p-3 md:lg-8 md:p-3 mb-20">
-                                <h2 className='p-6 font-montBold text-xl'>{`${edit ? `Edit Address` : `Add a New Address`}`}</h2>
+                                <h2 className='hidden p-6 font-montBold text-xl'>{`${edit ? `Edit Address` : `Add a New Address`}`}</h2>
                                 <hr />
                                 {/* form */}
                                 <div className='p-6'>

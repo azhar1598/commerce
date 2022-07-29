@@ -115,14 +115,14 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
             </Head> */}
             <Profile />
             <div className='flex flex-col w-full mt-16 lg:mt-0 lg:mr-24 md:mr-24'>
-                <div className='bg-white pl-4 p-3 lg:pl-8 lg md:pl-8 md:p-3 flex flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
-                    <div className='flex '>
+                <div className='bg-white lg:pl-4 lg:p-3 lg:pl-8 lg md:pl-8 md:p-3 flex flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
+                    <div className='flex items-center  p-3  pb-1 lg:pb-0 lg:p-0 lg:border-none border-b border-blue-100 shadow'>
                         <div className='lg:hidden block'>
                             <Link href='/account/user'>
                                 <LeftOutlined className='text-slate-300 text-lg mr-4 ' />
                             </Link>
                         </div>
-                        <p className='text-black font-montSemiBold lg:font-montBold text-lg lg:mt-4'>My Orders</p>
+                        <p className='text-black font-montSemiBold mt-5 lg:font-montBold text-lg lg:mt-4 '>My Orders</p>
                     </div>
 
                     <div className='flex flex-col items-center  justify-between  w-full  cursor-pointer mb-24' >
@@ -132,17 +132,17 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                 {orders.length != 0 ?
                                     orders.map((item, index) =>
                                         <div className='lg:w-full mt-5' key={index}>
-                                            <div className='border-2 border-[#00000028] '>
+                                            <div className='border-b  lg:border-2 border-[#00000028] '>
 
-                                                <div className='flex pl-8 p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
+                                                <div className='flex px-3 lg:pl-8 lg:p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
 
 
                                                     {Object.keys(item.orderItems).map((key, index) => {
                                                         return (<>
                                                             {index == 0 ?
 
-                                                                <div className={`${Object.keys(item.orderItems).length > 1 ? `blur-sm` : ``}`}>
-                                                                    <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-full min-w-96 min-h-96 h-12 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow ' />
+                                                                <div className={` ${Object.keys(item.orderItems).length > 1 ? `pr-3 blur-sm` : ``}`}>
+                                                                    <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-44  min-w-44 min-h-28 h-28 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow mb-2 lg:mb-0' />
 
                                                                 </div> : ''}
 
@@ -153,14 +153,14 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                     <p className={`${Object.keys(item.orderItems).length > 1 ? `text-[#212B36]  font-montSemiBold text-lg  absolute lg:mt-0 lg:ml-9  ml-10 mt-10` : `hidden`}`}>+ {Object.keys(item.orderItems).length - 1}</p>
 
 
-                                                    <div className='flex flex-col items-start w-full ml-4 lg:ml-24 md:ml-24'>
+                                                    <div className='flex flex-col w-full ml-4 lg:ml-24 md:ml-24'>
                                                         <p className='text-[#212B36]    font-montSemiBold '>Order No. #{item.orderId}</p>
 
                                                         {Object.keys(item.orderItems).map((key, index) => {
                                                             return (<>
                                                                 {index == 0 ?
                                                                     <>
-                                                                        <p className='text-[#212B36]   font-montSemiBold w-96 break-words '>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
+                                                                        <p className='text-[#212B36] -mt-4 lg:mt-0  font-montSemiBold lg:w-96 break-words item-description'>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
                                                                         <p className='text-[#212B3680] '></p>
                                                                     </> : ''}
                                                             </>
@@ -177,6 +177,8 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                         <RightOutlined className='text-[#00000028] text-lg  self-center' />
                                                     </div>
                                                 </div>
+
+                                                
                                                 <div className='lg:block hidden py-3'>
                                                     <Stepper vertical={false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
                                                 </div>

@@ -20,6 +20,7 @@ import ContactUs from './ContactUs'
 import LoginModal from './LoginModal/LoginModal'
 import { customerDetails, getShopWidgets, getStoreDetails, getStoreDisplaySettings, getStoreSettings } from '../actions'
 import { ConfigProvider } from 'antd'
+import MenuIcon from './svgComponents/MenuIcon'
 
 function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialProfile, customerDetails, storeSettings,
   dispatchStoreDisplaySettings, getStoreDetails
@@ -151,15 +152,22 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
               { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 ease-in' } : { transition: 'all .5s ease-out' }} /> */}
           <p className={`text-[12px] font-montMedium`} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }} >Shop</p>
         </div>
-        <div className='flex flex-col'
+        <div className='flex flex-col items-center'
         // onClick={() => {
         //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
         // }}
         >
           {/* <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} /> */}
-          <HeartFilled className='text-[#212B36] text-2xl' style={router.pathname == '/account/wishlist' ?
-            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} />
-          <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Wishlist</p>
+          {/* <HeartFilled className='text-[#212B36] text-2xl' style={router.pathname == '/account/wishlist' ?
+            { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
+          {/* <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Wishlist</p> */}
+
+          <MenuIcon secondaryColor={router.pathname?.includes('/') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
+
+{/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
+  { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
+<p className='text-[12px] font-montMedium ' style={router.pathname=='' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Menu</p>
+
         </div>
         <div className={`flex flex-col items-center`} onClick={() => { router.push('/account/user') }}>
 
