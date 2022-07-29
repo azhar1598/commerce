@@ -135,20 +135,20 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
           </div>
 
           {/* // style={router.pathname == '/' ? */}
-            {/* //   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
+          {/* //   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
 
-            <p className={`text-[12px] font-montMedium`} style={router.pathname == '/' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Home</p>
+          <p className={`text-[12px] font-montMedium`} style={router.pathname == '/' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}` } : { color: 'black' }} >Home</p>
         </div>
 
         <div className={`flex flex-col items-center`}
-        onClick={() => { router.push('/shop') }}
+          onClick={() => { router.push('/shop') }}
         >
           {/* <ShopFilled className='text-2xl' */}
-<ShopIcon secondaryColor={router.pathname == '/shop' || router.pathname?.includes('/product') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#b4b4b4' : '#B4B4B4'} />
+          <ShopIcon secondaryColor={router.pathname == '/shop' || router.pathname?.includes('/product') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#b4b4b4' : '#B4B4B4'} />
 
 
 
-            {/* style={router.pathname == '/shop' || router.pathname?.includes('/product') ?
+          {/* style={router.pathname == '/shop' || router.pathname?.includes('/product') ?
               { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 ease-in' } : { transition: 'all .5s ease-out' }} /> */}
           <p className={`text-[12px] font-montMedium`} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }} >Shop</p>
         </div>
@@ -164,14 +164,14 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
 
           <MenuIcon secondaryColor={router.pathname?.includes('/') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
 
-{/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
+          {/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
-<p className='text-[12px] font-montMedium ' style={router.pathname=='' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Menu</p>
+          <p className='text-[12px] font-montMedium ' style={router.pathname == '' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Menu</p>
 
         </div>
         <div className={`flex flex-col items-center`} onClick={() => { router.push('/account/user') }}>
 
-        <UserAltIcon secondaryColor={router.pathname?.includes('/account/user') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
+          <UserAltIcon secondaryColor={router.pathname?.includes('/account/user') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
 
           {/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
             { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
