@@ -7,6 +7,7 @@ import { BsFilterLeft } from 'react-icons/bs'
 import { getFilterGroups } from '../actions';
 import { useMediaQuery } from 'react-responsive';
 import { BsArrowLeft } from 'react-icons/bs'
+import Filter from './svgComponents/Filter';
 
 
 const { TabPane } = Tabs;
@@ -137,7 +138,12 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
       {
         isTabletOrMobile ? <div className="flex   cursor-pointer " onClick={openMobileSort}>
           {/* <BsFilterLeft size={20} className='' /> */}
-          <p className="flex items-center font-montSemiBold border border-slate-300 px-2 rounded p-2 -mt-3"> Sort  |  Filter {sortOrder != 'false' ? <img src="/images/dot.png" height={5} width={5} /> : ''}</p>
+          <p className="flex items-center font-montSemiBold border border-slate-300 px-2 rounded p-2 -mt-3"> 
+          <Filter secondaryColor={storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'red'}/>
+         <span className='px-2'> 
+          Sort  |  Filter
+           {/* {sortOrder != 'false' ? <img src="/images/dot.png" height={2} width={2} /> : ''} */}
+           </span></p>
         </div>
           : <div className="flex font-bold cursor-pointer" onClick={() => setFilterModalVisible(true)}>
             {/* <BsFilterLeft size={20} className='' /> */}

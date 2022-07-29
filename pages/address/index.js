@@ -211,19 +211,23 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                 <div className='lg:w-[55vw]   lg:mr-24 md:mr-24'>
                     <div className='flex flex-col lg:[50vw] w-full lg:mr-24 md:mr-24 '>
                         {!showAddressMobile && isTabletOrMobile ?
-                            <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border-b-4 border-slate-[200] '>
+                            <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border-b-2 lg:border-b-4 border-slate-[200] '>
                                 <div className='cursor-pointer' onClick={() => { router.push('/cart') }}>
                                     {/* /account/user` */}
                                     <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />
                                 </div>
                                 {/* onClick={() => !addNewAddress ? setAddNewAddress(!addNewAddress) : setAddNewAddress(!addNewAddress)} */}
-                                <p className='text-black font-montRegular mt-3 text-lg' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
+                                <p className='hidden lg:block text-black font-montRegular mt-3 text-lg' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
+
+                                <p className='block lg:hidden text-black font-montSemiBold mt-3 text-lg' >{!addNewAddress ? 'Delivery Method' : 'Add New Address'}</p>
+
+                                
                             </div>
 
                             : ''}
 
                         {!showAddressMobile ?
-                            <div className='lg:hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
+                            <div className='hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
                                 <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
                                 <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
                             </div>
@@ -243,7 +247,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                     <p className='text-black font-montBold mt-3 text-lg'  >{!addNewAddress ? 'Delivery Method' : 'Add New Address'}</p>
                                 </div>}
 
-                                <div className='bg-white   flex items-center px-8 ml-5 w-full'>
+                                <div className='bg-white hidden   lg:flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                         <div  className="leading gap-0 ">
                                             <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
@@ -257,6 +261,23 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                         </div>
                                     </Radio.Group>
                                 </div>
+
+
+                                <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
+                                    <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
+                                        <div  className="leading gap-0 w-full flex items-center flex-col ">
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px',width:"90vw",marginLeft:'-13px' }}>Dine-in {
+                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9',  padding: '10px', paddingTop: '20px', paddingBottom: '20px',width:"90vw",marginLeft:'-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
+                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+
+                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+
+                                        </div>
+                                    </Radio.Group>
+                                </div>
+
 
                                 {deliveryMethod == 'DELIVERY' ?
                                     <>
@@ -325,7 +346,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                         <button className='hidden lg:block md:block mt-6 mb-12 w-full lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ border: `2px solid ${storeSettings.data ? storeSettings.data.primary_color : "black"}`, borderStyle: 'dashed', width: '220px' }}>Add new Address <span><PlusOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '20px', paddingLeft: '6px' }} /></span></button> */}
                                     </> :
 
-                                    <div className='bg-white flex w-full px-24 py-12 mx-5'>
+                                  <>
+                                    <div className='hidden bg-white lg:flex w-full px-24 py-12 mx-5'>
                                         <img src="/chef.png" className='h-60 w-48 ' />
                                         <p className='text-2xl font-montBold w-[500px] ml-36 mr-24 mt-12 z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
                                         <div className='absolute rounded-full h-44 w-44' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '275px' }}></div>
@@ -336,6 +358,22 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                         <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '495px', marginTop: '100px' }}></div>
                                     </div>
+
+
+                                    <div className='lg:hidden bg-white flex w-full px- py-12 mx-5 -ml-1'>
+                                        <img src="/chef.png" className='h-40  ' />
+                                        <p className='text-lg font-montBold w-[300px]  z-[100]' style={{ color: ` ${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Get Hot and Fresh meals served on your table.</p>
+                                        <div className='absolute rounded-full h-44' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '' }}></div>
+
+
+                                        <div className='absolute rounded-full h-20 w-20' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '80px' }}></div>
+
+
+                                        <div className='absolute rounded-full h-10 w-10' style={{ backgroundColor: ` ${storeSettings.data ? rgbaBackground : "black"}`, marginLeft: '80px', marginTop: '100px' }}></div>
+                                    </div>
+                                  
+                                  
+                                  </>
 
                                 } </>
                             :

@@ -304,7 +304,10 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                     </div>
                     {!stateMobileSearch && <Link href="/cart">
                         <Badge count={cartQuantity} color={storeSettings?.data ? storeSettings.data.secondary_color : 'black'}>
-                            <ShoppingOutlined style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} />
+                            {/* <ShoppingOutlined style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} /> */}
+
+                            <IoIosCart className='' style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} />
+
                         </Badge>
                     </Link>}
                 </div>

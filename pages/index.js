@@ -315,20 +315,30 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
           {/* Mobile View Banner */}
           <div className='lg:hidden md:hidden h-72  ' >
-            <div className=' h-72 w-[100vw]  mt-[36px]'>
-              <p>help</p>
+            <div className=' h-72 w-[100vw]  mt-[60px]'>
+              
               <ECarousel itemPosition={consts.START} enableAutoPlay autoPlaySpeed={1500} itemsToShow={1} itemPadding={[0, 0]} showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                 return (
                   <div direction="row" style={{ display: 'flex', }}>
                     {pages.map(page => {
                       const isActivePage = activePage === page
                       return (
-                        <FaCircle
-                          key={page}
-                          onClick={() => onClick(page)}
-                          active={isActivePage}
-                          style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, padding: '3px', fontSize: '15px', margin: '5px 5px', cursor: 'pointer', border: `2px solid ${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, borderRadius: '100%' } : { border: 'none', fontSize: '5px', color: `${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, margin: '11px 5px', cursor: 'pointer', }}
-                        />)
+                        // <FaCircle
+                        //   key={page}
+                        //   onClick={() => onClick(page)}
+                        //   active={isActivePage}
+                        //   style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, padding: '3px', fontSize: '15px', margin: '5px 5px', cursor: 'pointer', border: `2px solid ${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, borderRadius: '100%' } : { border: 'none', fontSize: '5px', color: `${storeSettingsReducer.data ? storeSettingsReducer.data.navbar_color : 'black'}`, margin: '11px 5px', cursor: 'pointer', }}
+                        // />
+
+
+                        <MinusOutlined
+                        key={page}
+                        onClick={() => onClick(page)}
+                        active={isActivePage}
+                        style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
+                      />
+
+                        )
                     })}
                   </div>
                 )
@@ -341,15 +351,15 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                 )}
               </ECarousel>
             </div>
-            <div className=' h-[32px] w-[70vw] -mt-12 ml-[11px]' style={{
+            {/* <div className=' h-[32px] w-[70vw] -mt-12 ml-[11px]' style={{
               backgroundColor: `${storeSettingsReducer.data ? storeSettingsReducer.data.primary_color : 'black'}`
-            }}></div>
+            }}></div> */}
           </div>
 
 
 
 
-          <p className='font-montSemiBold text-[16px] ml-2 mt-2 lg:hidden md:hidden'>New Arrivals</p>
+          <p className='font-montSemiBold text-[16px] ml-2 -mt-3 lg:hidden md:hidden'>New Arrivals</p>
           <div className='bg-[#F1F1F1] p-2 flex items-center justify-between w-full lg:hidden md:hidden'>
             <ECarousel itemPosition={consts.START} itemsToShow={2} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
               return (

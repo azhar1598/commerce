@@ -296,7 +296,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                 <>
 
                     {loading ?
-                        <div className='ml-80'>
+                        <div className='lg:ml-80'>
                             <Skeleton grid={grid} />
                         </div>
                         :
