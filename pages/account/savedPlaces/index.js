@@ -210,7 +210,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                     </div>
                                     <p className='text-black font-montBold mt-3 text-lg' >{!addNewAddress ? 'Saved Places' : 'Add New Address'}</p>
                                 </div>}
-                                <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:ml-5 md:ml-5 w-full bg-white w-[100vw] border-b-2 border-slate-[200] cursor-pointer  lg:pb-3 '>
+                                <div className='flex flex-col flex-wrap lg:w-[55vw]  lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:ml-5 md:ml-5 w-full bg-white w-[100vw] border-b-2 border-slate-[200] cursor-pointer  lg:pb-3 '>
                                     {
                                         stateAddress ?
                                             !showAddressMobile ?

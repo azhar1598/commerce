@@ -116,7 +116,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
             <Profile />
             <div className='flex flex-col w-full mt-16 lg:mt-0 lg:mr-24 md:mr-24'>
                 <div className='bg-white lg:pl-4 lg:p-3 lg:pl-8 lg md:pl-8 md:p-3 flex flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
-                    <div className='flex items-center  p-3  pb-1 lg:pb-0 lg:p-0 lg:border-none border-b border-blue-100 shadow'>
+                    <div className='flex items-center  p-3  pb-1 lg:pb-0 lg:p-0 lg:border-none border-b border-blue-100 shadow lg:shadow-none'>
                         <div className='lg:hidden block'>
                             <Link href='/account/user'>
                                 <LeftOutlined className='text-slate-300 text-lg mr-4 ' />

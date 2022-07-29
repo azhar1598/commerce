@@ -41,7 +41,7 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
     console.log('coupon', coupon)
     const orderId = Object?.keys(statePurchaseDetails?.data?.orders)[0]
     setLoading(true)
-    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon,purchaseId:statePurchaseDetails.data.purchaseId ,setLoading,toast}
+    const payload = { customerId: stateCustomerId, orderId, storeId: stateStoreDetails?.store_id, coupon, msg, setMsg, message, setValidCoupon,purchaseId:statePurchaseDetails.data.purchaseId ,setLoading}
 
     dispatchCouponCode({ payload })
 

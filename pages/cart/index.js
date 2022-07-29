@@ -557,7 +557,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
                         <p className='hidden lg:block md:block font-montBold text-2xl py-6 px-5'>Cart<span className='text-gray-500 font-montSemiBold text-lg px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
 
-                        <div className=' px-5 flex items-start border-b-2 border-slate-200 w-full mb-2'>
+                        <div className='lg:hidden px-5 flex items-start border-b-2 border-slate-200 w-full mb-2'>
                             <LeftOutlined className='mt-2 pr-2' />
 
                             <p className=' lg:hidden font-montBold text-lg mt-1 '>Cart <span className='text-gray-500 font-montMedium text-sm px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
