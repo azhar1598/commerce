@@ -217,7 +217,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                         {!addNewAddress ?
                             <>
-                                {!isTabletOrMobile && <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
+                                {!isTabletOrMobile && <div className='bg-white lg:-mt-4  pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
                                     <div className='cursor-pointer' onClick={() => { `${!addNewAddress ? setAddNewAddress(!addNewAddress) : ""}` }}>
                                         {/* /account/user` */}
                                         {addNewAddress && <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4 ' />}
@@ -305,7 +305,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                             // /* Add Address Web View */
                             <>
                                 {!isTabletOrMobile &&
-                                    <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full ' >
+                                    <div className='bg-white lg:-mt-4 pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full ' >
                                         <div className='cursor-pointer' onClick={() => {
                                             setAddNewAddress(!addNewAddress)
                                             if (edit) {

@@ -111,7 +111,7 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
             <Modal title="Logout" visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
                 <p className='text-xl text-center font-montSemiBold'>Log Out?</p>
                 <p className='text-base text-center'>Are you sure? You want to log out !</p>
-                <div className='flex justify-center gap-3'>
+                <div className='flex justify-center gap-3 pb-6'>
                     <button onClick={() => setIsModalVisible(false)} className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
                     <button onClick={handleLogout} className='w-4/12 py-2 rounded' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white` }}>Confirm</button>
                 </div>
