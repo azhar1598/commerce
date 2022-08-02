@@ -12,6 +12,7 @@ import Stepper from '../../../components/stepper'
 import Head from 'next/head';
 import PageWrapper from '../../../components/PageWrapper/PageWrapper'
 import { useRef } from "react"
+import { toast, ToastContainer } from 'react-toastify';
 
 
 const { Step } = Steps;
@@ -137,7 +138,18 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
             setLoading(false)
         }
         else {
-            message.error('Unable to fetch Order Details,Please try after sometime')
+            // message.error('Unable to fetch Order Details,Please try after sometime')
+
+
+            toast.error('Unable to fetch Order Details,Please try after sometime', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
             setLoading(false)
         }
 
@@ -170,7 +182,18 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
     useEffect(() => {
         if (msg != '') {
             handleCancel()
-            message.success('Order has been cancelled')
+            // message.success('Order has been cancelled')
+
+            toast.success('Order has been cancelled', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
         }
 
     }, [msg])
@@ -181,7 +204,19 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
         if (orderItemId.length != 0) {
             setCancelTab(!cancelTab)
         } else {
-            message.error('Please choose items to return')
+            // message.error('Please choose items to return')
+
+
+            toast.error('Please choose items to return', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
         }
     }
 
@@ -195,7 +230,19 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
             dispatchCancelOrder(orderDetails.orderId, { payload }, setMsg)
         }
         else {
-            message.error('Please select reason for cancellation')
+            // message.error('Please select reason for cancellation')
+
+            toast.error('Please select reason for cancellation', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
         }
     }
 
@@ -466,7 +513,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
             </Modal>
 
 
-
+            <ToastContainer />
         </div>
     )
 }

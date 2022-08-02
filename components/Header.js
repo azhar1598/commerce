@@ -49,7 +49,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
       
         
-        toast('Logged Out Successfully ', {
+        toast.success('Logged Out Successfully ', {
             position: "bottom-right",
             autoClose: 1000,
             hideProgressBar: false,

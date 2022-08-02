@@ -154,7 +154,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         const response = await removeAddress(customerDetails.data.customer_id, addressId)
         if (response) {
             // message.success('Address Deleted Successfully');
-            toast('Address Deleted Successfully', {
+            toast.success('Address Deleted Successfully', {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,

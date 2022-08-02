@@ -8,6 +8,7 @@ import { ImLocation } from 'react-icons/im';
 import { IoMdHelpCircle } from 'react-icons/io';
 import { BiLogOut } from 'react-icons/bi';
 import { customerDetails, getWalletInfoAction } from '../actions'
+import { toast,ToastContainer } from 'react-toastify'
 
 export const Profile = ({ customerDetails, customerDetailsAction, storeSettings, stateWalletBalance, dispatchWalletInfo, stateStoreDetails, msg }) => {
     const router = useRouter()
@@ -37,7 +38,20 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
         customerDetailsAction()
 
         setIsModalVisible(false)
-        message.success('Logged Out Successfully')
+        // message.success('Logged Out Successfully')
+
+
+        toast.success('Logged Out Successfully', {
+            position: "bottom-right",
+            autoClose: 500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
+
         router.push('/')
 
 
@@ -103,7 +117,7 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
                 </div>
 
             </Modal>
-
+            <ToastContainer />
 
         </div>
     )

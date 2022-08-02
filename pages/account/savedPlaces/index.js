@@ -13,6 +13,7 @@ import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetai
 import ReviewTracker from '../../../components/ReviewTracker'
 import Profile from '../../../components/Profile'
 import { useRef } from "react"
+import { toast, ToastContainer } from 'react-toastify';
 
 
 export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails }) => {
@@ -148,7 +149,20 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     const deleteAddress = async (addressId) => {
         const response = await removeAddress(customerDetails.data.customer_id, addressId)
         if (response) {
-            message.success('Address Deleted Successfully');
+            // message.success('Address Deleted Successfully');
+
+            toast.success('Address Deleted Successfully', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
+
             setBool(!bool)
             // addressData(customerDetails.data.customer_id)
         }
@@ -506,6 +520,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
 
             </div >
+            <ToastContainer />
         </div>
     )
 }

@@ -125,7 +125,7 @@ export const Product = (props) => {
 
                 // toast("Added to Wishlist");
 
-                toast('Added to Wishlist', {
+                toast.success('Added to Wishlist', {
                     position: "bottom-right",
                     autoClose: 500,
                     hideProgressBar: false,
@@ -147,7 +147,7 @@ export const Product = (props) => {
 
             // message.success('Removed from wishlist')
 
-            toast('Removed From Wishlist', {
+            toast.success('Removed From Wishlist', {
                 position: "bottom-right",
                 autoClose: 500,
                 hideProgressBar: false,
@@ -229,7 +229,19 @@ export const Product = (props) => {
                 props.addToCart(item)
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You Cannot add more items')
+
+
+                toast.error('Sorry, You Cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
             }
 
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
@@ -275,7 +287,19 @@ export const Product = (props) => {
                 props.addToCart(item)
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You Cannot add more items')
+
+
+                toast.error('Sorry, You Cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
             }
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
             // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
@@ -687,7 +711,19 @@ export const Product = (props) => {
             props.adjustQty(itemid, qty)
         }
         else {
-            message.error('Sorry, You Cannot add more items')
+            // message.error('Sorry, You Cannot add more items')
+
+
+            toast.error('Sorry, You Cannot add more items', {
+                position: "bottom-right",
+                autoClose: 500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
         }
     }
 

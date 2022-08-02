@@ -11,6 +11,7 @@ import EmptyCart from '../../components/svgComponents/EmptyCart'
 import Head from 'next/head';
 import PageWrapper from '../../components/PageWrapper/PageWrapper'
 import { useMediaQuery } from 'react-responsive'
+import { toast, ToastContainer } from 'react-toastify'
 
 const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails }) => {
 
@@ -151,7 +152,20 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                             console.log('checkout.purchaseDetails.data.orders[c]', checkout.purchaseDetails.data.orders[c].orderItems[a].isOrderItemValid)
                             setPurchaseInvalid(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
-                            message.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+                            // message.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+
+                            toast.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`, {
+                                position: "bottom-right",
+                                autoClose: 1000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                            });
+
+
+
                         }
                     })
                 }
@@ -196,7 +210,20 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     if (filter[0].qty <= item.defaultVariantItem.inventory_details?.inventory_quantity) {
 
 
-                        message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
                         // setMinQtyMsg(true)
                         setMinProduct(item.item_name)
                     }
@@ -213,7 +240,19 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
 
 
-                        message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
                         // setMinQtyMsg(true)
                         setMinProduct(item.item_name)
                     }
@@ -249,7 +288,19 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
 
 
-                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
                         // setMinQtyMsg(true)
                         setMinProduct(item.item_name)
 
@@ -265,7 +316,20 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
 
 
-                        message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
                         // setMinQtyMsg(true)
                         setMinProduct(item.item_name)
 
@@ -387,7 +451,18 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
 
                     if (filter[0].qty >= quantity) {
-                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
 
 
                         // adjustQty(item.item_id, item.qty)
@@ -411,7 +486,20 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
 
                     if (filter[0].qty >= quantity) {
-                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
 
 
                         // adjustQty(item.item_id, item.qty)
@@ -430,7 +518,17 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You Cannot add more items')
+
+                toast.error('Sorry, You Cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
 
         }
@@ -494,6 +592,17 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
 
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
                         // adjustQty(item.item_id, item.qty)
                     }
                     else {
@@ -515,7 +624,19 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
 
                     if (filter[0].qty >= quantity) {
-                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
 
 
                         // adjustQty(item.item_id, item.qty)
@@ -530,7 +651,19 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 }
             }
             else {
-                message.error('Sorry, You cannot add more items')
+                // message.error('Sorry, You cannot add more items')
+
+
+                toast.error('Sorry, You cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
             }
         }
 
@@ -639,15 +772,15 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                                         </div>
                                         <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24' >
-                                        <div className='flex'>
-                                        {item.is_veg == "Y" ? <img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2' />
-                                                : <img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2' />}
-                                            <p className='text-sm font-montMedium flex item-city' onClick={() => {
-                                                fetchItemDetails('', '')
-                                                router.push(`/product/${item.item_id}`)
-                                            }}> 
-                                                {item.item_name}</p>
-                                        </div>
+                                            <div className='flex'>
+                                                {item.is_veg == "Y" ? <img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2' />
+                                                    : <img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2' />}
+                                                <p className='text-sm font-montMedium flex item-city' onClick={() => {
+                                                    fetchItemDetails('', '')
+                                                    router.push(`/product/${item.item_id}`)
+                                                }}>
+                                                    {item.item_name}</p>
+                                            </div>
                                             {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
                                                 <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
                                                 <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
@@ -711,6 +844,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     <p className='text-xl font-montSemiBold' style={{ color: storeSettings.data ? storeSettings.data.secondary_color : 'black' }}>Your Cart is Empty</p>
                 </div>
             }
+            <ToastContainer />
         </>
     )
 }

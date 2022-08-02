@@ -17,6 +17,7 @@ import Magnify from '../../components/Magnify';
 import LoginModal from '../../components/LoginModal/LoginModal';
 import PageWrapper from '../../components/PageWrapper/PageWrapper';
 import { useRef } from "react"
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
@@ -110,8 +111,25 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         if (selectedItem?.qty < initialState.data?.inventoryDetails?.min_order_quantity || selectedItem?.qty < initialState.defaultVariantItem?.inventoryDetails?.min_order_quantity) {
             console.log('initialState.data', initialState.data)
             setMinQtyMsg(true)
-            !isDesktopOrLaptop && message.error(`Minimum Quantity is ${initialState.defaultVariantItem ? item.defaultVariantItem?.inventory_details?.min_order_quantity>item.defaultVariantItem?.inventory_details?.inventory_quantity?item.defaultVariantItem?.inventory_details?.inventory_quantity:item.defaultVariantItem?.inventory_details?.min_order_quantity : initialState.data?.inventoryDetails?.min_order_quantity> initialState.data?.inventoryDetails?.inventory_quantity? initialState.data?.inventoryDetails?.inventory_quantity:initialState.data?.inventoryDetails?.min_order_quantity}`)
+            !isDesktopOrLaptop && 
+
+            
+            
+            // message.error(`Minimum Quantity is ${initialState.defaultVariantItem ? item.defaultVariantItem?.inventory_details?.min_order_quantity>item.defaultVariantItem?.inventory_details?.inventory_quantity?item.defaultVariantItem?.inventory_details?.inventory_quantity:item.defaultVariantItem?.inventory_details?.min_order_quantity : initialState.data?.inventoryDetails?.min_order_quantity> initialState.data?.inventoryDetails?.inventory_quantity? initialState.data?.inventoryDetails?.inventory_quantity:initialState.data?.inventoryDetails?.min_order_quantity}`)
             //
+
+            
+            toast.error(`Minimum Quantity is ${initialState.defaultVariantItem ? item.defaultVariantItem?.inventory_details?.min_order_quantity>item.defaultVariantItem?.inventory_details?.inventory_quantity?item.defaultVariantItem?.inventory_details?.inventory_quantity:item.defaultVariantItem?.inventory_details?.min_order_quantity : initialState.data?.inventoryDetails?.min_order_quantity> initialState.data?.inventoryDetails?.inventory_quantity? initialState.data?.inventoryDetails?.inventory_quantity:initialState.data?.inventoryDetails?.min_order_quantity}`, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
         }
         else {
             setMinQtyMsg(false)
@@ -234,7 +252,23 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                 addToCart(item)
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You Cannot add more items')
+
+
+
+                            
+            toast.error('Sorry, You Cannot add more items', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
+                
             }
 
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
@@ -280,7 +314,24 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                 addToCart(item)
             }
             else {
-                message.error('Sorry, sYou Cannot add more items')
+                // message.error('Sorry, sYou Cannot add more items')
+
+                
+
+
+                            
+            toast.error('Sorry, You Cannot add more items', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
+
             }
             // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
             // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
@@ -453,7 +504,24 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             const response = await addToWishlist('storeId', stateCustomerDetails?.data?.customer_id, itemId)
             if (response.data) {
 
-                message.success('Added to Wishlist')
+                // message.success('Added to Wishlist')
+
+
+                
+
+
+                            
+            toast.success('Added to Wishlist', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+
                 console.log('response', response.data)
 
                 setHeartIcon(true)
@@ -467,7 +535,19 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         else {
             const response = await deleteFromWishlist(wishlistId)
 
-            message.success('Removed from wishlist')
+            // message.success('Removed from wishlist')
+
+                    
+            toast.success('Removed from wishlist', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
             setWishlistId('')
             setHeartIcon(false)
             setLoadingWishlist(false)
@@ -754,7 +834,18 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                 }
 
                                                                                 else if (filter[0].qty >= quantity) {
-                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                                    toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                        position: "bottom-right",
+                                                                                        autoClose: 1000,
+                                                                                        hideProgressBar: false,
+                                                                                        closeOnClick: true,
+                                                                                        pauseOnHover: true,
+                                                                                        draggable: true,
+                                                                                        progress: undefined,
+                                                                                    });
+
                                                                                     item.qty = item.qty - 1
 
                                                                                     return item
@@ -772,7 +863,18 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                 }
 
                                                                                 else if (filter[0].qty >= quantity) {
-                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                                    
+                                                                                    toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                        position: "bottom-right",
+                                                                                        autoClose: 1000,
+                                                                                        hideProgressBar: false,
+                                                                                        closeOnClick: true,
+                                                                                        pauseOnHover: true,
+                                                                                        draggable: true,
+                                                                                        progress: undefined,
+                                                                                    });
                                                                                     item.qty = item.qty - 1
 
                                                                                     return item
@@ -789,7 +891,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                                         }
                                                                         else {
-                                                                            message.error('Sorry, You Cannot add more items')
+                                                                            // message.error('Sorry, You Cannot add more items')
+
+
+
+                                                                            toast.error('Sorry, You Cannot add more items', {
+                                                                                position: "bottom-right",
+                                                                                autoClose: 1000,
+                                                                                hideProgressBar: false,
+                                                                                closeOnClick: true,
+                                                                                pauseOnHover: true,
+                                                                                draggable: true,
+                                                                                progress: undefined,
+                                                                            });
+
                                                                         }
 
 
@@ -852,7 +967,19 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                 }
 
                                                                                 else if (filter[0].qty >= quantity) {
-                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                                    toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                        position: "bottom-right",
+                                                                                        autoClose: 1000,
+                                                                                        hideProgressBar: false,
+                                                                                        closeOnClick: true,
+                                                                                        pauseOnHover: true,
+                                                                                        draggable: true,
+                                                                                        progress: undefined,
+                                                                                    });
+
+
                                                                                     item.qty = item.qty - 1
 
                                                                                     return item
@@ -870,7 +997,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                 }
 
                                                                                 else if (filter[0].qty >= quantity) {
-                                                                                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                    // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                                                                                    toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                        position: "bottom-right",
+                                                                                        autoClose: 1000,
+                                                                                        hideProgressBar: false,
+                                                                                        closeOnClick: true,
+                                                                                        pauseOnHover: true,
+                                                                                        draggable: true,
+                                                                                        progress: undefined,
+                                                                                    });
+
                                                                                     item.qty = item.qty - 1
 
                                                                                     return item
@@ -1140,7 +1280,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             }
 
                                                             else if (filter[0].qty >= quantity) {
-                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                    position: "bottom-right",
+                                                                    autoClose: 1000,
+                                                                    hideProgressBar: false,
+                                                                    closeOnClick: true,
+                                                                    pauseOnHover: true,
+                                                                    draggable: true,
+                                                                    progress: undefined,
+                                                                });
+
                                                                 item.qty = item.qty - 1
 
                                                                 return item
@@ -1158,7 +1311,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             }
 
                                                             else if (filter[0].qty >= quantity) {
-                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                    position: "bottom-right",
+                                                                    autoClose: 1000,
+                                                                    hideProgressBar: false,
+                                                                    closeOnClick: true,
+                                                                    pauseOnHover: true,
+                                                                    draggable: true,
+                                                                    progress: undefined,
+                                                                });
+
                                                                 item.qty = item.qty - 1
 
                                                                 return item
@@ -1175,7 +1341,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                     }
                                                     else {
-                                                        message.error('Sorry, You Cannot add more items')
+                                                        // message.error('Sorry, You Cannot add more items')
+
+
+                                                        
+                                                        toast.error('Sorry, You Cannot add more items', {
+                                                            position: "bottom-right",
+                                                            autoClose: 1000,
+                                                            hideProgressBar: false,
+                                                            closeOnClick: true,
+                                                            pauseOnHover: true,
+                                                            draggable: true,
+                                                            progress: undefined,
+                                                        });
+
                                                     }
 
 
@@ -1238,7 +1417,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             }
 
                                                             else if (filter[0].qty >= quantity) {
-                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                                                        
+                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                    position: "bottom-right",
+                                                                    autoClose: 1000,
+                                                                    hideProgressBar: false,
+                                                                    closeOnClick: true,
+                                                                    pauseOnHover: true,
+                                                                    draggable: true,
+                                                                    progress: undefined,
+                                                                });
+
                                                                 item.qty = item.qty - 1
 
                                                                 return item
@@ -1256,7 +1448,20 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             }
 
                                                             else if (filter[0].qty >= quantity) {
-                                                                message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                                                        
+                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                    position: "bottom-right",
+                                                                    autoClose: 1000,
+                                                                    hideProgressBar: false,
+                                                                    closeOnClick: true,
+                                                                    pauseOnHover: true,
+                                                                    draggable: true,
+                                                                    progress: undefined,
+                                                                });
+
                                                                 item.qty = item.qty - 1
 
                                                                 return item
@@ -1312,7 +1517,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
             </div>
 
-
+            <ToastContainer />
             <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
 
         </>

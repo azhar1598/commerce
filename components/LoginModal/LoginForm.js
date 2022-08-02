@@ -1,11 +1,34 @@
 import { Input } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PhoneInput from 'react-phone-number-input'
 import { connect } from 'react-redux'
 
-function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, disabled, storeSettings, method, handleForgotPasswordChange, handleForgotPassword, forgotPassword, mobile }) {
+function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, disabled, storeSettings, method, handleForgotPasswordChange, handleForgotPassword, forgotPassword, mobile,loginLoader }) {
 
     const [value, setValue] = useState('+91')
+
+
+
+    const [rgbaBackground, setRgbaBackground] = useState('')
+    const [rgbaColor, setRgbaColor] = useState()
+
+    
+
+
+    const hex2rgba = (hex, alpha = 1) => {
+        const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+        return `rgba(${r},${g},${b},${alpha})`;
+    };
+
+
+
+    
+    useEffect(() => {
+        
+        setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#ffffff', 0.4))
+        setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 0.02))
+        // setCustomBorder(hex2rgba('#212B36' , 0.25))
+    }, [rgbaBackground == ''])
 
     return (
         <>
@@ -57,8 +80,8 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
                 {!forgotPassword ? <div className=' mt-4 bottom-0 w-full pr-8 lg:pr-16'>
                     <p className="login-tag font-montMedium" style={{ textAlign: 'right', cursor: 'pointer', color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={handleForgotPasswordChange}>Forgot Password ?</p>
                 </div> : ''}
-                <button className={` border lg:w-96 w-80 login-button font-montMedium ${forgotPassword ? `mt-5` : ``}`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, padding: '8px', borderRadius: '5px' }}  >
-                    {forgotPassword ? 'Get OTP' : 'Log in'}
+                <button className={` border lg:w-96 w-80 login-button font-montMedium ${forgotPassword ? `mt-5` : ``}`} style={{ backgroundColor: `${!loginLoader?storeSettings.data ? storeSettings.data.secondary_color : 'black':rgbaBackground}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, padding: '8px', borderRadius: '5px' }} disabled={loginLoader}  >
+                    {!loginLoader?forgotPassword ? 'Get OTP' : 'Log in':'Loading ...'}
                 </button>
                 <div className=' mt-4 w-full pl-8 lg:pl-16 bottom-0 font-montMedium pb-4'>
                     <p className="login-tag" style={{ textAlign: 'left' }}>New User? <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, cursor: 'pointer' }} onClick={handleClick}>Sign Up</span></p>

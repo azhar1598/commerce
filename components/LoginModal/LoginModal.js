@@ -88,7 +88,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             console.log('Em consol', message)
             // messageAnt.error(message)
                
-            toast(message, {
+            toast.error(message, {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -107,7 +107,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             // setOtp(true)
             // setLoginMethod('email')    
          
-            toast('Logged In Successfully ', {
+            toast.success('Logged In Successfully ', {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -151,7 +151,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
             // customerDetails(response.data.customerDetails)
             // messageAnt.error('Please Verify Your Account')
-            toast('Please Verify Your Account', {
+            toast.error('Please Verify Your Account', {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -170,7 +170,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
             message &&
             //  messageAnt.success('successfully verified acdcount')
-            toast('successfully verified account', {
+            toast.success('successfully verified account', {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -191,7 +191,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message != '') {
             message &&
             //  messageAnt.error(message)
-            toast(message, {
+            toast.error(message, {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -332,7 +332,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
             if (inputSignUp.method.length < 10) {
                 // messageAnt.error("Please enter valid 10 digit phone number")
-                toast('Please enter valid 10 digit phone number', {
+                toast.error('Please enter valid 10 digit phone number', {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -346,7 +346,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
             else if (inputSignUp.password != inputSignUp.confirm_password) {
                 // messageAnt.error("Password and Confirm Password doesn't match ")
-                toast("Password and Confirm Password doesn't match", {
+                toast.error("Password and Confirm Password doesn't match", {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -358,7 +358,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             }
             else if (inputSignUp.password.length < 8) {
                 // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
-                toast("Password strength is weak, please maintain atleast 8 characters", {
+                toast.error("Password strength is weak, please maintain atleast 8 characters", {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -373,7 +373,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             else if(/\s/g.test(inputSignUp.password)){
                 
                 // messageAnt.error('No Blank Spaces Allowed')
-                toast("No Blank Spaces Allowed", {
+                toast.error("No Blank Spaces Allowed", {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -492,7 +492,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
         if (OTP.length < 5) {
             // messageAnt.error('Please Fill the OTP')
-            toast('Please Fill the OTP', {
+            toast.error('Please Fill the OTP', {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -508,7 +508,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             if (response.data.message == 'successfully verified account') {
                 // messageAnt.success(response.data.message)
 
-                toast(response.data.message, {
+                toast.success(response.data.message, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -526,7 +526,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                 // messageAnt.error(response.data.message)
 
                 
-                toast(response.data.message, {
+                toast.error(response.data.message, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -552,7 +552,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         if (inputSignUp.password != inputSignUp.confirm_password) {
             // messageAnt.error("Password and Confirm Password doesn't match ")
 
-            toast("Password and Confirm Password doesn't match ", {
+            toast.error("Password and Confirm Password doesn't match ", {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -564,7 +564,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         }
         else if (inputSignUp.password.length < 8) {
             // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
-            toast("Password strength is weak, please maintain atleast 8 characters", {
+            toast.error("Password strength is weak, please maintain atleast 8 characters", {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -577,7 +577,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if(/\s/g.test(inputSignUp.password)){
                 
             // messageAnt.error('No Blank Spaces Allowed')
-            toast("No Blank Spaces Allowed", {
+            toast.error("No Blank Spaces Allowed", {
                 position: "bottom-right",
                 autoClose: 1000,
                 hideProgressBar: false,
@@ -600,7 +600,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                 setVisible(false)
                 // setMessage('Password changed succesfully')
                 // messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
-                toast(`${response.data.message} & Successfully LoggedIn`, {
+                toast.success(`${response.data.message} & Successfully LoggedIn`, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -612,7 +612,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             }
             else {
                 // messageAnt.error(response.data.message)
-                toast(response.data.message, {
+                toast.error(response.data.message, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
