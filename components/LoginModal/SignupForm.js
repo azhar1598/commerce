@@ -11,7 +11,7 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
 
     return (
         <>
-            <p className='lg:block text-lg border-b-2 border-slate-300 pb-3 w-full font-montMedium hidden p-4 font-montMedium p-4 px-12 text-white' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Create Account</p>
+            <p className='hidden lg:block text-lg border-b-2 border-slate-300 pb-3 w-full font-montMedium hidden p-4 font-montMedium p-4 px-12 text-white' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Create Account</p>
 
             <form onSubmit={(e) => { handleAuth(e, method, value, "SIGNUP") }} id="form" className="font-montRegular" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div className='flex flex-col'>
@@ -79,7 +79,7 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
                     Sign up
                 </button>
 
-                <div className=' mt-4 pb-4 ml-32  w-full font-montMedium'>
+                <div className=' mt-4 pb-4 px-12 lg:px-0 lg:ml-32  w-full font-montMedium'>
                     <p className="login-tag" style={{ textAlign: 'left' }}>Already have an account? <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, cursor: 'pointer' }} onClick={handleClick}>Log in</span></p>
                 </div>
 

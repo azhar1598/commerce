@@ -64,7 +64,7 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
             {/* <div className='lg:hidden md:hidden flex flex-col'> */}
                 {/* <div className={`flex flex-col  whitespace-nowrap overflow-scroll `}
                     style={data.category_id == id ? { borderBottom: `2px solid ${stateStoreSettings ? stateStoreSettings.secondary_color : 'black'}` } : { border: 'none' }}> */}
-                    <p className={`flex flex-col pb-2 px-4 border-white border-b-2 text-lg ${categoryKey == id && data?.category_id == categoryKey ? 'font-montSemiBold' : 'font-montMedium '} `} onClick={() => { handleCategory(id, name, subCategories) }}>{name}</p>
+                    <p className={`lg:hidden flex flex-col pb-2 px-4 border-white border-b-2 text-lg ${categoryKey == id && data?.category_id == categoryKey ? 'font-montSemiBold' : 'font-montMedium '} `} onClick={() => { handleCategory(id, name, subCategories) }}>{name}</p>
                 {/* </div> */}
             {/* </div> */}
 
