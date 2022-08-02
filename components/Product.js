@@ -740,52 +740,53 @@ export const Product = (props) => {
 
         <>
             {props.grid ?
-                <div className={`flex flex-col w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  lg:p-2 cursor-pointer  `} >
+                <>
+                    <div className={`hidden lg:flex flex-col w-1/2  items-center justify-between ${!props.wishlistPage ? `lg:w-1/3` : `lg:w-1/3`} md:w-11/4  lg:p-2 cursor-pointer  `} >
 
-                    <div className='p-2 lg:flex lg:flex-col h-[50vh] lg:w-[300px] lg:min-w-[300px] lg:max-w-[300px]  border border-blue-100 shadow lg:min-h-[50vh] lg:max-h-[50vh]'>
-                        <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img`}
-                            onClick={() => {
-                                handlePush()
+                        <div className='p-2 lg:flex lg:flex-col lg:w-[300px] lg:min-w-[300px] lg:max-w-[300px]  border border-blue-100 shadow lg:min-h-[50vh] lg:max-h-[50vh] w-full'>
+                            <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]   md:min-h-[255px] lg:w-[300px]  lg:h-[230px] lg:min-h-[230px] md:h-72 md:w-48 wishlist-img w-full`}
+                                onClick={() => {
+                                    handlePush()
 
-                                // props.dispatchSearchItems('') 
-                            }} />
+                                    // props.dispatchSearchItems('') 
+                                }} />
 
 
-                        <div className='hidden lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
-                            {!loadingWishlist ? <div className='lg:block flex md:flex items-start justify-start ' onClick={() => {
+                            <div className='hidden lg:block  absolute ml-64 pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '17px' }}>
+                                {!loadingWishlist ? <div className='lg:block flex md:flex items-start justify-start ' onClick={() => {
 
-                                !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : showModal() : removeFromWishlist(props.entryId)
-                            }}>
-                                {props.wishlistPage ?
+                                    !props.wishlistPage ? props.customerId ? !loadingWishlist ? handleWishlist(props.itemId, props.isWishlisted) : '' : showModal() : removeFromWishlist(props.entryId)
+                                }}>
+                                    {props.wishlistPage ?
 
-                                    <AiFillHeart id={`m+${props.itemId}`} className={`text-red-500 text-xl mr-3`} />
+                                        <AiFillHeart id={`m+${props.itemId}`} className={`text-red-500 text-xl mr-3`} />
+                                        :
+                                        <HeartIcon fill={wishlistId ? '#FF4141' : '#0000007F'} id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-[#0000007F] shadow-xl'} text-lg`} />
+                                    }
+                                </div>
                                     :
-                                    <HeartIcon fill={wishlistId ? '#FF4141' : '#0000007F'} id={props.itemId} className={`${wishlistId ? 'text-red-500 shadow-2xl' : 'text-[#0000007F] shadow-xl'} text-lg`} />
+                                    !wishlistId ? <div className='-mt-16 -ml-4  flex items-center justify-center'>
+                                        <lottie-player
+                                            id="firstLottie"
+                                            ref={ref}
+                                            autoplay
+                                            loop
+                                            mode="normal"
+                                            src="/fireworks.json"
+                                            style={{ width: "200px", height: "130px" }}
+                                        ></lottie-player>
+                                    </div> :
+                                        <div className='-mt-2 ml-2'>
+                                            <SyncOutlined spin />
+                                        </div>
+
                                 }
                             </div>
-                                :
-                                !wishlistId ? <div className='-mt-16 -ml-4  flex items-center justify-center'>
-                                    <lottie-player
-                                        id="firstLottie"
-                                        ref={ref}
-                                        autoplay
-                                        loop
-                                        mode="normal"
-                                        src="/fireworks.json"
-                                        style={{ width: "200px", height: "130px" }}
-                                    ></lottie-player>
-                                </div> :
-                                    <div className='-mt-2 ml-2'>
-                                        <SyncOutlined spin />
-                                    </div>
-
-                            }
-                        </div>
 
 
 
 
-                        {/* Wishlist feature for web  Use it later}
+                            {/* Wishlist feature for web  Use it later}
             {/* <div className='hidden wishlist-btn    absolute  pt-2 pb-2' style={props.wishlistPage ? { width: '303px' } : { width: '300px' }}>
                 {!loadingWishlist ?
                     <div className='hidden lg:flex md:flex items-center justify-center  ' onClick={() => {
@@ -803,20 +804,20 @@ export const Product = (props) => {
 
 
                         {/* <button className='capitalize '>{!props.wishlistPage ? 'ADD TO WISHLIST' : 'Remove'}</button> */}
-                        {/* </div> */}
-                        {/* : */}
-                        {/* <div className='w-52 ml-64 -pt-3'>
+                            {/* </div> */}
+                            {/* : */}
+                            {/* <div className='w-52 ml-64 -pt-3'>
                         <SyncOutlined spin />
                     </div>} */}
-                        {/* </div> */}
+                            {/* </div> */}
 
-                        {/* End of wishlist feature for web */}
+                            {/* End of wishlist feature for web */}
 
 
 
-                        {/* W ishlist feature for mobile*/}
+                            {/* W ishlist feature for mobile*/}
 
-                        {/* <div className='lg:hidden  absolute pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '170px' }}>
+                            {/* <div className='lg:hidden  absolute pt-2 pb-2' style={props.wishlistPage ? { width: '170px' } : { width: '170px' }}>
                 <div className='lg:hidden flex md:flex items-end justify-end ' onClick={() => {
 
                     !props.wishlistPage ? props.customerId ? !loadingWishlist?handleWishlist(props.itemId, props.isWishlisted):'' : router.push('account/user/login') : removeFromWishlist(props.entryId)
@@ -830,55 +831,55 @@ export const Product = (props) => {
                 </div>
             </div> */}
 
-                        {/* End of wishlist feature for mobile */}
+                            {/* End of wishlist feature for mobile */}
 
 
-                        <div className='hidden lg:flex items-start'>
-                            {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2' />
-                                : <img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2' />}
-                            <p className=' font-montMedium mt-1 ml- text-[16px] lg:text-lg lg:w-72 item-name item-description lg:h-[60px]' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
-                        </div>
-
-                        <div className='lg:hidden'>
-                            <p className='font-montMedium mt-2 text-[14px] h-10  item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
-                        </div>
-
-                        {/* <p className='hidden font-montRegular text-sm -mt-5 item-description' onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p> */}
-                        <div className='flex justify-between '>
-                            <p className='h-12 -mt-3 lg:w-[17vw]  md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
-                                <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
-                                <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
-                                {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
-                            </p>
-                            <div className='hidden lg:block font-montSemiBold text-xl text-white -' >
-                                {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
- */}
-
-
-                                {props.cart.find(product => product.item_id == props.item.item_id) ?
-
-
-
-                                    <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
-                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
-                                        <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
-                                    </div>
-                                    :
-                                    <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
-
-
-                                }
-
-
-
-
-
+                            <div className='hidden lg:flex items-start'>
+                                {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2' />
+                                    : <img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2' />}
+                                <p className=' font-montMedium mt-1 ml- text-[16px] lg:text-lg lg:w-72 item-name item-description lg:h-[60px]' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '240px' } : {}}>{props.name}<span></span></p>
                             </div>
-                        </div>
+
+                            <div className='lg:hidden'>
+                                <p className='font-montMedium mt-2 text-[14px] h-10  item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
+                            </div>
+
+                            {/* <p className='hidden font-montRegular text-sm -mt-5 item-description' onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p> */}
+                            <div className='flex justify-between '>
+                                <p className='h-12 -mt-3 lg:w-[17vw]  md:w-[13vw] flex  justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
+                                    <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
+                                    <span className='line-through px-1 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
+                                    {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
+                                </p>
+                                <div className='hidden lg:block font-montSemiBold text-xl text-white -' >
+                                    {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+ */}
 
 
-                        <div className='lg:hidden  font-montSemiBold text-xl text-white -' >
+                                    {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+
+
+                                        <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                            <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
+                                            <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                            <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
+                                        </div>
+                                        :
+                                        <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+
+
+                                    }
+
+
+
+
+
+                                </div>
+                            </div>
+
+
+                            <div className='lg:hidden  font-montSemiBold text-xl text-white -' >
                                 {/* <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
  */}
 
@@ -887,13 +888,13 @@ export const Product = (props) => {
 
 
 
-                                    <div className='-mt-6 border rounded border-red-600 font-montSemiBold h-10  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                                    <div className='-mt-6 border rounded border-red-600 font-montSemiBold h-10  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white ' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
                                         <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={` text-2xl px-4 cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-7'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
                                         <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3  text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
-                                    <p className='w-[37px] -mt-5 ml-32 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
+                                    <p className='w-[37px] -mt-8 ml-32 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
 
 
                                 }
@@ -906,11 +907,78 @@ export const Product = (props) => {
 
 
 
+                        </div>
+                        <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
                     </div>
-                    <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
+
+
+                    <div className='lg:hidden flex items-center flex-wrap '>
+
+                        <div className='w-[50vw] border border-blue-100 shadow p-2'>
+                            <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-44 w-full`}
+                                onClick={() => {
+                                    handlePush()
+                                    // props.dispatchSearchItems('') 
+                                }} />
+
+
+                            <p className='font-montMedium mt-2 text-[14px] h-10  item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
+
+
+                            <div className='flex justify-between '>
+                                <p className=' flex  justify-start flex-wrap text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
+                                    <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
+                                    <span className='line-through px-1 font-montMedium'>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
+                                    {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
+                                </p>
+                            </div>
+
+
+                            <div className='flex justify-end font-montSemiBold text-xl' >
+                    
+                    {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+
+
+                        <div className=' border rounded border-red-600 font-montSemiBold flex items-center space-x-6  bg-white w-full' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
+                            <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-6 text-xl py-1 cursor-pointer`}>-</span>
+                            <span className='text-black font-montMedium text-xl py-1'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                            <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-6 py-1 text-xl cursor-pointer'>+</span>
+                        </div>
+                        :
+      
+                            <span className='text-white w-10 rounded shadow border border-red-200 px-3 py-1 text-xl' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</span>
+              
+
+
+                    }
+
+
+
+
+
                 </div>
 
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+
+
+                </>
                 :
+
+
+
+
+
                 // List Layout
                 <div className={`hidden lg:flex  w-full  ${!props.wishlistPage ? `lg:w-full` : `lg:w-1/3`} md:w-11/4  p-2 cursor-pointer`} >
                     <img src={props.image ? props.image : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className={`h-[184px] min-h-[100px]  lg:min-h-[280px] lg:max-h-[280px] md:min-h-[275px] lg:min-w-[300px] lg:w-[300px]  lg:h-[316px] md:h-72 md:w-48 wishlist-img border border-blue-100 shadow `}

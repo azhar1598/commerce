@@ -333,7 +333,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                             >
 
                                 {grid ? 
-                                <div className='p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
+                                <div className='lg:p-2 flex flex-wrap items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
                                     {items.map((item, index) => {
                                         return (
                                             <>
@@ -354,7 +354,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                                 </div>
 
                                     :
-                                    <div className='p-2 flex flex-col items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
+                                    <div className='lg:p-2 flex flex-col items-start w-full lg:w-[75vw] md:w-[65vw]  mb-24 '>
                                         {items.map((item, index) => {
                                             return (
                                                 <>

@@ -115,7 +115,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 )} */}
             {/* </div> */}
 
-        <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname=='/shop'?'-mt-11':'-mt-16'}  fixed z-[1000] px-32 pt-3`}>
+        <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname=='/shop'?'-mt-11':'-mt-[65px]'}  fixed z-[1000] px-32 pt-3`}>
                 {/* <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
 
                 {categories.map((item, key) => {
