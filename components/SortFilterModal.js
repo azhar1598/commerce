@@ -136,12 +136,13 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
     <div>
 
       {
-        isTabletOrMobile ? <div className="flex   cursor-pointer " onClick={openMobileSort}>
+        isTabletOrMobile ? 
+        <div className="flex   cursor-pointer " onClick={openMobileSort}>
           {/* <BsFilterLeft size={20} className='' /> */}
           <p className="flex items-center font-montSemiBold border border-slate-300 px-2 rounded p-2 -mt-3"> 
           <Filter secondaryColor={storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'red'}/>
          <span className='px-2'> 
-          Sort  |  Filter
+          Sort  |  Filtder
            {/* {sortOrder != 'false' ? <img src="/images/dot.png" height={2} width={2} /> : ''} */}
            </span></p>
         </div>
