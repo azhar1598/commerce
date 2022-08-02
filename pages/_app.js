@@ -46,7 +46,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <GoogleAnalytics></GoogleAnalytics>
       <PersistGate persistor={persistor}>
-        {router.pathname != '/review-mobile' && router.pathname != '/review-mobile/final' && router.pathname != '/account/user/login' && !router.pathname.includes('/success-mobile') && <Header />}
+        {router.pathname != '/review-mobile' && router.pathname != '/review-mobile/final' && router.pathname != '/menu' && router.pathname != '/account/user/login' && !router.pathname.includes('/success-mobile') && <Header />}
         <Component {...pageProps} />
         <Footer />
       </PersistGate>

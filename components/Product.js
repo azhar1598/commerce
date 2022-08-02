@@ -928,7 +928,7 @@ export const Product = (props) => {
                             <div className='flex justify-between '>
                                 <p className=' flex  justify-start flex-wrap text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                                     <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
-                                    <span className='line-through px-1 font-montMedium'>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
+                                    <span className='line-through px font-montMedium'>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
                                     {/* <span className='text-green-500'>{props.price - props.salePrice != 0 ? `Save ${props.stateStoreDetails?.currency_symbol}${props.price - props.salePrice}` : ''}</span> */}
                                 </p>
                             </div>

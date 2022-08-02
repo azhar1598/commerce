@@ -61,16 +61,16 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
             </div>
 
             {/* Mobile View */}
-            <div className='lg:hidden md:hidden flex flex-col'>
-                <div className={` ml-2 mt-2  whitespace-nowrap overflow-y-hidden`}
-                    style={data.category_id == id ? { borderBottom: `2px solid ${stateStoreSettings ? stateStoreSettings.secondary_color : 'black'}` } : { border: 'none' }}>
-                    <p className={`px-4 ${categoryKey == id && data?.category_id == categoryKey ? 'font-montSemiBold' : 'font-montRegular'} mt-4`} onClick={() => { handleCategory(id, name, subCategories) }}>{name}</p>
-                </div>
-            </div>
+            {/* <div className='lg:hidden md:hidden flex flex-col'> */}
+                {/* <div className={`flex flex-col  whitespace-nowrap overflow-scroll `}
+                    style={data.category_id == id ? { borderBottom: `2px solid ${stateStoreSettings ? stateStoreSettings.secondary_color : 'black'}` } : { border: 'none' }}> */}
+                    <p className={`flex flex-col pb-2 px-4 border-white border-b-2 text-lg ${categoryKey == id && data?.category_id == categoryKey ? 'font-montSemiBold' : 'font-montMedium '} `} onClick={() => { handleCategory(id, name, subCategories) }}>{name}</p>
+                {/* </div> */}
+            {/* </div> */}
 
             <div className='lg:hidden md:hidden absolute mt-28 ml-2' >
                 {categoryKey == id && subCategories?.map(item =>
-                    <p className='cursor-pointer text-lg font-semibold' style={data.sub_category_id == item.sub_category_id ? { color: `${stateStoreSettings ? stateStoreSettings.secondary_color : 'black'}` } : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}>{item.sub_category_name}</p>
+                    <p className='cursor-pointer text-lg font-semibold border ' style={data.sub_category_id == item.sub_category_id ? { color: `${stateStoreSettings ? stateStoreSettings.secondary_color : 'black'}` } : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}>{item.sub_category_name}</p>
                 )}
             </div>
 

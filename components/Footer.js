@@ -156,17 +156,19 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
         // onClick={() => {
         //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
         // }}
+        onClick={() => { router.push('/menu') }}
+
         >
           {/* <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} /> */}
           {/* <HeartFilled className='text-[#212B36] text-2xl' style={router.pathname == '/account/wishlist' ?
             { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
           {/* <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Wishlist</p> */}
 
-          <MenuIcon secondaryColor={router.pathname?.includes('/') ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
+          <MenuIcon secondaryColor={router.pathname=='/menu' ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
 
           {/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
-          <p className='text-[12px] font-montMedium ' style={router.pathname == '' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Menu</p>
+          <p className='text-[12px] font-montMedium ' style={router.pathname == '/menu' ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Menu</p>
 
         </div>
         <div className={`flex flex-col items-center`} onClick={() => { router.push('/account/user') }}>

@@ -9,7 +9,7 @@ import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import { Dropdown, Menu, Space } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu'
 
-export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems }) => {
+export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems,showMenu }) => {
 
     const [categories, setCategories] = useState([])
     const [showModal, setShowModal] = useState(false)
@@ -151,20 +151,21 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 {/* <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.secondary_color : 'white' }} /> */}
                 {console.log('data.subcateg', data.sub_category_name, data?.category_id != 'All Items', data.sub_category_name != undefined)}
                 <p className='  pl-2 text-lg font-montSemiBold' style={{marginTop:'80px'}}>{Object.keys(data).length != 0 && data.constructor === Object
-                    ? data?.category_id != 'All Items' ? data.sub_category_name != 'undefined' ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `Search Results` : 'All Items'}</p>
+                    ? data?.category_id != 'All Items' ? data.sub_category_name != undefined ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `Search Results` : 'All Items'}</p>
 
             </div>
 
             {/* Mobile view Categories */}
 
-            {showModal ?
-                <div className='lg:hidden md:hidden bg-white fixed h-[100vh] w-full  left-0 top-[4rem]' style={{ zIndex: 1111 }}>
-                    <div className='flex items-start justify-start  w-full' onClick={openCategorySidebar}>
-                        <ArrowLeftOutlined style={{ color: 'black', fontSize: '24px', textAlign: 'left' }} className=' mt-4 pl-4' onClick={openCategorySidebar} />
-                        <p className='text-lg mt-4 px-4 font-montSemiBold '>Categories</p>
+            {showMenu ?
+                <div className='lg:hidden md:hidden bg-white fixed h-[100vh] w-full  left-0 top-[4rem] -mt-16' style={{ zIndex: 1111 }}>
+                    <div className='flex items-start justify-start  w-full' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.navbar_color : 'white',backgroundColor: stateStoreSettings?.data ? stateStoreSettings?.data?.primary_color : 'white' }} >
+                        {/* <ArrowLeftOutlined style={{ color: 'black', fontSize: '24px', textAlign: 'left' }} className=' mt-4 pl-4' onClick={openCategorySidebar} /> */}
+                        <p className='text-lg mt-4 py-3 px-4 font-montSemiBold ' >Categories</p>
                     </div>
-                    <div className='flex bg-gray-100 h-20 overflow-scroll px-2'>
-                        <p className='mt-6 min-w-[80px] cursor-pointer pl-2 px-2 font-montRegular' onClick={() => { handleCategory('All Items') }}>All Items</p>
+
+                    <div className='bg-gray-100 pt-4 overflow-scroll h-[80vh] '>
+                        {/* <p className='  cursor-pointer  text-lg px-4 font-montMedium border-white border-b-2 py-3' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
 
 
 
