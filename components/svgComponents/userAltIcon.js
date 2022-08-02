@@ -11,4 +11,5 @@ function UserAltIcon({navbarColor,secondaryColor,mobile,grid}) {
     )
 }
 
+
 export default UserAltIcon
