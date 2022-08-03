@@ -9,13 +9,15 @@ import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import { Dropdown, Menu, Space } from 'antd';
 import SubMenu from 'antd/lib/menu/SubMenu'
 
-export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems,showMenu }) => {
+export const Categories = ({ dispatchCategories, stateStoreSettings, searchedItem, dispatchSearchItems, showMenu }) => {
 
     const [categories, setCategories] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [categoryKey, setCategoryKey] = useState()
     const [closeSubCategory, setCloseSubCategory] = useState(false)
     const router = useRouter()
+
+    const[categoryId,setCategoryId]=useState()
     const data = router.query
 
     useEffect(() => {
@@ -38,8 +40,9 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
         setCategoryKey(id)
 
 
-        if (subCategories || subCategories == undefined) {
-            subCategories.length == 0 && router.push(`/shop/?category_id=${id}&category_name=${name}`)
+        // if (subCategories || subCategories == undefined) {
+        //     subCategories.length == 0 && 
+            router.push(`/shop/?category_id=${id}&category_name=${name}`)
 
             // if you want to add default subcategory then copy below code and paste  or attachin line 41
 
@@ -47,8 +50,8 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
             // sub_category_name=${subCategories[0]?.sub_category_name}` : ``}
 
-            setShowModal(false)
-        }
+            // setShowModal(false)
+        // }
 
         if (id != "All Items") {
 
@@ -83,20 +86,40 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
         <Menu>
             {categories.map((item, index) =>
 
-                index >= 6 && <Menu.Item>
-                    <p onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }}>{item.category_name}</p>
-                    {item.subCategories.map(product =>
+                index >= 6 &&
+                <Menu.Item>
+                    <>
+                        <p onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }}  onMouseEnter={() => {setCategoryId(item.category_id)
+                        }}>{item.category_name}
+                        
+                        
+                        {item.subCategories.map(product => 
+                            categoryId == product.category_id &&
 
-                      {item.category_id==product.category_id &&  <SubMenu key={product.category_id} title={product.category_name} onTitleClick={() => {
-                            handleSubCategory(product.category_id, product.category_name)
-                        }}
-                        >
-                            <Menu.Item key={product.sub_category_id}>{product.sub_category_name}</Menu.Item>
-                        </SubMenu>}
-                    )}
+                            <SubMenu key={product.category_id} title={product.category_name} onTitleClick={() => {
+                                handleSubCategory(product.category_id, product.category_name)
+                            }}
+                            >
+                                <Menu.Item key={product.sub_category_id}>{product.sub_category_name}</Menu.Item>
+                            </SubMenu>
+                  
+
+                        
+                        )} 
+                        
+                        </p>
+
+                      
+                       
+                    </>
                 </Menu.Item>
             )}
         </Menu>
+
+
+
+
+
 
     )
 
@@ -115,7 +138,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 )} */}
             {/* </div> */}
 
-        <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname=='/shop'?'-mt-11':'-mt-[65px]'}  fixed z-[1000] px-32 pt-3`}>
+            <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname == '/shop' ? '-mt-11' : '-mt-[65px]'}  fixed z-[1000] px-32 pt-3`}>
                 {/* <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
 
                 {categories.map((item, key) => {
@@ -150,7 +173,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
             <div className='lg:hidden md:hidden flex'>
                 {/* <AppstoreFilled className='mt-24 pl-4 text-2xl' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.secondary_color : 'white' }} /> */}
                 {console.log('data.subcateg', data.sub_category_name, data?.category_id != 'All Items', data.sub_category_name != undefined)}
-                <p className='  pl-2 text-lg font-montSemiBold' style={{marginTop:'80px'}}>{Object.keys(data).length != 0 && data.constructor === Object
+                <p className='  pl-2 text-lg font-montSemiBold' style={{ marginTop: '80px' }}>{Object.keys(data).length != 0 && data.constructor === Object
                     ? data?.category_id != 'All Items' ? data.sub_category_name != undefined ? data.sub_category_name : data.category_name : 'All Items' : searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0 ? `Search Results` : 'All Items'}</p>
 
             </div>
@@ -159,7 +182,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
             {showMenu ?
                 <div className='lg:hidden md:hidden bg-white fixed h-[100vh] w-full  left-0 top-[4rem] -mt-16' style={{ zIndex: 1111 }}>
-                    <div className='flex items-start justify-start  w-full' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.navbar_color : 'white',backgroundColor: stateStoreSettings?.data ? stateStoreSettings?.data?.primary_color : 'white' }} >
+                    <div className='flex items-start justify-start  w-full' onClick={openCategorySidebar} style={{ color: stateStoreSettings?.data ? stateStoreSettings?.data?.navbar_color : 'white', backgroundColor: stateStoreSettings?.data ? stateStoreSettings?.data?.primary_color : 'white' }} >
                         {/* <ArrowLeftOutlined style={{ color: 'black', fontSize: '24px', textAlign: 'left' }} className=' mt-4 pl-4' onClick={openCategorySidebar} /> */}
                         <p className='text-lg mt-4 py-3 px-4 font-montSemiBold ' >Categories</p>
                     </div>
