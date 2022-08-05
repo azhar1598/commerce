@@ -21,6 +21,8 @@ export const getStoreDisplaySettingsAPI = () =>
 export const getStoreDetailsAPI = (storeId) =>
     callAPI('GET', `stores/get-details&storeId=${STORE_ID}`)
 
+    
+
 export const getBannerImages = (storeId) =>
     callAPI(`GET`, `stores/get-banners&storeId=${STORE_ID}`)
 
