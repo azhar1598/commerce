@@ -152,5 +152,9 @@ export const GET_SHOP_SEO_START="GET_SHOP_SEO_START"
 export const GET_SHOP_SEO_SUCCESS="GET_SHOP_SEO_SUCCESS"
 
 
+export const SET_PARCEL="SET_PARCEL"
+export const SET_DELIVERY="SET_DELIVERY"
+
+
 
 export default wishlistActionType

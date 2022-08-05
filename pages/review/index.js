@@ -12,9 +12,10 @@ import Head from 'next/head';
 import PageWrapper from '../../components/PageWrapper/PageWrapper'
 import ReviewTracker from '../../components/ReviewTracker'
 import StoreStatus from '../../components/svgComponents/StoreStatus'
+import { toast, ToastContainer } from 'react-toastify'
 
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails,storeDisplaySettings }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings }) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
 
@@ -28,10 +29,56 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const [enableBulkAPI, setEnableBulkAPI] = useState(true)
     const [validCoupon, setValidCoupon] = useState(false)
     const [paymentAdded, setPaymentAdded] = useState(false)
-    
-  const[storeClosed,setStoreClosed]=useState(false)
-  const[payReview,setPayReview]=useState(true)
 
+    const [storeClosed, setStoreClosed] = useState(false)
+    const [payReview, setPayReview] = useState(true)
+
+    const [minQtyMsg, setMinQtyMsg] = useState(false)
+    const [minProduct, setMinProduct] = useState()
+
+
+
+    useEffect(() => {
+        cart.map(item => {
+            console.log('mappingitem', item, item.inventoryDetails?.min_order_quantity > item.qty)
+            if (item.defaultVariantItem) {
+
+                if (item?.defaultVariantItem.inventory_details?.min_order_quantity > item?.defaultVariantItem?.inventory_details?.inventory_quantity) {
+                    if (item.defaultVariantItem?.inventory_details?.inventory_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+
+                } else {
+                    if (item.defaultVariantItem?.inventory_details?.min_order_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+                }
+            }
+            else {
+                if (item?.inventoryDetails?.min_order_quantity > item?.inventoryDetails?.inventory_quantity) {
+                    if (item?.inventoryDetails?.inventory_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+                }
+                else {
+                    if (item?.inventoryDetails?.min_order_quantity > item.qty) {
+                        setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                        console.log('mapping')
+                    }
+                }
+                // else {
+                // setMinQtyMsg(false)
+                // }
+            }
+        })
+    }, [cart])
 
 
 
@@ -45,6 +92,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
                 if (response) {
                     setPaymentAdded(true)
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
                 }
             }
             else {
@@ -57,6 +105,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
                 if (response) {
                     setPaymentAdded(true)
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
                 }
             }
             else {
@@ -68,7 +117,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         setUseWallet(false)
 
 
-       
+
     }
 
     useEffect(() => {
@@ -85,12 +134,23 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     }, [isTabletOrMobile])
 
-    const walletChange = (e) => {
+    const walletChange = async (e) => {
 
         console.log(e.target.checked)
         if (e.target.checked) {
             setPaymentMethod('ONL')
             setUseWallet(true)
+            if (paymentMethod == 'COD') {
+                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                if (response) {
+                    setPaymentAdded(true)
+
+                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                }
+            }
+
+
+
         }
         else {
             setPaymentMethod(paymentMethod)
@@ -171,29 +231,177 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
-    const handleDecreaseQuantity = (itemid, qty) => {
+    const handleDecreaseQuantity = (item, qty) => {
 
-        console.log('item id', itemid)
         const data = readyCartData(cart)
+        item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+
+        if (item.defaultVariantItem) {
+
+            const filter = cart.filter((c) => {
+                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                    return c
+                }
+            })
+
+            // important
+            if (qty == 0) {
+                removeFromCart(Number(item.variant_item_id))
+
+            }
+            else {
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.inventory_quantity) {
 
 
-        if (qty == 0) {
-            removeFromCart(Number(itemid))
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+                else {
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+
+
+            }
+
+
+        } else {
+            const filter = cart.filter((c) => {
+                if (c.item_id == item.item_id) {
+                    return c
+                }
+            })
+
+            // important
+            if (qty == 0) {
+                removeFromCart(Number(item.item_id))
+
+            }
+            else {
+                if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+                    if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                } else {
+
+                    if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+            }
 
         }
-        else {
-
-            console.log('itemmmid', itemid, qty)
-
-            adjustQty(itemid, qty)
-        }
 
 
 
 
-        // const data = readyCartData(cart)
-        // fetchBackendCart('userDetails.data?.customer_id,', 'storeDetails.group_id', data)
+
+
+        // if (checkout.backendCart?.purchase_id || state) {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', checkout.backendCart?.purchase_id, data)
+
+        // }
+        // else {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', undefined, data)
+
+        // }
+
+
+        // fetchBackendCart('customerDetails.data?.customer_id,', 'storeDetails.group_id', data)
     }
+
 
     const readyCartData = function (arr) {
         const key = 'store_id'
@@ -217,8 +425,11 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
+
     const handleIncreaseQuantity = (item) => {
 
+
+        console.log('itenmmmm', item)
 
         if (item.defaultVariantItem) {
 
@@ -255,32 +466,124 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         return c
                     }
                 })
-                console.log('fffilter', filter)
-                if (filter[0].qty >= quantity) {
-                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                // console.log('fffilter', filter)
+                // if (filter[0].qty >= quantity) {
+                //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
-                    adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+                //     // adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+                // }
+                // else {
+                //     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                //         setMinQtyMsg(false)
+                //     }
+                //     adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                // }
+
+
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+                    if (filter[0].qty < item.item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                        return item
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
                 }
+
                 else {
-                    adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+
+
+                    if (filter[0].qty < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                        return item
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
+
                 }
+
+
+
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You Cannot add more items')
+
+
+                toast.error('Sorry, You Cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
 
         }
         else {
             // item without variant
-
-
+            console.log('item without variant', item)
 
             let quantity = 0
-            const value = item?.inventory_details
+            const value = item?.inventoryDetails
 
+            console.log('valuee', value)
             if (value != null) {
 
                 if (value?.inventory_quantity == null) {
+
+
+
                     if (value?.max_order_quantity == null)
                         quantity = 15
                     else {
@@ -314,43 +617,106 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
                 })
 
-                if (filter[0].qty >= quantity) {
-                    message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                // important
 
-                    adjustQty(item.item_id, item.qty)
+                if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+
+                    if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                        adjustQty(item.item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.item_id, item.qty + 1)
+                    }
                 }
+
                 else {
-                    adjustQty(item.item_id, item.qty + 1)
+
+
+
+                    if (filter[0].qty < item.inventoryDetails.min_order_quantity) {
+                        adjustQty(item.item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        adjustQty(item.item_id, item.qty + 1)
+                    }
                 }
             }
             else {
-                message.error('Sorry, You Cannot add more items')
+                // message.error('Sorry, You cannot add more items')
+
+                     
+                toast.error('Sorry, You cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
-
-
-
-
-
-
-
-
-
         }
 
     }
+
 
 
     const handleWalletChange = async (e) => {
 
-        if(storeDisplaySettings?.data?.is_payment_accepted=="Y"){
-        stateWallet?.customer_wallet_balance != 0 ? walletChange(e) : ''
-        const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-        if (response) {
-            setPaymentAdded(true)
+        if (storeDisplaySettings?.data?.is_payment_accepted == "Y") {
+            stateWallet?.customer_wallet_balance != 0 ? walletChange(e) : ''
+            // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+            // if (response) {
+            //     setPaymentAdded(true)
+            // }
+        } else {
+            // setStoreClosed(true)
         }
-    }else{
-        // setStoreClosed(true)
-    }
 
     }
 
@@ -363,30 +729,51 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             </Head> */}
 
             <div className='mt-20 lg:mt-24 lg:flex lg:flex-col  md:-mt-4  bg-[#F6F6F6]  lg:pl-16 md:pl-32 lg:p-8 md:p-8'>
-                <div className='hidden lg:block'>
+                {/* <div className='hidden lg:block'>
                     <ReviewTracker storeSettings={storeSettings} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} paymentAdded={paymentAdded} useWallet={useWallet} />
-                </div>
+                </div> */}
 
 
                 <div className='bg-[#F6F6F6] lg:h-full lg:min-h-screen md:h-full flex flex-col lg:flex-row md:flex-row items-start md:-mt-4 lg:p-2 md:p-2'>
 
-                    <div className='mt-24 lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml-12 lg:mr-36 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer '>
-                        <p className='hidden lg;block md:block font-montSemiBold text-lg text-[#212B36]'>Select Payment Method</p>
-                        <div className='bg-white h-32 mb-1 flex items-center p-8  w-full'>
+                    <div className='mt-24 lg:bg-white lg:mt-4 md:mt-4 flex flex-col items-start justify-between  lg:ml- lg:mr-12  w-full lg:w-full border-b-2 border-slate-[200] cursor-pointer '>
+                        <p className='hidden lg;block md:block font-montBold pt-6 px-10 text-lg text-[#212B36]'>Choose Payment Method</p>
+                        <div className='bg-white   flex items-center px-8 pt-2 w-full'>
                             <Radio.Group onChange={handlePaymentChange} value={paymentMethod}>
-                                <Space direction="vertical" className="leading-9">
-                                    <Radio value='ONL' className='font-montSemiBold' style={{color:storeDisplaySettings?.data?.is_payment_accepted != 'Y'?'gray':'black',fontSize:'16px'}}>Online Payment {
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"":
-                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y'?<span className='text-red-500 px-2'>Not Accepting Online Payments</span>:''}</Radio>
-                                    <Radio value='COD' style={{color:storeDisplaySettings?.data?.is_cod_accepted != 'Y'?'gray':'black',fontSize:'16px'}} className={`font-montSemiBold inline text-[16px]`}>Pay on Delivery {
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"":
-                                    
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y'?<span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span>:''}</Radio>
+                                <div className="leading gap-0 ">
+                                    <Radio value='ONL' className='font-montSemiBold gap-5' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pay Online {
+                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                            storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}
+                                        <div className=' bg-white flex items-center justify-between pt-5 w-full'>
 
-                                </Space>
+                                            <div className='-mt-4'>
+                                                {/* disabled={stateWallet?.customer_wallet_balance && paymentMethod=='ONL' !=0?false:true} */}
+                                                <Checkbox onChange={(e) => {
+                                                    handleWalletChange(e)
+
+
+                                                }} defaultChecked={false} checked={useWallet} style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black' }}><span className=' font-montMedium text-sm' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
+                                            </div>
+                                            <p className=' font-montMedium flex items-center text-sm'>(Balance <span className='text-green-500 text-sm'>{storeDetails?.currency_symbol} {stateWallet?.customer_wallet_balance})</span></p>
+
+                                        </div>
+
+                                    </Radio>
+
+
+
+                                    <Radio value='COD' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px] gap-5`}>Pay on Delivery {
+                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+
+                                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}
+                                            <p className=' font-montMedium flex items-center text-sm py-4'>(wallet money cant be used for cash on delivery.)</p>
+                                            
+                                            </Radio>
+
+                                </div>
                             </Radio.Group>
-                            
-                      
+
+
                         </div>
                         {/* <div className='bg-white h-32 flex items-center p-8 mb-1 w-full'>
                     <Radio.Group onChange={handleChange} value={value}>
@@ -394,7 +781,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     </Radio.Group>
                 </div> */}
 
-                        <div className='bg-white flex items-center justify-between px-8 pt-5 w-full'>
+                        <div className='lg:hidden bg-white flex items-center justify-between px-8 pt-5 w-full'>
 
                             <div className='-mt-4'>
                                 {/* disabled={stateWallet?.customer_wallet_balance && paymentMethod=='ONL' !=0?false:true} */}
@@ -402,55 +789,56 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                     handleWalletChange(e)
 
 
-                                }} defaultChecked={false} checked={useWallet} style={{color:storeDisplaySettings?.data?.is_payment_accepted != 'Y'?'gray':'black'}}><span className=' font-montSemiBold' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
+                                }} defaultChecked={false} checked={useWallet} style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black' }}><span className=' font-montSemiBold' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
                             </div>
                             <p className=' font-montSemiBold flex items-center'><WalletFilled style={{ color: 'gray', paddingRight: '4px' }} />Balance <span className='text-green-500'>{storeDetails?.currency_symbol} {stateWallet?.customer_wallet_balance}</span></p>
 
                         </div>
                         <p className='text-red-500 text-[16px] pt-2'>{
-                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' &&   storeDisplaySettings?.data?.is_payment_accepted != 'Y'?"Not Accepting Any Payments at the Moment":""}</p>
+                            storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "Not Accepting Any Payments at the Moment" : ""}</p>
 
-                        <p className='hidden lg:block md:block font-montSemiBold mt-8 text-[#212B36]'>Review Order</p>
+                        {/* <p className='hidden lg:block md:block font-montSemiBold mt-8 text-[#212B36]'>Review Order</p> */}
 
                         <div className='flex flex-col bg-white w-full justify-between items-start'>
 
                             {
-                                cart.map((item, idx) =>
-                                    <div className='flex items-start text-left w-full border-b-2 border-slate-300  lg:pl-8 p-3 md:pl-8 lg:pt-3 md:pt-3' key={idx}>
-                                        <img src={item.primary_img ? item.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' />
-                                        <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
-                                            <p className='text-lg font-montSemiBold'>{item.item_name}</p>
+                                cart.map((item, idx) => <></>
+                                    // No need of cart list here
+                                    // <div className='flex items-start text-left w-full border-b-2 border-slate-300  lg:pl-8 p-3 md:pl-8 lg:pt-3 md:pt-3' key={idx}>
+                                    //     <img src={item.primary_img ? item.primary_img : 'https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png'} className='w-28 min-w-28 max-w-28 h-40' />
+                                    //     <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24'>
+                                    //         <p className='text-lg font-montSemiBold'>{item.item_name}</p>
 
-                                            {item.defaultVariantItem ? <p className='text-sm font-montMedium -mt-5'>
-                                                <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
-                                                <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
-                                                <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
+                                    //         {item.defaultVariantItem ? <p className='text-sm font-montMedium -mt-5'>
+                                    //             <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
+                                    //             <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                    //             <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
 
-                                            {/* <p className='text-[#212B3680]'>{item.item_desc}</p> */}
-                                            <p className='text-lg  flex items-start  font-montSemiBold'>{storeDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
-                                                <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${storeDetails?.currency_symbol} ${item.price}` : ''}</span>
-                                                <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${storeDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
+                                    //         {/* <p className='text-[#212B3680]'>{item.item_desc}</p> */}
+                                    //         <p className='text-lg  flex items-start  font-montSemiBold'>{storeDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
+                                    //             <span className='line-through px-1 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `${storeDetails?.currency_symbol} ${item.price}` : ''}</span>
+                                    //             <span className='text-green-500 text-sm hidden lg:flex mt-1 ml-2'>{item.price - item.sale_price != 0 ? `Save ${storeDetails?.currency_symbol}${item.defaultVariantItem ? item.defaultVariantItem.list_price - item.defaultVariantItem.sale_price : item.price - item.sale_price}` : ''}</span>
 
-                                            </p>
+                                    //         </p>
 
 
-                                            {checkout.backendCart?.purchase_id != undefined ?
-                                                <div className='flex justify-between items-center gap-6' >
-                                                    <div className='border border-gray-400 space-x-4 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id, item.qty - 1)} className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
-                                                        <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{item.qty}</span>
-                                                        <span onClick={() => { handleIncreaseQuantity(item) }}
+                                    //         {checkout.backendCart?.purchase_id != undefined ?
+                                    //             <div className='flex justify-between items-center gap-6' >
+                                    //                 <div className='border border-gray-400 space-x-4 flex items-center' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                    //                     <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                    //                     <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{item.qty}</span>
+                                    //                     <span onClick={() => { handleIncreaseQuantity(item) }}
 
-                                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
-                                                    </div>
-                                                    {/* <div onClick={() => removeFromCart(item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
-                                                </div> :
-                                                <div className=' w-1/3 flex items-center justify-center'>
-                                                    <SyncOutlined style={{ fontSize: 24 }} spin />
-                                                </div>}
-                                        </div>
-                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
-                                    </div>
+                                    //                         className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.2', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                    //                 </div>
+                                    //                 {/* <div onClick={() => removeFromCart(item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
+                                    //             </div> :
+                                    //             <div className=' w-1/3 flex items-center justify-center'>
+                                    //                 <SyncOutlined style={{ fontSize: 24 }} spin />
+                                    //             </div>}
+                                    //     </div>
+                                    //     <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
+                                    // </div>
 
                                 )}
                         </div>
@@ -463,21 +851,23 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                         <div className='flex flex-col justify-center gap-3'>
 
 
-                            <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'} paymentMethod/>
+                            <StoreStatus secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : 'black'} mobile={false} navbarColor={storeSettings.data ? storeSettings.data.primary_color : 'black'} paymentMethod />
                             <p className='text-base text-center text-sm'>Store is not accepting this payment method at the moment</p>
                         </div>
 
                     </Modal>
 
-                    <div className='mt-16 w-96'>
-                        <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} />
-                        <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={true} wallet={useWallet} walletAmount={stateWallet?.customer_wallet_balance} paymentMethod={paymentMethod} final={false} storeDisplaySettings={storeDisplaySettings} payReview={payReview}/>
+                    <div className='mt-4 w-96 mr-20'>
+                        {/* <Coupon storeSettings={storeSettings} validCoupon={validCoupon} billingDetails={checkout.purchaseDetails?.data} setValidCoupon={setValidCoupon} /> */}
+                        <Billing className='' billingDetails={checkout.purchaseDetails?.data} checkout={checkout.backendCart?.purchase_id} review={true} wallet={useWallet} walletAmount={stateWallet?.customer_wallet_balance} paymentMethod={paymentMethod} final={false} storeDisplaySettings={storeDisplaySettings} payReview={payReview} />
                     </div>
 
 
 
                 </div>
             </div>
+
+            <ToastContainer />
         </>
     )
 }
@@ -489,7 +879,7 @@ const mapStateToProps = (state) => ({
     customerDetails: state.customerDetailsReducer,
     stateWallet: state.walletReducer?.data,
     storeDetails: state.storeDetailsReducer?.data,
-    storeDisplaySettings:state.storeDisplaySettingsReducer
+    storeDisplaySettings: state.storeDisplaySettingsReducer
 })
 
 

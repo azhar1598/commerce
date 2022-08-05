@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useRouter } from 'next/router'
@@ -9,12 +9,69 @@ import { getOrdersInfo } from '../../../services/apiServices'
 import Head from 'next/head';
 import NoOrders from '../../../components/svgComponents/NoOrders'
 import PageWrapper from '../../../components/PageWrapper/PageWrapper'
+import { useRef } from "react"
+import Stepper from '../../../components/stepper'
 
 export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [orderItems, setOrderItems] = useState([])
+    const [orderStatus, setOrderStatus] = useState(0);
+    const [isReturnActive, setIsReturnActive] = useState(false)
+
+    const ref = useRef(null);
+
+
+    const steps = [
+        {
+            label: 'Order is Placed',
+            // dsc: moment.unix(orderDetails?.orderPlacedTime).format('LLL')
+        },
+        {
+            label: 'Order in Progress',
+        },
+        {
+            label: 'Out For Delivery',
+        },
+        {
+            label: 'Order Delivered Successfully',
+        },
+
+
+    ];
+
+    const cancelSteps = [
+        {
+            label: 'Order is Placed',
+            // dsc: moment.unix(orderDetails?.orderPlacedTime).format('LLL')
+        },
+
+        // {
+        //     label: orderDetails.orderStatus == "CANCELLED_BY_CUSTOMER" ?'Order Cancelled':'Order Declined by Restaurant',
+        // },
+
+
+    ];
+
+
+
+    const style = storeSettings ? {
+        completed: {
+            color: storeSettings.secondary_color || '#E83B3B'
+        },
+        active: {
+            color: '#E83B3B'
+        },
+        pending: {
+            color: '#c5c5c5'
+        },
+        check: {
+            color: '#fff'
+        },
+    } : {}
+
+
 
     useEffect(() => {
 
@@ -29,6 +86,11 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
     }
 
 
+    useEffect(() => {
+        import("@lottiefiles/lottie-player");
+    }, []);
+
+
     const router = useRouter()
 
     const handlePush = (item) => {
@@ -41,6 +103,9 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
     }
 
+
+
+
     return (
         <div className=' lg:mt-24 md:-mt-4 bg-[#F6F6F6] flex lg:pl-32 md:pl-32 lg:p-8 md:p-8'>
             {/* <Head>
@@ -49,79 +114,113 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                 <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
             </Head> */}
             <Profile />
-            <div className='flex flex-col w-full mt-20 lg:mt-0 lg:mr-24 md:mr-24'>
-                <div className='bg-white pl-4 p-3 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border-b-4 border-slate-[200]'>
-                    <div className='lg:hidden block'>
-                        <Link href='/account/user'>
-                            <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4' />
-                        </Link>
-                    </div>
-                    <p className='text-black font-montSemiBold mt-4'>My Orders</p>
-                </div>
-                <div className='flex flex-col items-center  justify-between lg:ml-5 md:ml-5 w-full  cursor-pointer mb-24' >
-
-                    {!loading ?
-                        <>
-                            {orders.length != 0 ?
-                                orders.map((item, index) =>
-                                    <div className='w-full' key={index}>
-                                        <div className='flex p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center bg-white mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
-
-
-                                            {Object.keys(item.orderItems).map((key, index) => {
-                                                return (<>
-                                                    {index == 0 ?
-
-                                                        <div className={`${Object.keys(item.orderItems).length > 1 ? `blur-sm` : ``}`}>
-                                                            <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-28 h-28 lg:w-28 lg:min-w-28 lg:max-w-28' />
-
-                                                        </div> : ''}
-
-                                                </>
-                                                )
-                                            })}
-
-                                            <p className={`${Object.keys(item.orderItems).length > 1 ? `text-black font-montSemiBold text-lg  absolute lg:mt-0 lg:ml-9  ml-10 mt-10` : `hidden`}`}>+ {Object.keys(item.orderItems).length - 1}</p>
-
-                                            <div className='flex flex-col items-start w-full ml-4 lg:ml-24 md:ml-24'>
-                                                <p className={`ml-6 ${item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? `text-green-500` : item.orderStatus === "CANCELLED_BY_CUSTOMER" ? `text-red-500` : `text-black`} text-md font-montSemiBold`}>{item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? "Delivered" : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? "Order Confirmed" : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? "Out for delivery" : item.orderStatus == "CANCELLED_BY_CUSTOMER" ? "Order Cancelled" : "Order Placed"}</p>
-                                                {Object.keys(item.orderItems).map((key, index) => {
-                                                    return (<>
-                                                        {index == 0 ?
-                                                            <>
-                                                                <p className='ml-6 w-56 break-words '>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
-                                                                <p className='text-[#212B3680] '></p>
-                                                            </> : ''}
-                                                    </>
-                                                    )
-                                                })}
-                                            </div>
-                                            <RightOutlined className='text-black text-lg  self-center' />
-
-                                        </div>
-                                    </div>
-                                )
-
-                                :
-                                <>
-                                    <div className='hidden lg:flex flex-col items-center mt-12 '>
-                                        <NoOrders secondaryColor={storeSettings?.secondary_color} navbarColor={storeSettings?.primary_color} mobile={false} />
-                                        <p className='text-lg font-montSemiBold'>No Orders</p>
-                                    </div>
-                                    <div className=' lg:hidden flex flex-col items-center mt-5 w-full'>
-                                        <NoOrders secondaryColor={storeSettings?.secondary_color} navbarColor={storeSettings?.primary_color} mobile={true} />
-                                        <p className='text-lg font-montSemiBold'>No Orders</p>
-                                    </div>
-                                </>
-                            }
-                        </>
-                        :
-
-
-                        <div className='h-96 flex items-center justify-center'>
-                            <Spin />
+            <div className='flex flex-col w-full mt-16 lg:mt-0 lg:mr-24 md:mr-24'>
+                <div className='bg-white lg:pl-4 lg:p-3 lg:pl-8 lg md:pl-8 md:p-3 flex flex-col text-left lg:ml-5 md:ml-5 w-full rounded'>
+                    <div className='flex items-center  p-3  pb-1 lg:pb-0 lg:p-0 lg:border-none border-b border-blue-100 shadow lg:shadow-none'>
+                        <div className='lg:hidden block'>
+                            <Link href='/account/user'>
+                                <LeftOutlined className='text-slate-300 text-lg mr-4 ' />
+                            </Link>
                         </div>
-                    }
+                        <p className='text-black font-montSemiBold mt-5 lg:font-montBold text-lg lg:mt-4 '>My Orders</p>
+                    </div>
+
+                    <div className='flex flex-col items-center  justify-between  w-full  cursor-pointer mb-24' >
+
+                        {!loading ?
+                            <>
+                                {orders.length != 0 ?
+                                    orders.map((item, index) =>
+                                        <div className='lg:w-full mt-5' key={index}>
+                                            <div className='border-b  lg:border-2 border-[#00000028] '>
+
+                                                <div className='flex px-3 lg:pl-8 lg:p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center mt-2 md:pl-8 md:p-3 text-left w-full  ' onClick={() => { handlePush(item) }}>
+
+
+                                                    {Object.keys(item.orderItems).map((key, index) => {
+                                                        return (<>
+                                                            {index == 0 ?
+
+                                                                <div className={` ${Object.keys(item.orderItems).length > 1 ? `pr-3 blur-sm` : ``}`}>
+                                                                    <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-44  min-w-44 min-h-28 h-28 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow mb-2 lg:mb-0' />
+
+                                                                </div> : ''}
+
+                                                        </>
+                                                        )
+                                                    })}
+
+                                                    <p className={`${Object.keys(item.orderItems).length > 1 ? `text-[#212B36]  font-montSemiBold text-lg  absolute lg:mt-0 lg:ml-9  ml-10 mt-10` : `hidden`}`}>+ {Object.keys(item.orderItems).length - 1}</p>
+
+
+                                                    <div className='flex flex-col w-full ml-4 lg:ml-24 md:ml-24'>
+                                                        <p className='text-[#212B36]    font-montSemiBold '>Order No. #{item.orderId}</p>
+
+                                                        {Object.keys(item.orderItems).map((key, index) => {
+                                                            return (<>
+                                                                {index == 0 ?
+                                                                    <>
+                                                                        <p className='text-[#212B36] -mt-4 lg:mt-0  font-montSemiBold lg:w-96 break-words item-description'>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
+                                                                        <p className='text-[#212B3680] '></p>
+                                                                    </> : ''}
+                                                            </>
+                                                            )
+                                                        })}
+                                                        <p className={` ${item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? `text-green-500` : item.orderStatus === "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? `text-red-500` : `text-black`} text-md font-montSemiBold`}>{item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? "Delivered" : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? "Order Confirmed" : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? "Out for delivery" : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? "Order Cancelled" : "Order Placed"}</p>
+
+
+
+
+
+                                                    </div>
+                                                    <div className='lg:block hidden '>
+                                                        <RightOutlined className='text-[#00000028] text-lg  self-center' />
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <div className='lg:block hidden py-3'>
+                                                    <Stepper vertical={false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    )
+
+                                    :
+                                    <>
+                                        <div className='hidden lg:flex flex-col items-center mt-12 '>
+                                            <NoOrders secondaryColor={storeSettings?.secondary_color} navbarColor={storeSettings?.primary_color} mobile={false} />
+                                            <p className='text-lg font-montSemiBold'>No Orders</p>
+                                        </div>
+                                        <div className=' lg:hidden flex flex-col items-center mt-5 w-full'>
+                                            <NoOrders secondaryColor={storeSettings?.secondary_color} navbarColor={storeSettings?.primary_color} mobile={true} />
+                                            <p className='text-lg font-montSemiBold'>No Orders</p>
+                                        </div>
+                                    </>
+                                }
+                            </>
+                            :
+
+
+                            <div className='h-96 flex items-center justify-center'>
+
+
+                                <lottie-player
+                                    id="firstLottie"
+                                    ref={ref}
+                                    autoplay
+
+                                    loop
+                                    mode="normal"
+                                    src="/loader.json"
+                                    style={{ width: "100px", height: "100px" }}
+                                ></lottie-player>
+                            </div>
+                        }
+                    </div>
                 </div>
 
             </div>

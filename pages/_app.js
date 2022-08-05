@@ -10,6 +10,8 @@ import { useRouter } from 'next/router';
 import { PersistGate } from 'redux-persist/integration/react'
 import { useEffect } from 'react';
 import GoogleAnalytics from '../components/GoogleAnalytics/GoogleAnalytics'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -18,7 +20,7 @@ function MyApp({ Component, pageProps }) {
   
   // You can remove all consoles at once
 
-  // console.log = function() {}
+  console.log = function() {}
 
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 })
   const isTabletOrMobile = useMediaQuery({ query: ' (max-width: 992px)' })
@@ -44,7 +46,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <GoogleAnalytics></GoogleAnalytics>
       <PersistGate persistor={persistor}>
-        {router.pathname != '/review-mobile' && router.pathname != '/review-mobile/final' && router.pathname != '/account/user/login' && !router.pathname.includes('/success-mobile') && <Header />}
+        {router.pathname != '/review-mobile' && router.pathname != '/review-mobile/final' && router.pathname != '/menu' && router.pathname != '/account/user/login' && !router.pathname.includes('/success-mobile') && <Header />}
         <Component {...pageProps} />
         <Footer />
       </PersistGate>

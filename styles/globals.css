@@ -36,6 +36,48 @@
 }
 
 
+.wave-billing {
+  background-color: red;
+  height: 10px;
+  color: #fff;
+  padding: 8px;
+  padding-bottom: 50px; /*h*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-billing:before,
+.wave-billing:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 25px; /*h/2*/
+  height: 50px; /*h*/
+  background: radial-gradient(closest-side, #fff, #fff 50%, transparent 50%);
+  /*or farthest-side*/
+  background-size: 50px 50px; /*h h*/
+  background-position: 10 25px; /*0 h/2*/
+  background-repeat: repeat-x;
+}
+
+.wave-billing:after {
+  background: radial-gradient(
+    closest-side,
+    transparent,
+    transparent 50%,
+    #fff 50%
+  );
+  /*or farthest-side*/
+  background-size: 50px 50px; /*h h*/
+  background-position: 25px -25px; /*h/2 -h/2*/
+  background-repeat: repeat-x;
+  bottom: -25px;
+}
 
 
 
@@ -129,6 +171,14 @@ input[type="number"] {
   /* background: green; */
 }
 
+.ant-modal-body{
+  padding: 0px !important;
+}
+
+.anticon svg{
+  /* color:white */
+}
+
 .ant-menu-title-content {
   color: black;
 }
@@ -147,7 +197,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    scroll-behavior: smooth
+    scroll-behavior: smooth;
+    scrollbar-color: red !important;
 }
 
 a {
@@ -158,6 +209,26 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.item-description-list{
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+
+.item-city{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+}
+
+
 @media only screen and (min-width: 600px) {
 .item-description{
     display: -webkit-box;
@@ -168,12 +239,13 @@ a {
     
 }
 .wishlist-btn {
-  display: none;
-}
-
-.wishlist-btn:hover {
+  /* display: none; */
   display: inline-block;
 }
+
+/* .wishlist-btn:hover {
+  display: inline-block;
+} */
 
 /* custom scrollbar */
 ::-webkit-scrollbar {

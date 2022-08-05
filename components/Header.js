@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { CloseOutlined, HeartFilled, MenuOutlined, SearchOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
-import { Badge, Dropdown, Menu, message } from 'antd'
+import { CloseOutlined, HeartFilled, MenuOutlined, SearchOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
+import { Badge, Dropdown, Menu } from 'antd'
 import { useRouter } from 'next/router'
 import LoginModal from './LoginModal/LoginModal'
 import Link from 'next/link'
 import { FaUserAlt, FaShoppingBag } from 'react-icons/fa'
+import { IoIosCart } from 'react-icons/io';
 import { customerDetails, getStoreDetails, hideCartAction, mobileSearchAction, searchItems } from '../actions'
 import Modal from 'antd/lib/modal/Modal'
 import ContactUs from './ContactUs'
 import { configConsumerProps } from 'antd/lib/config-provider'
 import absoluteUrl from 'next-absolute-url'
 import SearchSvg from './svgComponents/SearchSvg'
+import { FaSearch } from 'react-icons/fa';
+import HeartIcon from './svgComponents/HeartIcon'
+import { toast, ToastContainer } from 'react-toastify'
 
 
 
@@ -30,7 +34,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
     const [rgbaBackground, setRgbaBackground] = useState('')
     const [rgbaColor, setRgbaColor] = useState()
-    const[customBorder,setCustomBorder]=useState()
+    const [customBorder, setCustomBorder] = useState()
     const [contactUsVisible, setContactUsVisible] = useState(false)
 
     const [hamburger, setHamburger] = useState(false)
@@ -42,8 +46,20 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
     const handleLogout = () => {
         setIsModalVisible(false)
         customerDetails()
-        message.success('Logged Out Successfully')
+
+      
+        
+        toast.success('Logged Out Successfully ', {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         router.push('/')
+        setVisible(true)
     }
 
     const { origin } = absoluteUrl()
@@ -96,6 +112,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
     }
 
     const showModal = () => {
+        console.log('show')
         setVisible(true);
     }
 
@@ -123,10 +140,10 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
     }, [router.pathname, router?.query?.enable == 'true'])
 
     useEffect(() => {
-        
+
         setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#ffffff', 0.9))
         setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 0.02))
-        setCustomBorder(hex2rgba('#212B36' , 0.25))
+        setCustomBorder(hex2rgba('#212B36', 0.25))
     }, [rgbaBackground == ''])
 
     useEffect(() => {
@@ -162,14 +179,14 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
 
 
-console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_account_verified=="Y" )
+    console.log('isLoggedIn.data?.is_account_verified=="Y" ', isLoggedIn.data?.is_account_verified == "Y")
 
     const menu = (
         <>
             {isLoggedIn.data?.customer_id ?
                 <Menu style={{ width: '200px' }} >
 
-                    {/* <Menu.Item>
+                    <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
                             My Orders
                         </Link>
@@ -193,16 +210,16 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                         <p onClick={() => setIsModalVisible(true)} passHref>
                             <p >Logout</p>
                         </p>
-                    </Menu.Item> */}
+                    </Menu.Item>
                 </Menu> :
                 <Menu>
-                    {/* <Menu.Item>
+                    <Menu.Item>
                         <p onClick={showModal} passHref>
                             <p>Log In / Sign Up</p>
                         </p>
-                    </Menu.Item> */}
+                    </Menu.Item>
                 </Menu>
-                }
+            }
         </>
     );
 
@@ -254,7 +271,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                                 <p className='text-sm'>Online Store Created on</p>
                                 <p className='text-sm mb-12' >www.Goplinto.com</p>
 
-                                <img src={'https://devo2.goplinto.com/profileLogos/goplinto_logo.png'} className='h-6 object-contain' onClick={()=>{router.push('https://www.goplinto.com/')}} />
+                                <img src={'https://devo2.goplinto.com/profileLogos/goplinto_logo.png'} className='h-6 object-contain' onClick={() => { router.push('https://www.goplinto.com/') }} />
 
                             </div>
                             {/* <p className='text-[#6E335F] border-b border-slate-200 text-lg pb-4 pl-3 cursor-pointer'>About</p> */}
@@ -271,7 +288,7 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
                 <MenuOutlined style={{ color: 'white' }} onClick={showHamburger} />
                 <div className='flex items-center justify-between '>
-                    <div className="  p-2 flex flex-row items-center " >
+                    <div className="  p-2 flex flex-row items-center rounded " >
                         <input type="text" placeholder="Search" name="input" value={input.input} className={`  text-white outline-none text-[19px]`} style={stateMobileSearch ? { background: storeSettings.data ? storeSettings.data.primary_color : 'black', borderBottom: '2px solid white', width: '75vw', transition: 'all .5s linear' } : { display: 'none', outline: 'none', transition: 'all .5s ease-out', width: '55vw' }} onChange={handleChange} autoComplete="off" />
                         <SearchOutlined
                             //  className={`text-gray-900 ${stateMobileSearch ? 'mr-5' : ''}`} 
@@ -287,7 +304,10 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
                     </div>
                     {!stateMobileSearch && <Link href="/cart">
                         <Badge count={cartQuantity} color={storeSettings?.data ? storeSettings.data.secondary_color : 'black'}>
-                            <ShoppingOutlined style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} />
+                            {/* <ShoppingOutlined style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} /> */}
+
+                            <IoIosCart className='' style={{ color: `${storeSettings?.data ? 'white' : 'black'}`, fontSize: '28px ', cursor: 'pointer' }} />
+
                         </Badge>
                     </Link>}
                 </div>
@@ -295,82 +315,76 @@ console.log('isLoggedIn.data?.is_account_verified=="Y" ',isLoggedIn.data?.is_acc
 
 
             {/* Web View and Tablet View*/}
-            <div className='hidden shadow-2xl fixed w-full lg:flex md:flex items-center top-0 justify-around p-5  pl-28 pr-28 mb-4' style={{ zIndex: 1000, backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`}}>
-                <div className='flex items-center w-1/4 max-w-1/2 '>
-                    <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer min-h-20 min-w-20 max-h-[72px] max-w-20' onClick={() => { router.push('/') }} />
-                 <p className={` text-xl font-montSemiBold mt-3 cursor-pointer px-3`} style={{
-                        color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                    }} onClick={() => { router.push('/') }} >{storeDetailsReducer?.data?.store_name.toUpperCase()}</p> 
-                </div>
+            <div className='hidden fixed top-0  lg:flex md:flex items-center justify-around w-full py-4 px-28 z-[1000]' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>
+                <img src={storeDetailsReducer?.data?.logo_img_url} className='cursor-pointer' height={70} width={70}  onClick={() => { router.push('/') }}/>
+         
+              <p className={` text-xl font-montSemiBold cursor-pointer mt-5`} onClick={() => { router.push('/') }} style={{
+                    color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
+                }}>{storeDetailsReducer?.data?.store_name.toUpperCase()}</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}   onClick={() => { router.push('/shop') }}>Shop</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>About</p>
+                <p className='font-montMedium mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
+                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>Contact us</p>
+              
+                <div className="flex items-center rounded p-1 w-[25vw] mx-10" style={{ backgroundColor: 'white', boxShadow: `0px 0px 0px 1px ${customBorder}` }} >
 
-                <div className='flex w-full  items-center justify-between font-montSemiBold'>
-                    <ul className='flex items-center mt-2 ml-5 w-[20vw] justify-around  text-[#212B36] ' style={{
-                        color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                    }}>
-                         <li>|</li>
-                        <li className='text-sm cursor-pointer px-2' style={{
-                            color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`
-                        }} 
-                        // onClick={() => { router.push('/shop') }}
+                    <input type="text" placeholder="Search" name="input" value={input.input} className="w-full text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{
+                        color: `${storeSettings.data ? 'gray' : 'black'}`,
+                        // backgroundColor: rgbaColor 
+                    }} />
+
+                    <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black' : ''} />
+                    {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
+                </div>
+            <div className='flex items-center '>
+            <Dropdown overlay={menu} placement="bottomCenter" arrow >
+                    <FaUserAlt className='' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
+                </Dropdown>
+
+                <div className='cursor-pointer px-12'>
+                    {isLoggedIn.data?.customer_id ?
+                        <Link href="/account/wishlist"
                         >
-                            Shop
-                        </li>
-                        <li>|</li>
-                        <li className='text-sm cursor-pointer px-2' onClick={() => setContactUsVisible(true)} >
-                            About
-                        </li>
-                        <li>|</li>
-                        <li className='text-sm cursor-pointer px-2' onClick={() => setContactUsVisible(true)} >
-                            Contact Us
-                        </li>
+                            <div>
+                                <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl ' />
+                            </div>
+                        </Link> : <div onClick={showModal}>
+                            <HeartIcon fill={storeSettings.data ? storeSettings.data.navbar_color : 'black'} style={{ cursor: 'pointer' }} className=' text-[#0000007F] shadow-xl '
 
+                            />
 
-
-
-                    </ul>
-                    <div className=" p-1 flex flex-row items-center w-[30vw]
-                    mr-4 -mt-1" style={{ backgroundColor: rgbaBackground ,boxShadow:`0px 0px 0px 1px ${customBorder}`}} >
-
-                        <input type="text" placeholder="Search" name="input" value={input.input} className="w-full  text-black outline-none px-2" onChange={handleChange} autoComplete="off" style={{ color: `${storeSettings.data ? 'gray' : 'black'}`, backgroundColor: rgbaColor }} />
-                    <SearchSvg navbarColor={storeSettings.data ? 'gray':'black'}/>
-                        {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
-                    </div>
+                        </div>
+                    }
                 </div>
 
-                <div className='flex items-center justify-center w-1/4 text-lg text-[#212B36]'>
+                <Link href="/cart"
+                // 
+                >
+                    <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
+                        {/* <ShoppingCartOutlined  className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} /> */}
 
-                    <Dropdown overlay={menu} placement="bottomCenter" arrow >
-                        <FaUserAlt className='ml-12 cursor-pointer' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                    </Dropdown>
-                    <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
-                    {isLoggedIn.data?.customer_id ? <Link href="/"
-                    // href="/account/wishlist"
-                    >
-                        <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                    </Link> : <HeartFilled className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }}
-                    //  onClick={showModal}
-                      />}
-                    <Link href="/"
-                    // href="/cart"
-                    >
-                        <Badge count={cartQuantity} color={storeSettings.data ? storeSettings.data.secondary_color : 'black'} >
-                            <FaShoppingBag className='ml-12' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '20px', cursor: 'pointer' }} />
-                        </Badge>
-                    </Link>
-                </div>
+                        <IoIosCart className='' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, fontSize: '27px', cursor: 'pointer' }} />
+                    </Badge>
+                </Link>
             </div>
 
-            <Modal title="Logout" visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
-                <p className='text-xl text-center font-montSemiBold'>Log Out?</p>
-                <p className='text-base text-center'>Are you sure? You want to log out !</p>
-                <div className='flex justify-center gap-3'>
-                    <button onClick={() => setIsModalVisible(false)} className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
+
+            </div>
+
+            <Modal visible={isModalVisible} onCancel={() => setIsModalVisible(false)} footer={null}>
+                <p className='text-xl text-center font-montMedium p-4' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: 'white' }}>Log Out?</p>
+                <p className='text-base text-center' >Are you sure? You want to log out !</p>
+                <div className='flex justify-center gap-3 p-4'>
+                    <button onClick={() => setIsModalVisible(false)} className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
                     <button onClick={handleLogout} className='w-4/12 py-2 rounded' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white` }}>Confirm</button>
                 </div>
 
             </Modal>
-
+            <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} />
             <ContactUs contactUsVisible={contactUsVisible} setContactUsVisible={setContactUsVisible} />
+            <ToastContainer />
 
         </div>
     )

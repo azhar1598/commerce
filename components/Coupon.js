@@ -61,11 +61,11 @@ function Coupon({ stateCustomerId, stateStoreDetails, statePurchaseDetails, disp
   return (<>
     {stateCustomerId ?
       <div className='hidden lg:block bg-white p-4 -mt-20 lg:mt-0 md:mt-0'>
-        <p className='font-montSemiBold'>Have a Coupon?</p>
+        <p className='font-montSemiBold text-lg'>Have a Coupon?</p>
         <div className='flex items-center'>
           {!billingDetails?.totalCouponSavingsAmount !=0 ?
             <>
-              <input type="text" placeholder="Enter your Coupon" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-slate-400' disabled={!loading ?false:true} />
+              <input type="text" placeholder="Enter Coupon/Promo Code Here" name='coupon' value={coupon} onChange={handleChange} className='p-2 border-2 w-96 border-dashed border-[#00BAC8]' disabled={!loading ?false:true} />
               {!loading ? <button className='p-2 px-5 ml-3' style={{
                 backgroundColor: stateStoreSettings ? stateStoreSettings.secondary_color : 'black', color: stateStoreSettings ? stateStoreSettings.navbar_color : 'white'
               }} onClick={applyCoupon}>Apply</button> : <SyncOutlined className='p-2 px-5 ml-3' style={{ fontSize: 22 }} spin />}

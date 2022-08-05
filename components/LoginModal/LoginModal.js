@@ -11,6 +11,7 @@ import { customerLogIn, customerSignUp, forgotPasswordAPI, resetPasswordAPI, ver
 import ResetPassword from './ResetPassword';
 import { useFirebase } from '../../firebase/useFirebase';
 import create from '@ant-design/icons/lib/components/IconFont';
+import { toast, ToastContainer } from 'react-toastify';
 
 function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisible, showModal, storeId, customerDetails, customerDetailsReducer, dispatchForgotPassword, dispatchResetPassword, dispatchCustomerSignUp, dispatchCustomerLogin, dispatchForgotOtp,
     dispatchVerifyOtp }) {
@@ -41,6 +42,8 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
     const [fcmToken, setFcmToken] = useState('')
 
+    const[loginLoader,setLoginLoader]=useState(false)
+
     // useEffect(()=>{
 
     useFirebase().then(res => {
@@ -52,8 +55,8 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     console.log('fcmToken', fcmToken)
     useEffect(() => {
 
-        console.log('messageeee', message, customerDetails, createAccount)
-        console.log('fcmToken', fcmToken)
+     
+        setLoginLoader(false)
         // if(resetPassword){
         //     setResetPassword(false)
         // }
@@ -83,7 +86,19 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message == "Email is already taken") {
             setLoading(false)
             console.log('Em consol', message)
-            messageAnt.error(message)
+            // messageAnt.error(message)
+               
+            toast.error(message, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
+
             setMessage('')
 
         }
@@ -91,8 +106,20 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         else if (message === "Successful logged in") {
             // setOtp(true)
             // setLoginMethod('email')    
-            messageAnt.success('Logged In Successfully ')
+         
+            toast.success('Logged In Successfully ', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
+            
             setMessage('')
+            setLoginLoader(false)
             // customerDetails(response.data.customerDetails)
             setVisible(false)
             setLoading(false)
@@ -123,13 +150,36 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
             dispatchForgotPassword({ payload })
 
             // customerDetails(response.data.customerDetails)
-            messageAnt.error('Please Verify Your Account')
+            // messageAnt.error('Please Verify Your Account')
+            toast.error('Please Verify Your Account', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+         
+
+
             setLoading(false)
         }
         else if (message == "OTP verification successful" && createAccount) {
 
 
-            message && messageAnt.success('successfully verified acdcount')
+            message &&
+            //  messageAnt.success('successfully verified acdcount')
+            toast.success('successfully verified account', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
             setOTP('')
 
             setLoading(false)
@@ -139,7 +189,19 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
         }
 
         else if (message != '') {
-            message && messageAnt.error(message)
+            message &&
+            //  messageAnt.error(message)
+            toast.error(message, {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+
+
             setMessage('')
             if (!forgotPassword) {
                 setForgotPassword(false)
@@ -261,24 +323,66 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     const handleAuth = async (e, verificationType, isd, mode) => {
         e.preventDefault()
 
+        setLoginLoader(true)
+
 
         if (mode == "SIGNUP") {
 
             setVerifyAccount(true)
 
             if (inputSignUp.method.length < 10) {
-                messageAnt.error("Please enter valid 10 digit phone number")
+                // messageAnt.error("Please enter valid 10 digit phone number")
+                toast.error('Please enter valid 10 digit phone number', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+
             }
 
             else if (inputSignUp.password != inputSignUp.confirm_password) {
-                messageAnt.error("Password and Confirm Password doesn't match ")
+                // messageAnt.error("Password and Confirm Password doesn't match ")
+                toast.error("Password and Confirm Password doesn't match", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
             else if (inputSignUp.password.length < 8) {
-                messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+                // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+                toast.error("Password strength is weak, please maintain atleast 8 characters", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
+                
             }
             else if(/\s/g.test(inputSignUp.password)){
                 
-                messageAnt.error('No Blank Spaces Allowed')
+                // messageAnt.error('No Blank Spaces Allowed')
+                toast.error("No Blank Spaces Allowed", {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
         }
       
 
@@ -359,6 +463,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
                 dispatchCustomerLogin({ payload })
                 setLoading(false)
+                
 
 
                 // const response = await customerLogIn('storeId', inputSignUp, auth, method)
@@ -386,18 +491,50 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
 
         if (OTP.length < 5) {
-            messageAnt.error('Please Fill the OTP')
+            // messageAnt.error('Please Fill the OTP')
+            toast.error('Please Fill the OTP', {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
         }
         else {
             const response = await verifyOtpAPI('storeId', customerId, OTP, method)
             if (response.data.message == 'successfully verified account') {
-                messageAnt.success(response.data.message)
+                // messageAnt.success(response.data.message)
+
+                toast.success(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                
                 customerDetails(response.data.customerDetails)
                 setVisible(false)
                 // handleClose()
             }
             else {
-                messageAnt.error(response.data.message)
+                // messageAnt.error(response.data.message)
+
+                
+                toast.error(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 customerDetails()
             }
         }
@@ -413,14 +550,43 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
 
         if (inputSignUp.password != inputSignUp.confirm_password) {
-            messageAnt.error("Password and Confirm Password doesn't match ")
+            // messageAnt.error("Password and Confirm Password doesn't match ")
+
+            toast.error("Password and Confirm Password doesn't match ", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
         else if (inputSignUp.password.length < 8) {
-            messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+            // messageAnt.error('Password strength is weak, please maintain atleast 8 characters')
+            toast.error("Password strength is weak, please maintain atleast 8 characters", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
         }
         else if(/\s/g.test(inputSignUp.password)){
                 
-            messageAnt.error('No Blank Spaces Allowed')
+            // messageAnt.error('No Blank Spaces Allowed')
+            toast.error("No Blank Spaces Allowed", {
+                position: "bottom-right",
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+            
     }
         else {
 
@@ -433,10 +599,28 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                 setLoading(false)
                 setVisible(false)
                 // setMessage('Password changed succesfully')
-                messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
+                // messageAnt.success(`${response.data.message} & Successfully LoggedIn`)
+                toast.success(`${response.data.message} & Successfully LoggedIn`, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
             }
             else {
-                messageAnt.error(response.data.message)
+                // messageAnt.error(response.data.message)
+                toast.error(response.data.message, {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
                 setForgotPassword(false)
                 setLoading(false)
             }
@@ -478,7 +662,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                     !error ?
                         !otp ?
                             !createAccount ?
-                                <LoginForm handleAuth={handleAuth} handleChange={handleChange} handleClick={handleClick} disabled={disabled} method={method} handleLoginMethod={handleLoginMethod} handleForgotPassword={handleForgotPassword} forgotPassword={forgotPassword} handleForgotPasswordChange={handleForgotPasswordChange} />
+                                <LoginForm handleAuth={handleAuth} handleChange={handleChange} handleClick={handleClick} disabled={disabled} method={method} handleLoginMethod={handleLoginMethod} handleForgotPassword={handleForgotPassword} forgotPassword={forgotPassword} handleForgotPasswordChange={handleForgotPasswordChange} loginLoader={loginLoader}/>
                                 : <SignupForm handleAuth={handleAuth} handleChange={handleChange} handleClick={handleClick} method={method} storeSettings={storeSettings} handleLoginMethod={handleLoginMethod} inputSignUp={inputSignUp} />
                             : resetPassword ? <ResetPassword handleResetPassword={handleResetPassword} handleChange={handleChange} /> :
                                 <OtpForm handleChangeOtp={handleChangeOtp} inputSignUp={inputSignUp} handleProceed={handleProceed} handleAuth={handleAuth} method={method} inputOtp={inputOtp} OTP={OTP} change={change} auth={auth} verifyOtp={verifyOtp} handleForgotPassword={handleForgotPassword} handleForgotPasswordAuth={handleForgotPasswordAuth} verifyAccount={verifyAccount} disable={disable}/> :
@@ -489,6 +673,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
                     </div>
                 }
             </Modal>
+            <ToastContainer />
         </div>
     )
 }
