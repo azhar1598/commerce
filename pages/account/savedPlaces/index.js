@@ -109,27 +109,28 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
     const onSubmit = async (address) => {
         let response
+
+        console.log('adddress', address)
+
         setLoading(true);
         const payload = {
             customerId: customerDetails.data.customer_id, addressId
-            , address, setLoading, bool, setBool, message, edit
+            , address, setLoading, bool, setBool, message, edit,toast
         }
         if (!edit) {
             addAddressAction({ payload })
             !isTabletOrMobile && setAddNewAddress(!addNewAddress)
-
+            // getData()
         }
         else {
             // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
             editAddressAction({ payload })
             setAddNewAddress(!addNewAddress)
+            // getData()
         }
         setValueAddress()
         defaultAddressAction()
         setShowAddressMobile(false)
-
-
-
     }
 
     const handleDisplayMobileAddress = () => {

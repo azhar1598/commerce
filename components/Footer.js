@@ -224,16 +224,16 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
                 <div>
                   <h3 className='text-xl font-montMedium text-white'>Account</h3>
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
+                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
                   >My Orders</p>
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  // onClick={() => router.push('/cart')}
+                  onClick={() => router.push('/cart')}
                   >My Cart</p>
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
+                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
                   >Orders</p>
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  // onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
+                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
                   >Saved Address</p>
                 </div>
 

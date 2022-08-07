@@ -609,7 +609,7 @@ export function* handleAddress({ type, payload }) {
             if (response) {
                 // payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
 
-                payload.toast(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+                payload.toast.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
@@ -649,7 +649,7 @@ export function* handleAddress({ type, payload }) {
             if (response) {
                 // payload.message.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`)
 
-                payload.toast(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
+                payload.toast.success(`${payload.edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
                     position: "bottom-right",
                     autoClose: 1000,
                     hideProgressBar: false,
