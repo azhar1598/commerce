@@ -121,6 +121,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
             addAddressAction({ payload })
             !isTabletOrMobile && setAddNewAddress(!addNewAddress)
             // getData()
+
+            
         }
         else {
             // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
