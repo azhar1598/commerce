@@ -208,7 +208,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
             </div> */}
 
             <div className='lg:hidden absolute fixed -mt-20 z-[300000]'>
-                <ReviewTracker storeSettings={storeSettings} deliveryMethod={deliveryMethod=='PARCEL' || deliveryMethod=='DELIVERY' ?true:false} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
+                <ReviewTracker storeSettings={storeSettings} deliveryMethod={deliveryMethod == 'PARCEL' || deliveryMethod == 'DELIVERY' ? true : false} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
             </div>
 
             <div className='  lg:flex   md:-mt-4  bg-[#F6F6F6] md:p-8'>
@@ -231,16 +231,21 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                             : ''}
 
-                        {!showAddressMobile ?
-                            <div className='hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
-                                <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
-                            </div>
-                            :
-                            <div className=' bg-white p-3 flex items-baseline  w-full border-b-4 border-slate-[200]' onClick={edit ? handleEditMobileAddress : handleDisplayMobileAddress} >
-                                <ArrowLeftOutlined className='text-black text-lg mr-4' />
-                                <p className='text-black font-montSemiBold'>{edit ? `Edit Address` : `Add New Address`}</p>
-                            </div>}
+                        {
+                            deliveryMethod == 'DELIVERY' ?
+                                !showAddressMobile ?
+
+                                    <div className=' md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
+                                        <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
+                                        <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
+                                    </div>
+                                    :
+                                    <div className=' bg-white p-3 flex items-baseline  w-full border-b-4 border-slate-[200]' onClick={edit ? handleEditMobileAddress : handleDisplayMobileAddress} >
+                                        <ArrowLeftOutlined className='text-black text-lg mr-4' />
+                                        <p className='text-black font-montSemiBold'>{edit ? `Edit Address` : `Add New Address`}</p>
+                                    </div>
+                                : ''
+                        }
 
                         {!addNewAddress ?
                             <>
@@ -268,20 +273,21 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                 </div>
 
 
-                                <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
-                                    <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
-                                        <div className="leading gap-0 w-full flex items-center flex-col ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                {!showAddressMobile ?
+                                    <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
+                                        <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
+                                            <div className="leading gap-0 w-full flex items-center flex-col ">
+                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in {
+                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                                        storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
+                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
+                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
 
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
 
-                                        </div>
-                                    </Radio.Group>
-                                </div>
+                                            </div>
+                                        </Radio.Group>
+                                    </div> : ''}
 
 
                                 {deliveryMethod == 'DELIVERY' ?
@@ -289,8 +295,10 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                         <p className='lg:block hidden text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
 
 
-                                        <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
-
+                                        {stateAddress.length != 0 ? <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
+                                            :
+                                            <p className='lg:hidden text-black font-montMedium py-2 lg:mt-0  text-[16px] bg-white w-full   pt-8 px-6'  >No Address Added Yet</p>
+                                                }
 
                                         <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 -mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
                                             {
@@ -300,7 +308,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                                             {stateAddress?.map(item =>
                                                                 <div className='lg:flex flex-col items-start px-2 lg:py-2' key={item.address_tag}>
-                                                                    <div className='flex w-full lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
+                                                                    <div className='flex w-[90vw] lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
                                                                         <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
                                                                             <Radio className='font-montSemiBold' value={item.address_id}></Radio>
                                                                         </Radio.Group>

@@ -676,6 +676,199 @@ export const Product = (props) => {
         }
     }
 
+    const handleDecreaseQuantity = (item, qty) => {
+
+        const data = readyCartData(props.cart)
+        // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+
+        if (item.defaultVariantItem) {
+
+            const filter = props.cart.filter((c) => {
+                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                    return c
+                }
+            })
+
+            // important
+            if (qty == 0) {
+                props.removeFromCart(Number(item.variant_item_id))
+
+            }
+            else {
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+                else {
+
+                    if (filter[0].qty <= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`)
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.defaultVariantItem.inventory_details?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+                    }
+
+
+                    else {
+                        console.log('qqtty', qty)
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+
+
+            }
+
+
+        } else {
+            const filter = props.cart.filter((c) => {
+                if (c.item_id == item.item_id) {
+                    return c
+                }
+            })
+
+            // important
+            if (qty == 0) {
+                props.removeFromCart(Number(item.item_id))
+
+            }
+            else {
+                if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+                    if (filter[0].qty <= item.inventoryDetails?.inventory_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.inventory_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        props.adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                } else {
+
+                    if (filter[0].qty <= item.inventoryDetails?.min_order_quantity) {
+
+
+                        // message.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`)
+
+
+                        toast.error(`Sorry, The Minimum Order Quantity is ${item.inventoryDetails?.min_order_quantity}`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // setMinQtyMsg(true)
+                        setMinProduct(item.item_name)
+
+
+                    }
+                    else {
+                        props.adjustQty(item.item_id, qty)
+                        setMinQtyMsg(false)
+
+                    }
+                }
+            }
+
+        }
+
+
+
+
+
+
+        // if (checkout.backendCart?.purchase_id || state) {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', checkout.backendCart?.purchase_id, data)
+
+        // }
+        // else {
+        //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', undefined, data)
+
+        // }
+
+
+        // fetchBackendCart('customerDetails.data?.customer_id,', 'storeDetails.group_id', data)
+    }
+const readyCartData = function (arr) {
+
+        const key = 'store_id'
+        return arr.reduce(function (rv, x) {
+
+            (rv[x[key]] = rv[x[key]] || []).push({
+                item_id: x.item_id,
+                barcode_id: null,
+                quantity: x.qty,
+                variant_item_id: x.defaultVariantItem?.variant_item_id | null,
+            });
+            return rv;
+        }, {});
+    };
+
+
+
+
     const handleIncreseQuantity = (inventory, itemid, qty) => {
         let quantity = 0
         let value = null
@@ -726,6 +919,288 @@ export const Product = (props) => {
 
         }
     }
+
+
+    const handleIncreaseQuantity = (item) => {
+
+
+        console.log('itenmmmm', item)
+
+        if (item.defaultVariantItem) {
+
+            let quantity = 0
+            const value = item?.defaultVariantItem?.inventory_details
+
+            if (value?.inventory_quantity == null) {
+                if (value?.max_order_quantity == null)
+                    quantity = 15
+                else {
+                    quantity = value.max_order_quantity
+                }
+                // if(maxmin)
+            }
+            else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                quantity = value.inventory_quantity
+                console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+            }
+            else if (value?.max_order_quantity > value?.inventory_quantity) {
+                quantity = value.inventory_quantity
+                console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+            }
+            else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+                quantity = value.max_order_quantity
+                console.log('value?.max_order_quantity < value?.inventory_quantity',)
+            }
+
+            if (quantity > 0) {
+                console.log('cartt', props.cart)
+                const filter = props.cart.filter((c) => {
+                    if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                        return c
+                    }
+                })
+                // console.log('fffilter', filter)
+                // if (filter[0].qty >= quantity) {
+                //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                //     // adjustQty(item.defaultVariantItem.variant_item_id, item.qty)
+                // }
+                // else {
+                //     if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                //         setMinQtyMsg(false)
+                //     }
+                //     adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                // }
+
+
+                if (item.defaultVariantItem.inventory_details?.inventory_quantity < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+
+                    if (filter[0].qty < item.item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
+                }
+
+                else {
+
+
+
+                    if (filter[0].qty < item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.defaultVariantItem.inventory_details?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        props.adjustQty(item.defaultVariantItem.variant_item_id, item.qty + 1)
+                    }
+
+                }
+
+
+
+            }
+            else {
+                // message.error('Sorry, You Cannot add more items')
+
+                toast.error('Sorry, You Cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+
+        }
+        else {
+            // item without variant
+            console.log('item without variant', item)
+
+            let quantity = 0
+            const value = item?.inventoryDetails
+
+            console.log('valuee', value)
+            if (value != null) {
+
+                if (value?.inventory_quantity == null) {
+
+
+
+                    if (value?.max_order_quantity == null)
+                        quantity = 15
+                    else {
+                        quantity = value?.max_order_quantity
+                    }
+                    // if(maxmin)
+                }
+                else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                    quantity = value?.inventory_quantity
+                    console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+                }
+                else if (value?.max_order_quantity > value?.inventory_quantity) {
+                    quantity = value.inventory_quantity
+                    console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+                }
+                else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+                    quantity = value.max_order_quantity
+                    console.log('value?.max_order_quantity < value?.inventory_quantity',)
+                }
+            } else {
+                quantity = 15
+            }
+
+            if (quantity > 0) {
+                console.log('cartt', props.cart)
+                const filter = props.cart.filter((c) => {
+                    if (c.item_id == item.item_id) {
+                        return c
+                    }
+                })
+
+                // important
+
+                if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+                    if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                        props.adjustQty(item.item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1', filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.inventory_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        props.adjustQty(item.item_id, item.qty + 1)
+                    }
+                }
+
+                else {
+
+
+
+                    if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
+                        props.adjustQty(item.item_id, item.qty + 1)
+
+                    }
+
+                    if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                        toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+
+
+                        // adjustQty(item.item_id, item.qty)
+                    }
+                    else {
+                        console.log('filter[0].qty+1',filter[0].qty,typeof(filter[0].qty), filter[0].qty + 1)
+                        if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
+                            setMinQtyMsg(false)
+                        }
+                        props.adjustQty(item.item_id, filter[0].qty + 1)
+                    }
+                }
+            }
+            else {
+                // message.error('Sorry, You cannot add more items')
+
+
+                toast.error('Sorry, You cannot add more items', {
+                    position: "bottom-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+            }
+        }
+
+    }
+
 
     const handlePush = () => {
         props.fetchItemDetails('', '')
@@ -861,9 +1336,19 @@ export const Product = (props) => {
 
 
                                         <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
-                                            <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-3 text-2xl cursor-pointer`}>-</span>
+                                            <span onClick={() =>
+                                                //  handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
+
+                                                handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+
+                                                 className={`px-3 text-2xl cursor-pointer`}>-</span>
                                             <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                            <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3 text-xl cursor-pointer'>+</span>
+                                            <span onClick={() => 
+                                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
+
+                                             handleIncreaseQuantity(props.item) }
+                                            
+                                            className='px-3 text-xl cursor-pointer'>+</span>
                                         </div>
                                         :
                                         <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
@@ -889,9 +1374,19 @@ export const Product = (props) => {
 
 
                                     <div className='-mt-6 border rounded border-red-600 font-montSemiBold h-10  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white ' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
-                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={` text-2xl px-4 cursor-pointer`}>-</span>
+                                        <span onClick={() =>
+                                            //  handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+                                             
+                                            handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+
+                                             className={` text-2xl px-4 cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-7'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-3  text-xl cursor-pointer'>+</span>
+                                        <span onClick={() =>
+                                            //  handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)}
+                                             
+                                            handleIncreaseQuantity(props.item) }
+
+                                             className='px-3  text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
                                     <p className='w-[37px] -mt-8 ml-32 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>+</p>
@@ -941,9 +1436,17 @@ export const Product = (props) => {
 
 
                         <div className=' border rounded border-red-600 font-montSemiBold flex items-center space-x-6  bg-white w-full' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
-                            <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`px-6 text-xl py-1 cursor-pointer`}>-</span>
+                            <span onClick={() => 
+                                // handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
+                                
+                                handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+
+                                className={`px-6 text-xl py-1 cursor-pointer`}>-</span>
                             <span className='text-black font-montMedium text-xl py-1'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                            <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='px-6 py-1 text-xl cursor-pointer'>+</span>
+                            <span onClick={() => 
+                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
+                            handleIncreaseQuantity(props.item) }
+                            className='px-6 py-1 text-xl cursor-pointer'>+</span>
                         </div>
                         :
       
@@ -1039,9 +1542,19 @@ export const Product = (props) => {
 
 
                                     <div className='   border rounded border-red-600   l-mt-5 mr-3 rounded shadow  w-44  mt-4 font-montMedium text-sm flex items-center bg-white h-10' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.primary_color : 'black'}` }}>
-                                        <span onClick={() => handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} className={`pl-4  text-2xl cursor-pointer`}>-</span>
+                                        <span onClick={() => 
+                                            // handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
+                                            
+                                            handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+
+                                            className={`pl-4  text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-12'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                        <span onClick={() => handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
+                                        <span onClick={() => 
+                                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)}
+                                            
+                                            handleIncreaseQuantity(props.item) }
+                                            
+                                            className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
                                     <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage ? 'px-6 py-2 w-44' : "px-10 py-2 "}  mt-4 font-montMedium text-sm`} onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.primary_color : "black"}` }}>ADD TO CART</p>

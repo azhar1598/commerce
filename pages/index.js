@@ -240,7 +240,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
                         </div> :
                         <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow-xl bg-white max-h-[55vh]' key={index}>
-                          {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
+                          <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p>
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
@@ -290,7 +290,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
                         </div> :
                         <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
-                          {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
+                          <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p>
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 

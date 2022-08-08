@@ -116,7 +116,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             else {
               // message.error(purchaseInvalid)
               toast.error(purchaseInvalid, {
-                position: "bottom-right",
+                position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+                style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
                 autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -131,7 +132,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
 
 
-             if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
+            if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
 
               if (deliveryMethod == 'DELIVERY') {
                 if (address.defaultAddress) {
@@ -145,13 +146,14 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   setloader(false)
                   // message.error('Please Add the Address')
                   toast.error('Please Add the Address', {
-                    position: `${isTabletOrMobile?'top-center':'bottom-right'}`,
+                    position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
                     autoClose: 1000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
+                    style: { marginTop: isTabletOrMobile ? '80px' : '0px' }
                   });
                 }
               }
@@ -159,25 +161,25 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                 setloader(false)
                 router.push('/review-mobile')
               }
-  
+
             }
             else {
               setloader(false)
               // message.error('Please Choose Delivery Method')
               toast.error('Please Choose Delivery Method', {
-                position: `${isTabletOrMobile?'top-center':'bottom-right'}`,
+                position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
                 autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-                style:{marginTop:'80px'}
+                style: { marginTop: isTabletOrMobile ? '80px' : '0px' }
               });
             }
 
 
-            
+
             // if (address.defaultAddress) {
             //   const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
             //   if (response) {
@@ -210,7 +212,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               setloader(false)
               // message.error(purchaseInvalid)
               toast.error(purchaseInvalid, {
-                position: "bottom-right",
+                position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+                style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
                 autoClose: 1000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -234,7 +237,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                 setloader(false)
                 // message.error('Please Add the Address')
                 toast.error('Please Add the Address', {
-                  position: "bottom-right",
+                  position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+                  style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
                   autoClose: 1000,
                   hideProgressBar: false,
                   closeOnClick: true,
@@ -254,14 +258,15 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             setloader(false)
             // message.error('Please Choose Delivery Method')
             toast.error('Please Choose Delivery Method', {
-              position: "bottom-right",
+              position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+              style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
               autoClose: 1000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-              style:{zIndex:500000}
+              style: { zIndex: 500000 }
             });
           }
         }
@@ -269,7 +274,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       else {
         // message.error(`Please Check Minimum Quantity of ${minProduct}`)
         toast.error(`Please Check Minimum Quantity of ${minProduct}`, {
-          position: "bottom-right",
+          position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+          style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
           autoClose: 1000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -283,7 +289,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       setloader(false)
       // message.error('Something is wrong with address')
       toast.error('Something is wrong with address', {
-        position: "bottom-right",
+        position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+        style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -322,7 +329,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     else {
       // message.error('Please Add the payment Method')
       toast.error('Please Add the payment Method', {
-        position: "bottom-right",
+        position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+        style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -353,7 +361,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         const successInfo = { totalSavings, orderIds }
 
         if (wallet) {
-          
+
           if (walletAmount < billingDetails?.calculatedPurchaseTotal) {
 
             if (paymentMethod == 'COD') {
@@ -434,7 +442,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     else {
       // message.error('Please Add the Payment Method')
       toast.error('Please Add the Payment Method', {
-        position: "bottom-right",
+        position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+        style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -470,7 +479,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     if (response) {
       // message.success(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`)
       toast.error(`${edit ? `Address Updated Successfully` : `Address added Successfully`}`, {
-        position: "bottom-right",
+        position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+        style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -495,7 +505,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     else {
       // message.error('Something is wrong')
       toast.error('Something is wrong', {
-        position: "bottom-right",
+        position: `${isTabletOrMobile ? 'top-center' : 'bottom-right'}`,
+        style: { marginTop: isTabletOrMobile ? '80px' : '0px' },
         autoClose: 1000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -587,6 +598,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           </div>
 
           <div className='hidden lg:flex items-center justify-center w-full'>
+
             {checkout != undefined ? !loader ? <button className='p-2 w-72 mt-4  ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => {
               !customerDetails.data?.customer_id ? showModal() :
                 stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) :
@@ -676,10 +688,17 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       {/* Mobile View */}
       <div className='lg:hidden md:hidden flex  items-center justify-between bottom-16 pt-4 bg-white border-t-2 w-full fixed p-1 '>
         {!showAddressMobile ? <>  {!final ?
-          <div className=" w-1/2  pt-1  h-12 pr-2 mr-2   text-center font-montSemiBold text-  cursor-pointer" style={{ color: `${storeSettings.data ? 'black' : 'black'}`, background: `white` }}><p className='mb-0 font-montRegular'>{billingDetails?.itemCount} Items In bag</p>Total {stateStoreDetails?.currency_symbol} {billingDetails?.calculatedPurchaseTotal}</div> : ''}
+          checkout != undefined ? <div className=" w-1/2  pt-1  h-12 pr-2 mr-2   text-center font-montSemiBold text-  cursor-pointer" style={{ color: `${storeSettings.data ? 'black' : 'black'}`, background: `white` }}>
+
+            <p className='mb-0 font-montRegular'>{billingDetails?.itemCount} Items In bag</p>Total {stateStoreDetails?.currency_symbol} {billingDetails?.calculatedPurchaseTotal}</div> : '' : ''}
 
           {checkout != undefined ? !loader ?
-            <button className={` flex items-center justify-center text-lg h-12  ${final ? ' w-full' : 'w-44'} text-center font-montSemiBold`} style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? router.push('/account/user/login') : stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) : !review ? handleProceed('mobile') : final ? paymentMethod == 'COD' ? handleCodModal() : handlePayment('mobile') : handleProceedMobile() }}>{customerDetails.data?.customer_id ? 'PROCEED' : 'LOGIN'}</button> : <Spin /> : <Spin />}</> :
+            <button className={` flex items-center justify-center text-lg h-12  ${final ? ' w-full' : 'w-44'} text-center font-montSemiBold`} style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? router.push('/account/user/login') : stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) : !review ? handleProceed('mobile') : final ? paymentMethod == 'COD' ? handleCodModal() : handlePayment('mobile') : handleProceedMobile() }}>{customerDetails.data?.customer_id ? 'PROCEED' : 'LOGIN'}</button> : <Spin /> :
+
+
+            <button className={` flex items-center justify-center text-lg h-12  ${final ? ' w-full' : 'w-full'} text-center font-montSemiBold`} style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, background: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { !customerDetails.data?.customer_id ? router.push('/account/user/login') : stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) : !review ? handleProceed('mobile') : final ? paymentMethod == 'COD' ? handleCodModal() : handlePayment('mobile') : handleProceedMobile() }}>{customerDetails.data?.customer_id ? 'PROCEED' : 'LOGIN'}</button>
+
+          }</> :
           ''}
 
         {paymentData.rzpOrderId && <OnlinePayment paymentData={paymentData} store={'storeDetails'} setPaymentData={setPaymentData} purchaseId={address.purchaseDetails.data.purchaseId} customerId={customerDetails.data?.customer_id} razorpayKey={razorpayKey}></OnlinePayment>}
@@ -817,9 +836,9 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         </div>
 
       </Modal>
-<div className='mt-24 z-[500000]'>
-<ToastContainer />
-</div>
+      <div className='mt-24 z-[500000]'>
+        <ToastContainer />
+      </div>
 
     </>
   )

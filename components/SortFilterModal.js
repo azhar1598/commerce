@@ -159,7 +159,7 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
           onRequestClose={() => setFilterModalVisible(false)}
           style={customStyles}
         > */}
-        <div className='mt-12 hidden lg:block'>
+        <div className='mt-12 fixed hidden lg:block'>
           {/* <div className='flex justify-between pt-4 px-4'>
 
             <h2 className='text-2xl flex '><img src="/filter.svg" className='pr-4' />Filter / Sort  </h2>
@@ -171,18 +171,18 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
           <div>
             <div  type="card" size="large" tabBarGutter='0' className='h-[40vh]'>
               <div  key="sort" className='h-[40vh] overflow-hidden overflow-y-scroll ' >
-                <p className='font-montSemiBold text-lg'>Sort By</p>
+                <p className='font-montSemiBold text-[18px]'>Sort By</p>
                 <div className='mt-2'>
                   <input checked={sortOrder == "false" ? true : false} style={{ accentColor: storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'pink-500' }} onClick={handleSortOrder} id='rel' type="radio" name='sort' value="false" />
-                  <label className='text-[18px] ml-2' htmlFor="rel">Relevance</label>
+                  <label className='text-[18px] ml-2 font-montRegular ' htmlFor="rel">Relevance</label>
                 </div>
                 <div className='mt-2'>
                   <input checked={sortOrder == "DESC" ? true : false} style={{ accentColor: storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'pink-500' }} onClick={handleSortOrder} id='htl' type="radio" name='sort' value="DESC" />
-                  <label className='text-[18px] ml-2' htmlFor="htl">Price (High to Low)</label>
+                  <label className='text-[18px] ml-2 font-montRegular ' htmlFor="htl">Price (High to Low)</label>
                 </div>
                 <div className='mt-2'>
                   <input checked={sortOrder == "ASC" ? true : false} style={{ accentColor: storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'pink-500' }} onClick={handleSortOrder} id='lth' type="radio" name='sort' value="ASC" />
-                  <label className='text-[18px] ml-2' htmlFor="lth">Price (Low to High)</label>
+                  <label className='text-[18px] ml-2 font-montRegular ' htmlFor="lth">Price (Low to High)</label>
                 </div>
               </div>
               {

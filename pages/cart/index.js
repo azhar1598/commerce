@@ -594,7 +594,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
 
                     if (filter[0].qty >= quantity) {
-                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
 
                         toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
@@ -709,7 +709,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             {cart.length != 0 ?
                 <div className='lg:bg-[#F6F6F6] lg:mt-24 md:-mt-4 lg:h-full md:h-screen flex flex-col lg:flex-row md:flex-row items-start lg:p-2 md:p-2 lg:min-h-screen'>
 
-                    <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
+                    <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] lg:border-b-2 lg:border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
                         <p className='hidden lg:block md:block font-montBold text-2xl py-6 px-5'>Cart<span className='text-gray-500 font-montSemiBold text-lg px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
 
                         <div className='lg:hidden px-5 flex items-start border-b-2 border-slate-200 w-full mb-2'>
@@ -735,7 +735,9 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                             {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
                                                 <div className='flex -mt-5  gap-4 ' >
                                                     <div className='border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span onClick={() => 
+                                                            handleDecreaseQuantity(item, item.qty - 1)} 
+                                                            className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
                                                         <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
 
                                                         <span onClick={() => { handleIncreaseQuantity(item) }}

@@ -11,6 +11,7 @@ import NoOrders from '../../../components/svgComponents/NoOrders'
 import PageWrapper from '../../../components/PageWrapper/PageWrapper'
 import { useRef } from "react"
 import Stepper from '../../../components/stepper'
+import moment from 'moment'
 
 export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
@@ -19,6 +20,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
     const [orderItems, setOrderItems] = useState([])
     const [orderStatus, setOrderStatus] = useState(0);
     const [isReturnActive, setIsReturnActive] = useState(false)
+    const [isCancelled, setIsCancelled] = useState(false)
 
     const ref = useRef(null);
 
@@ -41,15 +43,52 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
     ];
 
+    useEffect(() => {
+
+        if (orders.length != 0) {
+            orders.map((item, index) => {
+
+                console.log('item.orderStatus',item.orderStatus)
+
+                if (item?.orderStatus) {
+                    if (item?.orderStatus == "PAYMENT_COMPLETED") {
+                        setOrderStatus(0)
+                    }
+                    else if (item?.orderStatus == "ORDER_CONFIRMED_BY_REST") {
+                        setOrderStatus(1)
+                    }
+                    else if (item?.orderStatus == "PENDING_PICKUP_BY_CUST") {
+                        setOrderStatus(2)
+                    }
+                    else if (item?.orderStatus == "ORDER_DELIVERED_SUCCESS") {
+                        setOrderStatus(3)
+                    }
+                    else if (item?.orderStatus == "ORDER_DECLINED_BY_RESTAURANT" || item?.orderStatus == "CANCELLED_BY_CUSTOMER") {
+                        setIsCancelled(true)
+                        setOrderStatus(1)
+                    }
+                }
+            }
+
+
+            )
+        }
+
+
+
+    }, [orders])
+
     const cancelSteps = [
+
         {
+
             label: 'Order is Placed',
-            // dsc: moment.unix(orderDetails?.orderPlacedTime).format('LLL')
+            // dsc: moment.unix(item?.orderPlacedTime).format('LLL')
         },
 
-        // {
-        //     label: orderDetails.orderStatus == "CANCELLED_BY_CUSTOMER" ?'Order Cancelled':'Order Declined by Restaurant',
-        // },
+        {
+            // label: item.orderStatus == "CANCELLED_BY_CUSTOMER" ?'Order Cancelled':'Order Declined by Restaurant',
+        },
 
 
     ];
@@ -127,6 +166,8 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
                     <div className='flex flex-col items-center  justify-between  w-full  cursor-pointer mb-24' >
 
+
+
                         {!loading ?
                             <>
                                 {orders.length != 0 ?
@@ -178,9 +219,9 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                     </div>
                                                 </div>
 
-                                                
+
                                                 <div className='lg:block hidden py-3'>
-                                                    <Stepper vertical={false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
+                                                    <Stepper vertical={false} cancelled={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? true : false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? steps : steps} activeStep={item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? orderStatus+4 : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? orderStatus+2 : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? orderStatus+3 : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? orderStatus+2 : orderStatus+1} sx={style} openReturn={setIsReturnActive} details={item} />
                                                 </div>
 
 

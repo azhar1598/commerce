@@ -32,7 +32,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
     const handleCategory = async (id, name, subCategories) => {
 
         // document.getElementById(id).style.color = "red"
-        // dispatchSearchItems('')
+        dispatchSearchItems('')
 
 
         console.log('subCategpries', subCategories, name)

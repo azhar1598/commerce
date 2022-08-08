@@ -335,7 +335,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                         // backgroundColor: rgbaColor 
                     }} />
 
-                    <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.secondary_color : 'black' : ''} />
+                    <SearchSvg navbarColor={storeSettings.data ? storeSettings.data ? storeSettings.data.primary_color : 'black' : ''} />
                     {/* <SearchOutlined className="text-lg px-2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} /> */}
                 </div>
             <div className='flex items-center '>
