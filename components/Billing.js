@@ -535,7 +535,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               {checkout != undefined ?
                 <div className='bg-white p-2 w-full  font-montMedium'>
                   <div className='flex items-start w-full'>
-                    {review ? <p className='text-sm font-montSemiBold w-[3000px]'>Shipping to <span className='font-montRegular   text-[12px]'>{address?.defaultAddress?.full_name}, {address?.defaultAddress?.address_line_1}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
+                    {review ? <p className='text-sm font-montSemiBold w-[3000px]'>{address?.defaultAddress.pickup_point_name?'Pickup Point ':'Shipping To'} <span className='font-montRegular   text-[12px]'>{address?.defaultAddress?.full_name}{address?.defaultAddress.pickup_point_name}, {address?.defaultAddress?.address_line_1}{address?.defaultAddress.address}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
                     </span> </p>
                       : ''}
                     <p className='font-montRegular w-1/2 text-sm'>

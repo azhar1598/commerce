@@ -182,6 +182,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         if (e.target.value == 'PARCEL') {
 
             setParcelAction(checkout.backendCart?.purchase_id)
+            defaultAddressAction(storeDisplaySettings?.data?.pickupPointDetails)
 
 
         }
