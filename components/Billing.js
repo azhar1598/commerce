@@ -135,7 +135,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
 
               if (deliveryMethod == 'DELIVERY') {
-                if (address.defaultAddress) {
+                if (address.defaultAddress && !address.defaultAddress.pickup_point_name) {
                   const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
                   if (response) {
                     setloader(false)
@@ -226,7 +226,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           else if (deliveryMethod == 'DELIVERY' || deliveryMethod == 'PARCEL') {
 
             if (deliveryMethod == 'DELIVERY') {
-              if (address.defaultAddress) {
+              if (address.defaultAddress && !address.defaultAddress.pickup_point_name) {
                 const response = await setDeliveryAddress(address.purchaseDetails.data.purchaseId, address?.defaultAddress?.address_id)
                 if (response) {
                   setloader(false)

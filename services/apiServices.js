@@ -175,8 +175,15 @@ export const editAddressAPI = (customerId, addressId, addressData) =>
 export const getPurchaseDetails = (payload) =>
     callAPI('GET', `orders/get-purchase&purchaseId=${payload}`)
 
-export const setDeliveryAddress = (purchaseId, addressId) =>
-    callAPI('GET', `orders/set-delivery-address-id&purchaseId=${purchaseId}&deliveryAddressId=${addressId}`)
+export const setDeliveryAddress = (purchaseId, addressId) =>{
+  if(addressId){
+  
+   return callAPI('GET', `orders/set-delivery-address-id&purchaseId=${purchaseId}&deliveryAddressId=${addressId}`)
+}
+else{
+    return null
+}
+}
 
 export const setDeliveryAddressFlag = (purchaseId, flag) =>
     callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=Y`)
@@ -189,7 +196,7 @@ export const convenienceFlag = (purchaseId, flag) =>
     callAPI('GET',`orders/set-parcel&purchaseId=${purchaseId}&flagStatus=Y`)
 
     export const setDeliveryAPI=(purchaseId)=>
-    callAPI('GET',`orders/set-delivery&purchaseId=${purchaseId}&flagStatus=N`)
+    callAPI('GET',`orders/set-delivery&purchaseId=${purchaseId}&flagStatus=Y`)
     
 
 export const couponApply = (payload) =>
