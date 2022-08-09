@@ -153,10 +153,10 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
           <p className={`text-[12px] font-montMedium`} style={router.pathname?.includes('/shop') || router.pathname?.includes('/product') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }} >Shop</p>
         </div>
         <div className='flex flex-col items-center'
-        // onClick={() => {
-        //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
-        // }}
-        onClick={() => { router.push('/menu') }}
+          // onClick={() => {
+          //   customerDetails.data?.customer_id ? router.push('/account/wishlist') : router.push('/account/user/login')
+          // }}
+          onClick={() => { router.push('/menu') }}
 
         >
           {/* <LoginModal visible={visible} setVisible={setVisible} showModal={showModal} /> */}
@@ -164,7 +164,7 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
             { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
           {/* <p className='text-[16px] ' style={router.pathname?.includes('/account/wishlist') ? { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4'}` } : { color: '#B4B4B4' }}>Wishlist</p> */}
 
-          <MenuIcon secondaryColor={router.pathname=='/menu' ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
+          <MenuIcon secondaryColor={router.pathname == '/menu' ? stateStoreSettings.data ? stateStoreSettings.data.primary_color : '#B4B4B4' : '#B4B4B4'} />
 
           {/* <MdAccountCircle className='text-[#212B36] text-3xl' style={router.pathname?.includes('/account/user') ?
   { color: `${stateStoreSettings.data ? stateStoreSettings.data.primary_color : 'black'}`, transition: 'all .5 linear' } : { transition: 'all .5s linear' }} /> */}
@@ -223,18 +223,29 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
                 </div>
                 <div>
                   <h3 className='text-xl font-montMedium text-white'>Account</h3>
+
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
+                    onClick={() => customerDetails.data?.customer_id ? router.push("/account/profile") : showModal()}
+                  >Profile</p>
+
+
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
+                    onClick={() => customerDetails.data?.customer_id ? router.push("/account/wishlist") : showModal()}
+                  >Wishlist</p>
+
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
+                    onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
                   >My Orders</p>
+
+
                   <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  onClick={() => router.push('/cart')}
-                  >My Cart</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/myOrders") : showModal()}
-                  >Orders</p>
-                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
-                  onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
+                    onClick={() => customerDetails.data?.customer_id ? router.push("/account/savedPlaces") : showModal()}
                   >Saved Address</p>
+
+
+                  <p className='text-gray-200 font-montRegular text-base cursor-pointer'
+                    onClick={() => customerDetails.data?.customer_id ? router.push("/account/wallet") : showModal()}
+                  >Wallet</p>
                 </div>
 
 
@@ -266,11 +277,12 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
                                 <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Privacy Policy</p> */}
                 </div>
 
-                <div>
+                <div className='w-52'>
                   <h3 className='text-xl font-montMedium text-white'>Contact Us</h3>
 
-                  {storeDetails?.city ? <div>
-                    <span className='text-white'><img className='inline mr-2 py-2 text-white' src={location.src} alt="" />{storeDetails?.city}, {storeDetails?.country}</span>
+                  {storeDetails?.city ? <div className='flex items-start mb-2'>
+                    <img className='inline mr-2 py-2 text-white -mt-2' src={location.src} alt="" />
+                    <div className='text-white'>{storeDetails?.address},{storeDetails?.city}, {storeDetails?.state}, {storeDetails?.country}</div>
                   </div> : ''}
                   <div>
                     <span className='text-white'><img className='inline mr-2 text-white' src={call.src} alt="" />+91 {storeDetails?.primary_phone}</span>
@@ -294,7 +306,7 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
             <ContactUs contactUsVisible={contactUsVisible} setContactUsVisible={setContactUsVisible} />
           </>
 
-          <div className='w-full mt-16 flex items-center justify-center '>
+          <div className='w-full mt-9 flex items-center justify-center '>
             <img src={'https://devo2.goplinto.com/profileLogos/goplinto_logo.png'} className='h-6  object-contain' />
           </div>
 

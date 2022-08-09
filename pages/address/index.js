@@ -178,18 +178,21 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     }
 
     const handleDeliveryMethod = (e) => {
-        setDeliveryMethod(e.target.value)
+        
         if (e.target.value == 'PARCEL') {
+            if (storeDisplaySettings?.data?.is_parcel_available == 'Y') {
 
             setParcelAction(checkout.backendCart?.purchase_id)
             defaultAddressAction(storeDisplaySettings?.data?.pickupPointDetails)
-
+            setDeliveryMethod(e.target.value)
 
         }
+    }
         else {
-
+            if (storeDisplaySettings?.data?.is_delivery_available == 'Y') {
             setDeliveryAction(checkout.backendCart?.purchase_id)
-
+            setDeliveryMethod(e.target.value)
+            }
         }
 
 
@@ -261,16 +264,28 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                 <div className='bg-white hidden   lg:flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                         <div className="leading gap-0 ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pick Up 
+                                            {
+                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                    storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ''}
+                                                        {
+                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> :""
+                                    }
+                                                    </Radio>
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery 
+                                            {
+                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                        {
+                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> :""
+                                    }
+                                                    </Radio>
 
                                         </div>
+                                        
                                     </Radio.Group>
+                                
                                 </div>
 
 
@@ -278,13 +293,17 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                     <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
                                         <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                             <div className="leading gap-0 w-full flex items-center flex-col ">
-                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in {
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                                        storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in 
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                        storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Pick Up</span> : ''}
+                                                        </Radio>
+                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery 
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                        storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                        </Radio>
 
                                             </div>
                                         </Radio.Group>

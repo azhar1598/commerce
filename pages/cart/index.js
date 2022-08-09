@@ -138,6 +138,60 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     }, [validCoupon])
 
+// useEffect(()=>{
+
+//     if (checkout.backendCart?.purchase_id && !checkout.purchaseDetails?.data.isPurchaseValid) {
+
+//         cart.map((item, idx) =>{
+
+//         Object.keys(checkout.purchaseDetails.data.orders).map(c => {
+
+//             // console.log('checkout .', c)
+//             console.log('checkout.purchaseDetails.data.orders[c]', checkout.purchaseDetails.data.orders[c].isOrderValid, checkout.purchaseDetails.data.orders[c].orderItems)
+//             if (!checkout.purchaseDetails.data.orders[c].isOrderValid) {
+//                 console.log('checkout.pur', checkout.purchaseDetails.data.orders[c].isOrderValid == 'false')
+//                 Object.keys(checkout.purchaseDetails.data.orders[c].orderItems).map(a => {
+//                     if (checkout.purchaseDetails.data.orders[c].orderItems[a].itemQuantity<item.qty) {
+
+
+//                         adjustQty(item.item_id, checkout.purchaseDetails.data.orders[c].orderItems[a].itemQuantity)
+                        
+
+//                         console.log('checkout.purchaseDetails.data.orders[c]', checkout.purchaseDetails.data.orders[c].orderItems[a].isOrderItemValid)
+//                         setPurchaseInvalid(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+//                         // message.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+
+//                         // toast.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`, {
+//                         //     position: "bottom-right",
+//                         //     autoClose: 1000,
+//                         //     hideProgressBar: false,
+//                         //     closeOnClick: true,
+//                         //     pauseOnHover: true,
+//                         //     draggable: true,
+//                         //     progress: undefined,
+//                         // });
+
+
+
+//                     }
+//                 })
+//             }
+//         }
+
+//         )
+//     })
+
+
+//     } else {
+//         setPurchaseInvalid('')
+//     }
+
+
+
+// },[])
+
+
+
     useEffect(() => {
 
         console.log('!checkout.purchaseDetails.data.isPurchaseValid),', !checkout.purchaseDetails?.data.isPurchaseValid)
@@ -776,7 +830,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         </div>
-                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
+                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
                                     </div>
 
                                 )}
@@ -838,7 +892,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         </div>
-                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
+                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
                                     </div>
 
                                 )}
