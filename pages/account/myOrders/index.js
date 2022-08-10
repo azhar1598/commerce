@@ -48,7 +48,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
         if (orders.length != 0) {
             orders.map((item, index) => {
 
-                console.log('item.orderStatus',item.orderStatus)
+                console.log('item.orderStatus', item.orderStatus)
 
                 if (item?.orderStatus) {
                     if (item?.orderStatus == "PAYMENT_COMPLETED") {
@@ -200,10 +200,14 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                         {Object.keys(item.orderItems).map((key, index) => {
                                                             return (<>
                                                                 {index == 0 ?
-                                                                    <>
-                                                                        <p className='text-[#212B36] -mt-4 lg:mt-0  font-montSemiBold lg:w-96 break-words item-description'>{item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
+                                                                    <div className='flex'>
+                                                                        {item.orderItems[key].isVeg ? <img src="/veg.svg" className=' w-4 h-4  mr-2' />
+                                                                            : <img src="/non-veg.png" className='w-4 h-4  mr-2' />}
+                                                                        <p className='text-[#212B36] -mt-4 lg:mt-0  font-montSemiBold lg:w-96 break-words item-description '>
+
+                                                                            {item.orderItems[key].itemName}  {Object.keys(item.orderItems).length > 1 ? `+ ${Object.keys(item.orderItems).length - 1} More` : ''}</p>
                                                                         <p className='text-[#212B3680] '></p>
-                                                                    </> : ''}
+                                                                    </div> : ''}
                                                             </>
                                                             )
                                                         })}
@@ -221,7 +225,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
 
                                                 <div className='lg:block hidden py-3'>
-                                                    <Stepper vertical={false} cancelled={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? true : false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? steps : steps} activeStep={item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? orderStatus+4 : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? orderStatus+2 : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? orderStatus+3 : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? orderStatus+2 : orderStatus+1} sx={style} openReturn={setIsReturnActive} details={item} />
+                                                    <Stepper vertical={false} cancelled={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? true : false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? steps : steps} activeStep={item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? orderStatus + 4 : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? orderStatus + 2 : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? orderStatus + 3 : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? orderStatus + 2 : orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
                                                 </div>
 
 

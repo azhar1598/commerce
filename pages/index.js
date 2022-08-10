@@ -263,7 +263,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
           {featured.length != 0 ?
             <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
-              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Best sellings</p>
+              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special Menus</p>
               <div className='bg-white p-2 flex items-center justify-between w-full '>
                 <ECarousel itemPosition={consts.START} itemsToShow={4} itemPadding={[0, 0]} renderArrow={myArrow} renderPagination={({ pages, activePage, onClick }) => {
                   return (
