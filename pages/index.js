@@ -10,7 +10,7 @@ import styles from '../styles/Home.module.css'
 import { getBannerImages, getFeaturedProducts, getNewArrivals } from '../services/apiServices'
 import { Carousel, Spin } from 'antd'
 import ECarousel, { consts } from 'react-elastic-carousel'
-import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, UpSquareOutlined } from '@ant-design/icons'
+import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, LeftSquareFilled, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, RightSquareFilled, UpSquareOutlined } from '@ant-design/icons'
 import { Skeleton } from 'antd';
 import { FaCircle } from 'react-icons/fa'
 import { useRouter } from "next/router";
@@ -91,6 +91,14 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
     )
   }
 
+  const myArrowBanner = ({ type, onClick, isEdge }) => {
+    const pointer = type === consts.PREV ? <LeftOutlined  style={{position:'absolute',marginLeft:'40px',fontSize:'16px',fontWeight:500}} className='bg-opacity-90 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2'/> : <RightOutlined style={{position:'absolute' ,marginLeft:'-60px',fontSize:'16px',fontWeight:500}} className='bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2'/>
+    return (
+      <button onClick={onClick} disabled={isEdge} style={{ display: '',position:'',zIndex:20000 }}>
+        {pointer}
+      </button>
+    )
+  }
 
   const props = {
     dots: true,
@@ -153,18 +161,20 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
               <div className='mt-36  w-full '>
 
 
-                <ECarousel itemPosition={consts.START} autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
+                <ECarousel itemPosition={consts.START} autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowBanner} renderPagination={({ pages, activePage, onClick }) => {
                   return (
                     <div direction="row" style={{ display: 'flex' }}>
                       {pages.map(page => {
                         const isActivePage = activePage === page
                         return (
+                          <>
                           <MinusOutlined
                             key={page}
                             onClick={() => onClick(page)}
                             active={isActivePage}
                             style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
                           />
+                          </>
                         )
                       })}
                     </div>

@@ -1515,9 +1515,9 @@ const readyCartData = function (arr) {
 
 
                     <div className='flex-col px-12'>
-                        <div className='hidden lg:block'>
-                        {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-2 mr-2' />
-                                    : <img src="/non-veg.png" className='w-4 h-4 mt-2 mr-2' />}
+                        <div className='hidden lg:flex'>
+                        {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-3 mr-2' />
+                                    : <img src="/non-veg.png" className='w-4 h-4 mt-3 mr-2' />}
                             <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? {} : {}}>{props.name}<span></span></p>
                         </div>
 

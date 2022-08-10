@@ -67,13 +67,14 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                                 <ArrowLeftOutlined className='text-black text-lg mr-4 mt-3 lg:mt-0' />
                             </div>
                         </Link>
-                        <p className='text-black font-montBold text-xl mt-4'>Wishlist</p>
+                        <p className='text-black font-montBold text-xl mt-4'>Wishlist <span className='text-sm text-slate-400'>{ wishlist.length>0?
+                        `${wishlist.length} items`:``}</span></p>
                         <p className='lg:hidden text-lg text-black font-montRegular mt-2'>Wishlist</p>
                     </div>
 
                     {loading ?
                         <>
-                            :
+                            
 
 
                             <div className='h-96 flex items-center justify-center'>
@@ -108,7 +109,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                                 >
                                     <div className='p-2 flex  lg:ml-4 flex-col flex-wrap items-start w-full lg:w-full mb-24 '>
                                         {wishlist.map((item, index) =>
-                                            <Product image={item.primary_img} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} customerId={customerDetails.customer_id} entryId={item.entry_id} wishlistPage='true' stateStoreDetails={storeDetails} deleteItemFromWishlist={deleteItemFromWishlist} setState={setState} state={state} grid={false} item={item} />
+                                            <Product image={item.primary_img} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} customerId={customerDetails.customer_id} entryId={item.entry_id} wishlistPage='true' stateStoreDetails={storeDetails} deleteItemFromWishlist={deleteItemFromWishlist} setState={setState} state={state} grid={false} item={item} isVeg={item.is_veg=="Y"?true:false} />
                                         )}
                                     </div>
 
