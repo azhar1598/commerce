@@ -330,7 +330,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                 {deliveryMethod == 'DELIVERY' ?
                                     <>
-                                        <p className='lg:block hidden text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
+                                        <p className='lg:block hidden text-black font-montBold  text-[16px] bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
 
 
                                         {stateAddress?.length != 0 ? <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>

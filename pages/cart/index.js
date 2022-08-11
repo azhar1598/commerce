@@ -260,7 +260,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         if (item.defaultVariantItem) {
 
             const filter = cart.filter((c) => {
-                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
                     return c
                 }
             })

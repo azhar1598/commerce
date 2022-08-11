@@ -23,7 +23,7 @@ export const ResetPassword = ({handleResetPassword,handleChange,storeSettings}) 
 
           <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px', }} className='lg:w-96 w-80'>
               {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-              <Input.Password placeholder="Enter Confirm Password" name="confirm_password"  onChange={handleChange} required autoComplete="off" bordered={false} />
+              <Input.Password placeholder="Enter Password Again" name="confirm_password"  onChange={handleChange} required autoComplete="off" bordered={false} />
           </div>
           </div>
 

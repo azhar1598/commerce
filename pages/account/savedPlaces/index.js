@@ -122,7 +122,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
             !isTabletOrMobile && setAddNewAddress(!addNewAddress)
             // getData()
 
-            
+
         }
         else {
             // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
@@ -269,7 +269,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                 >
                                                                     <div className='flex items-center'>
                                                                         <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                                                        <button className="bg-white lg:py-6 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
+                                                                        <button className="bg-white lg:py-3 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
                                                                     </div>
                                                                 </Popconfirm>
                                                             </div>

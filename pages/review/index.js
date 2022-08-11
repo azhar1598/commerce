@@ -755,7 +755,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
                                                 }} defaultChecked={false} checked={useWallet} style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black' }}><span className=' font-montMedium text-sm' >{stateWallet?.customer_wallet_balance != 0 ? paymentMethod == 'ONL' ? ' Use Wallet Money' : 'Wallet only available for Online Payment' : 'No Wallet Amount'}</span></Checkbox>
                                             </div>
-                                            <p className=' font-montMedium flex items-center text-sm'>(Balance <span className='text-green-500 text-sm'>{storeDetails?.currency_symbol} {stateWallet?.customer_wallet_balance})</span></p>
+                                            <p className=' font-montMedium flex items-center text-sm'>(Balance <span className='text-green-500 text-sm pl-1'>  {storeDetails?.currency_symbol}{stateWallet?.customer_wallet_balance}</span>)</p>
 
                                         </div>
 

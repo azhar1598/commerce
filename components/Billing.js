@@ -530,19 +530,24 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       {customerDetails.data?.customer_id ?
         <>
           <div className='hidden lg:flex md:flex flex-col items-center w-[100vw] -mt-4  lg:bg-white  md:mt-0  lg:w-full md:w-full '>
-            <p className='bg-white font-montSemiBold placeholder p-2  w-full  mt-12 lg:mt-4 text-lg lg:px-5 mb-0'>Billing Details</p>
+
+
+            <div className='flex items-start w-full'>
+              {review ? <p className='text-sm font-montSemiBold w-[3000px]   w-full  mt-12 lg:mt-4 text-xl lg:px-5'>{address?.defaultAddress.pickup_point_name ? 'Pickup Point ' : 'Delivery Address'} <p className='font-montMedium   text-[13px] mt-3'>{address?.defaultAddress?.full_name}{address?.defaultAddress.pickup_point_name}, {address?.defaultAddress?.address_line_1}{address?.defaultAddress.address}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
+              </p> </p>
+                : ''}
+              <p className='font-montRegular w-1/2 text-sm'>
+
+              </p>
+
+            </div>
+
+
+            <p className='bg-white font-montSemiBold placeholder p-2  w-full   mt-12 lg:mt-1 text-lg lg:px-5 mb-0'>Billing Details</p>
             <div className='bg-white p-2 w-full  h-84'>
               {checkout != undefined ?
                 <div className='bg-white p-2 w-full  font-montMedium'>
-                  <div className='flex items-start w-full'>
-                    {review ? <p className='text-sm font-montSemiBold w-[3000px]'>{address?.defaultAddress.pickup_point_name?'Pickup Point ':'Shipping To'} <span className='font-montRegular   text-[12px]'>{address?.defaultAddress?.full_name}{address?.defaultAddress.pickup_point_name}, {address?.defaultAddress?.address_line_1}{address?.defaultAddress.address}, {address?.defaultAddress?.address_line_2},{address?.defaultAddress?.city}, {address?.defaultAddress?.state}, {address?.defaultAddress?.country}-{address?.defaultAddress?.zip_code}
-                    </span> </p>
-                      : ''}
-                    <p className='font-montRegular w-1/2 text-sm'>
 
-                    </p>
-
-                  </div>
                   {/* <p className='text-sm font-montSemiBold'>Get all items before:</p> */}
                   <div className='flex items-center justify-between px-2 p-1 '>
                     <p>items Total</p>
@@ -603,7 +608,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
               !customerDetails.data?.customer_id ? showModal() :
                 stateStoreDetails.is_open_today != "Y" ? setStoreClosed(true) :
                   !review ? handleProceed() : paymentMethod == 'COD' ? handleCodModal() : handlePayment()
-            }} disabled={loader ? true : false}>{customerDetails.data?.customer_id ? 'PROCEED TO PAYMENT' : 'LOGIN TO CHECKOUT'}</button> : <Spin /> : ''}
+            }} disabled={loader ? true : false}>{customerDetails.data?.customer_id ? 'Proceed To Checkout' : 'LOGIN TO CHECKOUT'}</button> : <Spin /> : ''}
           </div>
 
 
@@ -672,7 +677,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   <Spin />
                 </div>}
             </div>
-            {/* {!loader ? <button className='p-2 w-72 mt-4 ' style={{ color: 'white', background: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} onClick={!customerDetails.data?.customer_id ? showModal : !review ? handleProceed : paymentMethod == 'COD' ? handleCodModal : handlePayment}>{customerDetails.data?.customer_id ? 'PROCEED TO PAYMENT' : 'LOGIN TO CHECKOUT'}</button> : <Spin />} */}
+            {/* {!loader ? <button className='p-2 w-72 mt-4 ' style={{ color: 'white', background: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}` }} onClick={!customerDetails.data?.customer_id ? showModal : !review ? handleProceed : paymentMethod == 'COD' ? handleCodModal : handlePayment}>{customerDetails.data?.customer_id ? 'Proceed To Checkout' : 'LOGIN TO CHECKOUT'}</button> : <Spin />} */}
 
             {paymentData.rzpOrderId && <OnlinePayment paymentData={paymentData} store={'storeDetails'} setPaymentData={setPaymentData} purchaseId={address.purchaseDetails.data.purchaseId} customerId={customerDetails.data?.customer_id} wallet={wallet} walletAmount={walletAmount} razorpayKey={razorpayKey}></OnlinePayment>}
 
