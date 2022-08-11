@@ -92,7 +92,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
   }
 
   const myArrowBanner = ({ type, onClick, isEdge }) => {
-    const pointer = type === consts.PREV ? <LeftOutlined  style={{position:'absolute',marginLeft:'40px',fontSize:'16px',fontWeight:500}} className='bg-opacity-90 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2'/> : <RightOutlined style={{position:'absolute' ,marginLeft:'-60px',fontSize:'16px',fontWeight:500}} className='bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2'/>
+    const pointer = type === consts.PREV ? <LeftOutlined  style={{position:'absolute',marginLeft:'40px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2'/> : <RightOutlined style={{position:'absolute' ,marginLeft:'-60px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2'/>
     return (
       <button onClick={onClick} disabled={isEdge} style={{ display: '',position:'',zIndex:20000 }}>
         {pointer}

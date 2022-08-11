@@ -234,11 +234,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                 // if(maxmin)
             }
             else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                quantity = value.inventory_quantity
+                quantity = value?.inventory_quantity
                 console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
             }
             else if (value?.max_order_quantity > value?.inventory_quantity) {
-                quantity = value.inventory_quantity
+                quantity = value?.inventory_quantity
                 console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
             }
@@ -793,11 +793,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             // if(maxmin)
                                                                         }
                                                                         else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                                            quantity = value.inventory_quantity
+                                                                            quantity = value?.inventory_quantity
                                                                             console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
                                                                         }
                                                                         else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                                            quantity = value.inventory_quantity
+                                                                            quantity = value?.inventory_quantity
                                                                             console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
                                                                         }
@@ -826,9 +826,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-                                                                            if (value.inventory_quantity < value.min_order_quantity) {
+                                                                            if (value?.inventory_quantity < value?.min_order_quantity) {
                                                                                 
-                                                                                if (filter[0].qty < value.inventory_quantity) {
+                                                                                if (filter[0].qty < value?.inventory_quantity) {
                                                                                     return item
 
                                                                                 }
@@ -857,7 +857,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             }
 
                                                                             else {
-                                                                                if (filter[0].qty < value.min_order_quantity) {
+                                                                                if (filter[0].qty < value?.min_order_quantity) {
                                                                                     return item
 
                                                                                 }
@@ -1239,11 +1239,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         // if(maxmin)
                                                     }
                                                     else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                        quantity = value.inventory_quantity
+                                                        quantity = value?.inventory_quantity
                                                         console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
                                                     }
                                                     else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                        quantity = value.inventory_quantity
+                                                        quantity = value?.inventory_quantity
                                                         console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
                                                     }
@@ -1272,9 +1272,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-                                                        if (value.inventory_quantity < value.min_order_quantity) {
+                                                        if (value?.inventory_quantity < value?.min_order_quantity) {
                                                             
-                                                            if (filter[0].qty < value.inventory_quantity) {
+                                                            if (filter[0].qty < value?.inventory_quantity) {
                                                                 return item
 
                                                             }
@@ -1305,7 +1305,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         }
 
                                                         else {
-                                                            if (filter[0].qty < value.min_order_quantity) {
+                                                            if (filter[0].qty < value?.min_order_quantity) {
                                                                 return item
 
                                                             }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
-import { addToCart, adjustQty, fetchBackendCart, fetchPurchaseDetails, getWalletInfoAction, removeFromCart } from '../../actions'
+import { addToCart, adjustQty, fetchBackendCart, fetchPurchaseDetails, getStoreDisplaySettings, getWalletInfoAction, removeFromCart } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import { convenienceFlag } from '../../services/apiServices'
@@ -15,7 +15,7 @@ import StoreStatus from '../../components/svgComponents/StoreStatus'
 import { toast, ToastContainer } from 'react-toastify'
 
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings,dispatchStoreDisplaySettings }) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
 
@@ -129,6 +129,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             , storeId: 'storeId',
         }
         dispatchWalletInfo({ payload })
+        dispatchStoreDisplaySettings(storeDetails?.store_id)
 
         console.log('walllele', stateWallet)
 
@@ -891,6 +892,7 @@ const mapDispatchToProps = dispatch => {
         fetchBackendCart: (customerid, groupid, purchaseId, data) => dispatch(fetchBackendCart(customerid, groupid, purchaseId, data)),
         fetchPurchaseDetails: (purchaseid) => dispatch(fetchPurchaseDetails(purchaseid)),
         dispatchWalletInfo: (payload) => dispatch(getWalletInfoAction(payload)),
+        dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
     }
 }
 

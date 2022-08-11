@@ -437,7 +437,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 {/* discount */}
                                 {
                                     orderDetails?.savingsAmount ? <div className='p-6 text-center'>
-                                        <p className='bg-green-200 p-4 rounded font-montRegular'>% You Saved {storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)} on this order</p>
+                                        <p className='bg-green-200 p-4 rounded font-montRegular'>You Saved {storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)} on this order</p>
                                     </div> : ''
                                 }
                             </div>

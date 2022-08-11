@@ -9,14 +9,14 @@ import { connect } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
 
 import { addAddress, editAddressAPI, getAddressList, removeAddress } from '../../services/apiServices'
-import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, setDeliveryAction, setParcelAction } from '../../actions'
+import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, getStoreDisplaySettings, setDeliveryAction, setParcelAction } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import Head from 'next/head';
 import ReviewTracker from '../../components/ReviewTracker'
 import { toast, ToastContainer } from 'react-toastify'
 
-export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction }) => {
+export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction ,dispatchStoreDisplaySettings}) => {
 
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 992px)' })
@@ -58,6 +58,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
             reset()
         }
+        dispatchStoreDisplaySettings(storeDetails?.store_id)
 
     }, [loading, bool])
 
@@ -659,7 +660,8 @@ const mapDispatchToProps = dispatch => {
         getAddressAction: (data) => dispatch(getAddressAction(data)),
         fetchPurchaseDetails: (purchaseid, setLoading) => dispatch(fetchPurchaseDetails(purchaseid, setLoading)),
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
-        setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId))
+        setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId)),
+        dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
 
 
     }
