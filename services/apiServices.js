@@ -186,7 +186,7 @@ export const setDeliveryAddress = (purchaseId, addressId) => {
 }
 
 export const setDeliveryAddressFlag = (purchaseId, flag) =>
-    callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=Y`)
+    callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=N`)
 
 
 export const convenienceFlag = (purchaseId, flag) =>

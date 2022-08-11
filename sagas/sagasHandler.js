@@ -1,5 +1,5 @@
-import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems, setShopWidgets, getShopSeoSuccess } from "../actions";
-import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI } from "../services/apiServices";
+import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems, setShopWidgets, getShopSeoSuccess, shippingCharges } from "../actions";
+import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI, setDeliveryAddressFlag } from "../services/apiServices";
 import { put } from "redux-saga/effects"
 import store from "../config/store";
 import wishlistActionType, { FETCH_FILTER_GROUPS } from "../constants/actionTypes";
@@ -66,13 +66,16 @@ export function* handleStoreSettings() {
 
 export function* handleDeliveryMethod(data) {
 
-console.log('type',data)
+    console.log('type', data)
 
     try {
         if (data.type == 'SET_PARCEL') {
             const response = yield setParcelAPI(data.payload)
-         console.log('data.payload',data.payload)
-            
+            console.log('data.payload', data.payload)
+
+            const response2 = yield setDeliveryAddressFlag(data.payload)
+
+
             // const response1 = yield getPurchaseDetails(data.payload)
             // yield put(purchaseDetails(response1))
 
@@ -85,11 +88,11 @@ console.log('type',data)
             const response = yield setDeliveryAPI(data.payload)
             const response1 = yield getPurchaseDetails(data.payload)
             yield put(purchaseDetails(response1))
-           
+
             // const response1 = yield getPurchaseDetails(data.payload)
             // yield put(purchaseDetails(response1))
 
-            
+
         }
 
     } catch (error) {
@@ -97,6 +100,7 @@ console.log('type',data)
     }
 
 }
+
 
 
 
@@ -617,7 +621,7 @@ export function* handleAddress({ type, payload }) {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    });
+                });
 
                 payload.setLoading(false)
                 payload.setBool(!payload.bool)
@@ -633,8 +637,8 @@ export function* handleAddress({ type, payload }) {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    });
-                
+                });
+
                 payload.setLoading(false)
             }
         }
@@ -657,7 +661,7 @@ export function* handleAddress({ type, payload }) {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    });
+                });
 
 
                 payload.setLoading(false)
@@ -673,7 +677,7 @@ export function* handleAddress({ type, payload }) {
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
-                    });
+                });
                 payload.setLoading(false)
             }
         }

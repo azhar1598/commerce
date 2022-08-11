@@ -15,8 +15,9 @@ import Coupon from '../../components/Coupon'
 import Head from 'next/head';
 import ReviewTracker from '../../components/ReviewTracker'
 import { toast, ToastContainer } from 'react-toastify'
+import { convenienceFlag } from '../../services/apiServices'
 
-export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction ,dispatchStoreDisplaySettings}) => {
+export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings }) => {
 
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 992px)' })
@@ -60,7 +61,16 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         }
         dispatchStoreDisplaySettings(storeDetails?.store_id)
 
+
+
     }, [loading, bool])
+
+    useEffect(() => {
+        const removeConvenience =async () => {
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id,'N')
+        }
+        removeConvenience()
+    }, [])
 
 
     const getData = async () => {
@@ -79,6 +89,12 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     }, [validCoupon])
 
 
+    
+    useEffect(() => {
+        setParcelAction(checkout.backendCart?.purchase_id)
+        setValueAddress()
+        defaultAddressAction()
+    }, [])
 
     const { register, setValue, handleSubmit, reset, formState: { errors } } =
         useForm({
@@ -178,21 +194,22 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         defaultAddressAction(item)
     }
 
+
     const handleDeliveryMethod = (e) => {
-        
+
         if (e.target.value == 'PARCEL') {
             if (storeDisplaySettings?.data?.is_parcel_available == 'Y') {
 
-            setParcelAction(checkout.backendCart?.purchase_id)
-            defaultAddressAction(storeDisplaySettings?.data?.pickupPointDetails)
-            setDeliveryMethod(e.target.value)
+                setParcelAction(checkout.backendCart?.purchase_id)
+                defaultAddressAction(storeDisplaySettings?.data?.pickupPointDetails)
+                setDeliveryMethod(e.target.value)
 
+            }
         }
-    }
         else {
             if (storeDisplaySettings?.data?.is_delivery_available == 'Y') {
-            setDeliveryAction(checkout.backendCart?.purchase_id)
-            setDeliveryMethod(e.target.value)
+                setDeliveryAction(checkout.backendCart?.purchase_id)
+                setDeliveryMethod(e.target.value)
             }
         }
 
@@ -265,28 +282,28 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                 <div className='bg-white hidden   lg:flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                         <div className="leading gap-0 ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pick Up 
-                                            {
-                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
-                                                    storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ''}
-                                                        {
-                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> :""
-                                    }
-                                                    </Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery 
-                                            {
-                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pick Up
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                        storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ''}
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ""
+                                                }
+                                            </Radio>
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
-                                                        {
-                                                storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> :""
-                                    }
-                                                    </Radio>
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ""
+                                                }
+                                            </Radio>
 
                                         </div>
-                                        
+
                                     </Radio.Group>
-                                
+
                                 </div>
 
 
@@ -294,17 +311,17 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                     <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
                                         <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                             <div className="leading gap-0 w-full flex items-center flex-col ">
-                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in 
-                                                {
-                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
-                                                        storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Pick Up</span> : ''}
-                                                        </Radio>
-                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery 
-                                                {
-                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in
+                                                    {
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                            storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Pick Up</span> : ''}
+                                                </Radio>
+                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery
+                                                    {
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
-                                                        </Radio>
+                                                            storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                </Radio>
 
                                             </div>
                                         </Radio.Group>
@@ -319,7 +336,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                         {stateAddress?.length != 0 ? <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
                                             :
                                             <p className='lg:hidden text-black font-montMedium py-2 lg:mt-0  text-[16px] bg-white w-full   pt-8 px-6'  >No Address Added Yet</p>
-                                                }
+                                        }
 
                                         <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 -mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
                                             {
@@ -662,6 +679,7 @@ const mapDispatchToProps = dispatch => {
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
         setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId)),
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
+        setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
 
 
     }

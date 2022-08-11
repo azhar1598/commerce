@@ -550,7 +550,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   </div>
                   {billingDetails?.totalDeliveryCharge ? <div className='flex items-center justify-between px-2 p-1'>
                     <p>Shipping Charge</p>
-                    <p className={`font-semibold ${billingDetails?.totalDeliveryCharge ? `text-black` : 'text-green-400'}`}> {billingDetails?.totalDeliveryCharge != 0 ? `+ ${billingDetails?.totalDeliveryCharge}` : 'Free'}</p>
+                    <p className={`font-semibold ${billingDetails?.totalDeliveryCharge ? `text-black` : 'text-green-400'}`}> {billingDetails?.totalDeliveryCharge != 0 ? `+ ${stateStoreDetails?.currency_symbol} ${billingDetails?.totalDeliveryCharge}` : 'Free'}</p>
                   </div> : ''}
                   {billingDetails?.totalSavings != 0 ? <div className='flex items-center justify-between px-2 p-1'>
                     <p>Discount</p>
