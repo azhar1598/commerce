@@ -16,6 +16,7 @@ import Head from 'next/head';
 import ReviewTracker from '../../components/ReviewTracker'
 import { toast, ToastContainer } from 'react-toastify'
 import { convenienceFlag } from '../../services/apiServices'
+import PageWrapper from '../../components/PageWrapper/PageWrapper'
 
 export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings }) => {
 
@@ -684,4 +685,4 @@ const mapDispatchToProps = dispatch => {
 
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Index)
+export default connect(mapStateToProps, mapDispatchToProps)(PageWrapper(Index))

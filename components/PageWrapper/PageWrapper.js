@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 import Head from 'next/head'
-import { getShopSeoStart } from '../../actions';
+import { getShopSeoStart, getStoreDetails } from '../../actions';
 import { useRouter } from "next/router";
 
 
-const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo }) => {
+const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo,getStoreDetails }) => {
   const router = useRouter()
   useEffect(() => {
     getShopSeo(196);
+    getStoreDetails('storeId')
+    
 }, [router])
     return (
         <>
@@ -40,6 +42,7 @@ const mapStateToProps = state => {
   const mapDispatchToProps = dispatch => {
     return{
       getShopSeo: (shopId) => dispatch(getShopSeoStart(shopId)),
+      getStoreDetails: (storeId) => dispatch(getStoreDetails(storeId)),
     }
 
 }
