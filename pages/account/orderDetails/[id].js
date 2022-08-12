@@ -386,44 +386,46 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                         <div className=" lg:ml-5 p-6 mb-6 w-full items-center bg-white">
                             <h2 className="text-xl font-montMedium text-center mb-9">Shipping and Billing Details</h2>
                             <div className=" lg:w-1/2">
+                                <div className='border p-3 px-5 mb-3 rounded'>
 
-                                <p className='text-lg font-montSemiBold'>Address</p>
+                                    <p className='text-lg font-montSemiBold'>Address</p>
 
-                                <div className='flex justify-between lg:w-1/3 md:w-1/3 mb-4 '>
-                                    <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>
+                                    <div className='flex justify-between lg:w-1/3 md:w-1/3 mb-4 '>
+                                        <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>
 
+                                    </div>
                                 </div>
 
-                                <p className='text-lg font-montSemiBold'>Invoice</p>
+                                <p className='text-lg font-montSemiBold'>Billing Details</p>
 
                                 <div className='flex justify-between'>
                                     <p>Price</p>
                                     <p>{storeDetails?.currency_symbol} {Number(orderDetails?.orderAmount).toFixed(2)}</p>
                                 </div>
-                                <div className='flex justify-between'>
+                                {orderDetails?.parcelCharge != 0 ? <div className='flex justify-between'>
                                     <p>Discount</p>
                                     <p>-{storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.parcelCharge != 0 ? <div className='flex justify-between'>
                                     <p>Parcel</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.parcelCharge).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.deliveryCharge != 0 ? <div className='flex justify-between'>
                                     <p>Shipping</p>
                                     <p style={{ color: `${stateStoreSettings?.secondary_color ? stateStoreSettings.secondary_color : "black"}` }}>{parseFloat(orderDetails?.deliveryCharge) ? `+${storeDetails?.currency_symbol} ${Number(orderDetails?.deliveryCharge).toFixed(2)}` : 'Free'}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.convenienceFee != 0 ?   <div className='flex justify-between'>
                                     <p>Tax</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.taxAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div>:''}
+                                {orderDetails?.couponSavingsAmount != 0 ?     <div className='flex justify-between'>
                                     <p>Coupon Applied</p>
                                     <p>-{storeDetails?.currency_symbol} {Number(orderDetails?.couponSavingsAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div>:''}
+                                {orderDetails?.convenienceFee != 0 ?  <div className='flex justify-between'>
                                     <p>Convenience Charge</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.convenienceFee).toFixed(2)}</p>
-                                </div>
+                                </div>:''}
                                 <hr />
                                 <div className='flex justify-between text-xl font-montMedium mt-1'>
                                     <p>Total</p>
