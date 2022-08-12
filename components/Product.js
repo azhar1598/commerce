@@ -1525,7 +1525,7 @@ const readyCartData = function (arr) {
                             <p className='font-montSemiBold mt-2 text-[16px] lg:text-lg lg:w-72 item-name item-description' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? { width: '170px' } : {}}>{props.name}<span></span></p>
                         </div>
 
-                        <p className={`leading-loose font-montMedium text-sm -mt-5 w-auto  h-36 ${props.wishlistPage ? 'item-description' : 'item-description-list'}`} onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
+                        <p className={`leading-loose font-montMedium text-sm -mt-5 w-auto  ${props.wishlistPage ? 'item-description' : 'item-description-list'}`} onClick={() => { router.push(`product/${props.itemId}`) }}>{props.desc}</p>
                         <p className='-mt-3 leading-loose lg:w-[17vw] md:w-[13vw] flex justify-start flex-wrap lg:justify-start md:justify-start text-[16px]  ' onClick={() => { router.push(`/product/${props.itemId}`) }}>
                             <span className='font-montBold '>{props.stateStoreDetails?.currency_symbol} {props.salePrice}</span>
                             <span className='line-through px-2 '>{props.price - props.salePrice != 0 ? `${props.stateStoreDetails?.currency_symbol} ${props.price}` : ''}</span>
