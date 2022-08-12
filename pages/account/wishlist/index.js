@@ -67,7 +67,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                                 <ArrowLeftOutlined className='text-black text-lg mr-4 mt-3 lg:mt-0' />
                             </div>
                         </Link>
-                        <p className='text-black font-montBold text-xl mt-4'>Wishlist <span className='text-sm text-slate-400'>{ wishlist.length>0?
+                        <p className='text-black font-montBold text-xl mt-4 -ml-5'>Wishlist <span className='text-sm text-slate-400'>{ wishlist.length>0?
                         `${wishlist.length} items`:``}</span></p>
                         <p className='lg:hidden text-lg text-black font-montRegular mt-2'>Wishlist</p>
                     </div>
