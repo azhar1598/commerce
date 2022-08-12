@@ -3,7 +3,7 @@ import { message, Spin } from 'antd'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { addToCart, adjustQty, fetchBackendCart, fetchItemDetails, fetchPurchaseDetails, getStoreDisplaySettings, removeFromCart } from '../../actions'
+import { addToCart, adjustQty, fetchBackendCart, fetchItemDetails, fetchPurchaseDetails, getStoreDisplaySettings, removeFromCart, setParcelAction } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import { useRouter } from 'next/router'
@@ -12,8 +12,9 @@ import Head from 'next/head';
 import PageWrapper from '../../components/PageWrapper/PageWrapper'
 import { useMediaQuery } from 'react-responsive'
 import { toast, ToastContainer } from 'react-toastify'
+import { convenienceFlag } from '../../services/apiServices'
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails, setParcelAction }) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
     const [datas, setDatas] = useState([])
@@ -25,12 +26,17 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const [minProduct, setMinProduct] = useState()
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 })
 
-    
+
     const [rgbaBackground, setRgbaBackground] = useState('')
     const [rgbaColor, setRgbaColor] = useState()
 
 
     const router = useRouter()
+
+
+    useEffect(() => {
+        setParcelAction(checkout.backendCart?.purchase_id)
+    }, [])
 
     // useEffect(() => {
     // if (customerDetails.data?.customer_id && cart.length != 0) {
@@ -138,6 +144,60 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     }, [validCoupon])
 
+    // useEffect(()=>{
+
+    //     if (checkout.backendCart?.purchase_id && !checkout.purchaseDetails?.data.isPurchaseValid) {
+
+    //         cart.map((item, idx) =>{
+
+    //         Object.keys(checkout.purchaseDetails.data.orders).map(c => {
+
+    //             // console.log('checkout .', c)
+    //             console.log('checkout.purchaseDetails.data.orders[c]', checkout.purchaseDetails.data.orders[c].isOrderValid, checkout.purchaseDetails.data.orders[c].orderItems)
+    //             if (!checkout.purchaseDetails.data.orders[c].isOrderValid) {
+    //                 console.log('checkout.pur', checkout.purchaseDetails.data.orders[c].isOrderValid == 'false')
+    //                 Object.keys(checkout.purchaseDetails.data.orders[c].orderItems).map(a => {
+    //                     if (checkout.purchaseDetails.data.orders[c].orderItems[a].itemQuantity<item.qty) {
+
+
+    //                         adjustQty(item.item_id, checkout.purchaseDetails.data.orders[c].orderItems[a].itemQuantity)
+
+
+    //                         console.log('checkout.purchaseDetails.data.orders[c]', checkout.purchaseDetails.data.orders[c].orderItems[a].isOrderItemValid)
+    //                         setPurchaseInvalid(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+    //                         // message.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`)
+
+    //                         // toast.error(`Please remove ${checkout.purchaseDetails.data.orders[c].orderItems[a].itemName}.Currently,it is out of stock`, {
+    //                         //     position: "bottom-right",
+    //                         //     autoClose: 1000,
+    //                         //     hideProgressBar: false,
+    //                         //     closeOnClick: true,
+    //                         //     pauseOnHover: true,
+    //                         //     draggable: true,
+    //                         //     progress: undefined,
+    //                         // });
+
+
+
+    //                     }
+    //                 })
+    //             }
+    //         }
+
+    //         )
+    //     })
+
+
+    //     } else {
+    //         setPurchaseInvalid('')
+    //     }
+
+
+
+    // },[])
+
+
+
     useEffect(() => {
 
         console.log('!checkout.purchaseDetails.data.isPurchaseValid),', !checkout.purchaseDetails?.data.isPurchaseValid)
@@ -200,7 +260,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         if (item.defaultVariantItem) {
 
             const filter = cart.filter((c) => {
-                if (c.defaultVariantItem.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
                     return c
                 }
             })
@@ -371,6 +431,16 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     useEffect(() => {
         dispatchStoreDisplaySettings(stateStoreDetails?.store_id)
     }, [])
+
+
+
+    useEffect(() => {
+        const removeConvenience = async () => {
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id, 'N')
+        }
+        removeConvenience()
+    }, [])
+
 
 
 
@@ -594,7 +664,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                     }
 
                     if (filter[0].qty >= quantity) {
-                        message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
 
                         toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
@@ -675,7 +745,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     }
 
 
-    
+
 
 
     const hex2rgba = (hex, alpha = 1) => {
@@ -685,9 +755,9 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
 
-    
+
     useEffect(() => {
-        
+
         setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.primary_color : '#ffffff', 0.4))
         setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.primary_color : '#000000', 0.02))
         // setCustomBorder(hex2rgba('#212B36' , 0.25))
@@ -709,7 +779,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             {cart.length != 0 ?
                 <div className='lg:bg-[#F6F6F6] lg:mt-24 md:-mt-4 lg:h-full md:h-screen flex flex-col lg:flex-row md:flex-row items-start lg:p-2 md:p-2 lg:min-h-screen'>
 
-                    <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] border-b-2 border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
+                    <div className='mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] lg:border-b-2 lg:border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white'>
                         <p className='hidden lg:block md:block font-montBold text-2xl py-6 px-5'>Cart<span className='text-gray-500 font-montSemiBold text-lg px-3'>{cart.length} {cart.length > 1 ? 'items' : 'item'}</span></p>
 
                         <div className='lg:hidden px-5 flex items-start border-b-2 border-slate-200 w-full mb-2'>
@@ -735,12 +805,14 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                             {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
                                                 <div className='flex -mt-5  gap-4 ' >
                                                     <div className='border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span onClick={() =>
+                                                            handleDecreaseQuantity(item, item.qty - 1)}
+                                                            className={`px-4   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
                                                         <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
 
                                                         <span onClick={() => { handleIncreaseQuantity(item) }}
 
-                                                            className={`px-4  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                            className={`px-4  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
                                                     </div>
                                                     {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
 
@@ -774,7 +846,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         </div>
-                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
+                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
                                     </div>
 
                                 )}
@@ -818,12 +890,12 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                             {checkout.backendCart?.purchase_id != undefined || Object.keys(checkout).length == 0 ?
                                                 <div className='flex -mt-5  gap-4 mt-5 ' >
                                                     <div className='border border-gray-400 space-x-4 mb-2 w-40 ml-2 flex items-center rounded' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-6   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`,borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        <span onClick={() => handleDecreaseQuantity(item, item.qty - 1)} className={`px-6   py-1 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
                                                         <span className='font-montSemiBold' style={{ color: `${!storeSettings.data ? storeSettings.data.primary_color : 'black'}`, }}>{item.qty}</span>
 
                                                         <span onClick={() => { handleIncreaseQuantity(item) }}
 
-                                                            className={`px-6  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground: 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                            className={`px-6  text-xl cursor-pointer py-1`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
                                                     </div>
                                                     {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
 
@@ -836,7 +908,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         </div>
-                                        {/* <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} /> */}
+                                        <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
                                     </div>
 
                                 )}
@@ -890,6 +962,7 @@ const mapDispatchToProps = dispatch => {
         fetchPurchaseDetails: (purchaseid, setLoading) => dispatch(fetchPurchaseDetails(purchaseid, setLoading)),
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
         fetchItemDetails: (customerId, itemId) => dispatch(fetchItemDetails(customerId, itemId)),
+        setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
     }
 }
 

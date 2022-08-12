@@ -109,27 +109,30 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
     const onSubmit = async (address) => {
         let response
+
+        console.log('adddress', address)
+
         setLoading(true);
         const payload = {
             customerId: customerDetails.data.customer_id, addressId
-            , address, setLoading, bool, setBool, message, edit
+            , address, setLoading, bool, setBool, message, edit,toast
         }
         if (!edit) {
             addAddressAction({ payload })
             !isTabletOrMobile && setAddNewAddress(!addNewAddress)
+            // getData()
+
 
         }
         else {
             // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
             editAddressAction({ payload })
             setAddNewAddress(!addNewAddress)
+            // getData()
         }
         setValueAddress()
         defaultAddressAction()
         setShowAddressMobile(false)
-
-
-
     }
 
     const handleDisplayMobileAddress = () => {
@@ -266,7 +269,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                 >
                                                                     <div className='flex items-center'>
                                                                         <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                                                        <button className="bg-white lg:py-6 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
+                                                                        <button className="bg-white lg:py-3 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
                                                                     </div>
                                                                 </Popconfirm>
                                                             </div>

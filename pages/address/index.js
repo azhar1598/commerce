@@ -9,14 +9,16 @@ import { connect } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
 
 import { addAddress, editAddressAPI, getAddressList, removeAddress } from '../../services/apiServices'
-import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, setDeliveryAction, setParcelAction } from '../../actions'
+import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, getStoreDisplaySettings, setDeliveryAction, setParcelAction } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import Head from 'next/head';
 import ReviewTracker from '../../components/ReviewTracker'
 import { toast, ToastContainer } from 'react-toastify'
+import { convenienceFlag } from '../../services/apiServices'
+import PageWrapper from '../../components/PageWrapper/PageWrapper'
 
-export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction }) => {
+export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings }) => {
 
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 992px)' })
@@ -58,8 +60,18 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
             reset()
         }
+        dispatchStoreDisplaySettings(storeDetails?.store_id)
+
+
 
     }, [loading, bool])
+
+    useEffect(() => {
+        const removeConvenience =async () => {
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id,'N')
+        }
+        removeConvenience()
+    }, [])
 
 
     const getData = async () => {
@@ -78,6 +90,12 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     }, [validCoupon])
 
 
+    
+    useEffect(() => {
+        setParcelAction(checkout.backendCart?.purchase_id)
+        setValueAddress()
+        defaultAddressAction()
+    }, [])
 
     const { register, setValue, handleSubmit, reset, formState: { errors } } =
         useForm({
@@ -177,18 +195,23 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
         defaultAddressAction(item)
     }
 
+
     const handleDeliveryMethod = (e) => {
-        setDeliveryMethod(e.target.value)
+
         if (e.target.value == 'PARCEL') {
+            if (storeDisplaySettings?.data?.is_parcel_available == 'Y') {
 
-            setParcelAction(checkout.backendCart?.purchase_id)
+                setParcelAction(checkout.backendCart?.purchase_id)
+                defaultAddressAction(storeDisplaySettings?.data?.pickupPointDetails)
+                setDeliveryMethod(e.target.value)
 
-
+            }
         }
         else {
-
-            setDeliveryAction(checkout.backendCart?.purchase_id)
-
+            if (storeDisplaySettings?.data?.is_delivery_available == 'Y') {
+                setDeliveryAction(checkout.backendCart?.purchase_id)
+                setDeliveryMethod(e.target.value)
+            }
         }
 
 
@@ -208,7 +231,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
             </div> */}
 
             <div className='lg:hidden absolute fixed -mt-20 z-[300000]'>
-                <ReviewTracker storeSettings={storeSettings} deliveryMethod={deliveryMethod=='PARCEL' || deliveryMethod=='DELIVERY' ?true:false} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
+                <ReviewTracker storeSettings={storeSettings} deliveryMethod={deliveryMethod == 'PARCEL' || deliveryMethod == 'DELIVERY' ? true : false} addPaymentMethod={false} reviewOrder={false} orderPlaced={false} />
             </div>
 
             <div className='  lg:flex   md:-mt-4  bg-[#F6F6F6] md:p-8'>
@@ -231,16 +254,21 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                             : ''}
 
-                        {!showAddressMobile ?
-                            <div className='hidden md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
-                                <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
-                            </div>
-                            :
-                            <div className=' bg-white p-3 flex items-baseline  w-full border-b-4 border-slate-[200]' onClick={edit ? handleEditMobileAddress : handleDisplayMobileAddress} >
-                                <ArrowLeftOutlined className='text-black text-lg mr-4' />
-                                <p className='text-black font-montSemiBold'>{edit ? `Edit Address` : `Add New Address`}</p>
-                            </div>}
+                        {
+                            deliveryMethod == 'DELIVERY' ?
+                                !showAddressMobile ?
+
+                                    <div className=' md:hidden bg-white p-3 flex items-baseline justify-center  w-full border-b-4 border-slate-[200]' onClick={handleDisplayMobileAddress} >
+                                        <PlusCircleOutlined className='text-black text-lg mr-4 mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
+                                        <p className='text-black font-montSemiBold  mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Add New Address</p>
+                                    </div>
+                                    :
+                                    <div className=' bg-white p-3 flex items-baseline  w-full border-b-4 border-slate-[200]' onClick={edit ? handleEditMobileAddress : handleDisplayMobileAddress} >
+                                        <ArrowLeftOutlined className='text-black text-lg mr-4' />
+                                        <p className='text-black font-montSemiBold'>{edit ? `Edit Address` : `Add New Address`}</p>
+                                    </div>
+                                : ''
+                        }
 
                         {!addNewAddress ?
                             <>
@@ -255,42 +283,61 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                 <div className='bg-white hidden   lg:flex items-center px-8 ml-5 w-full'>
                                     <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
                                         <div className="leading gap-0 ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Dine-in {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }}>Pick Up
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                        storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ''}
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ""
+                                                }
+                                            </Radio>
+                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', width: '50vw', padding: '10px', paddingTop: '20px', paddingBottom: '20px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                {
+                                                    storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Unavailable</span> : ""
+                                                }
+                                            </Radio>
 
                                         </div>
+
                                     </Radio.Group>
+
                                 </div>
 
 
-                                <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
-                                    <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
-                                        <div className="leading gap-0 w-full flex items-center flex-col ">
-                                            <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
-                                                    storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Online Payments</span> : ''}</Radio>
-                                            <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? 'gray' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery {
-                                                storeDisplaySettings?.data?.is_cod_accepted != 'Y' && storeDisplaySettings?.data?.is_payment_accepted != 'Y' ? "" :
+                                {!showAddressMobile ?
+                                    <div className='bg-white lg:hidden  flex items-center pt-4 px-8  w-full'>
+                                        <Radio.Group onChange={handleDeliveryMethod} value={deliveryMethod}>
+                                            <div className="leading gap-0 w-full flex items-center flex-col ">
+                                                <Radio value='PARCEL' className='font-montSemiBold' style={{ color: storeDisplaySettings?.data?.is_parcel_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }}>Dine-in
+                                                    {
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
+                                                            storeDisplaySettings?.data?.is_parcel_available != 'Y' ? <span className='text-red-500 px-2'>Not Accepting Pick Up</span> : ''}
+                                                </Radio>
+                                                <Radio value='DELIVERY' style={{ color: storeDisplaySettings?.data?.is_delivery_available != 'Y' ? 'black' : 'black', fontSize: '16px', border: '2px solid #F9F9F9', padding: '10px', paddingTop: '20px', paddingBottom: '20px', width: "90vw", marginLeft: '-13px' }} className={`font-montSemiBold inline text-[16px]`}>Delivery
+                                                    {
+                                                        storeDisplaySettings?.data?.is_delivery_available != 'Y' && storeDisplaySettings?.data?.is_parcel_available != 'Y' ? "" :
 
-                                                    storeDisplaySettings?.data?.is_cod_accepted != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting COD at the Moment</span> : ''}</Radio>
+                                                            storeDisplaySettings?.data?.is_delivery_available != 'Y' ? <span className='text-red-500 text-[16px] px-3'>Not Accepting Delivery</span> : ''}
+                                                </Radio>
 
-                                        </div>
-                                    </Radio.Group>
-                                </div>
+                                            </div>
+                                        </Radio.Group>
+                                    </div> : ''}
 
 
                                 {deliveryMethod == 'DELIVERY' ?
                                     <>
-                                        <p className='lg:block hidden text-black font-montBold  text-lg bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
+                                        <p className='lg:block hidden text-black font-montBold  text-[16px] bg-white mx-5 w-full py-7 px-8'  >Select Delivery Address</p>
 
 
-                                        <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
-
+                                        {stateAddress?.length != 0 ? <p className='lg:hidden text-black font-montSemiBold py-2  text-[16px] bg-white w-full  px-3'  >Select Address</p>
+                                            :
+                                            <p className='lg:hidden text-black font-montMedium py-2 lg:mt-0  text-[16px] bg-white w-full   pt-8 px-6'  >No Address Added Yet</p>
+                                        }
 
                                         <div className='flex flex-col lg:flex-row md:flex-row lg:pl-8 lg:p-3 md:lg-8 md:p-3  items-center flex-wrap  justify-between lg:-mt-5 -mt-5 lg:ml-5 md:ml-5 w-full bg-white  cursor-pointer  lg:pb-3'>
                                             {
@@ -300,7 +347,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                                             {stateAddress?.map(item =>
                                                                 <div className='lg:flex flex-col items-start px-2 lg:py-2' key={item.address_tag}>
-                                                                    <div className='flex w-full lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
+                                                                    <div className='flex w-[90vw] lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
                                                                         <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
                                                                             <Radio className='font-montSemiBold' value={item.address_id}></Radio>
                                                                         </Radio.Group>
@@ -631,9 +678,11 @@ const mapDispatchToProps = dispatch => {
         getAddressAction: (data) => dispatch(getAddressAction(data)),
         fetchPurchaseDetails: (purchaseid, setLoading) => dispatch(fetchPurchaseDetails(purchaseid, setLoading)),
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
-        setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId))
+        setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId)),
+        dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
+        setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
 
 
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Index)
+export default connect(mapStateToProps, mapDispatchToProps)(PageWrapper(Index))

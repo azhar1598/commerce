@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 import Head from 'next/head'
-import { getShopSeoStart } from '../../actions';
+import { getShopSeoStart, getStoreDetails } from '../../actions';
 import { useRouter } from "next/router";
 
 
-const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo }) => {
+const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo,getStoreDetails }) => {
   const router = useRouter()
   useEffect(() => {
     getShopSeo(196);
+    getStoreDetails('storeId')
+    
 }, [router])
     return (
         <>
@@ -21,7 +23,7 @@ const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo })
             : ""
           : ""
         }
-        <title>{seo ? seo.seo_title : storeDetails ? storeDetails?.store_name : 'Apparel Store'}</title>
+        <title>{seo ? seo.seo_title : storeDetails ? storeDetails?.store_name : 'Restaurant Store'}</title>
         <meta name="description" content={seo ? seo?.seo_desc : storeDetails ? storeDetails?.store_desc:'GoPlinto'} />
         <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
       </Head>
@@ -40,6 +42,7 @@ const mapStateToProps = state => {
   const mapDispatchToProps = dispatch => {
     return{
       getShopSeo: (shopId) => dispatch(getShopSeoStart(shopId)),
+      getStoreDetails: (storeId) => dispatch(getStoreDetails(storeId)),
     }
 
 }

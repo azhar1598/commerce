@@ -1,14 +1,14 @@
 import { callAPI, callNodeAPI, callNodeProdAPI } from "./apiHandler";
 
 
-const STORE_ID=585
+const STORE_ID = 196
 //widgets
 export const handleGetShopWidgets = (payload) =>
     callAPI('GET', `stores/get-all-widget-integrations&storeId=${payload}`)
 
-    // SEO
+// SEO
 
-    export const handleSEO = (payload) =>
+export const handleSEO = (payload) =>
     callAPI('GET', `stores/get-seo-details&storeId=${STORE_ID}`)
 
 
@@ -21,7 +21,7 @@ export const getStoreDisplaySettingsAPI = () =>
 export const getStoreDetailsAPI = (storeId) =>
     callAPI('GET', `stores/get-details&storeId=${STORE_ID}`)
 
-    
+
 
 export const getBannerImages = (storeId) =>
     callAPI(`GET`, `stores/get-banners&storeId=${STORE_ID}`)
@@ -58,7 +58,7 @@ export const getCategories = (storeId) =>
 
 export const getCategoricalItems = (payload) => {
 
-console.log('filterpayloadAnd payload sort',payload)
+    console.log('filterpayloadAnd payload sort', payload)
 
     return callAPI(
         'GET', `catalog/get-items&storeId=${STORE_ID}&categoryId=${payload.categoryId}&${payload.subCategoryId != 'undefined' && payload.subCategoryId != undefined ? `subCategoryId=${payload.subCategoryId}` : ''}&pageNum=${payload.page}${payload.sortOrder != 'false' || undefined ? `&sortOrder=${payload.sortOrder}` : ''}&customerId=${payload.customerId}`,
@@ -91,7 +91,7 @@ export const forgotPasswordAPI = ({ payload }) => {
 
 export const verifyForgotOtp = (payload) => {
     console.log('payload otp', payload)
-    return callNodeAPI('POST', `/api/v1/customer/verify-otp`, { otpCode: payload.OTP, customerId: payload.customerId ,verificationType:payload.method})
+    return callNodeAPI('POST', `/api/v1/customer/verify-otp`, { otpCode: payload.OTP, customerId: payload.customerId, verificationType: payload.method })
 }
 
 export const resetPasswordAPI = (input, customerId) =>
@@ -175,22 +175,29 @@ export const editAddressAPI = (customerId, addressId, addressData) =>
 export const getPurchaseDetails = (payload) =>
     callAPI('GET', `orders/get-purchase&purchaseId=${payload}`)
 
-export const setDeliveryAddress = (purchaseId, addressId) =>
-    callAPI('GET', `orders/set-delivery-address-id&purchaseId=${purchaseId}&deliveryAddressId=${addressId}`)
+export const setDeliveryAddress = (purchaseId, addressId) => {
+    if (addressId) {
+
+        return callAPI('GET', `orders/set-delivery-address-id&purchaseId=${purchaseId}&deliveryAddressId=${addressId}`)
+    }
+    else {
+        return null
+    }
+}
 
 export const setDeliveryAddressFlag = (purchaseId, flag) =>
-    callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=Y`)
+    callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=N`)
 
 
 export const convenienceFlag = (purchaseId, flag) =>
     callAPI('GET', `orders/set-convenience-flag&purchaseId=${purchaseId}&flagStatus=${flag}`)
 
-    export const setParcelAPI=(purchaseId)=>
-    callAPI('GET',`orders/set-parcel&purchaseId=${purchaseId}&flagStatus=Y`)
+export const setParcelAPI = (purchaseId) =>
+    callAPI('GET', `orders/set-parcel&purchaseId=${purchaseId}&flagStatus=Y`)
 
-    export const setDeliveryAPI=(purchaseId)=>
-    callAPI('GET',`orders/set-delivery&purchaseId=${purchaseId}&flagStatus=N`)
-    
+export const setDeliveryAPI = (purchaseId) =>
+    callAPI('GET', `orders/set-delivery&purchaseId=${purchaseId}&flagStatus=Y`)
+
 
 export const couponApply = (payload) =>
     callAPI('GET', `orders/validate-coupon&storeId=${payload.storeId}&couponCode=${payload.coupon}&orderId=${payload.orderId}&customerId=${payload.customerId}`)

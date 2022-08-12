@@ -234,11 +234,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                 // if(maxmin)
             }
             else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                quantity = value.inventory_quantity
+                quantity = value?.inventory_quantity
                 console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
             }
             else if (value?.max_order_quantity > value?.inventory_quantity) {
-                quantity = value.inventory_quantity
+                quantity = value?.inventory_quantity
                 console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
             }
@@ -746,7 +746,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                 :
 
-                                                !cart.find(item => initialState.defaultVariantItem ? item.defaultVariantItem?.variant_item_id == initialState.defaultVariantItem.variant_item_id : item.item_id == id) ? <div onClick={() => itemAddToCart(initialState.data)} className="text-lg py-2 px-7 border cursor-pointer mt-3" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>ADD TO BAG</div>
+                                                !cart.find(item => initialState.defaultVariantItem ? item.defaultVariantItem?.variant_item_id == initialState.defaultVariantItem.variant_item_id : item.item_id == id) ? <div onClick={() => itemAddToCart(initialState.data)} className="text-lg py-2 px-7 border cursor-pointer mt-3" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Add to Cart</div>
                                                     :
                                                     <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
                                                         <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
@@ -793,11 +793,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             // if(maxmin)
                                                                         }
                                                                         else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                                            quantity = value.inventory_quantity
+                                                                            quantity = value?.inventory_quantity
                                                                             console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
                                                                         }
                                                                         else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                                            quantity = value.inventory_quantity
+                                                                            quantity = value?.inventory_quantity
                                                                             console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
                                                                         }
@@ -826,9 +826,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-                                                                            if (value.inventory_quantity < value.min_order_quantity) {
+                                                                            if (value?.inventory_quantity < value?.min_order_quantity) {
                                                                                 
-                                                                                if (filter[0].qty < value.inventory_quantity) {
+                                                                                if (filter[0].qty < value?.inventory_quantity) {
                                                                                     return item
 
                                                                                 }
@@ -857,7 +857,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             }
 
                                                                             else {
-                                                                                if (filter[0].qty < value.min_order_quantity) {
+                                                                                if (filter[0].qty < value?.min_order_quantity) {
                                                                                     return item
 
                                                                                 }
@@ -1056,7 +1056,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                         <div onClick={() => handleWishlist(initialState?.data.item_id)} className="text-lg py-2 px-7 cursor-pointer mt-3 text-[#212B36] flex items-start" ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartFilled style={{ fontSize: '24px', color: 'red' }} /></span>ADDED TO WISHLIST</div>
                                         :
-                                        <div onClick={() => stateCustomerDetails?.data?.customer_id ? handleWishlist(initialState?.data.item_id) : showModal()} className="text-lg py-2 px-7 cursor-pointer mt-3 text-[#212B36] flex items-start" ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartOutlined style={{ fontSize: '24px', }} /></span>ADD TO WISHLIST</div>
+                                        <div onClick={() => stateCustomerDetails?.data?.customer_id ? handleWishlist(initialState?.data.item_id) : showModal()} className="text-lg py-2 px-7 cursor-pointer mt-3 text-[#212B36] flex items-start" ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartOutlined style={{ fontSize: '24px', }} /></span>Add to wishlist</div>
 
                                         : <div className=' h-12 flex  py-2 px-24 mt-4  items-center '>
                                             <SyncOutlined spin />
@@ -1175,7 +1175,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                         <div onClick={() => stateCustomerDetails?.data?.customer_id ? handleWishlist(initialState?.data.item_id) : router.push('/account/user/login')} className="text-sm py-2 px-1 cursor-pointer mt-3 text-[#212B36] flex items-start w-64 " ><span className=' pr-3 ' id={initialState?.data?.item_id}><HeartFilled style={{ fontSize: '24px', color: 'red' }} /></span>ADDED TO WISHLIST</div>
                                         :
-                                        <div onClick={() => stateCustomerDetails?.data?.customer_id ? handleWishlist(initialState?.data.item_id) : router.push('/account/user/login')} className="text py-2 px-1 cursor-pointer mt-3 text-[#212B36] flex items-start w-64 " ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartOutlined style={{ fontSize: '24px', }} /></span>ADD TO WISHLIST</div>
+                                        <div onClick={() => stateCustomerDetails?.data?.customer_id ? handleWishlist(initialState?.data.item_id) : router.push('/account/user/login')} className="text py-2 px-1 cursor-pointer mt-3 text-[#212B36] flex items-start w-64 " ><span className='-mt-1 pr-3 ' id={initialState?.data?.item_id}><HeartOutlined style={{ fontSize: '24px', }} /></span>Add to wishlist</div>
 
                                     : <div className='w-52 px-20'>
                                         <SyncOutlined spin />
@@ -1189,7 +1189,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                 :
 
                                 !cart.find(item => initialState.defaultVariantItem ? item.defaultVariantItem?.variant_item_id == initialState.defaultVariantItem.variant_item_id : item.item_id == id) ?
-                                    <div onClick={() => itemAddToCart(initialState.data)} className="mt-2 py-2 px-2 border text-center text- cursor-pointer w-1/2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>ADD TO BAG</div>
+                                    <div onClick={() => itemAddToCart(initialState.data)} className="mt-2 py-2 px-2 border text-center text- cursor-pointer w-1/2" style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Add to Cart</div>
                                     :
                                     <div className='border space-x-2  flex items-center justify-between w-1/2 m-auto' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
                                         <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
@@ -1239,11 +1239,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         // if(maxmin)
                                                     }
                                                     else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                        quantity = value.inventory_quantity
+                                                        quantity = value?.inventory_quantity
                                                         console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
                                                     }
                                                     else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                        quantity = value.inventory_quantity
+                                                        quantity = value?.inventory_quantity
                                                         console.log('value?.max_order_quantity > value?.inventory_quantity',)
 
                                                     }
@@ -1272,9 +1272,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
 
-                                                        if (value.inventory_quantity < value.min_order_quantity) {
+                                                        if (value?.inventory_quantity < value?.min_order_quantity) {
                                                             
-                                                            if (filter[0].qty < value.inventory_quantity) {
+                                                            if (filter[0].qty < value?.inventory_quantity) {
                                                                 return item
 
                                                             }
@@ -1305,7 +1305,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         }
 
                                                         else {
-                                                            if (filter[0].qty < value.min_order_quantity) {
+                                                            if (filter[0].qty < value?.min_order_quantity) {
                                                                 return item
 
                                                             }

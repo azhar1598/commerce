@@ -28,7 +28,7 @@ function OtpForm({ handleAuth, handleChangeOtp, OTP, inputSignUp, handleProceed,
 
             <div className='flex flex-col items-start justify-center w-full p-8' >
                 <p className='font-montMedium'> An OTP has been sent to {inputSignUp?.method}.Please enter <br/> the OTP to verify. </p>
-                <p className=" cursor-pointer" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}` }} onClick={change}>Change</p>
+                <p className=" cursor-pointer" style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={change}>Change</p>
                 {/* <div style={{ border: '1px solid grey', padding: '8px', marginTop: '10px', borderRadius: '3px' }}>
                 <input type="text" placeholder="Enter OTP"className="otp-input" name="otp" onChange={handleChangeOtp} required autoComplete="off" />
             </div> */}
@@ -48,7 +48,7 @@ function OtpForm({ handleAuth, handleChangeOtp, OTP, inputSignUp, handleProceed,
 
                     <Countdown title="" value={Date.now() + 30 * 1000} valueStyle={{ fontSize: '17px' }} onChange={onChange} />
 
-                    <p className="text-right mt-4"><span>Didnt receive OTP?</span><span className="text-teal-600 cursor-pointer" style={{ color: `${storeSettings.data ?!disable? storeSettings.data.primary_color:'gray' : 'black'}` }} onClick={(e) => {!disable? !verifyOtp ? handleForgotPassword(e, method, 'isd', "SIGNUP") : handleForgotPassword(e, method, 'value') :''}}>Resend Now</span></p>
+                    <p className="text-right mt-4"><span>Didnt receive OTP?</span><span className="cursor-pointer" style={{ color: `${storeSettings.data ?!disable? storeSettings.data.primary_color:storeSettings.data.secondary_color : 'black'}` }} onClick={(e) => {!disable? !verifyOtp ? handleForgotPassword(e, method, 'isd', "SIGNUP") : handleForgotPassword(e, method, 'value') :''}}>Resend Now</span></p>
                 </div>
                 
                 <button className="otp-button border w-full" style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white`, padding: '8px', marginTop: '15px', borderRadius: '5px' }}>

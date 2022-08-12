@@ -10,7 +10,7 @@ import styles from '../styles/Home.module.css'
 import { getBannerImages, getFeaturedProducts, getNewArrivals } from '../services/apiServices'
 import { Carousel, Spin } from 'antd'
 import ECarousel, { consts } from 'react-elastic-carousel'
-import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, UpSquareOutlined } from '@ant-design/icons'
+import { CiCircleOutlined, LeftCircleFilled, LeftOutlined, LeftSquareFilled, MinusOutlined, RightCircleFilled, RightCircleOutlined, RightOutlined, RightSquareFilled, UpSquareOutlined } from '@ant-design/icons'
 import { Skeleton } from 'antd';
 import { FaCircle } from 'react-icons/fa'
 import { useRouter } from "next/router";
@@ -91,6 +91,14 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
     )
   }
 
+  const myArrowBanner = ({ type, onClick, isEdge }) => {
+    const pointer = type === consts.PREV ? <LeftOutlined  style={{position:'absolute',marginLeft:'40px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2'/> : <RightOutlined style={{position:'absolute' ,marginLeft:'-60px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2'/>
+    return (
+      <button onClick={onClick} disabled={isEdge} style={{ display: '',position:'',zIndex:20000 }}>
+        {pointer}
+      </button>
+    )
+  }
 
   const props = {
     dots: true,
@@ -153,18 +161,20 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
               <div className='mt-36  w-full '>
 
 
-                <ECarousel itemPosition={consts.START} autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
+                <ECarousel itemPosition={consts.START} autoPlaySpeed={1500} enableAutoPlay itemsToShow={1} itemPadding={[0, 0]} renderArrow={myArrowBanner} renderPagination={({ pages, activePage, onClick }) => {
                   return (
                     <div direction="row" style={{ display: 'flex' }}>
                       {pages.map(page => {
                         const isActivePage = activePage === page
                         return (
+                          <>
                           <MinusOutlined
                             key={page}
                             onClick={() => onClick(page)}
                             active={isActivePage}
                             style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
                           />
+                          </>
                         )
                       })}
                     </div>
@@ -240,7 +250,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
                         </div> :
                         <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow-xl bg-white max-h-[55vh]' key={index}>
-                          {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
+                          <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p>
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 
@@ -263,7 +273,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
           {featured.length != 0 ?
             <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
-              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Best sellings</p>
+              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special Menus</p>
               <div className='bg-white p-2 flex items-center justify-between w-full '>
                 <ECarousel itemPosition={consts.START} itemsToShow={4} itemPadding={[0, 0]} renderArrow={myArrow} renderPagination={({ pages, activePage, onClick }) => {
                   return (
@@ -290,7 +300,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
                         </div> :
                         <div maxWidth="45%" className='flex flex-col ml-2 p-2 rounded border border-blue-100 shadow bg-white max-h-[55vh]' key={index}>
-                          {/* <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p> */}
+                          <p className='absolute font-montSemiBold lg:mt-56 text-red-600 lg:text-xl md:text-lg md:px-4 md:py-2 bg-white lg:px-6 lg:py-2 bottom-0'>OUT OF STOCK</p>
                           <img src={a.primary_img ? a.primary_img : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='h-72 lg:h-[35vh] md:72 md:h-[25vh] bg-white cursor-pointer' />
                           {/* <p className='font-montSemiBold mt-2 text-[16px] lg:text-sm  item-name item-description text-[#000000BF] h-4' onClick={() => { router.push(`/product/${a.item_id}`) }} >{a.item_name}<span></span></p>
 

@@ -57,7 +57,7 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
                     </div>
                 }
 
-                <div className='flex flex-col '> <p className='font-montMedium text-sm text-slate-500 mt-3' >Password</p>
+                <div className='flex flex-col '> <p className='font-montMedium text-sm text-slate-500 mt-3' >Create Password</p>
 
                     <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px' }} className='lg:w-96 w-80'>
 

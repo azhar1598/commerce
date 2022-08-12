@@ -315,10 +315,15 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 <div className=' w-full flex flex-col lg:flex-row flex-wrap px-3 lg:p-4 lg:px-12 lg:justify-between  bg-white '>
                                     {/* Object.values(orderDetails.orderItems).map(item => */}
                                     {orderDetails?.orderItems && Object?.values(orderDetails?.orderItems)?.map((item, index) =>
-                                        <div className='flex lg:items-start lg border-2 w-[30vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
+                                        <div className='flex lg:items-start lg border-2 w-[30vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
                                             <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-28 lg:h-36 min-w-36 max-w-36 border border-blue-100 shadow ' />
                                             <div className='flex flex-col items-start w-full ml-3 lg: '>
-                                                <p className='text- font-montSemiBold w-56 lg:w-72   break-words'>{item.itemName}</p>
+                                                <div className='flex'>
+                                                    {item.isVeg ? <img src="/veg.svg" className=' w-4 h-4  mr-2' />
+                                                        : <img src="/non-veg.png" className='w-4 h-4  mr-2' />}
+
+                                                    <p className='text- font-montSemiBold w-56 lg:w-72   break-words'>{item.itemName}</p>
+                                                </div>
                                                 {item.customizationDetails && <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
                                                     item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},
 
@@ -381,44 +386,46 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                         <div className=" lg:ml-5 p-6 mb-6 w-full items-center bg-white">
                             <h2 className="text-xl font-montMedium text-center mb-9">Shipping and Billing Details</h2>
                             <div className=" lg:w-1/2">
+                                <div className='border p-3 px-5 mb-3 rounded'>
 
-                                <p className='text-lg font-montSemiBold'>Address</p>
+                                    <p className='text-lg font-montSemiBold'>Address</p>
 
-                                <div className='flex justify-between lg:w-1/3 md:w-1/3 mb-4 '>
-                                    <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>
+                                    <div className='flex justify-between lg:w-1/3 md:w-1/3 mb-4 '>
+                                        <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>
 
+                                    </div>
                                 </div>
 
-                                <p className='text-lg font-montSemiBold'>Invoice</p>
+                                <p className='text-lg font-montSemiBold'>Billing Details</p>
 
                                 <div className='flex justify-between'>
                                     <p>Price</p>
                                     <p>{storeDetails?.currency_symbol} {Number(orderDetails?.orderAmount).toFixed(2)}</p>
                                 </div>
-                                <div className='flex justify-between'>
+                                {orderDetails?.parcelCharge != 0 ? <div className='flex justify-between'>
                                     <p>Discount</p>
                                     <p>-{storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.parcelCharge != 0 ? <div className='flex justify-between'>
                                     <p>Parcel</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.parcelCharge).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.deliveryCharge != 0 ? <div className='flex justify-between'>
                                     <p>Shipping</p>
                                     <p style={{ color: `${stateStoreSettings?.secondary_color ? stateStoreSettings.secondary_color : "black"}` }}>{parseFloat(orderDetails?.deliveryCharge) ? `+${storeDetails?.currency_symbol} ${Number(orderDetails?.deliveryCharge).toFixed(2)}` : 'Free'}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div> : ''}
+                                {orderDetails?.convenienceFee != 0 ?   <div className='flex justify-between'>
                                     <p>Tax</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.taxAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div>:''}
+                                {orderDetails?.couponSavingsAmount != 0 ?     <div className='flex justify-between'>
                                     <p>Coupon Applied</p>
                                     <p>-{storeDetails?.currency_symbol} {Number(orderDetails?.couponSavingsAmount).toFixed(2)}</p>
-                                </div>
-                                <div className='flex justify-between'>
+                                </div>:''}
+                                {orderDetails?.convenienceFee != 0 ?  <div className='flex justify-between'>
                                     <p>Convenience Charge</p>
                                     <p>+{storeDetails?.currency_symbol} {Number(orderDetails?.convenienceFee).toFixed(2)}</p>
-                                </div>
+                                </div>:''}
                                 <hr />
                                 <div className='flex justify-between text-xl font-montMedium mt-1'>
                                     <p>Total</p>
@@ -432,7 +439,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 {/* discount */}
                                 {
                                     orderDetails?.savingsAmount ? <div className='p-6 text-center'>
-                                        <p className='bg-green-200 p-4 rounded font-montRegular'>% You Saved {storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)} on this order</p>
+                                        <p className='bg-green-200 p-4 rounded font-montRegular'>You Saved {storeDetails?.currency_symbol} {Number(orderDetails?.savingsAmount).toFixed(2)} on this order</p>
                                     </div> : ''
                                 }
                             </div>
@@ -499,7 +506,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                     </div>
                     <div className='w-full flex items-end justify-center px-8'>
                         {!cancelLoader ?
-                            <button className='px-28 mt-4 font-montSemiBold py-2  mb-10' style={stateStoreSettings ? { background: stateStoreSettings?.secondary_color, color: stateStoreSettings?.navbar_color } : { background: 'black', color: 'white' }} onClick={() => handleCancelReason()}>Cancel</button> : <Spin style={{ marginTop: '20px', marginBottom: '20px' }} />}
+                            <button className='px-28 mt-4 font-montSemiBold py-2  mb-10 rounded' style={stateStoreSettings ? { background: stateStoreSettings?.secondary_color, color: stateStoreSettings?.navbar_color } : { background: 'black', color: 'white' }} onClick={() => handleCancelReason()}>Cancel</button> : <Spin style={{ marginTop: '20px', marginBottom: '20px' }} />}
 
                     </div>
                 </div> :

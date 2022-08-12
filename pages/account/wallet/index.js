@@ -87,7 +87,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                         ></lottie-player>
                     </div>
                     : <>
-                        <div className='flex w-full justify-between bg-white lg:ml-5 border-b-2 border-slate-400'>
+                        <div className='flex w-full justify-between bg-white lg:ml-5 border-b-2 border-slate-200'>
                             <div className='pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 text-left w-full '>
                                 <p className='hidden text-black font-montBold text-xl pt-3  lg:block'>Wallet Balance</p>
                                 <p className='text-black font-montRegular text-[16px] lg:hidden mt-4'>Balance</p>
@@ -111,7 +111,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
 
                         {
                             walletTransactions?.length != 0 ?
-                                <div className='lg:mb-0 mb-24 lg:-mt-4 -mt-2'>
+                                <div className='lg:mb-0 mb-24 lg:-mt-5   -mt-2'>
                                     {walletTransactions.map((item, index) => {
 
                                         return (
