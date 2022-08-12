@@ -1,13 +1,14 @@
 import { callAPI, callNodeAPI, callNodeProdAPI } from "./apiHandler";
 
 
-const STORE_ID = 196
+const STORE_ID = 585
+
+
 //widgets
 export const handleGetShopWidgets = (payload) =>
     callAPI('GET', `stores/get-all-widget-integrations&storeId=${payload}`)
 
 // SEO
-
 export const handleSEO = (payload) =>
     callAPI('GET', `stores/get-seo-details&storeId=${STORE_ID}`)
 
