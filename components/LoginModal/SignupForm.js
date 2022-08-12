@@ -18,7 +18,7 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
                     <p className='text-slate-500 text-sm font-montMedium'>Name</p>
                     <div style={{ border: '1px solid grey', padding: '5px', borderRadius: '3px', marginTop: '-5px' }} className='lg:w-96 w-80 '>
                         {/* <input type="text" placeholder="Enter Password" className="login-input outline-none"  /> */}
-                        <Input placeholder="Enter Your Name" name="name" onChange={handleChange} required autoComplete="off" bordered={false} />
+                        <Input placeholder="Enter Your Name" name="name" pattern="[a-z]{4,8}"  title="4 to 8  letters" onChange={handleChange} required autoComplete="off" bordered={false} />
                     </div>
                 </div>
 

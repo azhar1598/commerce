@@ -91,7 +91,7 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
                 <div className={`flex items-baseline  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wallet' ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
                     <WalletFilled />
                     <p className='pl-8 text-sm'>Wallet</p>
-                    <p className='ml-8 py-1 px-1  text-[12px] rounded text-black' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white`, opacity: '40%' }} >{stateStoreDetails?.currency_symbol} {stateWalletBalance?.customer_wallet_balance}</p>
+                    <p className='ml-8 py-1 px-1  text-[12px] rounded text-black' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white`, opacity: '40%' }} >{stateStoreDetails?.currency_symbol} {stateWalletBalance?.customer_wallet_balance}</p>
                 </div>
             </Link>
             <Link href={`/account/savedPlaces`} >
