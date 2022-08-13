@@ -416,7 +416,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         else {
 
           if (paymentMethod == 'COD') {
-            // const response = await initiateCashOnDelivery(purchaseId, customerId, calculatedPurchaseTotal)
+            const response = await initiateCashOnDelivery(purchaseId, customerId, calculatedPurchaseTotal)
             setTransparentLoader(true)
             if (response.data) {
               // clearCart()
