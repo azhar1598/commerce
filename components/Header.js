@@ -120,6 +120,9 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
 
     useEffect(() => {
+
+console.log('search items test', searchedItem?.data )
+
         if (router.pathname == `/product/[id]` || router.pathname == `/cart` || router.pathname == `/account/myOrders` || router.pathname == `/account/savedPlaces` || router.pathname == `/account/addAddress` || router.pathname == `/account/orderDetails/[orderId]` || router.pathname == `/account/wallet` || router.pathname == `/wishlist` || searchedItem?.data == '' || router.pathname == `/address` || router.pathname == `/review`) {
             setInput({ input: '' })
 
@@ -137,7 +140,7 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
 
         setShowMobileSearch(false)
-    }, [router.pathname, router?.query?.enable == 'true'])
+    }, [router.pathname, router?.query?.enable == 'true',searchedItem?.data ])
 
     useEffect(() => {
 
@@ -323,8 +326,8 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
                 }}>{storeDetailsReducer?.data?.store_name.toUpperCase()}</p>
                 <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
                 <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}   onClick={() => { router.push('/shop') }}>Shop</p>
-                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
-                <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>About</p>
+                {/* <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p> */}
+                {/* <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>About</p> */}
                 <p className='font-montMedium mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}>|</p>
                 <p className='font-montMedium cursor-pointer mt-3' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}` }}onClick={() => setContactUsVisible(true)}>Contact us</p>
               

@@ -76,7 +76,7 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
                         dispatchCategoricalItems({ payload })
 
 
-
+                        searchItemLocal('')
                     }
                     setPage(1)
 
@@ -226,7 +226,17 @@ export const ProductList = ({ searchedItem, customerId, dispatchWishlist, stateS
             if (data?.category_id && data?.category_id != "All Items") {
                 const payload = { storeId: 'storeId', categoryId: data.category_id, sortOrder, subCategoryId: data.sub_category_id, page: 1, customerId, setItems, items, setLoading }
                 dispatchCategoricalItems({ payload })
-            } else {
+            } 
+            else if (searchedItem.data != '' && searchedItem.data != undefined && searchedItem.length != 0) {
+
+                const payload = { storeId: 'storeId', searchedItem: searchedItem.data, page: 1, customerId, items, setItems, setLoading, sortOrder }
+                if (data?.category_id) {
+                    router.push('/shop')
+                }
+                dispatchSearchItems({ payload })
+                setPage(1)
+            }
+            else {
                 const payload = { storeId: stateStoreDetails.store_id, filterAndSortPayload, customerId: customerId, sortOrder, page: 1, items, setItems, loading, setLoading }
                 dispatchInitialItems({ payload })
             }

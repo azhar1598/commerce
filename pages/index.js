@@ -92,9 +92,9 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
   }
 
   const myArrowBanner = ({ type, onClick, isEdge }) => {
-    const pointer = type === consts.PREV ? <LeftOutlined  style={{position:'absolute',marginLeft:'40px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2'/> : <RightOutlined style={{position:'absolute' ,marginLeft:'-60px',fontSize:'16px',fontWeight:500}} className='bg-black bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2'/>
+    const pointer = type === consts.PREV ? <LeftOutlined style={{ position: 'absolute', marginLeft: '40px', fontSize: '16px', fontWeight: 500 }} className='bg-black bg-opacity-40 backdrop-blur-xl rounded drop-shadow-lg p-4 px-2' /> : <RightOutlined style={{ position: 'absolute', marginLeft: '-60px', fontSize: '16px', fontWeight: 500 }} className='bg-black bg-opacity-40 backdrop-blur-lg rounded drop-shadow-2xl p-4 px-2' />
     return (
-      <button onClick={onClick} disabled={isEdge} style={{ display: '',position:'',zIndex:20000 }}>
+      <button onClick={onClick} disabled={isEdge} style={{ display: '', position: '', zIndex: 20000 }}>
         {pointer}
       </button>
     )
@@ -136,13 +136,13 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
 
           {/* <div className="border border-blue-100 shadow rounded-md lg:h-[75vh]  lg:mb-16   md:max-w-[24vw] lg:mt-12  p-3 min-w-[95vw]" > */}
-            <div className="animate-pulse mt-8 flex space-x-4 ">
-              <div className="flex-1 space-y-6 py-5">
-                <div className="rounded bg-slate-300 lg:h-56 lg:h-[70vh]"></div>
-        
-           
-              </div>
+          <div className="animate-pulse mt-8 flex space-x-4 ">
+            <div className="flex-1 space-y-6 py-5">
+              <div className="rounded bg-slate-300 lg:h-56 lg:h-[70vh]"></div>
+
+
             </div>
+          </div>
           {/* </div> */}
 
           <Skeleton active paragraph={{ rows: 7 }} title='hello' />
@@ -168,12 +168,12 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                         const isActivePage = activePage === page
                         return (
                           <>
-                          <MinusOutlined
-                            key={page}
-                            onClick={() => onClick(page)}
-                            active={isActivePage}
-                            style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
-                          />
+                            <MinusOutlined
+                              key={page}
+                              onClick={() => onClick(page)}
+                              active={isActivePage}
+                              style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
+                            />
                           </>
                         )
                       })}
@@ -182,8 +182,9 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
                 }}>
                   {banners.map((a, index) =>
                     <div maxWidth="100%" className='flex flex-col ' key={index}>
-                      <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[100vw] h-[75vh] bg-white' />
-
+                      <a className={`${a.target_url ? "cursor-pointer" : "cursor-default"}`} rel="noreferrer" target="_blank" href={a.target_url}>
+                        <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[100vw] h-[75vh] bg-white' />
+                      </a>
                     </div>
                   )}
                 </ECarousel>
@@ -223,7 +224,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
           {newArrivals.length != 0 ?
             <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
-              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special menus</p>
+              <p className='font-montBold text-[#000000BF] text-lg ml-2'>New Arrivals</p>
               <div className='bg-white p-2 flex items-center justify-between w-full '>
                 <ECarousel itemPosition={consts.START} itemsToShow={4} itemPadding={[0, 0]} renderArrow={myArrow} renderPagination={({ pages, activePage, onClick }) => {
                   return (
@@ -273,7 +274,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
           {featured.length != 0 ?
             <div className='hidden lg:flex md:flex flex-col mt-9 lg:pr-28 lg:pl-28 md:pr-28 md:pl-28 mb-8'>
-              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Special Menus</p>
+              <p className='font-montBold text-[#000000BF] text-lg ml-2'>Best Sellings</p>
               <div className='bg-white p-2 flex items-center justify-between w-full '>
                 <ECarousel itemPosition={consts.START} itemsToShow={4} itemPadding={[0, 0]} renderArrow={myArrow} renderPagination={({ pages, activePage, onClick }) => {
                   return (
@@ -326,7 +327,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
           {/* Mobile View Banner */}
           <div className='lg:hidden md:hidden h-72  ' >
             <div className=' h-72 w-[100vw]  mt-[60px]'>
-              
+
               <ECarousel itemPosition={consts.START} enableAutoPlay autoPlaySpeed={1500} itemsToShow={1} itemPadding={[0, 0]} showArrows={false} renderPagination={({ pages, activePage, onClick }) => {
                 return (
                   <div direction="row" style={{ display: 'flex', }}>
@@ -342,21 +343,22 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
 
 
                         <MinusOutlined
-                        key={page}
-                        onClick={() => onClick(page)}
-                        active={isActivePage}
-                        style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
-                      />
+                          key={page}
+                          onClick={() => onClick(page)}
+                          active={isActivePage}
+                          style={page === activePage ? { color: `${storeSettingsReducer.data ? storeSettingsReducer.data.secondary_color : 'black'}`, fontSize: '29px', margin: '6px', cursor: 'pointer' } : { border: 'none', fontSize: '29px', color: 'gray', margin: '6px', cursor: 'pointer', }}
+                        />
 
-                        )
+                      )
                     })}
                   </div>
                 )
               }}>
                 {banners.map((a, index) =>
                   <div className='flex flex-col bg-red-700 w-[150vw]' key={index}>
-                    <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[120vw] h-52 bg-white' />
-
+                    <a className={`${a.target_url ? "cursor-pointer" : "cursor-default"}`} rel="noreferrer" target="_blank" href={a.target_url}>
+                      <img src={a.banner_img_url ? a.banner_img_url : 'https://wabisabiproject.com/wp-content/uploads/woocommerce-placeholder.png'} className='w-[120vw] h-52 bg-white' />
+                    </a>
                   </div>
                 )}
               </ECarousel>
@@ -405,7 +407,7 @@ function Home({ getStoreDetails, storeSettingsReducer, dispatchSocialProfile, st
           </div>
 
           <div className='lg:hidden md:hidden pb-24'>
-            <p className='font-montSemiBold text-[16px] text- ml-2 mt-3 '>Featured Products</p>
+            <p className='font-montSemiBold text-[16px] text- ml-2 mt-3 '>Best Sellings</p>
             <div className='bg-[#F1F1F1] p-2 flex items-center justify-between w-full' >
               <ECarousel itemPosition={consts.START} itemsToShow={2} itemPadding={[0, 0]} renderArrow={myArrowMobile} renderPagination={({ pages, activePage, onClick }) => {
                 return (

@@ -36,7 +36,7 @@ export const getFeaturedProducts = (storeId) =>
 
 
 export const getInitialItems = (payload) => {
-    console.log('api ', payload)
+    console.log('api services    ', payload)
     if (payload.filterAndSortPayload) {
 
         return callAPI(
