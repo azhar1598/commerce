@@ -275,14 +275,14 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
             <Profile />
 
 
-            <div className='flex flex-col w-full'>
+            <div className='flex flex-col w-full lg:px-2 lg:mr-28'>
 
                 {!loading ?
                     <>
 
-                        <div className='flex flex-col w-full lg:mr-24'>
-                            <div className='bg-white hidden lg:pl-8 lg:flex items-center justify-between text-left lg:ml-5 w-full '>
-                                <div className='lg:w-1/2 flex mt-6 lg:mt-0'>
+                        <div className='flex flex-col w-full lg:mr-24 bg-white lg:ml-8 rounded'>
+                            <div className=' hidden lg:pl-8 lg:flex items-center justify-between text-left  w-full rounded'>
+                                <div className='lg:w-1/2 flex mt-6 lg:mt-0  '>
                                     <Link href='/account/myOrders'>
                                         <ArrowLeftOutlined className='text-black text-lg mr-4 mt-4' />
                                     </Link>
@@ -293,7 +293,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 {/* <p className='text-[#212B3680] font-montSemiBold lg:mt-0 mt-6'>Order ID - # {orderDetails.orderId}</p> */}
                             </div>
 
-                            <div className='bg-white lg:hidden lg:pl-8 flex items-center justify-between text-left lg:ml-5 w-full '>
+                            <div className='bg-white lg:hidden lg:pl-8 flex items-center justify-between text-left w-full '>
                                 <div className='lg:w-1/2 flex mt-3 lg:mt-0 border-b border-blue-100 shadow w-full mb-2'>
                                     <Link href='/account/myOrders'>
                                         <LeftOutlined className='text-black text-lg mr-4 mt-4 ml-3' />
@@ -308,7 +308,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
 
 
-                            <div className=' flex flex-col lg:items-start lg:justify-around justify-between  lg:ml-5 min-h-96  md:ml-5 w-full  cursor-pointer'>
+                            <div className=' flex flex-col lg:items-start lg:justify-around justify-between  min-h-96  w-full  cursor-pointer'>
                                 {/* Web View Tracker */}
 
 
@@ -371,7 +371,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
                                 <Stepper vertical={true} steps={orderDetails.orderStatus == 'CANCELLED_BY_CUSTOMER' || orderDetails.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? cancelSteps : steps} activeStep={orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={orderDetails} />
                             </div>
-                            <div className=' bg-white pl-8 p-3 text-right lg:ml-5 md:ml-5 w-full border-b-4 border-slate-[200]'>
+                            <div className=' bg-white pl-8 p-3 text-right lg:ml- w-full border-b-4 border-slate-[200]'>
 
                                 {orderDetails.orderStatus == "CANCELLED_BY_CUSTOMER" ? <span className='text-[#212B36] cursor-pointer font-montSemiBold pr-5' >{orderDetails.orderStatus == "CANCELLED_BY_CUSTOMER" ? 'Order Cancelled by Customer' : 'ORDER_DECLINED_BY_RESTAURANT'}</span> :
 
@@ -383,7 +383,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
 
                         {/* order summary */}
-                        <div className=" lg:ml-5 p-6 mb-6 w-full items-center bg-white">
+                        <div className=" lg:ml-8 p-6 mb-6 w-full items-center bg-white ">
                             <h2 className="text-xl font-montMedium text-center mb-9">Shipping and Billing Details</h2>
                             <div className=" lg:w-1/2">
                                 <div className='border p-3 px-5 mb-3 rounded'>

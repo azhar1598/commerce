@@ -9,6 +9,10 @@ import { IoMdHelpCircle } from 'react-icons/io';
 import { BiLogOut } from 'react-icons/bi';
 import { customerDetails, getWalletInfoAction } from '../actions'
 import { toast,ToastContainer } from 'react-toastify'
+import MyOrdersIcon from './svgComponents/MyOrdersIcon'
+import WishlistImage from './svgComponents/WishlistImage'
+import HeartIcon from './svgComponents/HeartIcon'
+import SavedPlacesIcon from './svgComponents/SavedPlacesIcon'
 
 export const Profile = ({ customerDetails, customerDetailsAction, storeSettings, stateWalletBalance, dispatchWalletInfo, stateStoreDetails, msg }) => {
     const router = useRouter()
@@ -74,29 +78,32 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
             <Link href={`/account/myOrders`} >
                 <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/myOrders' || router.pathname.includes('/account/orderDetails/') ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
                     {/* <ShoppingFilled /> */}
-                    <img src="/Icon ionic-ios-paper.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/>
-                    <p className='pl-8 text-sm'>My orders</p>
+                    {/* <img src="/Icon ionic-ios-paper.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/> */}
+                    <MyOrdersIcon secondaryColor={router.pathname == '/account/myOrders' || router.pathname.includes('/account/orderDetails/') ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
+                    <p className='pl-8 text-sm'>My Orders</p>
                 </div>
             </Link>
 
             <Link href={`/account/wishlist`} >
                 <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wishlist' || router.pathname.includes('/account/wishlist/') ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
                     {/* <HeartFilled /> */}
-                    <img src="/Icon metro-heart.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/>
+                    {/* <img src="/Icon metro-heart.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/> */}
+                    <HeartIcon fill={router.pathname == '/account/wishlist' ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
                     <p className='pl-8 text-sm'>Wishlist</p>
                 </div>
             </Link>
 
             <Link href={`/account/wallet`}>
                 <div className={`flex items-baseline  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wallet' ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
-                    <WalletFilled />
-                    <p className='pl-8 text-sm'>Wallet</p>
+                    <WalletFilled style={{fontSize:'20px'}}/>
+                    <p className='pl-10 text-sm'>Wallet</p>
                     <p className='ml-8 py-1 px-1  text-[12px] rounded text-black' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white`, opacity: '40%' }} >{stateStoreDetails?.currency_symbol} {stateWalletBalance?.customer_wallet_balance}</p>
                 </div>
             </Link>
             <Link href={`/account/savedPlaces`} >
                 <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/savedPlaces' ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }} >
-                    <img src="/Icon awesome-map-marked-alt.svg" width={20} height={40}secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'} />
+                <SavedPlacesIcon secondaryColor={router.pathname == '/account/savedPlaces' ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
+                    {/* <img src="/Icon awesome-map-marked-alt.svg" width={20} height={40}secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'} /> */}
                     <p className='pl-8 text-sm'>Saved Places</p>
                 </div>
             </Link>

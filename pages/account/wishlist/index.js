@@ -58,16 +58,16 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                 <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
             </Head> */}
                 <Profile />
-                <div className='flex flex-col lg:w-[62vw] bg-white w-full lg:mr-24 md:mr-24 lg:ml-8  '>
+                <div className='flex flex-col  bg-white w-full lg:mr-28   lg:ml-8 rounded '>
                     {/* {wishlist.length>0 ? <p className='text-lg font-montSemiBold lg:px-32 mt-8'>Wishlist <span className='text-gray-400 font-montRegular'>( {wishlist.length} Items )</span></p> : ''} */}
 
-                    <div className=' pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
+                    <div className=' pl-4 lg:pl-3 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full '>
                         <Link href='/account/user'>
                             <div className='lg:hidden md:hidden'>
                                 <ArrowLeftOutlined className='text-black text-lg mr-4 mt-3 lg:mt-0' />
                             </div>
                         </Link>
-                        <p className='text-black font-montBold text-xl mt-4 -ml-5'>Wishlist <span className='text-sm text-slate-400'>{ wishlist.length>0?
+                        <p className='text-black font-montBold text-xl mt-4 '>Wishlist <span className='text-sm text-slate-400'>{ wishlist.length>0?
                         `${wishlist.length} items`:``}</span></p>
                         <p className='lg:hidden text-lg text-black font-montRegular mt-2'>Wishlist</p>
                     </div>
@@ -77,7 +77,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                             
 
 
-                            <div className='h-96 flex items-center justify-center'>
+                            <div className='h-96 flex items-center justify-center '>
 
 
                                 <lottie-player
@@ -95,7 +95,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
 
                         :
                         wishlist.length > 0 ?
-                            <div className='flex flex-col -ml-1 w-[64vw] lg:px-2  md:px-0  '>
+                            <div className='flex flex-col -ml-1 lg:px-8  md:px-0  '>
 
 
                                 <InfiniteScroll
@@ -107,7 +107,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings, getWishlis
                                         <Skeleton />
                                     }
                                 >
-                                    <div className='p-2 flex  lg:ml-4 flex-col flex-wrap items-start w-full lg:w-full mb-24 '>
+                                    <div className=' flex flex-col flex-wrap items-start w-full lg:w-full mb-24 '>
                                         {wishlist.map((item, index) =>
                                             <Product image={item.primary_img} name={item.item_name} desc={item.item_desc} price={item.price} salePrice={item.sale_price} discount={item.price - item.sale_price} key={index} itemId={item.item_id} isWishlisted={item.wishlist} customerId={customerDetails.customer_id} entryId={item.entry_id} wishlistPage='true' stateStoreDetails={storeDetails} deleteItemFromWishlist={deleteItemFromWishlist} setState={setState} state={state} grid={false} item={item} isVeg={item.is_veg=="Y"?true:false} />
                                         )}

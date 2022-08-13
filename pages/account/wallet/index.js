@@ -33,7 +33,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
     }, []);
 
     const getWalletInfo = () => {
-        setLoading(true)
+        // setLoading(true)
         const payload = {
             customerId: customerDetails?.data?.customer_id
             , storeId: 'storeId',
@@ -41,7 +41,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
             setLoading
         }
 
-        dispatchWalletInfo({ payload })
+        // dispatchWalletInfo({ payload })
         dispatchWalletTransactions({ payload })
 
     }
@@ -60,7 +60,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                 <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
             </Head> */}
             <Profile />
-            <div className='flex flex-col w-full lg:mr-24 md:mr-24'>
+            <div className='flex flex-col w-full lg:mr-32 md:mr-24'>
                 {/* <div className='bg-white pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 flex text-left lg:ml-5 md:ml-5 w-full border-b-4 border-slate-[200]'>
                     <Link href='/account/user'>
                         <div className='lg:hidden md:hidden'>
@@ -87,7 +87,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                         ></lottie-player>
                     </div>
                     : <>
-                        <div className='flex w-full justify-between bg-white lg:ml-5 border-b-2 border-slate-200'>
+                        <div className='flex w-full justify-between bg-white lg:mr-32 lg:ml-8 border-b-2 border-slate-200 rounded'>
                             <div className='pl-4 lg:pl-8 lg:p-3 md:pl-8 md:p-3 text-left w-full '>
                                 <p className='hidden text-black font-montBold text-xl pt-3  lg:block'>Wallet Balance</p>
                                 <p className='text-black font-montRegular text-[16px] lg:hidden mt-4'>Balance</p>
@@ -105,7 +105,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                         <button className='bg-[#212B36] text-white p-2 px-3 ml-3'>Add</button>
                     </div>
                 </div> */}
-                        <p className='hidden lg:block text-[#212B36] text-lg lg:font-montSemiBold font-montSemiBold lg:pl-8 lg:ml-5 md:ml-5  md:pl-8 bg-white lg:p-4 md:p-4 w-full p-2  '>Wallet Transaction History</p>
+                        <p className='hidden lg:block text-[#212B36] text-lg lg:font-montSemiBold font-montSemiBold lg:pl-8 lg:ml-8 md:ml-5  md:pl-8 bg-white lg:p-4 md:p-4 w-full p-2  '>Wallet Transaction History</p>
 
                         <p className='lg:hidden md:hidden lg:block text-[#212B36]  lg:font-montSemiBold font-montRegular lg:pl-8 lg:ml-5 md:ml-5  md:pl-8 bg-white lg:p-4 md:p-4 w-full p-2  '>Wallet transaction history</p>
 
@@ -115,7 +115,7 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                                     {walletTransactions.map((item, index) => {
 
                                         return (
-                                            <div className='flex flex-row items-center  justify-between lg:ml-5 md:ml-5 w-full bg-white border-b-2 border-slate-[200] cursor-pointer' onClick={() => { handlePush(item.transaction_ref_id) }} key={index}>
+                                            <div className='flex flex-row items-center  justify-between lg:ml-8 md:ml-5 w-full bg-white border-b-2 border-slate-[200] cursor-pointer' onClick={() => { handlePush(item.transaction_ref_id) }} key={index}>
 
                                                 <div>
                                                     <div className='flex p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center md:pl-8 md:p-3 text-left w-full'>
