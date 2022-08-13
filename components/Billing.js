@@ -36,6 +36,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
   const [storeClosed, setStoreClosed] = useState(false)
 
+  const [transparentLoader, setTransparentLoader] = useState(false)
+
   const decryptRazorPayKey = (RZPAccessKey) => {
     // console.log("widgets from", RZPAccessKey)
     var passphrase = process.env.NEXT_PUBLIC_RAZORPAY_API_KEY_ENCRYPTION_PASSWORD;
@@ -342,7 +344,10 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
   }
 
   const handlePayment = async () => {
-    setloader(true)
+    // setloader(true)
+
+
+
 
     console.log('payemene', paymentMethod)
 
@@ -365,6 +370,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           if (walletAmount < billingDetails?.calculatedPurchaseTotal) {
 
             if (paymentMethod == 'COD') {
+              setTransparentLoader(true)
               const response = await initiateCashOnDelivery(purchaseId, customerId, walletAmount > billingDetails?.calculatedPurchaseTotal ? 0.00 : billingDetails?.calculatedPurchaseTotal - walletAmount)
               if (response.data) {
                 // clearCart()
@@ -373,6 +379,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                   pathname: `/success`,
                   query: successInfo
                 })
+       
               }
             }
             if (paymentMethod == 'ONL') {
@@ -409,7 +416,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
         else {
 
           if (paymentMethod == 'COD') {
-            const response = await initiateCashOnDelivery(purchaseId, customerId, calculatedPurchaseTotal)
+            // const response = await initiateCashOnDelivery(purchaseId, customerId, calculatedPurchaseTotal)
+            setTransparentLoader(true)
             if (response.data) {
               // clearCart()
               setloader(false)
@@ -417,6 +425,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
                 pathname: `/success`,
                 query: successInfo
               })
+              // setTransparentLoader(false)
             }
           }
           if (paymentMethod == 'ONL') {
@@ -816,13 +825,32 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       {/* Modal for COD Confirmation */}
 
 
-      <Modal title="Order Confirm" visible={codModalVisible} onCancel={() => setCodModalVisible(false)} footer={null}>
+      <Modal title="Order Confirm" visible={codModalVisible} onCancel={() => {
+        setTransparentLoader(false)
+        setCodModalVisible(false)
+      }} footer={null}>
         <p className='text-xl text-center font-montSemiBold'>Proceed?</p>
         <p className='text-base text-center'>Confirm Your Order For Cash On Delivery</p>
         <div className='flex justify-center gap-3 pb-4'>
-          <button onClick={() => setCodModalVisible(false)} className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
-          <button onClick={handlePayment} className='w-4/12 py-2 rounded' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, }}>Confirm</button>
+          <button onClick={() => {
+            setCodModalVisible(false)
+            setTransparentLoader(false)
+          }
+          } className='w-4/12 border py-2 rounded' style={{ borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>Cancel</button>
+          <button onClick={transparentLoader?'':handlePayment} className='w-4/12 py-2 rounded' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, }}>Confirm</button>
         </div>
+
+
+        {transparentLoader ?
+          <div className='absolute h-full -mt-44 -ml-96 h-[50vh]  w-[80vw] ' >
+            <button className='  h-full w-full text-lg px- rounded font-montMedium border-[#959595] text-[#FFFFFF] bg-black bg-opacity-20 backdrop-blur-sm rounded drop-shadow-lg '
+            ><p className='font-montMedium text-lg'>Your Order Is Being Processed</p>
+              <p className='font-montRegular text-sm'>To ensure your order is not interrupted, please avoid clicking the <br />back or refresh buttons.</p>
+              <p><LoadingOutlined /></p>
+            </button>
+
+          </div>
+          : 'ascas'}
 
       </Modal>
 
@@ -844,6 +872,8 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       <div className='mt-24 z-[500000]'>
         <ToastContainer />
       </div>
+
+
 
     </>
   )

@@ -868,6 +868,9 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                 </div>
             </div>
 
+         
+
+
             <ToastContainer />
         </>
     )

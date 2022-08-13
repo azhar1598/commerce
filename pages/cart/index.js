@@ -35,7 +35,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
     useEffect(() => {
-        setParcelAction(checkout.backendCart?.purchase_id)
+        checkout.backendCart?.purchase_id && setParcelAction(checkout.backendCart?.purchase_id)
     }, [])
 
     // useEffect(() => {
@@ -438,7 +438,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         const removeConvenience = async () => {
             const response = await convenienceFlag(checkout.backendCart?.purchase_id, 'N')
         }
-        removeConvenience()
+        checkout.backendCart?.purchase_id &&   removeConvenience()
     }, [])
 
 
@@ -758,8 +758,8 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     useEffect(() => {
 
-        setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.primary_color : '#ffffff', 0.4))
-        setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.primary_color : '#000000', 0.02))
+        setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.secondary_color : '#ffffff', 0.1))
+        setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 1))
         // setCustomBorder(hex2rgba('#212B36' , 0.25))
     }, [rgbaBackground == ''])
 

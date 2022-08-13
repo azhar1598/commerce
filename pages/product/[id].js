@@ -9,7 +9,7 @@ import Link from 'next/link'
 import ReactPlayer from 'react-player'
 import { useMediaQuery } from 'react-responsive'
 // import ReactImageMagnify from 'react-image-magnify';
-import { HeartOutlined, ArrowLeftOutlined, HeartFilled, Loading3QuartersOutlined, LoadingOutlined, SyncOutlined, } from '@ant-design/icons'
+import { HeartOutlined, ArrowLeftOutlined, HeartFilled, Loading3QuartersOutlined, LoadingOutlined, SyncOutlined, MinusOutlined, PlusOutlined, } from '@ant-design/icons'
 
 
 import { addToWishlist, deleteFromWishlist, getVariantByItemId } from '../../services/apiServices';
@@ -44,6 +44,26 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist)
     const [visible, setVisible] = useState(false)
     const [wishlistId, setWishlistId] = useState()
+
+    
+    const [rgbaBackground, setRgbaBackground] = useState('')
+    const [primaryBackground, setPrimaryBackground] = useState('')
+
+    const [rgbaColor, setRgbaColor] = useState()
+
+
+    
+    useEffect(() => {
+
+        setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.secondary_color : '#ffffff', 0.2))
+        setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 1))
+
+    }, [rgbaBackground == ''])
+
+    const hex2rgba = (hex, alpha = 1) => {
+        const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+        return `rgba(${r},${g},${b},${alpha})`;
+    };
 
 
     // 75:5  Error: React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render This is because you made it like this     const [wishlistId, setWishlistId] = useState(initialState?.data?.wishlist), rather this is the solution const [wishlistId, setWishlistId] = useState()
@@ -760,7 +780,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             else if (item.item_id == id) {
                                                                 return item
                                                             }
-                                                        }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.4', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>-</span>
+                                                        }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined/></span>
                                                         <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
                                                             if (initialState.defaultVariantItem) {
                                                                 if (item.defaultVariantItem) {
@@ -1038,15 +1058,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                     }
                                                                 }
 
-
-                                                                // else if (item.item_id == id) {
-                                                                //     return item
-                                                                // }
-
-
-
                                                             }
-                                                        }).qty + 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.4', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                                        }).qty + 1)} className={`py-2  px-3   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className=''/></span>
 
                                                     </div>}
 
@@ -1206,7 +1219,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
                                         }).qty - 1)}
-                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.4', borderColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}` }}>-</span>
+                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`,  borderColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}` }}><MinusOutlined/></span>
 
 
                                         <span className='font-montBold text-' style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}` }}>{cart.find(function (item) {
@@ -1500,7 +1513,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                         }).qty + 1)}
 
 
-                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, opacity: '0.4', borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>+</span>
+                                            className={`px-4 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground: 'black'}`, color: `${storeSettings.data ?rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined/></span>
                                     </div>}
 
                             {/* 
