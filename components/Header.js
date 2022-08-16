@@ -205,27 +205,27 @@ const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, st
 
                     <Menu.Item>
                         <Link href={`/account/myOrders`} passHref>
-                            My Orders
+                        <p className='pt-1 px-2'>    My Orders</p>
                         </Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link href={`/account/wishlist`} passHref>
-                            Wishlist
+                            <p className='pt-1 px-2'>Wishlist</p>
                         </Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link href={`/account/wallet`} passHref>
-                            Wallet
+                           <p className='pt-1 px-2'> Wallet</p>
                         </Link>
                     </Menu.Item>
                     <Menu.Item>
                         <Link href={`/account/savedPlaces`} passHref>
-                            Saved Places
+                          <p className='pt-1 px-2'>  Saved Places</p>
                         </Link>
                     </Menu.Item>
                     <Menu.Item>
                         <p onClick={() => setIsModalVisible(true)} passHref>
-                            <p >Logout</p>
+                            <p className='px-2' >Logout</p>
                         </p>
                     </Menu.Item>
                 </Menu> :
