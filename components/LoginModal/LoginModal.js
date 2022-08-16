@@ -14,7 +14,7 @@ import create from '@ant-design/icons/lib/components/IconFont';
 import { toast, ToastContainer } from 'react-toastify';
 
 function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisible, showModal, storeId, customerDetails, customerDetailsReducer, dispatchForgotPassword, dispatchResetPassword, dispatchCustomerSignUp, dispatchCustomerLogin, dispatchForgotOtp,
-    dispatchVerifyOtp }) {
+    dispatchVerifyOtp,showSignUpTab }) {
 
     const [forgotPassword, setForgotPassword] = useState(false)
     const [input, setInput] = useState([])
@@ -53,6 +53,19 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
     // },[])
 
     console.log('fcmToken', fcmToken)
+
+
+useEffect(()=>{
+
+    console.log('showSignUpTab',showSignUpTab)
+
+if(showSignUpTab){
+    handleClick()
+}
+},[showSignUpTab])
+
+console.log('showSignUpTab',showSignUpTab)
+
     useEffect(() => {
 
      
@@ -292,6 +305,7 @@ function LoginModal({ userDetails, storeSettings, isLoggedIn, visible, setVisibl
 
     const handleClick = (e) => {
 
+        
         setCreateAccount(!createAccount)
         setForgotPassword(false)
     }

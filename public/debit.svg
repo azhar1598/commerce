@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49.823" height="51.056" viewBox="0 0 49.823 51.056">
+  <defs>
+    <filter id="Icon_map-location-arrow" x="0" y="0" width="49.823" height="51.056" filterUnits="userSpaceOnUse">
+      <feOffset dy="1" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#302d2d" flood-opacity="0.498"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#Icon_map-location-arrow)">
+    <path id="Icon_map-location-arrow-2" data-name="Icon map-location-arrow" d="M23.412,34.637,18.32,19.44H1.773L33.6,1.581Z" transform="translate(7.23 6.42)" fill="rgba(255,117,117,0.5)"/>
+  </g>
+</svg>

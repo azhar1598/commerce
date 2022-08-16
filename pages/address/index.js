@@ -17,6 +17,7 @@ import ReviewTracker from '../../components/ReviewTracker'
 import { toast, ToastContainer } from 'react-toastify'
 import { convenienceFlag } from '../../services/apiServices'
 import PageWrapper from '../../components/PageWrapper/PageWrapper'
+import Tick from '../../components/svgComponents/Tick'
 
 export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings }) => {
 
@@ -67,8 +68,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     }, [loading, bool])
 
     useEffect(() => {
-        const removeConvenience =async () => {
-            const response = await convenienceFlag(checkout.backendCart?.purchase_id,'N')
+        const removeConvenience = async () => {
+            const response = await convenienceFlag(checkout.backendCart?.purchase_id, 'N')
         }
         removeConvenience()
     }, [])
@@ -90,7 +91,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
     }, [validCoupon])
 
 
-    
+
     useEffect(() => {
         setParcelAction(checkout.backendCart?.purchase_id)
         setValueAddress()
@@ -346,11 +347,11 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                         <div className='lg:flex flex-wrap lg:justify-start lg:w-full lg:mb-0 mb-48'>
 
                                                             {stateAddress?.map(item =>
-                                                                <div className='lg:flex flex-col items-start px-2 lg:py-2' key={item.address_tag}>
-                                                                    <div className='flex w-[90vw] lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' key={item.address_id}>
-                                                                        <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
+                                                                <div className='lg:flex flex-col items-start px-2 lg:py-2' key={item.address_tag} >
+                                                                    <div className='flex w-[90vw] lg:w-[24vw] md:w-[vw] lg:justify-start md:justify-start lg:border-2 rounded lg:border-dashed lg:border-slate-400 md:border-none border-b-2 border-slate-200 p-2' style={{border:`2px dashed ${item.address_id == valueAddress?storeSettings.data ? storeSettings.data.secondary_color : "black":"gray"}` }} key={item.address_id} onClick={() => { handleAddressChange(item) }} value={valueAddress} >
+                                                                        {/* <Radio.Group onChange={() => { handleAddressChange(item) }} value={valueAddress} >
                                                                             <Radio className='font-montSemiBold' value={item.address_id}></Radio>
-                                                                        </Radio.Group>
+                                                                        </Radio.Group> */}
                                                                         <div className='flex flex-col'>
                                                                             <div className='flex items-start'>
                                                                                 <p className='text-lg'>{item.address_tag}</p>
@@ -369,6 +370,10 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                                                             </div>
                                                                         </div>
+                                                                        <div className='absolute ml-72'>
+                                                                            {item.address_id == valueAddress && <Tick secondaryColor={storeSettings.data ? storeSettings.data.secondary_color : "black"} />}
+                                                                        </div>
+
                                                                     </div>
 
                                                                     {/* 

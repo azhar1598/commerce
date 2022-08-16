@@ -120,12 +120,19 @@ export const Index = ({ customerDetails, dispatchWalletInfo, dispatchWalletTrans
                                                 <div>
                                                     <div className='flex p-2 lg:items-center lg:pl-8 lg:p-3 md:items-center md:pl-8 md:p-3 text-left w-full'>
                                                         {item.transaction_type == 'ORDER_REFUND' ?
-                                                            //  <img src="/GroupWallet.svg" style={{height:'26px',width:'42px'}}/>
+                                                             <img src="/credit.svg" style={{height:'36px',width:'42px'}}/>
 
-                                                            <BsArrowDownLeftSquareFill className='text-5xl' />
+                                                            // <BsArrowDownLeftSquareFill className='text-5xl' />
+                                                            
                                                             :
-                                                            <BsFillArrowUpRightSquareFill className='text-5xl' />}
+                                                            // <BsFillArrowUpRightSquareFill className='text-5xl' />
+                                                            <img src="/debit.svg" style={{height:'36px',width:'42px'}}/>
+
+                                                            }
                                                         <div className='flex flex-col items-start w-full ml-4 lg:ml-24 md:ml-24'>
+                                                        {item.transaction_type == 'ORDER_REFUND' ?
+                                                              <p className='text-lg  font-montSemiBold'>Order Refund</p>:
+                                                              <p className=' text-lg font-montSemiBold'>Order Placed</p>}
                                                             <p className='  font-montSemiBold'>Order Id #{item.transaction_ref_id}</p>
                                                             <p>{moment.unix(item.transaction_time).format("ll")}</p>
                                                             <p className='text-[#212B3680]'></p>

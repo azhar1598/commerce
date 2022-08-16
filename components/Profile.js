@@ -20,6 +20,19 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [walletTransactions, setWalletTransactions] = useState([])
 
+    const [rgbaBackground, setRgbaBackground] = useState('')
+
+
+    const [rgbaColor, setRgbaColor] = useState()
+
+    
+    useEffect(() => {
+
+        setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.secondary_color : '#ffffff', 0.25))
+        setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.secondary_color : '#000000', 1))
+
+    }, [rgbaBackground == ''])
+
 
 
     useEffect(() => {
@@ -61,6 +74,12 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
 
     }
 
+    const hex2rgba = (hex, alpha = 1) => {
+        const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+        return `rgba(${r},${g},${b},${alpha})`;
+    };
+
+
     return (
         <div className='hidden lg:flex flex-col items-start min-w-[20vw]  bg-white h-[100vh]'>
             <div style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, color: `white`, opacity: '50%' }} className='w-full h-44 min-h-44 max-h-44 min-w-full max-w-full' ></div>
@@ -84,20 +103,13 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
                 </div>
             </Link>
 
-            <Link href={`/account/wishlist`} >
-                <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wishlist' || router.pathname.includes('/account/wishlist/') ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
-                    {/* <HeartFilled /> */}
-                    {/* <img src="/Icon metro-heart.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/> */}
-                    <HeartIcon fill={router.pathname == '/account/wishlist' ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
-                    <p className='pl-8 text-sm'>Wishlist</p>
-                </div>
-            </Link>
+      
 
             <Link href={`/account/wallet`}>
                 <div className={`flex items-baseline  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wallet' ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
                     <WalletFilled style={{fontSize:'20px'}}/>
                     <p className='pl-10 text-sm'>Wallet</p>
-                    <p className='ml-8 py-1 px-1  text-[12px] rounded text-black' style={{ backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, color: `white`, opacity: '40%' }} >{stateStoreDetails?.currency_symbol} {stateWalletBalance?.customer_wallet_balance}</p>
+                    <p className='ml-8 py-1 px-1  text-[12px] rounded text-black' style={{ backgroundColor: rgbaBackground , color:rgbaColor}} >{stateStoreDetails?.currency_symbol} {stateWalletBalance?.customer_wallet_balance}</p>
                 </div>
             </Link>
             <Link href={`/account/savedPlaces`} >
@@ -105,6 +117,14 @@ export const Profile = ({ customerDetails, customerDetailsAction, storeSettings,
                 <SavedPlacesIcon secondaryColor={router.pathname == '/account/savedPlaces' ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
                     {/* <img src="/Icon awesome-map-marked-alt.svg" width={20} height={40}secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'} /> */}
                     <p className='pl-8 text-sm'>Saved Places</p>
+                </div>
+            </Link>
+            <Link href={`/account/wishlist`} >
+                <div className={`flex items-start  justify-start p-4 font-montSemiBold cursor-pointer`} style={router.pathname == '/account/wishlist' || router.pathname.includes('/account/wishlist/') ? { color: storeSettings.data ? storeSettings.data.secondary_color:'#212B36', fontSize: '24px' } : { color: '#90959A', fontSize: '24px' }}>
+                    {/* <HeartFilled /> */}
+                    {/* <img src="/Icon metro-heart.svg" width={20} height={40} secondaryColor={storeSettings.data ? storeSettings.data.secondary_color:'#212B36'}/> */}
+                    <HeartIcon fill={router.pathname == '/account/wishlist' ? storeSettings.data ? storeSettings.data.secondary_color:'#212B36':'#212B36' }/>
+                    <p className='pl-8 text-sm'>Wishlist</p>
                 </div>
             </Link>
 

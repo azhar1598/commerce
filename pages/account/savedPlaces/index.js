@@ -243,8 +243,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                 <div className='flex flex-col'>
                                                                     <div className='flex items-start'>
                                                                         <p className='text-lg'>{item.address_tag}</p>
-                                                                        <EditFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, paddingLeft: '2px', paddingTop: '2px' }} />
-                                                                        <button className="bg-white  pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, }} onClick={() => {
+                                                                        <EditFilled style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}`, paddingLeft: '2px', paddingTop: '2px' }} />
+                                                                        <button className="bg-white  pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}`, }} onClick={() => {
                                                                             setAddNewAddress(!addNewAddress)
                                                                             editAddress(item)
                                                                         }} >Edit</button>
@@ -269,8 +269,8 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
                                                                     cancelText="No"
                                                                 >
                                                                     <div className='flex items-center'>
-                                                                        <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }} />
-                                                                        <button className="bg-white lg:py-3 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}>Remove</button>
+                                                                        <DeleteFilled style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}` }} />
+                                                                        <button className="bg-white lg:py-3 pl-2 pr-2 font-montMedium float-right text-sm" style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}` }}>Remove</button>
                                                                     </div>
                                                                 </Popconfirm>
                                                             </div>
@@ -281,7 +281,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
                                                         </div>
                                                     )}
-                                                    <button className='hidden  md:block mt-6 mb-12 w-full lg:flex lg:items-start lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}` }}><span><PlusCircleOutlined style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : "black"}`, marginTop: '-5px', fontSize: '27px', paddingRight: '6px' }} /></span> Add new Address </button>
+                                                    <button className='hidden  md:block mt-6 mb-12 w-full lg:flex lg:items-start lg:ml-5 md:ml-5 cursor-pointer  py-4 font-montSemiBold' onClick={() => { setAddNewAddress(!addNewAddress) }} style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}` }}><span><PlusCircleOutlined style={{ color: `${storeSettings.data ? storeSettings.data.secondary_color : "black"}`, marginTop: '-5px', fontSize: '27px', paddingRight: '6px' }} /></span> Add new Address </button>
 
                                                 </div> : '' :
 
