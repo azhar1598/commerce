@@ -160,6 +160,10 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                         return (
                             key == 6 &&
                             <>
+
+
+                     
+
                                 <div className='flex'>
                                     <p id={item.category_id} className={`${categoryKey == item.category_id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }}
                                         // onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} onMouseEnter={() => {
@@ -204,13 +208,14 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
                                 </div>
 
-                                {closeSubCategory ?
+                            <div className='fixed mt-72 bg-yellow-300 '>
+                            {closeSubCategory ?
                                     showOthers && categories.map((item, key) => {
                                         return (
                                             key >= 6 &&
 
 
-                                            <div className='absolute  ml-[71vw] -mt-48   bg-red-300' onMouseLeave={() => {
+                                            <div className='bg-red-300' onMouseLeave={() => {
                                                 if (item.subCategories.length != 0) {
                                                     // handleCategory(id, name, subCategories)
                                                     setCloseSubCategory(false)
@@ -223,6 +228,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                                         )
                                     })
                                     : ''}
+                            </div>
 
                             </>
 
