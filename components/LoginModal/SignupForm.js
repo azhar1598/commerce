@@ -1,4 +1,4 @@
-import { Input } from 'antd'
+import { Input, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -8,6 +8,8 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
 
 
     const [value, setValue] = useState('+91')
+    const text = <span className='text-sm py-2'>You can switch between Phone no. and Email ID by clicking on the text</span>;
+
 
     return (
         <>
@@ -28,6 +30,9 @@ function SignupForm({ handleAuth, handleChange, handleClick, method, handleLogin
                         onClick={() => { handleLoginMethod('PHONE') }}>Phone Number</p>
                     <p className='text-slate-300 px-2'>|</p>
                     <p className='font-montMedium text-sm' style={method != 'EMAIL' ? { color: 'gray', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', }} onClick={() => { handleLoginMethod('EMAIL') }}>Email</p>
+                    <Tooltip placement="top" title={text}>
+                 <img src="/info.svg" className='cursor-pointer mx-2 w-5 h-5'/>
+                </Tooltip>
                 </div>
 
                 {method == "EMAIL" ?

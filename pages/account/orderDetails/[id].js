@@ -391,7 +391,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                     <p className='text-lg font-montSemiBold'>Address</p>
 
                                     <div className='flex justify-between lg:w-1/3 md:w-1/3 mb-4 '>
-                                        <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>
+                                    {orderDetails?.isParcel=='Y'?<p>{storeDetails?.address},{storeDetails?.city},{storeDetails?.state},{storeDetails?.country}</p> :   <p>{orderDetails?.deliveryAddressDetails?.full_name}, {orderDetails?.deliveryAddressDetails?.address_line_1}, {orderDetails?.deliveryAddressDetails?.address_line_2}, {orderDetails?.deliveryAddressDetails?.city}, {orderDetails?.deliveryAddressDetails?.state}, {orderDetails?.deliveryAddressDetails?.country}-{orderDetails?.deliveryAddressDetails?.zip_code}</p>}
 
                                     </div>
                                 </div>

@@ -1088,7 +1088,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                     </div>
                     {initialState.spec?.length ? <>
-                        <hr />
+                        {/* <hr /> */}
                         {/* product specification */}
                         <div className='lg:pl-24'>
                             <h2 className="text-gray-800 text-2xl font-montSemiBold lg:my-7">Product Specifications</h2>

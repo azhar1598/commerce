@@ -2,8 +2,9 @@ import { Input } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PhoneInput from 'react-phone-number-input'
 import { connect } from 'react-redux'
+import { Button, Tooltip } from 'antd';
 
-function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, disabled, storeSettings, method, handleForgotPasswordChange, handleForgotPassword, forgotPassword, mobile,loginLoader }) {
+function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, disabled, storeSettings, method, handleForgotPasswordChange, handleForgotPassword, forgotPassword, mobile, loginLoader }) {
 
     const [value, setValue] = useState('+91')
 
@@ -12,7 +13,7 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
     const [rgbaBackground, setRgbaBackground] = useState('')
     const [rgbaColor, setRgbaColor] = useState()
 
-    
+
 
 
     const hex2rgba = (hex, alpha = 1) => {
@@ -22,13 +23,15 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
 
 
 
-    
+
     useEffect(() => {
-        
+
         setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#ffffff', 0.4))
         setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 0.02))
         // setCustomBorder(hex2rgba('#212B36' , 0.25))
     }, [rgbaBackground == ''])
+
+    const text = <span className='text-sm py-2'>You can switch between Phone no. and Email ID by clicking on the text</span>;
 
     return (
         <>
@@ -39,6 +42,10 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
                     onClick={() => { handleLoginMethod('PHONE') }}>Phone Number</p>
                 <p className='text-slate-300 px-2'>|</p>
                 <p className='font-montMedium text-sm' style={method != 'EMAIL' ? { color: 'gray', cursor: 'pointer' } : { color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, cursor: 'pointer', }} onClick={() => { handleLoginMethod('EMAIL') }}>Email</p>
+
+                <Tooltip placement="top" title={text}>
+                 <img src="/info.svg" className='cursor-pointer mx-2 w-5 h-5'/>
+                </Tooltip>
             </div>
             <form onSubmit={(e) => { forgotPassword ? handleForgotPassword(e, method, value) : handleAuth(e, method, value, 'LOGIN') }} id="form" className="font-montRegular" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
@@ -80,8 +87,8 @@ function LoginForm({ handleAuth, handleChange, handleLoginMethod, handleClick, d
                 {!forgotPassword ? <div className=' mt-4 bottom-0 w-full pr-8 lg:pr-16'>
                     <p className="login-tag font-montMedium" style={{ textAlign: 'right', cursor: 'pointer', color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={handleForgotPasswordChange}>Forgot Password ?</p>
                 </div> : ''}
-                <button className={` border lg:w-96 w-80 login-button font-montMedium ${forgotPassword ? `mt-5` : ``}`} style={{ backgroundColor: `${!loginLoader?storeSettings.data ? storeSettings.data.secondary_color : 'black':rgbaBackground}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, padding: '8px', borderRadius: '5px' }} disabled={loginLoader}  >
-                    {!loginLoader?forgotPassword ? 'Get OTP' : 'Log in':'Loading ...'}
+                <button className={` border lg:w-96 w-80 login-button font-montMedium ${forgotPassword ? `mt-5` : ``}`} style={{ backgroundColor: `${!loginLoader ? storeSettings.data ? storeSettings.data.secondary_color : 'black' : rgbaBackground}`, color: `${storeSettings.data ? storeSettings.data.navbar_color : 'black'}`, padding: '8px', borderRadius: '5px' }} disabled={loginLoader}  >
+                    {!loginLoader ? forgotPassword ? 'Get OTP' : 'Log in' : 'Loading ...'}
                 </button>
                 <div className=' mt-4 w-full pl-8 lg:pl-16 bottom-0 font-montMedium pb-4'>
                     <p className="login-tag" style={{ textAlign: 'left' }}>New User? <span style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'black'}`, cursor: 'pointer' }} onClick={handleClick}>Sign Up</span></p>
