@@ -315,14 +315,14 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 <div className=' w-full flex flex-col lg:flex-row flex-wrap px-3 lg:p-4 lg:px-12 lg:justify-between  bg-white '>
                                     {/* Object.values(orderDetails.orderItems).map(item => */}
                                     {orderDetails?.orderItems && Object?.values(orderDetails?.orderItems)?.map((item, index) =>
-                                        <div className='flex lg:items-start lg border-2 w-[30vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
+                                        <div className='flex lg:items-start lg border-2 lg:w-[26vw] w-[27vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
                                             <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-28 lg:h-36 min-w-36 max-w-36 border border-blue-100 shadow ' />
                                             <div className='flex flex-col items-start w-full ml-3 lg: '>
                                                 <div className='flex'>
                                                     {item.isVeg ? <img src="/veg.svg" className=' w-4 h-4  mr-2' />
                                                         : <img src="/non-veg.png" className='w-4 h-4  mr-2' />}
 
-                                                    <p className='text- font-montSemiBold w-56 lg:w-72   break-words'>{item.itemName}</p>
+                                                    <p className='text- font-montSemiBold w-56 lg:w-44   break-words'>{item.itemName}</p>
                                                 </div>
                                                 {item.customizationDetails && <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
                                                     item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},

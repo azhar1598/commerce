@@ -16,7 +16,7 @@ function hexToRGB(hex, alpha) {
 }
 
 
-const Stepper = ({ activeStep = 1, vertical = false, steps = [], sx = {}, openReturn, details, cancelled }) => {
+const Stepper = ({ activeStep = 1, vertical = false, steps = [], sx = {}, openReturn, details, cancelled, orderPlaced, orderStatus }) => {
     const style = {
         completed: {
             color: '#E83B3B'
@@ -85,9 +85,9 @@ const Stepper = ({ activeStep = 1, vertical = false, steps = [], sx = {}, openRe
                                         }}>
                                             <span className={`text-sm font-semibold tracking-normal inline-block ${vertical && 'pl-6'} `}>
                                                 {item?.label}
-                                                <span className="block text-xs font-normal text-gray-400">
-                                                    {item?.dsc}
-                                                </span>
+                                                {item?.label== 'Order is Placed' ? <span className="block text-xs font-normal text-gray-400">
+                                                    {item?.dsc ? item?.dsc : orderStatus == 'PAYMENT_COMPLETED' ? orderPlaced ? orderPlaced : '' : ''}
+                                                </span> : ''}
                                             </span>
                                         </div>
                                         {

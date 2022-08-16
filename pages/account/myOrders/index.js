@@ -182,7 +182,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                         return (<>
                                                             {index == 0 ?
 
-                                                                <div className={` ${Object.keys(item.orderItems).length > 1 ? `pr-3 blur-sm` : ``}`}>
+                                                                <div className={` ${Object.keys(item.orderItems).length > 1 ? `pr-3` : ``}`}>
                                                                     <img src={item.orderItems[key].itemImg ? item.orderItems[key].itemImg : 'https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg'} className='w-44  min-w-44 min-h-28 h-28 lg:w-36 lg:min-w-36 lg:max-w-36 border border-blue-100 shadow mb-2 lg:mb-0' />
 
                                                                 </div> : ''}
@@ -191,7 +191,9 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
                                                         )
                                                     })}
 
-                                                    <p className={`${Object.keys(item.orderItems).length > 1 ? `text-[#212B36]  font-montSemiBold text-lg  absolute lg:mt-0 lg:ml-9  ml-10 mt-10` : `hidden`}`}>+ {Object.keys(item.orderItems).length - 1}</p>
+                                                    <p className={`${Object.keys(item.orderItems).length > 1 ? `text-[#212B36] text-[12px]  absolute lg:mt-[106px] lg:ml-0  ml-10 mt-16 px-2
+                                                    align-center   font-montMedium border-[#959595] text-[#FFFFFF] bg-white bg-opacity-40 backdrop-blur-lg  drop-shadow-lg 
+                                                    ` : `hidden`}`}>+ {Object.keys(item.orderItems).length - 1} more items</p>
 
 
                                                     <div className='flex flex-col w-full ml-4 lg:ml-24 md:ml-24'>
@@ -225,7 +227,7 @@ export const Index = ({ customerDetails, storeDetails, storeSettings }) => {
 
 
                                                 <div className='lg:block hidden py-3'>
-                                                    <Stepper vertical={false} cancelled={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? true : false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? steps : steps} activeStep={item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? orderStatus + 4 : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? orderStatus + 2 : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? orderStatus + 3 : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? orderStatus + 2 : orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
+                                                    <Stepper vertical={false} orderPlaced={moment.unix(item?.orderPlacedTime).format('LLL')} orderStatus={item.orderStatus} cancelled={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? true : false} steps={item.orderStatus == 'CANCELLED_BY_CUSTOMER' || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? steps : steps} activeStep={item.orderStatus === "ORDER_DELIVERED_SUCCESS" ? orderStatus + 4 : item.orderStatus == "ORDER_CONFIRMED_BY_REST" ? orderStatus + 2 : item.orderStatus == "PENDING_PICKUP_BY_CUST" ? orderStatus + 3 : item.orderStatus == "CANCELLED_BY_CUSTOMER" || item.orderStatus == 'ORDER_DECLINED_BY_RESTAURANT' ? orderStatus + 2 : orderStatus + 1} sx={style} openReturn={setIsReturnActive} details={item} />
                                                 </div>
 
 
