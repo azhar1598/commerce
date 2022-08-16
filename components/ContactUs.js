@@ -10,14 +10,6 @@ const ContactUs = ({ contactUsVisible, setContactUsVisible, storeDetails, storeI
     const [socialLinks, setSocialLinks] = useState([])
     const Router = useRouter();
 
-    // useEffect(() => {
-    //     getSocialLink(storeId)
-    // }, [Router.query])
-
-    // const getSocialLink = async (store) => {
-    //     const res = await getSocialProfile(store)
-    //     setSocialLinks(res.data)
-    // }
 
 
 

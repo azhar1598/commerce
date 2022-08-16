@@ -15,9 +15,13 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
     const [showModal, setShowModal] = useState(false)
     const [categoryKey, setCategoryKey] = useState()
     const [closeSubCategory, setCloseSubCategory] = useState(false)
+    const [showOthers, setShowOthers] = useState(false)
+
+
     const router = useRouter()
 
-    const[categoryId,setCategoryId]=useState()
+
+    const [categoryId, setCategoryId] = useState()
     const data = router.query
 
     useEffect(() => {
@@ -42,15 +46,16 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
         // if (subCategories || subCategories == undefined) {
         //     subCategories.length == 0 && 
-            router.push(`/shop/?category_id=${id}&category_name=${name}`)
 
-            // if you want to add default subcategory then copy below code and paste  or attachin line 41
+        router.push(`/shop/?category_id=${id}&category_name=${name}`)
 
-            // {*/  &${subCategories != [] && subCategories != undefined ? `sub_category_id=${subCategories[0]?.sub_category_id}&
+        // if you want to add default subcategory then copy below code and paste  or attachin line 41
 
-            // sub_category_name=${subCategories[0]?.sub_category_name}` : ``}
+        // {*/  &${subCategories != [] && subCategories != undefined ? `sub_category_id=${subCategories[0]?.sub_category_id}&
 
-            // setShowModal(false)
+        // sub_category_name=${subCategories[0]?.sub_category_name}` : ``}
+
+        // setShowModal(false)
         // }
 
         if (id != "All Items") {
@@ -71,6 +76,10 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
         }
     }
 
+
+
+
+
     const handleSubCategory = (categoryId, subCategoryId, subCategoryName) => {
         setShowModal(!showModal)
 
@@ -83,42 +92,42 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
     const menu = (
 
-        <Menu>
-            {categories.map((item, index) =>
+        // <Menu>
+        //     {categories.map((item, index) =>
 
-                index >= 6 &&
-                <Menu.Item>
-                    <>
-                        <p onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }}  onMouseEnter={() => {setCategoryId(item.category_id)
-                        }}>{item.category_name}
-                        
-                        
-                        {item.subCategories.map(product => 
-                            categoryId == product.category_id &&
+        //         index >= 6 &&
+        //         <Menu.Item>
+        //             <>
+        //                 <p onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }}  onMouseEnter={() => {setCategoryId(item.category_id)
+        //                 }}>{item.category_name}
 
-                            <SubMenu key={product.category_id} title={product.category_name} onTitleClick={() => {
-                                handleSubCategory(product.category_id, product.category_name)
-                            }}
-                            >
-                                <Menu.Item key={product.sub_category_id}>{product.sub_category_name}</Menu.Item>
-                            </SubMenu>
-                  
 
-                        
-                        )} 
-                        
-                        </p>
+        //                 {item.subCategories.map(product => 
+        //                     categoryId == product.category_id &&
 
-                      
-                       
-                    </>
-                </Menu.Item>
-            )}
-        </Menu>
+        //                     <SubMenu key={product.category_id} title={product.category_name} onTitleClick={() => {
+        //                         handleSubCategory(product.category_id, product.category_name)
+        //                     }}
+        //                     >
+        //                         <Menu.Item key={product.sub_category_id}>{product.sub_category_name}</Menu.Item>
+        //                     </SubMenu>
 
 
 
+        //                 )} 
 
+        //                 </p>
+
+
+
+        //             </>
+        //         </Menu.Item>
+        //     )}
+        // </Menu>
+
+
+
+        <></>
 
 
     )
@@ -144,20 +153,94 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 {categories.map((item, key) => {
                     if (key <= 5) {
                         return (
-                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} keyLimit={key} categories={categories} closeSubCategory={closeSubCategory} setCloseSubCategory={setCloseSubCategory} />
+                            <Category name={item.category_name} id={item.category_id} key={item.category_id} handleCategory={handleCategory} handleSubCategory={handleSubCategory} subCategories={item.subCategories} categoryKey={categoryKey} setCategoryKey={setCategoryKey} keyLimit={key} categories={categories} closeSubCategory={closeSubCategory} setCloseSubCategory={setCloseSubCategory} />
                         )
                     }
                     else {
                         return (
-                            key == 6 && <Dropdown overlay={menu}>
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <div className='flex '>
-                                        <p className='text-black font-montMedium'>Others</p>
-                                        <CaretDownOutlined className='px-2 pt-1 ' style={{ color: 'black' }} />
+                            key == 6 &&
+                            <>
+                                <div className='flex'>
+                                    <p id={item.category_id} className={`${categoryKey == item.category_id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }}
+                                        // onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} onMouseEnter={() => {
+                                        //     if (item.subCategories.length != 0) {
+                                        //         // handleCategory(id, name, subCategories)
+                                        //         setCategoryKey(id)
+                                        //         setCloseSubCategory(true)
+                                        //     }
+                                        // }}
+
+                                        onMouseEnter={() => setShowOthers(true)}
+                                    >Others</p>
+                                    <div className='-mt-1 px-2'>
+                                        <CaretDownOutlined style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} />
                                     </div>
-                                </a>
-                            </Dropdown>
+                                    <div className='absolute bg-white bg-opacity-40 backdrop-blur-lg  border-blue-100 shadow mt-8 px-5 ' onMouseLeave={() => { setShowOthers(!showOthers) }}>
+
+                                        {showOthers && categories.map((item, key) => {
+                                            return (
+                                                key >= 6 &&
+                                                <div className=' ' >
+
+                                                    <p className='px-5 cursor-pointer' onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onMouseEnter={() => {
+                                                        if (item.subCategories.length != 0) {
+                                                            // handleCategory(id, name, subCategories)
+                                                            setCategoryKey(item.category_id)
+                                                            setCloseSubCategory(true)
+                                                        }
+                                                    }} >{item.category_name}</p>
+
+
+
+                                                </div>
+
+                                            )
+                                        })}
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                                {closeSubCategory ?
+                                    showOthers && categories.map((item, key) => {
+                                        return (
+                                            key >= 6 &&
+
+
+                                            <div className='absolute  ml-[71vw] -mt-48   bg-red-300' onMouseLeave={() => {
+                                                if (item.subCategories.length != 0) {
+                                                    // handleCategory(id, name, subCategories)
+                                                    setCloseSubCategory(false)
+                                                }
+                                            }}>
+                                                {categoryKey == item.category_id && item.subCategories?.map(item =>
+                                                    <p className='cursor-pointer pl-5 ' style={data?.sub_category_id == item.sub_category_id ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}    >{item.sub_category_name}</p>
+                                                )}
+                                            </div>
+                                        )
+                                    })
+                                    : ''}
+
+                            </>
+
+
+
+                            // <Dropdown overlay={menu}>
+                            //     <a onClick={(e) => e.preventDefault()}>
+                            //         <div className='flex '>
+                            //             <p className='text-black font-montMedium'>Others</p>
+                            //             <CaretDownOutlined className='px-2 pt-1 ' style={{ color: 'black' }} />
+                            //         </div>
+                            //     </a>
+                            // </Dropdown>
                         )
+
+
+
+
 
 
 
