@@ -162,7 +162,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                             <>
 
 
-                     
+
 
                                 <div className='flex'>
                                     <p id={item.category_id} className={`${categoryKey == item.category_id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }}
@@ -208,7 +208,8 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
                                 </div>
 
-                            <div className='fixed mt-72 bg-yellow-300 '>
+                                {/* Work on it Tomorrow */}
+                                {/* <div className='fixed mt-72 bg-yellow-300 '>
                             {closeSubCategory ?
                                     showOthers && categories.map((item, key) => {
                                         return (
@@ -228,7 +229,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                                         )
                                     })
                                     : ''}
-                            </div>
+                            </div> */}
 
                             </>
 
