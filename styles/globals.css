@@ -37,6 +37,15 @@
 
 /* Transparent Background Loader */
 
+.category:hover .sub-category{
+display:block;
+
+}
+
+.show-others:hover .others-menu{
+  display: block;
+}
+
 
 
 

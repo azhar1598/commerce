@@ -147,7 +147,7 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                 )} */}
             {/* </div> */}
 
-            <div className={`hidden lg:flex items-end justify-between w-full  bg-white ${router.pathname == '/shop' ? '-mt-11' : '-mt-[65px]'}  fixed z-[1000] px-32 pt-3`}>
+            <div className={`hidden  lg:flex items-end justify-between w-full  bg-white ${router.pathname == '/shop' ? '-mt-11' : '-mt-[65px]'}  fixed z-[1000] px-32 pt-3`}>
                 {/* <p className='min-w-[80px] cursor-pointer pl-2 px-2 font-montMedium' onClick={() => { handleCategory('All Items') }}>All Items</p> */}
 
                 {categories.map((item, key) => {
@@ -159,13 +159,14 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                     else {
                         return (
                             key == 6 &&
-                            <>
+                            <div className=''>
 
 
 
 
-                                <div className='flex'>
-                                    <p id={item.category_id} className={`${categoryKey == item.category_id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }}
+                                <div className='flex relative '>
+                                    <div className='flex show-others'>
+                                        <p id={item.category_id} className={`inline ${categoryKey == item.category_id && data?.category_id == categoryKey ? 'font-montMedium' : 'font-montMedium'} cursor-pointer`} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }}
                                         // onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} onMouseEnter={() => {
                                         //     if (item.subCategories.length != 0) {
                                         //         // handleCategory(id, name, subCategories)
@@ -174,32 +175,61 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
                                         //     }
                                         // }}
 
-                                        onMouseEnter={() => setShowOthers(true)}
-                                    >Others</p>
-                                    <div className='-mt-1 px-2'>
-                                        <CaretDownOutlined style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} />
-                                    </div>
-                                    <div className='absolute bg-white bg-opacity-40 backdrop-blur-lg  border-blue-100 shadow mt-8 px-5 ' onMouseLeave={() => { setShowOthers(!showOthers) }}>
+                                        // onMouseEnter={() => setShowOthers(true)}
+                                        >Others</p>
+                                        <div className='-mt-1 px-2 inline'>
+                                            <CaretDownOutlined style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} />
+                                        </div>
 
-                                        {showOthers && categories.map((item, key) => {
-                                            return (
-                                                key >= 6 &&
-                                                <div className=' ' >
+                                        <div className='hidden absolute bg-white w-[250px] bg-opacity-40 backdrop-blur-lg  border-blue-100 shadow mt-8 px-5 left-[50%] -translate-x-[50%] others-menu ' onMouseLeave={() => { setShowOthers(!showOthers) }}>
 
-                                                    <p className='px-5 cursor-pointer' onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onMouseEnter={() => {
-                                                        if (item.subCategories.length != 0) {
-                                                            // handleCategory(id, name, subCategories)
-                                                            setCategoryKey(item.category_id)
-                                                            setCloseSubCategory(true)
-                                                        }
-                                                    }} >{item.category_name}</p>
+                                            {categories.map((item, key) => {
+                                                return (
+                                                    key >= 6 &&
+                                                    <div className='category relative' >
+
+                                                        <p className='px-5 cursor-pointer' onClick={() => { handleCategory(item.category_id, item.category_name, item.subCategories) }} style={categoryKey == item.category_id && data?.category_id == categoryKey ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} 
+                                                        onMouseEnter={() => {
+                                                            if (item.subCategories.length != 0) {
+                                                                // handleCategory(id, name, subCategories)
+                                                                setCategoryKey(item.category_id)
+                                                                // setCloseSubCategory(true)
+                                                            }
+                                                        }} 
+                                                        >{item.category_name}</p>
+
+
+                                                        <div className='hidden absolute right-[100%] bg-opacity-40 backdrop-blur-lg  border-blue-100 shadow mt- px-8  top-0  sub-category'>
+                                                            {/* {closeSubCategory ?
+                                                                showOthers &&  */}
+                                                                {item.subCategories.map((item, key) => {
+                                                                    return (
+                                                                       
 
 
 
-                                                </div>
+                                                                        // <div className='bg-red-300' onMouseLeave={() => {
+                                                                        //     if (item.subCategories.length != 0) {
+                                                                        //         // handleCategory(id, name, subCategories)
+                                                                        //         setCloseSubCategory(false)
+                                                                        //     }
+                                                                        // }}>
+                                                                        //     {categoryKey == item.category_id && item.subCategories?.map(item =>
+                                                                                <p className='cursor-pointer px-8 min-w-[100%] ' style={data?.sub_category_id == item.sub_category_id ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}    >{item.sub_category_name}</p>
+                                                                        //     )}
+                                                                        // </div>
+                                                                    )
+                                                                })}
+                                                                {/* // : ''} */}
+                                                        </div>
 
-                                            )
-                                        })}
+
+
+                                                    </div>
+
+                                                )
+                                            })}
+                                        </div>
                                     </div>
 
 
@@ -208,30 +238,10 @@ export const Categories = ({ dispatchCategories, stateStoreSettings, searchedIte
 
                                 </div>
 
-                                {/* Work on it Tomorrow */}
-                                {/* <div className='fixed mt-72 bg-yellow-300 '>
-                            {closeSubCategory ?
-                                    showOthers && categories.map((item, key) => {
-                                        return (
-                                            key >= 6 &&
 
 
-                                            <div className='bg-red-300' onMouseLeave={() => {
-                                                if (item.subCategories.length != 0) {
-                                                    // handleCategory(id, name, subCategories)
-                                                    setCloseSubCategory(false)
-                                                }
-                                            }}>
-                                                {categoryKey == item.category_id && item.subCategories?.map(item =>
-                                                    <p className='cursor-pointer pl-5 ' style={data?.sub_category_id == item.sub_category_id ? { color: stateStoreSettings ? stateStoreSettings?.secondary_color : 'black' } : { color: 'black' }} onClick={() => { handleSubCategory(item.category_id, item.sub_category_id, item.sub_category_name) }} key={item.sub_category_id}    >{item.sub_category_name}</p>
-                                                )}
-                                            </div>
-                                        )
-                                    })
-                                    : ''}
-                            </div> */}
 
-                            </>
+                            </div>
 
 
 
