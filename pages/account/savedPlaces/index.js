@@ -125,7 +125,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
         }
         else {
-            // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
+        
             editAddressAction({ payload })
             setAddNewAddress(!addNewAddress)
             // getData()

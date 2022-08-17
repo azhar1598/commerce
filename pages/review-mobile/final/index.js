@@ -29,11 +29,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const [minQtyMsg, setMinQtyMsg] = useState(false)
 
 
-    // const handlePaymentChange = async (e) => {
-
-    //     setPaymentMethod(e.target.value)
-    //     const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-    // }
+    
 
     console.log('wallet review-mo final',router)
 

@@ -577,7 +577,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
 
         // if (filteredItems?.length == 0 || filteredItems==undefined || Object.keys(filteredItems).length === 0 || stateWishlistItems == {}) {
-        //     const response = await addToWishlist('storeId', stateCustomerDetails?.data?.customer_id, itemId)
         //     if (response.data) {
 
         //         message.success('Added to Wishlist')
@@ -592,8 +591,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         // } else {
 
 
-        //     const response = await deleteFromWishlist(filteredItems[0]?.entry_id)
-
+        //  
         //     message.success('Removed from wishlist')
         //     setHeartIcon(false)
         //     // fetchItemDetails(stateCustomerDetails?.data?.customer_id, id);

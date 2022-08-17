@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
 
 import { addAddress, editAddressAPI, getAddressList, removeAddress } from '../../services/apiServices'
-import { addAddressAction, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, getStoreDisplaySettings, setDeliveryAction, setParcelAction } from '../../actions'
+import { addAddressAction, convenienceCharges, defaultAddress, editAddressAction, fetchPurchaseDetails, getAddressAction, getStoreDisplaySettings, setDeliveryAction, setParcelAction } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import Head from 'next/head';
@@ -19,7 +19,7 @@ import { convenienceFlag } from '../../services/apiServices'
 import PageWrapper from '../../components/PageWrapper/PageWrapper'
 import Tick from '../../components/svgComponents/Tick'
 
-export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings }) => {
+export const Index = ({ storeSettings, customerDetails, defaultAddressAction, defaultAddressState, addAddressAction, editAddressAction, checkout, getAddressAction, stateAddress, storeDetails, fetchPurchaseDetails, storeDisplaySettings, setParcelAction, setDeliveryAction, dispatchStoreDisplaySettings,convenienceChargesAction }) => {
 
 
     const isTabletOrMobile = useMediaQuery({ query: '(max-width: 992px)' })
@@ -69,7 +69,9 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
     useEffect(() => {
         const removeConvenience = async () => {
-            const response = await convenienceFlag(checkout.backendCart?.purchase_id, 'N')
+   
+         convenienceChargesAction(checkout.backendCart?.purchase_id, 'N')
+
         }
         removeConvenience()
     }, [])
@@ -143,7 +145,7 @@ export const Index = ({ storeSettings, customerDetails, defaultAddressAction, de
 
         }
         else {
-            // response = await editAddressAPI(customerDetails.data.customer_id, addressId, address)
+
             editAddressAction({ payload })
             setAddNewAddress(!addNewAddress)
         }
@@ -686,6 +688,7 @@ const mapDispatchToProps = dispatch => {
         setDeliveryAction: (purchaseId) => dispatch(setDeliveryAction(purchaseId)),
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
+        convenienceChargesAction:(purchaseId,flag)=>dispatch(convenienceCharges(purchaseId,flag))
 
 
     }

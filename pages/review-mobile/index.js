@@ -11,9 +11,10 @@ import Coupon from '../../components/Coupon';
 import { WalletFilled } from '@ant-design/icons';
 import Head from 'next/head';
 import PageWrapper from '../../components/PageWrapper/PageWrapper';
+import { convenienceCharges } from '../../actions';
 
 
-export const Index = ({ checkout, storeSettings, stateWallet, storeDetails,storeDisplaySettings }) => {
+export const Index = ({ checkout, storeSettings, stateWallet, storeDetails,storeDisplaySettings,convenienceChargesAction }) => {
 
 
     const [paymentMethod, setPaymentMethod] = useState()
@@ -60,10 +61,15 @@ export const Index = ({ checkout, storeSettings, stateWallet, storeDetails,store
         if (e.target.value == 'COD') {
             if (storeDisplaySettings?.data?.is_cod_accepted == 'Y') {
                 setPaymentMethod(e.target.value)
-                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-                if (response) {
-                    setPaymentAdded(true)
-                }
+                // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                // if (response) {
+                //     setPaymentAdded(true)
+                // }
+
+
+                convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
+
             }
             else {
                 // setStoreClosed(true)
@@ -72,10 +78,14 @@ export const Index = ({ checkout, storeSettings, stateWallet, storeDetails,store
         else if (e.target.value == 'ONL') {
             if (storeDisplaySettings?.data?.is_payment_accepted == 'Y') {
                 setPaymentMethod(e.target.value)
-                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-                if (response) {
-                    setPaymentAdded(true)
-                }
+                // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                // if (response) {
+                //     setPaymentAdded(true)
+                // }
+
+
+                convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
             }
             else {
                 // setStoreClosed(true)
@@ -90,10 +100,15 @@ export const Index = ({ checkout, storeSettings, stateWallet, storeDetails,store
 
         if(storeDisplaySettings?.data?.is_payment_accepted=="Y"){
         stateWallet?.customer_wallet_balance != 0 ? walletChange(e) : ''
-        const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-        if (response) {
-            setPaymentAdded(true)
-        }
+        // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+        // if (response) {
+        //     setPaymentAdded(true)
+        // }
+
+        convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
+
+
     }else{
         // setStoreClosed(true)
     }
@@ -173,6 +188,12 @@ const mapStateToProps = (state) => ({
 })
 
 
-const mapDispatchToProps = {}
+
+const mapDispatchToProps = dispatch => {
+    return {
+       
+        convenienceChargesAction:(purchaseId,flag,setPaymentAdded)=>dispatch(convenienceCharges(purchaseId,flag,setPaymentAdded))
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageWrapper(Index))

@@ -1,5 +1,5 @@
 import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems, setShopWidgets, getShopSeoSuccess, shippingCharges } from "../actions";
-import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI, setDeliveryAddressFlag } from "../services/apiServices";
+import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI, setDeliveryAddressFlag, convenienceFlag } from "../services/apiServices";
 import { put } from "redux-saga/effects"
 import store from "../config/store";
 import wishlistActionType, { FETCH_FILTER_GROUPS } from "../constants/actionTypes";
@@ -100,6 +100,34 @@ export function* handleDeliveryMethod(data) {
     }
 
 }
+
+export function* handleConvenienceCharges({payload}) {
+
+    console.log('type', payload,payload.purchaseId)
+
+    try {
+
+
+        const response = yield convenienceFlag(payload.purchaseId,payload.flag)
+
+        if(response){
+            if(payload?.setPaymentAdded?.length>0){
+                const response1 = yield getPurchaseDetails(payload.purchaseId)
+                yield put(purchaseDetails(response1))
+            
+            }
+        }
+
+    }
+
+    catch (error) {
+        console.log(error)
+    }
+
+}
+
+
+
 
 
 

@@ -67,7 +67,7 @@ export const Product = (props) => {
 
 
     //     if (filteredItems?.length == 0 || filteredItems == undefined) {
-    //         const response = await addToWishlist('storeId', props.customerId, itemId)
+
     //         if (response.data) {
     //             document.getElementById(itemId).style.color = "red"
     //             document.getElementById(`m+${itemId}`).style.color = "red"
@@ -84,7 +84,7 @@ export const Product = (props) => {
     //         }
     //     } else {
 
-    //         const response = await deleteFromWishlist(filteredItems[0]?.entry_id)
+   
     //         document.getElementById(itemId).style.color = "black"
     //         document.getElementById(`m+${itemId}`).style.color = "black"
     //         message.success('Removed from wishlist')

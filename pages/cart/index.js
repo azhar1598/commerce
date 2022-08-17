@@ -3,7 +3,7 @@ import { message, Spin } from 'antd'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { addToCart, adjustQty, fetchBackendCart, fetchItemDetails, fetchPurchaseDetails, getStoreDisplaySettings, removeFromCart, setParcelAction } from '../../actions'
+import { addToCart, adjustQty, convenienceCharges, fetchBackendCart, fetchItemDetails, fetchPurchaseDetails, getStoreDisplaySettings, removeFromCart, setParcelAction } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import { useRouter } from 'next/router'
@@ -14,7 +14,7 @@ import { useMediaQuery } from 'react-responsive'
 import { toast, ToastContainer } from 'react-toastify'
 import { convenienceFlag } from '../../services/apiServices'
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails, setParcelAction }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails, setParcelAction ,convenienceChargesAction}) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
     const [datas, setDatas] = useState([])
@@ -436,7 +436,9 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     useEffect(() => {
         const removeConvenience = async () => {
-            const response = await convenienceFlag(checkout.backendCart?.purchase_id, 'N')
+           
+
+            convenienceChargesAction(checkout.backendCart?.purchase_id, 'N')
         }
         checkout.backendCart?.purchase_id &&   removeConvenience()
     }, [])
@@ -963,6 +965,7 @@ const mapDispatchToProps = dispatch => {
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
         fetchItemDetails: (customerId, itemId) => dispatch(fetchItemDetails(customerId, itemId)),
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
+        convenienceChargesAction:(purchaseId,flag)=>dispatch(convenienceCharges(purchaseId,flag))
     }
 }
 

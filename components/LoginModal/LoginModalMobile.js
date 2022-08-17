@@ -137,7 +137,7 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
                
             setVerifyAccount(true)
             const payload = { method, inputSignUp, value: 'value', setCustomerId, setMessage }
-            // const response = await forgotPasswordAPI(method, inputSignUp, 'value')
+            
     
             dispatchForgotPassword({ payload })
 
@@ -180,7 +180,7 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
         setDisable(true)
 
         const payload = { method, inputSignUp, value: 'value', setCustomerId, setMessage }
-        // const response = await forgotPasswordAPI(method, inputSignUp, 'value')
+  
 
         dispatchForgotPassword({ payload })
 
@@ -205,7 +205,6 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
         setLoading(true)
 
 
-        // const response = await verifyForgotOtp(OTP, customerId)
         const payload = { OTP, customerId, customerDetails, setMessage,setOTP,method }
 
         dispatchForgotOtp({ payload })
@@ -296,7 +295,7 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
                 // let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
                 // if (String(inputSignUp?.method)?.match(regexEmail)) {
                 if (method == "EMAIL") {
-                    // const response = await customerSignUp('storeId', inputSignUp, auth, method)
+
 
 
                     dispatchCustomerSignUp({ payload })
@@ -317,7 +316,7 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
                 else {
                     dispatchCustomerSignUp({ payload })
 
-                    // const response = await customerSignUp('storeId', inputSignUp, auth, method)
+
 
                     // if (response.data.message === "signup successful") {
                     //     setOtp(true)
@@ -342,7 +341,7 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
             if (method == "EMAIL") {
 
                 dispatchCustomerLogin({ payload })
-                // const response = await customerLogIn('storeId', inputSignUp, auth, method)
+
                 // if (response.data.message === "Successful logged in") {
                 //     // setOtp(true)
                 //     // setLoginMethod('email')
@@ -363,7 +362,6 @@ function LoginModalMobile({ userDetails, storeSettings, isLoggedIn, visible, set
                 setLoading(false)
 
 
-                // const response = await customerLogIn('storeId', inputSignUp, auth, method)
                 // if (response.data.message === "Successful logged in") {
                 //     // setOtp(true)
                 //     // setLoginMethod('email')

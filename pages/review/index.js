@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useMediaQuery } from 'react-responsive'
-import { addToCart, adjustQty, fetchBackendCart, fetchPurchaseDetails, getStoreDisplaySettings, getWalletInfoAction, removeFromCart } from '../../actions'
+import { addToCart, adjustQty, convenienceCharges, fetchBackendCart, fetchPurchaseDetails, getStoreDisplaySettings, getWalletInfoAction, removeFromCart } from '../../actions'
 import Billing from '../../components/Billing'
 import Coupon from '../../components/Coupon'
 import { convenienceFlag } from '../../services/apiServices'
@@ -15,7 +15,7 @@ import StoreStatus from '../../components/svgComponents/StoreStatus'
 import { toast, ToastContainer } from 'react-toastify'
 
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings,dispatchStoreDisplaySettings }) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateWallet, dispatchWalletInfo, storeDetails, storeDisplaySettings,dispatchStoreDisplaySettings ,convenienceChargesAction}) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
 
@@ -81,6 +81,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     }, [cart])
 
 
+ 
 
 
     const handlePaymentChange = async (e) => {
@@ -89,11 +90,16 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         if (e.target.value == 'COD') {
             if (storeDisplaySettings?.data?.is_cod_accepted == 'Y') {
                 setPaymentMethod(e.target.value)
-                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-                if (response) {
-                    setPaymentAdded(true)
-                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
-                }
+                // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+
+
+
+                convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
+                // if (response) {
+                //     setPaymentAdded(true)
+                //     fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                // }
             }
             else {
                 // setStoreClosed(true)
@@ -102,11 +108,16 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
         else if (e.target.value == 'ONL') {
             if (storeDisplaySettings?.data?.is_payment_accepted == 'Y') {
                 setPaymentMethod(e.target.value)
-                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-                if (response) {
-                    setPaymentAdded(true)
-                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
-                }
+
+                convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
+         
+
+                // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                // if (response) {
+                //     setPaymentAdded(true)
+                //     fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                // }
             }
             else {
                 // setStoreClosed(true)
@@ -142,12 +153,16 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
             setPaymentMethod('ONL')
             setUseWallet(true)
             if (paymentMethod == 'COD') {
-                const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
-                if (response) {
-                    setPaymentAdded(true)
 
-                    fetchPurchaseDetails(checkout.backendCart?.purchase_id)
-                }
+                convenienceChargesAction(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y',setPaymentAdded)
+
+
+                // const response = await convenienceFlag(checkout.backendCart?.purchase_id, e.target.value == 'COD' ? 'N' : 'Y')
+                // if (response) {
+                //     setPaymentAdded(true)
+
+                //     fetchPurchaseDetails(checkout.backendCart?.purchase_id)
+                // }
             }
 
 
@@ -896,6 +911,7 @@ const mapDispatchToProps = dispatch => {
         fetchPurchaseDetails: (purchaseid) => dispatch(fetchPurchaseDetails(purchaseid)),
         dispatchWalletInfo: (payload) => dispatch(getWalletInfoAction(payload)),
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
+        convenienceChargesAction:(purchaseId,flag,setPaymentAdded)=>dispatch(convenienceCharges(purchaseId,flag,setPaymentAdded))
     }
 }
 
