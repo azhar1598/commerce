@@ -14,7 +14,13 @@ export const Category = ({ name, id, handleCategory, handleSubCategory, categori
 
 
     useEffect(() => {
-        console.log('categor', id, stateStoreSettings?.secondary_color, categoryKey, data, data?.category_id == categoryKey)
+        
+        // console.log('categor', id, stateStoreSettings?.secondary_color, categoryKey, data, data?.category_id == categoryKey)
+        
+        if(data?.category_id){
+            setCategoryKey(data?.category_id)
+        }
+
     }, [router.query])
 
     return (

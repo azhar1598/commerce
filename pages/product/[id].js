@@ -47,7 +47,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
     
     const [rgbaBackground, setRgbaBackground] = useState('')
-    const [primaryBackground, setPrimaryBackground] = useState('')
 
     const [rgbaColor, setRgbaColor] = useState()
 
