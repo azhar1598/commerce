@@ -666,7 +666,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                 {console.log('initiate.images', initialState, initialState.images, initialState?.defaultVariantItem?.variant_value_1?.variant_value_images)}
 
                                                 {/* <Magnify images={initialState.images}/> */}
-                                                <Magnify images={initialState.images?.length != 0 ? initialState.images : Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : '')} />
+                                                <Magnify images={initialState.images?.length != 0 ? initialState.images :initialState?.defaultVariantItem ? 
+                                                    Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images!= null ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images!=null?initialState.defaultVariantItem?.variant_value_3?.variant_value_images:''):''}  />
                                             </div> :
                                             <div className='w-[90vw] bg-red-600'>
                                                 <Carousel autoplay>
@@ -678,7 +679,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                             return (<img className='w-[20px] min-h-96 h-[100vh] max-h-96  rounded' key={key} src={key ? key : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`} alt="" />)
                                                         })
                                                         :
-                                                        Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : '').map((key, idx) => {
+                                                        Object.values(initialState.images?.length != 0 ? initialState.images :initialState?.defaultVariantItem ? Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images!=null?initialState.defaultVariantItem?.variant_value_3?.variant_value_images:dummyImage):dummyImage).map((key, idx) => {
                                                             console.log('key', key, idx)
 
                                                             return (<img className='w-[20px] min-h-96 h-96 max-h-96 rounded ' key={key} src={key ? key : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`} alt="" />)
