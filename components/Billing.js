@@ -850,7 +850,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             </button>
 
           </div>
-          : 'ascas'}
+          : ''}
 
       </Modal>
 
