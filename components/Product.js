@@ -1202,14 +1202,13 @@ const readyCartData = function (arr) {
     }
 
 
-    const handlePush = () => {
-        props.fetchItemDetails('', '')
-        props.dispatchSearchItems('')
-        router.push(`/product/${props.itemId}`)
-
+    const handlePush=()=>{
+        props.fetchItemDetails('','')
+      
+        router.push(`/product/${props.itemId}`) 
+    
 
     }
-
 
     return (
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from "next/router";
 
 import { connect } from 'react-redux'
-import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems } from "../../actions";
+import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems, searchItems } from "../../actions";
 import { Image, message, Rate, Spin, Tooltip, Space, Carousel } from 'antd';
 import Link from 'next/link'
 import ReactPlayer from 'react-player'
@@ -21,7 +21,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 
 
-const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist }) => {
+const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist,dispatchSearchItems }) => {
 
 
 
@@ -56,6 +56,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
         setRgbaBackground(hex2rgba(storeSettings.data ? storeSettings.data.secondary_color : '#ffffff', 0.2))
         setRgbaColor(hex2rgba(storeSettings.data ? storeSettings.data.navbar_color : '#000000', 1))
+        dispatchSearchItems('')
 
     }, [rgbaBackground == ''])
 
@@ -1576,7 +1577,7 @@ const mapDispatchToProps = dispatch => {
         fetchRelatedItems: (id) => dispatch(fetchRelatedItems(id)),
         addToCart: (data) => dispatch(addToCart(data)),
         adjustQty: (itemid, value) => dispatch(adjustQty(itemid, value)),
-
+        dispatchSearchItems: (query) => dispatch(searchItems(query)),
         getStoreDetails: (storeId) => dispatch(getStoreDetails(storeId)),
         setVariantImages: (data) => dispatch(setVariantImages(data)),
         setDefaultItem: (data) => dispatch(setDefaultItem(data)),
