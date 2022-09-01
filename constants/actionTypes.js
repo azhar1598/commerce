@@ -163,4 +163,9 @@ export const SET_DELIVERY="SET_DELIVERY"
 
 
 
+export const POLICIES="POLICIES"
+
+export const SET_POLICIES="SET_POLICIES"
+
+
 export default wishlistActionType

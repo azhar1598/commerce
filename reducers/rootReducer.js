@@ -13,6 +13,7 @@ import mobileHeaderReducer from "./mobileHeaderReducer";
 import addressReducer from "./addressReducer"
 import paymentMethodReducer from "./paymentMethodReducer";
 import storeDisplaySettingsReducer from "./storeDisplaySettingsReducer";
+import policiesReducer from "./policiesReducer";
 
 const rootReducer = combineReducers({
     storeSettingsReducer,       
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     mobileHeaderReducer,
     addressReducer,
     paymentMethodReducer,
-    storeDisplaySettingsReducer
+    storeDisplaySettingsReducer,
+    policiesReducer
 
 })
 

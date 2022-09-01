@@ -1,4 +1,4 @@
-import wishlistActionType, { STORE_SETTINGS, SET_STORE_SETTINGS, CART, ADJUST_QTY, REMOVE_FROM_CART, ADD_TO_CART, CLEAR_CART, FETCH_BACKEND_CART, SET_BACKEND_CART, FETCH_PURCHASE_DETAILS, PURCHASE_DETAILS, CUSTOMER_DETAILS, SEARCH_ITEMS, DEFAULT_ADDRESS, SET_STORE_DETAILS, GET_STORE_DETAILS, GET_WISHLIST_DETAILS, SET_WISHLIST_DETAILS, FETCH_ITEM_DETAILS, SET_ITEM_DETAILS, FETCH_VARIANTS, SET_VARIANTS, FETCH_SPECIFICATION, SET_SPECIFICATION, FETCH_ADDITIONAL_INFO, SET_ADDITIONAL_INFO, FETCH_RELATED_ITEMS, SET_RELATED_ITEMS, SET_VARIANT_IMAGES, SET_DEFAULT_ITEM, paymentActionType, addressActionType, INITIATE_RAZORPAY_ORDER, INITIATE_CASH_ON_DELIVERY, INITIATE_PAYMENT, SET_DELIVERY_ADDRESS, EDIT_ADDRESS, ADD_ADDRESS, GET_CATEGORICAL_ITEMS, GET_CATEGORY_ITEM_COUNT, GET_SEARCH_ITEMS, GET_INITIAL_ITEMS, GET_CATEGORIES, GET_SOCIAL_PROFILE, SET_SOCIAL_PROFILE, GET_BANNER_IMAGES, GET_NEW_ARRIVALS, GET_FEATURED_PRODUCTS, GET_WALLET_INFO, GET_WALLET_TRANSACTIONS, SET_WALLET_INFO, CUSTOMER_SIGN_UP, CUSTOMER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, VERIFY_FORGOT_OTP, VERIFY_OTP, MOBILE_SEARCH, GET_ADDRESS, SET_ADDRESS, COUPON_APPLY, PAYMENT_METHOD, FETCH_FILTER_GROUPS, CANCEL_ORDER, STORE_DISPLAY_SETTINGS, SET_STORE_DISPLAY_SETTINGS, REMOVE_COUPON, GET_SHOP_WIDGETS, SET_SHOP_WIDGETS, GET_SHOP_SEO_START, GET_SHOP_SEO_SUCCESS, SET_DELIVERY, SET_PARCEL, SHIPPING_CHARGES, CONVENIENCE_CHARGES } from '../constants/actionTypes'
+import wishlistActionType, { STORE_SETTINGS, SET_STORE_SETTINGS, CART, ADJUST_QTY, REMOVE_FROM_CART, ADD_TO_CART, CLEAR_CART, FETCH_BACKEND_CART, SET_BACKEND_CART, FETCH_PURCHASE_DETAILS, PURCHASE_DETAILS, CUSTOMER_DETAILS, SEARCH_ITEMS, DEFAULT_ADDRESS, SET_STORE_DETAILS, GET_STORE_DETAILS, GET_WISHLIST_DETAILS, SET_WISHLIST_DETAILS, FETCH_ITEM_DETAILS, SET_ITEM_DETAILS, FETCH_VARIANTS, SET_VARIANTS, FETCH_SPECIFICATION, SET_SPECIFICATION, FETCH_ADDITIONAL_INFO, SET_ADDITIONAL_INFO, FETCH_RELATED_ITEMS, SET_RELATED_ITEMS, SET_VARIANT_IMAGES, SET_DEFAULT_ITEM, paymentActionType, addressActionType, INITIATE_RAZORPAY_ORDER, INITIATE_CASH_ON_DELIVERY, INITIATE_PAYMENT, SET_DELIVERY_ADDRESS, EDIT_ADDRESS, ADD_ADDRESS, GET_CATEGORICAL_ITEMS, GET_CATEGORY_ITEM_COUNT, GET_SEARCH_ITEMS, GET_INITIAL_ITEMS, GET_CATEGORIES, GET_SOCIAL_PROFILE, SET_SOCIAL_PROFILE, GET_BANNER_IMAGES, GET_NEW_ARRIVALS, GET_FEATURED_PRODUCTS, GET_WALLET_INFO, GET_WALLET_TRANSACTIONS, SET_WALLET_INFO, CUSTOMER_SIGN_UP, CUSTOMER_LOGIN, FORGOT_PASSWORD, RESET_PASSWORD, VERIFY_FORGOT_OTP, VERIFY_OTP, MOBILE_SEARCH, GET_ADDRESS, SET_ADDRESS, COUPON_APPLY, PAYMENT_METHOD, FETCH_FILTER_GROUPS, CANCEL_ORDER, STORE_DISPLAY_SETTINGS, SET_STORE_DISPLAY_SETTINGS, REMOVE_COUPON, GET_SHOP_WIDGETS, SET_SHOP_WIDGETS, GET_SHOP_SEO_START, GET_SHOP_SEO_SUCCESS, SET_DELIVERY, SET_PARCEL, SHIPPING_CHARGES, CONVENIENCE_CHARGES, POLICIES, SET_POLICIES } from '../constants/actionTypes'
 
 
 export const getStoreSettings = (storeId) => {
@@ -9,7 +9,7 @@ export const getStoreSettings = (storeId) => {
 }
 
 export const getStoreDisplaySettings = (storeId) => {
-    console.log('storeDisplay', storeId)
+    
     return {
         type: STORE_DISPLAY_SETTINGS,
         payload: storeId
@@ -18,7 +18,7 @@ export const getStoreDisplaySettings = (storeId) => {
 
 
 export const setDeliveryAction = (purchaseId) => {
-    console.log('storeDisplay', purchaseId)
+
     return {
         type: SET_DELIVERY,
         payload: purchaseId
@@ -26,7 +26,7 @@ export const setDeliveryAction = (purchaseId) => {
 }
 
 export const setParcelAction = (purchaseId) => {
-    console.log('storeDisplay', purchaseId)
+   
     return {
         type: SET_PARCEL,
         payload: purchaseId
@@ -463,7 +463,7 @@ export const setWishlistItems = (data) => {
 }
 
 export const deleteItemFromWishlist = ({ payload }) => {
-    console.log('payload', payload)
+
     return {
         type: wishlistActionType.REMOVE_FROM_WISHLIST,
         payload: payload
@@ -518,7 +518,7 @@ export const shippingCharges = ({ payload }) => {
 }
 
 export const convenienceCharges = ( purchaseId,flag,setPaymentAdded) => {
-    console.log('convenience',purchaseId,flag,setPaymentAdded?setPaymentAdded:'')
+
     return {
         type: CONVENIENCE_CHARGES,
         payload:{purchaseId,flag,setPaymentAdded}
@@ -617,7 +617,7 @@ export const setShopWidgets = (data) => {
 
 export const cancelOrderAction = (orderId, payload, setMsg) => {
 
-    console.log('action', orderId, payload)
+
     return {
         type: CANCEL_ORDER,
         orderId,
@@ -639,5 +639,23 @@ export const getShopSeoSuccess = (seo) => {
     payload: seo
     }
 }
+
+
+export const policiesAction = (storeId) => {
+
+    return {
+        type: POLICIES,
+        payload:storeId
+    }
+}
+
+export const setPolicies = (data) => {
+
+    return {
+        type: SET_POLICIES,
+        payload:data
+    }
+}
+
 
 

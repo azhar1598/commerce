@@ -105,7 +105,6 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
       // const chooseDelivery = await setDeliveryAddressFlag(address.purchaseDetails.data.purchaseId,'Y')
 
 
-      console.log('billing minQtyMsg', minQtyMsg)
 
 
       if (!minQtyMsg || minQtyMsg == undefined) {
@@ -312,7 +311,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
   }
 
 
-  console.log('wallet', walletAmount)
+
 
   const handleProceedMobile = async () => {
 
@@ -349,7 +348,6 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
 
 
 
-    console.log('payemene', paymentMethod)
 
     if (paymentMethod) {
       // if(walletAmount>walletAmount>billingDetails?.calculatedPurchaseTotal){
@@ -385,7 +383,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
             if (paymentMethod == 'ONL') {
               const response = await initiateRazorPayOrder(purchaseId, walletAmount > billingDetails?.calculatedPurchaseTotal ? 0.00 : billingDetails?.calculatedPurchaseTotal - walletAmount, currencyCode)
               if (response.data) {
-                console.log('wallet used')
+           
                 const paymentInfo = {
                   rzpOrderId: response.data.id,
                   orderAmount: walletAmount > billingDetails?.calculatedPurchaseTotal ? 0.00 : billingDetails?.calculatedPurchaseTotal - walletAmount,
@@ -403,14 +401,13 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
           else {
             const { customerId, purchaseId, discountedPurchaseTotal, totalDeliveryCharge, totalParcelCharge, totalConvenienceCharge } = response.data;
 
-            console.log('discountedPurchaseTotal', discountedPurchaseTotal + totalDeliveryCharge + totalConvenienceCharge + totalParcelCharge)
-
+           
             razorPayOrderSuccess(purchaseId, customerId, discountedPurchaseTotal + totalDeliveryCharge + totalConvenienceCharge + totalParcelCharge, wallet, '', paymentMethod)
             router.push({
               pathname: `/success`,
               query: successInfo
             })
-            console.log('paymentData', successInfo)
+        
           }
         }
         else {
@@ -532,7 +529,7 @@ export const Billing = ({ customerDetails, billingDetails, checkout, address, re
     setCodModalVisible(true)
   }
 
-  console.log('wallet review mobile purchasLoading', wallet, purchaseLoading)
+ 
 
   return (
     <>

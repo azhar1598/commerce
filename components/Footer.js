@@ -18,12 +18,12 @@ import absoluteUrl from 'next-absolute-url'
 import { getSocialProfile } from '../services/apiServices'
 import ContactUs from './ContactUs'
 import LoginModal from './LoginModal/LoginModal'
-import { customerDetails, getShopWidgets, getStoreDetails, getStoreDisplaySettings, getStoreSettings } from '../actions'
+import { customerDetails, getShopWidgets, getStoreDetails, getStoreDisplaySettings, getStoreSettings,dispatchPolicies, policiesAction } from '../actions'
 import { ConfigProvider } from 'antd'
 import MenuIcon from './svgComponents/MenuIcon'
 
 function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialProfile, customerDetails, storeSettings,
-  dispatchStoreDisplaySettings, getStoreDetails
+  dispatchStoreDisplaySettings, getStoreDetails,policies,dispatchPolicies
 }) {
 
   const router = useRouter()
@@ -36,6 +36,22 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
   const [socialLinks, setSocialLinks] = useState([])
   const [contactUsVisible, setContactUsVisible] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [showOtherLinks, setShowOtherLinks] = useState(false)
+
+
+  useEffect(() => {
+    dispatchPolicies(storeDetails?.store_id)
+    console.log('policiess', policies)
+  }, [])
+  
+  useEffect(() => {
+    policies && policies?.data.map((item, idx) => {
+
+      if (item.is_policy_added) {
+        setShowOtherLinks(true)
+      }
+    })
+  }, [policies])
 
 
 
@@ -267,15 +283,23 @@ function Footer({ getShopWidgets, stateStoreSettings, storeDetails, stateSocialP
                                 <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Youtube</p> */}
                   </div> : ""
                 }
-                <div>
-                  <h3 className='text-xl font-montMedium text-white'>Other Links</h3>
-                  {
-                    otherLinks.map((item, idx) => <p onClick={() => window.open(`${item.url}`)} key={idx} className='text-gray-200 font-montRegular text-base cursor-pointer'>{item.name}</p>)
-                  }
-                  {/* <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Return & Refunds</p>
+                  {showOtherLinks &&
+                  <div>
+                    <h3 className='text-xl font-montMedium text-white'>Other Links</h3>
+                    {
+                      policies && policies?.data.map((item, idx) => item.is_policy_added ? <p onClick={() => {
+                        window.open(`/policies/${(item.policy_id)}`, `${item.policy_id}`)
+
+                      }
+
+                      }
+                        key={idx} className='text-gray-200 font-montRegular text-base cursor-pointer'>{item.is_policy_added ? item?.policy_name : ''}</p> : '')
+                    }
+                    {/* <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Return & Refunds</p>
                                 <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Term & Conditions</p>
                                 <p className='text-gray-200 font-montRegular text-base cursor-pointer'>Privacy Policy</p> */}
-                </div>
+                  </div>
+}
 
                 <div className='w-52'>
                   <h3 className='text-xl font-montMedium text-white'>Contact Us</h3>
@@ -381,7 +405,8 @@ const mapStateToProps = (state) => {
     stateStoreSettings: state.storeSettingsReducer,
     storeDetails: state.storeDetailsReducer.data,
     stateSocialProfile: state.socialProfileReducer.data,
-    customerDetails: state.customerDetailsReducer
+    customerDetails: state.customerDetailsReducer,
+    policies: state.policiesReducer?.data,
   }
 }
 
@@ -392,6 +417,7 @@ const mapDispatchToProps = dispatch => {
     getStoreDetails: (storeId) => dispatch(getStoreDetails(storeId)),
     dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
     getShopWidgets: (storeId) => dispatch(getShopWidgets(storeId)),
+    dispatchPolicies: (storeId) => dispatch(policiesAction(storeId))
 
 
   }

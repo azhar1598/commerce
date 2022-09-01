@@ -25,7 +25,7 @@ const Verifier = ({ children,storeSettingsReducer,storeDetails,getShopSeo,seo,ge
         }
         <title>{seo ? seo.seo_title : storeDetails ? storeDetails?.store_name : 'Restaurant Store'}</title>
         <meta name="description" content={seo ? seo?.seo_desc : storeDetails ? storeDetails?.store_desc:'GoPlinto'} />
-        <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
+        <link rel="icon"href={storeSettingsReducer.data?.favicon_img_url ? storeSettingsReducer?.data?.favicon_img_url : storeDetails?.logo_img_url} />
       </Head>
             <main>{children}</main>
         </>

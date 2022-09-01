@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import { getStoreDetailsAPI, handleSEO } from '../services/apiServices'
+import { getStoreDetailsAPI, getStoreSettingsAPI, handleSEO } from '../services/apiServices'
 
 class MyDocument extends Document {
 
@@ -19,10 +19,10 @@ class MyDocument extends Document {
         // Run the parent `getInitialProps`, it now includes the custom `renderPage`
         const storeId = 196;
         try {
-       
+            const storeDisplaySettings=await getStoreSettingsAPI(storeId)
             const storeSettingsRes = await getStoreDetailsAPI(storeId);
             const seo = await handleSEO(storeId);
-            return { ...initialProps, data: storeSettingsRes.data, seo: seo.data };
+            return { ...initialProps, data: storeSettingsRes.data, seo: seo.data,settings:storeDisplaySettings.data  };
         } catch (error) {
             return { ...initialProps, data: null, seo: null };
         }
@@ -36,11 +36,13 @@ class MyDocument extends Document {
         // console.log('rendered data',this.props.seo)
         const store = this.props?.data;
         const seo = this.props?.seo;
+        const settings=this.props?.settings
         return (
             <Html>
                 <Head>
                     <title>{seo ? seo.seo_title : store ? store?.store_name : 'GoPlinto'}</title>
-                    <link rel="shortcut icon" href={store ? store.logo_img_url : 'https://www.goplinto.com/assets/images/goplinto-logo-white-480x97.png'} type="image/x-icon" />
+                    <link rel="shortcut icon" href={settings?.favicon_img_url ?settings?.favicon_img_url:store? store.logo_img_url : 'https://www.goplinto.com/assets/images/goplinto-logo-white-480x97.png'} type="image/x-icon" />
+                    <meta name="description" content={seo ? seo?.seo_desc : store ? store.store_desc : 'GoPlinto'} />
 
 
                     
