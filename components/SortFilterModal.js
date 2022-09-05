@@ -185,65 +185,7 @@ export const SortFilterModal = ({ dispatchFilterGroups, storeId, filterAndSortPa
                   <label className='text-[18px] ml-2 font-montRegular ' htmlFor="lth">Price (Low to High)</label>
                 </div>
               </div>
-              {
-                Object.keys(filtersGroup).map(function (groupid) {
-                  if (groupid != 'priceRange') {
-                    return (<div tab={
-                      <>
-                        <p className='text-left'>{filtersGroup[groupid].filter_group_name}</p>
-                        {filterPayLoad[groupid]?.length && <p className='text-[12px] text-left btn-color-revers'>{filterPayLoad[groupid]?.length} items selected</p>}
-                      </>
-
-                    }
-                      key={groupid} className='h-[40vh] overflow-hidden overflow-y-scroll' >
-                      {
-                        Object.keys(filtersGroup[groupid].filter_group_values).map(function (value) {
-                          return (
-                            // <input type="radio" id="css" name="fav_language" value="CSS"></input>
-                            // <p>{filtersGroup[groupid].filter_group_values[value].filter_value_name}</p>
-                            // checked={filterArray.length&&filterArray.map(function(item){
-                            //   if(Object.keys(item)[0]==groupid && Object.values(item)[0]==value){
-                            //     console.log(Object.values(item)[0])
-                            //     // return true
-                            //     // // console.log(value,e.target.value)
-                            //     // document.getElementById(value).checked=true
-                            //     // console.log(document.getElementById(value))
-                            //   }
-                            //   else{
-                            //     return false
-                            //   }
-                            // })}
-                            <div className='mt-2' key={value}>
-
-                              {/* // Object.keys(filterPayLoad).length&&filterPayLoad[groupid]?.includes(value)?
-                                    // <input checked={true} type="checkbox" id={value} name={groupid} value={value} onClick={(e) => handleFilter(groupid, value, e)} /> */}
-
-                              <input style={{ accentColor: storeSettings?.data ? storeSettings.data.secondary_color.toLowerCase() : 'pink-500' }} checked={filterPayLoad[groupid]?.includes(1 * value) ? true : false} type="checkbox" id={value} name={groupid} value={value} onClick={(e) => handleFilter(groupid, value, e)} />
-
-                              <label className='text-[18px] ml-2' htmlFor={value}>{filtersGroup[groupid].filter_group_values[value].filter_value_name}</label>
-                            </div>
-                          )
-                        })
-                      }
-                    </div>)
-                  }
-                  else if (groupid == 'priceRange') {
-                    return (
-                      <TabPane tab={`${groupid}`} key={groupid} className='h-[40vh] overflow-hidden overflow-y-scroll' >
-                        <p className='text-xl text-center mt-14 mb-4'>Select the Price Range</p>
-                        <div className='px-10'>
-
-                          <Slider trackStyle={{ height: '10px' }} handleStyle={{ height: '20px', width: "20px" }} marks={{
-                            [Number(filtersGroup[groupid]?.min_value)]: `${Number(filtersGroup[groupid]?.min_value)}`,
-                            [Number(filtersGroup[groupid]?.max_value)]: `${Number(filtersGroup[groupid]?.max_value)}`,
-                          }
-                          } onAfterChange={priceSliderhandler} range max={Number(filtersGroup[groupid].max_value)} min={Number(filtersGroup[groupid].min_value)} defaultValue={[Number(filtersGroup[groupid].min_value), Number(filtersGroup[groupid].max_value)]} />
-                        </div>
-                      </TabPane>
-                    )
-                  }
-                })
-              }
+             {/* Add Filter Code Here */}
 
             </div>
           </div>

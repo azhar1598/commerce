@@ -14,7 +14,7 @@ import { useMediaQuery } from 'react-responsive'
 import { toast, ToastContainer } from 'react-toastify'
 import { convenienceFlag } from '../../services/apiServices'
 
-const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails, setParcelAction ,convenienceChargesAction,getStoreDetails}) => {
+const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, checkout, fetchBackendCart, fetchPurchaseDetails, customerDetails, stateStoreDetails, dispatchStoreDisplaySettings, fetchItemDetails, setParcelAction, convenienceChargesAction, getStoreDetails }) => {
 
     const [state, setState] = useState(checkout.backendCart?.purchase_id)
     const [datas, setDatas] = useState([])
@@ -25,6 +25,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
     const [minQtyMsg, setMinQtyMsg] = useState(false)
     const [minProduct, setMinProduct] = useState()
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 })
+
 
 
     const [rgbaBackground, setRgbaBackground] = useState('')
@@ -437,11 +438,11 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
     useEffect(() => {
         const removeConvenience = async () => {
-           
+
 
             convenienceChargesAction(checkout.backendCart?.purchase_id, 'N')
         }
-        checkout.backendCart?.purchase_id &&   removeConvenience()
+        checkout.backendCart?.purchase_id && removeConvenience()
     }, [])
 
 
@@ -830,16 +831,23 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         <div className='flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24' >
-                                            <p className='text-lg font-montSemiBold flex' onClick={() => {
+                                            <p className='text-lg font-montSemiBold ' onClick={() => {
                                                 fetchItemDetails('', '')
                                                 router.push(`/product/${item.item_id}`)
-                                            }}> {item.is_veg == "Y" ? <img src="/veg.svg" className=' w-4 h-4 mt-1 mr-2' />
-                                                : <img src="/non-veg.png" className='w-4 h-4 mt-1 mr-2' />}
-                                                {item.item_name}</p>
+                                            }}>{item.item_name}</p>
                                             {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
-                                                <span className='text-gray-500'>Color:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''},
-                                                <span className='text-gray-500'>Size:</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
-                                                <span className='text-black-500'> {item.defaultVariantItem.variant_value_3?.variant_value_name ? ', Design No' : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : 'No Design No'}</p> : ''}
+                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_1?.variant_group_name}:` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''}
+                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_2?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_2?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                                <span className='text-black-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_3?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : ''}</p> : ''}
+
+
+                                                {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
+                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_1?.variant_group_name}:` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''}
+                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_2?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_2?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
+                                                <span className='text-black-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_3?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : ''}</p> : ''}
+
+
+                                                
                                             <p className='text-[#212B3680] hidden'>{item.item_desc}</p>
                                             <p className='text-lg font-montSemiBold flex items-start -mt-3'>{stateStoreDetails?.currency_symbol} {item.defaultVariantItem ? item.defaultVariantItem.sale_price : item.sale_price}
 
@@ -849,6 +857,12 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
 
 
                                         </div>
+                                        
+
+
+
+
+
                                         <CloseOutlined className='p-4' onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} />
                                     </div>
 
@@ -966,7 +980,7 @@ const mapDispatchToProps = dispatch => {
         dispatchStoreDisplaySettings: (storeId) => dispatch(getStoreDisplaySettings(storeId)),
         fetchItemDetails: (customerId, itemId) => dispatch(fetchItemDetails(customerId, itemId)),
         setParcelAction: (purchaseId) => dispatch(setParcelAction(purchaseId)),
-        convenienceChargesAction:(purchaseId,flag)=>dispatch(convenienceCharges(purchaseId,flag)),
+        convenienceChargesAction: (purchaseId, flag) => dispatch(convenienceCharges(purchaseId, flag)),
         getStoreDetails: (storeId) => dispatch(getStoreDetails(storeId)),
     }
 }

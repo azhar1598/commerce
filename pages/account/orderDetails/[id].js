@@ -34,6 +34,9 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
     const [isReturnActive, setIsReturnActive] = useState(false)
     const [isCancelled, setIsCancelled] = useState(false)
     const [cancelLoader, setCancelLoader] = useState(false)
+
+    const[addonVisible,setAddonVisible]=useState(false)
+
     const ref = useRef(null);
 
 
@@ -263,6 +266,18 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
     console.log('orderItemId', orderItemId, value)
 
+    const handleAddonOk = () => {
+        setAddonVisible(true)
+    }
+
+    const handleAddonCancel = () => {
+        setAddonVisible(false)
+    }
+
+    const handleAddonClose = () => {
+        // setAddonVisible(false)
+    }
+
 
 
     return (
@@ -315,8 +330,11 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                 <div className=' w-full flex flex-col lg:flex-row flex-wrap px-3 lg:p-4 lg:px-12 lg:justify-between  bg-white '>
                                     {/* Object.values(orderDetails.orderItems).map(item => */}
                                     {orderDetails?.orderItems && Object?.values(orderDetails?.orderItems)?.map((item, index) =>
-                                        <div className='flex lg:items-start lg border-2 lg:w-[26vw] w-[27vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} onClick={() => { router.push(`/product/${item.itemId}`) }}>
-                                            <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-28 lg:h-36 min-w-36 max-w-36 border border-blue-100 shadow ' />
+                                        <div className='flex lg:items-start lg border-2 lg:w-[26vw] w-[27vw] lg:border-[#00000028]  lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} 
+
+                                        // onClick={() => { router.push(`/product/${item.itemId}`) }}
+                                        >
+                                            <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-28 lg:h-36 min-w-36 max-w-36 border border-blue-100 shadow ' onClick={() => { router.push(`/product/${item.itemId}`) }}/>
                                             <div className='flex flex-col items-start w-full ml-3 lg: '>
                                                 <div className='flex'>
                                                     {item.isVeg ? <img src="/veg.svg" className=' w-4 h-4  mr-2' />
@@ -324,13 +342,20 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
                                                     <p className='text- font-montSemiBold w-56 lg:w-44   break-words'>{item.itemName}</p>
                                                 </div>
-                                                {item.customizationDetails && <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
+                                                {item.customizationDetails &&
+                                                 <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
                                                     item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},
 
                                                     <span className='text-black'>Size : </span>{item.customizationDetails ?
                                                         item.customizationDetails?.variant_item_attributes?.variant_value_2?.variant_value_name : ''},
 
                                                 </p>}
+
+                                                <p className='text-[#212B3680]'><span className='text-black'>Color : </span>Red,
+
+                                                    <span className='text-black'>Size : </span>M
+                                                    <span className='text-black' onClick={()=>{setAddonVisible(true)}}>..more </span>
+                                                </p>
                                                 <p className='text-lg font-montSemiBold'>{storeDetails?.currency_symbol}
 
 
@@ -521,6 +546,63 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
 
             <ToastContainer />
+
+            <Modal
+                visible={addonVisible}
+                onOk={handleAddonOk}
+                afterClose={handleAddonClose}
+                destroyOnClose={true}
+                onCancel={handleAddonCancel}
+                footer={null}
+                okButtonProps={{ disabled: true }}
+                cancelButtonProps={{ disabled: true }}
+                width={800}
+                style={{ height: '100px' }}
+            >
+
+{orderDetails?.orderItems && Object?.values(orderDetails?.orderItems)?.map((item, index) =>
+                                        <div className='flex lg:items-start  lg:w-full lg:pl-8  lg:p-3 md:pl-8 lg:pt-3 md:pt-3 text-left w-full mb-2 lg:mb-0 lg:mt-2' key={index} 
+
+                                        // onClick={() => { router.push(`/product/${item.itemId}`) }}
+                                        >
+                                            <img src={item.itemImg ? item.itemImg : `https://www.bastiaanmulder.nl/wp-content/uploads/2013/11/dummy-image-square.jpg`} className='w-36 h-28 lg:h-36 min-w-36 max-w-36 border border-blue-100 shadow ' onClick={() => { router.push(`/product/${item.itemId}`) }}/>
+                                            <div className='flex flex-col items-start w-full ml-3 lg: '>
+                                                <div className='flex'>
+                                                    {item.isVeg ? <img src="/veg.svg" className=' w-4 h-4  mr-2' />
+                                                        : <img src="/non-veg.png" className='w-4 h-4  mr-2' />}
+
+                                                    <p className='text- font-montSemiBold    break-words'>{item.itemName}</p>
+                                                </div>
+                                                {item.customizationDetails &&
+                                                 <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
+                                                    item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},
+
+                                                    <span className='text-black'>Size : </span>{item.customizationDetails ?
+                                                        item.customizationDetails?.variant_item_attributes?.variant_value_2?.variant_value_name : ''},
+
+                                                </p>}
+
+                                                <p className='text-[#212B3680]'><span className='text-black'>Color : </span>Red,
+
+                                                    <span className='text-black '>Size : </span>M,  
+                                                    <span className='text-black px-2' onClick={()=>{setAddonVisible(true)}}>Toppings:Onion,Tomato,Olives;Message:Happy Birthday xyz, Addon#1: Value#2, Value#3, Toppings: Onion, Tomato, Olives, Toppings: Onion, Tomato, Olives; Message: Happy Birthday xyz!; Image: Image; T Addon#1: Value#2, Value#3, Toppings: Onion, Tomato, Olives </span>
+                                                </p>
+                                                <p className='text-lg font-montSemiBold'>{storeDetails?.currency_symbol}
+
+
+                                                    {item.customizationDetails ? item.customizationDetails.sale_price : item.itemPrice}</p>
+
+                                            </div>
+                                              </div>
+                                    )}
+                                     <p className='text-slate-300 px-44 py-2'>{moment.unix(orderDetails?.orderPlacedTime).format('LLL')}</p>
+                                     
+                             
+
+
+                </Modal>
+
+
         </div>
     )
 }

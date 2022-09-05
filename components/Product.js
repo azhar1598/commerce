@@ -84,7 +84,7 @@ export const Product = (props) => {
     //         }
     //     } else {
 
-   
+
     //         document.getElementById(itemId).style.color = "black"
     //         document.getElementById(`m+${itemId}`).style.color = "black"
     //         message.success('Removed from wishlist')
@@ -851,7 +851,7 @@ export const Product = (props) => {
 
         // fetchBackendCart('customerDetails.data?.customer_id,', 'storeDetails.group_id', data)
     }
-const readyCartData = function (arr) {
+    const readyCartData = function (arr) {
 
         const key = 'store_id'
         return arr.reduce(function (rv, x) {
@@ -1174,7 +1174,7 @@ const readyCartData = function (arr) {
                         // adjustQty(item.item_id, item.qty)
                     }
                     else {
-                        console.log('filter[0].qty+1',filter[0].qty,typeof(filter[0].qty), filter[0].qty + 1)
+                        console.log('filter[0].qty+1', filter[0].qty, typeof (filter[0].qty), filter[0].qty + 1)
                         if (filter[0].qty + 1 >= item.inventoryDetails?.min_order_quantity) {
                             setMinQtyMsg(false)
                         }
@@ -1202,11 +1202,11 @@ const readyCartData = function (arr) {
     }
 
 
-    const handlePush=()=>{
-        props.fetchItemDetails('','')
-      
-        router.push(`/product/${props.itemId}`) 
-    
+    const handlePush = () => {
+        props.fetchItemDetails('', '')
+
+        router.push(`/product/${props.itemId}`)
+
 
     }
 
@@ -1340,19 +1340,20 @@ const readyCartData = function (arr) {
 
                                                 handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
 
-                                                 className={`px-3 text-2xl cursor-pointer`}>-</span>
+                                                className={`px-3 text-2xl cursor-pointer`}>-</span>
                                             <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                            <span onClick={() => 
-                                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
+                                            <span onClick={() =>
+                                                // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
 
-                                             handleIncreaseQuantity(props.item) }
-                                            
-                                            className='px-3 text-xl cursor-pointer'>+</span>
+                                                handleIncreaseQuantity(props.item)}
+
+                                                className='px-3 text-xl cursor-pointer'>+</span>
                                         </div>
                                         :
-                                        <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</p>
-
-
+                                        <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() =>
+                                            router.push(`/product/${props.item.item_id}`)}
+                                            // itemAddToCart(props.item)}
+                                            style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</p>
                                     }
 
 
@@ -1375,17 +1376,17 @@ const readyCartData = function (arr) {
                                     <div className='-mt-6 border rounded border-red-600 font-montSemiBold h-10  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white ' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
                                         <span onClick={() =>
                                             //  handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
-                                             
+
                                             handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
 
-                                             className={` text-2xl px-4 cursor-pointer`}>-</span>
+                                            className={` text-2xl px-4 cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-7'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
                                         <span onClick={() =>
                                             //  handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)}
-                                             
-                                            handleIncreaseQuantity(props.item) }
 
-                                             className='px-3  text-xl cursor-pointer'>+</span>
+                                            handleIncreaseQuantity(props.item)}
+
+                                            className='px-3  text-xl cursor-pointer'>+</span>
                                     </div>
                                     :
                                     <p className='w-[37px] -mt-8 ml-32 rounded shadow border border-red-200 px-3 py-1' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</p>
@@ -1429,30 +1430,33 @@ const readyCartData = function (arr) {
 
 
                             <div className='flex justify-end font-montSemiBold text-xl' >
-                    
-                    {props.cart.find(product => product.item_id == props.item.item_id) ?
+
+                                {/* {props.cart.find(product => product.item_id == props.item.item_id) ?
 
 
 
-                        <div className=' border rounded border-red-600 font-montSemiBold flex items-center space-x-6  bg-white w-full' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
-                            <span onClick={() => 
-                                // handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
-                                
-                                handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+                                    <div className=' border rounded border-red-600 font-montSemiBold flex items-center space-x-6  bg-white w-full' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
+                                        <span onClick={() =>
+                                            // handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
 
-                                className={`px-6 text-xl py-1 cursor-pointer`}>-</span>
-                            <span className='text-black font-montMedium text-xl py-1'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                            <span onClick={() => 
-                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
-                            handleIncreaseQuantity(props.item) }
-                            className='px-6 py-1 text-xl cursor-pointer'>+</span>
-                        </div>
-                        :
-      
-                            <span className='text-white w-10 rounded shadow border border-red-200 px-3 py-1 text-xl' onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</span>
-                    }
+                                            handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
 
-                </div>
+                                            className={`px-6 text-xl py-1 cursor-pointer`}>-</span>
+                                        <span className='text-black font-montMedium text-xl py-1'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                        <span onClick={() =>
+                                            // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
+                                            handleIncreaseQuantity(props.item)}
+                                            className='px-6 py-1 text-xl cursor-pointer'>+</span>
+                                    </div>
+                                    : */}
+
+                                    <span className='text-white w-10 rounded shadow border border-red-200 px-3 py-1 text-xl' onClick={() =>
+                                        router.push(`/product/${props.item.item_id}`)
+                                        // itemAddToCart(props.item)
+                                    } style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</span>
+                                {/* // } */}
+
+                            </div>
                         </div>
 
 
@@ -1505,8 +1509,8 @@ const readyCartData = function (arr) {
 
                     <div className='flex-col px-12'>
                         <div className='hidden lg:flex'>
-                        {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-3 mr-2' />
-                                    : <img src="/non-veg.png" className='w-4 h-4 mt-3 mr-2' />}
+                            {props.isVeg ? <img src="/veg.svg" className=' w-4 h-4 mt-3 mr-2' />
+                                : <img src="/non-veg.png" className='w-4 h-4 mt-3 mr-2' />}
                             <p className='font-montMedium mt-2 text-[16px] lg:text-lg lg:w-auto ' onClick={() => { router.push(`/product/${props.itemId}`) }} style={props.wishlistPage ? {} : {}}>{props.name}<span></span></p>
                         </div>
 
@@ -1528,30 +1532,34 @@ const readyCartData = function (arr) {
  */}
 
 
-                                {props.cart.find(product => product.item_id == props.item.item_id) ?
+                                {/* {props.cart.find(product => product.item_id == props.item.item_id) ?
 
 
 
                                     <div className='   border rounded border-red-600   l-mt-5 mr-3 rounded shadow  w-44  mt-4 font-montMedium text-sm flex items-center bg-white h-10' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
-                                        <span onClick={() => 
+                                        <span onClick={() =>
                                             // handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
-                                            
+
                                             handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
 
                                             className={`pl-4  text-2xl cursor-pointer`}>-</span>
                                         <span className='text-black font-montMedium text-sm px-12'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                        <span onClick={() => 
+                                        <span onClick={() =>
                                             // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)}
-                                            
-                                            handleIncreaseQuantity(props.item) }
-                                            
+
+                                            handleIncreaseQuantity(props.item)}
+
                                             className='pl-4 pr-4 text-xl cursor-pointer'>+</span>
                                     </div>
-                                    :
-                                    <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage ? 'px-6 py-2 w-44' : "px-10 py-2 "}  mt-4 font-montMedium text-sm`} onClick={() => itemAddToCart(props.item)} style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>ADD TO CART</p>
+                                    : */}
+                                    <p className={`-mt-5 mr-3 rounded shadow border border-red-200 ${props.wishlistPage ? 'px-6 py-2 w-44' : "px-10 py-2 "}  mt-4 font-montMedium text-sm`} 
+                                        // itemAddToCart(props.item)} 
+                                        onClick={() => { router.push(`/product/${props.itemId}`) }}
+                                        style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>View Product</p>
+                                  
 
 
-                                }
+                                {/* } */}
 
 
 
