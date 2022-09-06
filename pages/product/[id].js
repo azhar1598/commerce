@@ -20,6 +20,15 @@ import { useRef } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 
 
+const groupBy = function (arr, key) {
+    return arr.reduce(function (rv, x) {
+        (rv[x[key]] = rv[x[key]] || []).push(x);
+
+        return rv;
+    }, {});
+};
+
+
 
 const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems }) => {
 
@@ -107,6 +116,65 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         },]
     )
 
+
+    const [addons1, setAddons1] = useState(
+
+        {
+
+            "3ebb31825aea7b4fb8c9f8065eb4bbda": {
+                "item_id": 12345,
+                "add_on_title": "Toppings on the Pizza",
+                "add_on_description": "Select min of 2 and max of 5",
+                "variant_group_id": 3340,
+                "variant_value_id": 7064,
+                "status": "ACTIVE",
+                "entry_id": 35,
+                "add_on_group_id": 12,
+                "add_on_group_type": "CHEKLIST",
+                "is_mandatory": "Y",
+                "min_qty": 2,
+                "max_qty": 5,
+                "price": null,
+                "add_on_options": [
+                    {
+                        "add_on_option_id": 24,
+                        "add_on_name": "Onion",
+                        "price": "30.00",
+                        "option_status": "AVAILABLE"
+                    },
+                    {
+                        "add_on_option_id": 25,
+                        "add_on_name": "Jalapeno",
+                        "price": "60.00",
+                        "option_status": "AVAILABLE"
+                    },
+                    {
+                        "add_on_option_id": 26,
+                        "add_on_name": "Olives",
+                        "price": "60.00",
+                        "option_status": "AVAILABLE"
+                    }
+                ],
+            },
+
+            "6445a0d6cd01e8b7086c5b0f34409dd9": {
+                "item_id": 12345,
+                "add_on_title": "Cooking Instructions",
+                "add_on_description": "Min of 10 characters to 200 characters",
+                "variant_group_id": null,
+                "variant_value_id": null,
+                "status": "ACTIVE",
+                "entry_id": 38,
+                "add_on_group_id": 11,
+                "add_on_group_type": "SHORT_TEXT",
+                "is_mandatory": "Y",
+                "min_qty": 0,
+                "max_qty": 100,
+                "price": 1.00
+            }
+        }
+    )
+
     const [separateAddons, setSeparateAddons] = useState()
 
     const [active, setActive] = useState(0)
@@ -124,6 +192,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [rgbaBackground, setRgbaBackground] = useState('')
 
     const [rgbaColor, setRgbaColor] = useState()
+
 
 
 
@@ -712,20 +781,26 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     }
 
     const [customItemData, setCustomItemData] = useState()
+    const [groupByTitle, setGroupByTitle] = useState({})
 
     const handleAddonChange = (e) => {
         console.log('eeeccc', e, addonsAdded, customItemData, priceWithAddon)
+
+
+
+
         if (e.target.checked) {
             console.log('eeec helo worl')
             setAddonsAdded([...addonsAdded, e.target.value])
             let data = addonsAdded
             data.push(e.target.value)
-
             setCustomItemData({ ...customItemData, addons: data })
+
+
         }
         else {
             const filterData = addonsAdded.filter((item, index) => {
-                return item.id != e.target.value.id
+                return item.add_on_option_id != e.target.value.add_on_option_id
             })
             let data = filterData
             setAddonsAdded(filterData)
@@ -733,10 +808,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             setCustomItemData({ ...customItemData, addons: data })
             console.log('eeecc filter', filterData)
         }
-
-
-
-
 
         // setPriceWithAddon({...priceWithAddon,})
     }
@@ -748,6 +819,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             setCustomItemData(data)
         }
     }
+
+
+
 
     useEffect(() => {
 
@@ -787,6 +861,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     }
 
     console.log('custtt', customItemData)
+
+
+
+
 
 
 
@@ -1728,33 +1806,33 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                     <div className='p-4 w-full flex item-center  flex-col'>
                         <p className='font-montBold text-lg self-center py-4' style={{ color: storeSettings.data ? storeSettings.data.secondary_color : 'black' }}>You can customize this item !!</p>
 
-                        {addons.map((item, index) => {
+                        {Object.keys(addons1).map((mapId, index) => {
+                            const item = addons1[mapId]
+
                             return (
                                 <div className='px-12 py-2'>
-                                    <p className='text-black font-montMedium '>{item.name}{item.mandatory ? <span className='font-montSemiBold text-red-600 px-2'>*</span> : ''}</p>
-                                    <p className='text-gray text-sm font-montMedium '>{item.desc}</p>
-                                    {item.values.map((value, index) => {
+                                    <p className='text-black font-montMedium '>{item.add_on_title}{item.mandatory ? <span className='font-montSemiBold text-red-600 px-2'>*</span> : ''}</p>
+                                    <p className='text-gray text-sm font-montMedium '>{item.add_on_description}</p>
+                                    {console.log('item.addonOprio', item.add_on_options)}
+                                    {item.add_on_options?.map((value, index) => {
                                         return (
                                             <div className=' w-1/2 flex'>
 
                                                 <div className='flex '>
                                                     <Checkbox onChange={(e) => {
                                                         handleAddonChange(e)
-                                                    }} defaultChecked={false} 
-                                                    // checked={addonsAdded?.map((add, num) => {
-                                                    //     if (add.id == item.id) {
-                                                    //         // return true
-                                                    //     }
-                                                    //     else {
-                                                    //         // return false
-                                                    //     }
+                                                    }} defaultChecked={false}
+                                                        name={item.add_on_group_id}
+                                                        checked={addonsAdded?.some(item =>
 
-                                                    // })
-                                                    // }
-                                                     value={value} style={{ color: 'black' }}>
+                                                            item.add_on_option_id == value.add_on_option_id
+
+                                                        )
+                                                        }
+                                                        value={{ ...value, add_on_group_id: item.add_on_group_id, add_on_title: item.add_on_title, add_on_mapping_id: mapId, }} style={{ color: 'black' }}>
 
                                                         <div className='flex justify-between  w-[20vw]'>
-                                                            <p className='font-montRegular px-4'> {value.name}</p>
+                                                            <p className='font-montRegular px-4'> {value.add_on_name}</p>
                                                             <p className='font-montMedium pr-2'>{storeDetails?.currency_symbol}  {value.price}</p>
 
                                                         </div>
@@ -1763,7 +1841,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                             </div>
                                         )
                                     })}
-                                    {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''}
+                                    {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
 
 
 
@@ -1790,18 +1868,55 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                 <div className='flex '>
                                     <p className='pl-4 -mt-3'></p>
+                                    {console.log('eeeec', customItemData)}
+
+                                    {/* <p className='font-montRegular px-1 -mt-3'> {item.name},</p> */}
+
+                                    {console.log('eeeecx', customItemData?.addons, groupBy(customItemData?.addons, 'add_on_title'))}
 
 
-                                    {customItemData?.addons?.map((item, index) => {
 
-                                        return (
-                                            <>
 
-                                                <p className='font-montRegular px-1 -mt-3'> {item.name},</p>
-                                            </>
-                                        )
+                                    {
 
-                                    })}
+                                        (() => {
+
+                                            const newVar = groupBy(customItemData?.addons, 'add_on_title')
+                                            return Object.keys(newVar).map((item, index) => {
+
+                                                const addons = newVar[item]
+
+                                                // Object.keys(item).map((title, index) => {
+                                                return (
+
+
+
+                                                    <>
+                                                        <p className='font-montRegular px-1 -mt-3'>{item}:</p>
+
+
+                                                        {addons.map((addon, num) => {
+                                                            return (
+                                                                <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name},</p>
+                                                            )
+                                                        })}
+
+                                                    </>
+
+
+
+                                                )
+                                                // })
+
+
+
+
+                                            })
+
+
+                                        })()
+
+                                    }
                                 </div>
                             </div>
 
