@@ -774,14 +774,17 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
     const handleAddonCancel = () => {
         setAddonVisible(false)
+        setAddonsAdded([])
     }
 
     const handleAddonClose = () => {
         // setAddonVisible(false)
+        setAddonsAdded([])
     }
 
     const [customItemData, setCustomItemData] = useState()
     const [groupByTitle, setGroupByTitle] = useState({})
+    const [addonCombination, setAddonCombination] = useState([])
 
     const handleAddonChange = (e) => {
         console.log('eeeccc', e, addonsAdded, customItemData, priceWithAddon)
@@ -791,8 +794,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             setAddonsAdded([...addonsAdded, e.target.value])
             let data = addonsAdded
             data.push(e.target.value)
+            
             setCustomItemData({ ...customItemData, addons: data })
-
+            console.log('combination', addonCombination)
         }
         else {
             const filterData = addonsAdded.filter((item, index) => {
@@ -811,26 +815,26 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [addonInstruction, setAddonInstructions] = useState()
 
     const handleAddonInstructions = (e, add_on_group_id, add_on_title, mapId) => {
-        console.log('eeeech', e.target.value, e, add_on_group_id, add_on_title, mapId,addonsAdded, customItemData)
-       let instructions={
-            add_on_group_id, add_on_title, mapId,text:e.target.value
+        console.log('eeeech', e.target.value, e, add_on_group_id, add_on_title, mapId, addonsAdded, customItemData)
+        let instructions = {
+            add_on_group_id, add_on_title, mapId, text: e.target.value
         }
         setAddonInstructions(instructions)
 
-        let filter=addonsAdded.filter((item,index)=>{
-            if(item.add_on_group_id!=instructions.add_on_group_id){
+        let filter = addonsAdded.filter((item, index) => {
+            if (item.add_on_group_id != instructions.add_on_group_id) {
                 return item
             }
         })
 
-        console.log('filter',filter)
+        console.log('filter', filter)
 
         filter.push(instructions)
         setAddonsAdded(filter)
         setCustomItemData({ ...customItemData, addons: filter })
-        
-      
-      
+
+
+
         // let data = addonsAdded
         // data.push(e.target.value)
         // setCustomItemData({ ...customItemData, addons: e.target.value })
@@ -878,13 +882,24 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         // itemAddToCart(customIte)
         // setCustomItemData({ ...customItemData, addons: addonsAdded })
 
+        setAddonCombination([...addonCombination, addonsAdded])
 
+        let data=addonCombination
+        data.push(addonsAdded)
+        let data1=customItemData
+        customItemData?.addons=data
+
+        console.log('combination', addonCombination)
         itemAddToCart(customItemData)
 
         setAddonVisible(false)
 
         console.log('customItemData', addonsAdded, customItemData)
     }
+
+    useEffect(() => {
+        setAddonsAdded([])
+    }, [addonCombination])
 
     console.log('custtt', customItemData)
 
@@ -1852,13 +1867,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                 handleAddonChange(e)
                                                             }} defaultChecked={false}
                                                                 name={item.add_on_group_id}
-                                                                checked={addonsAdded?.some(item =>
+                                                                // checked={addonsAdded?.some(item =>
 
-                                                                    item.add_on_option_id == value.add_on_option_id
+                                                                //     item.add_on_option_id == value.add_on_option_id
 
-                                                                )
-                                                                }
-                                                                value={{ ...value, add_on_group_id: item.add_on_group_id, add_on_title: item.add_on_title, add_on_mapping_id: mapId, }} style={{ color: 'black' }}>
+                                                                // )
+                                                                // }
+                                                                value={{ ...value, add_on_group_id: item.add_on_group_id, add_on_title: item.add_on_title, add_on_mapping_id: mapId, }}
+
+                                                                style={{ color: 'black' }}>
 
                                                                 <div className='flex justify-between  w-[20vw]'>
                                                                     <p className='font-montRegular px-4'> {value.add_on_name}</p>
@@ -1872,7 +1889,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                             })
                                             :
 
-                                            <TextArea rows={4}  placeholder={item.add_on_description} maxLength={200} onChange={(e) => {
+                                            <TextArea rows={4} placeholder={item.add_on_description} maxLength={200} onChange={(e) => {
                                                 handleAddonInstructions(e, item.add_on_group_id, item.add_on_title, mapId)
                                             }} />
                                     }
@@ -1932,7 +1949,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                         {addons.map((addon, num) => {
                                                             return (
-                                                                <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name?addon.add_on_name:addon.text},</p>
+                                                                <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name ? addon.add_on_name : addon.text},</p>
                                                             )
                                                         })}
 
@@ -1983,7 +2000,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                     })?.qty}</span>
 
-                                    <span onClick={() =>  adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                    <span onClick={() => adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                         if (initialState.defaultVariantItem) {
                                             if (item.defaultVariantItem) {
                                                 if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
