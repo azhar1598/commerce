@@ -887,10 +887,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         let data=addonCombination
         data.push(addonsAdded)
         let data1=customItemData
-        customItemData?.addons=data
+        data1.addons=data
 
         console.log('combination', addonCombination)
-        itemAddToCart(customItemData)
+        itemAddToCart(data1)
 
         setAddonVisible(false)
 
