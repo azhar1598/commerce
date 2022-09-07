@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { connect } from 'react-redux'
 import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems, searchItems } from "../../actions";
-import { Image, message, Rate, Spin, Tooltip, Space, Carousel, Modal, Checkbox } from 'antd';
+import { Image, message, Rate, Spin, Tooltip, Space, Carousel, Modal, Checkbox, Input } from 'antd';
 import Link from 'next/link'
 import ReactPlayer from 'react-player'
 import { useMediaQuery } from 'react-responsive'
@@ -33,7 +33,7 @@ const groupBy = function (arr, key) {
 const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems }) => {
 
 
-
+    const { TextArea } = Input;
     const router = useRouter();
     const { id } = router.query;
 
@@ -1812,35 +1812,42 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                             return (
                                 <div className='px-12 py-2'>
                                     <p className='text-black font-montMedium '>{item.add_on_title}{item.mandatory ? <span className='font-montSemiBold text-red-600 px-2'>*</span> : ''}</p>
-                                    <p className='text-gray text-sm font-montMedium '>{item.add_on_description}</p>
+                                    <p className='text-gray text-sm font-montMedium '>{item.add_on_group_type == 'CHEKLIST' ? item.add_on_description:''}</p>
                                     {console.log('item.addonOprio', item.add_on_options)}
-                                    {item.add_on_options?.map((value, index) => {
-                                        return (
-                                            <div className=' w-1/2 flex'>
+                                    {
 
-                                                <div className='flex '>
-                                                    <Checkbox onChange={(e) => {
-                                                        handleAddonChange(e)
-                                                    }} defaultChecked={false}
-                                                        name={item.add_on_group_id}
-                                                        checked={addonsAdded?.some(item =>
+                                        item.add_on_group_type == 'CHEKLIST' ?
+                                            item.add_on_options?.map((value, index) => {
+                                                return (
+                                                    <div className=' w-1/2 flex'>
 
-                                                            item.add_on_option_id == value.add_on_option_id
+                                                        <div className='flex '>
+                                                            <Checkbox onChange={(e) => {
+                                                                handleAddonChange(e)
+                                                            }} defaultChecked={false}
+                                                                name={item.add_on_group_id}
+                                                                checked={addonsAdded?.some(item =>
 
-                                                        )
-                                                        }
-                                                        value={{ ...value, add_on_group_id: item.add_on_group_id, add_on_title: item.add_on_title, add_on_mapping_id: mapId, }} style={{ color: 'black' }}>
+                                                                    item.add_on_option_id == value.add_on_option_id
 
-                                                        <div className='flex justify-between  w-[20vw]'>
-                                                            <p className='font-montRegular px-4'> {value.add_on_name}</p>
-                                                            <p className='font-montMedium pr-2'>{storeDetails?.currency_symbol}  {value.price}</p>
+                                                                )
+                                                                }
+                                                                value={{ ...value, add_on_group_id: item.add_on_group_id, add_on_title: item.add_on_title, add_on_mapping_id: mapId, }} style={{ color: 'black' }}>
 
+                                                                <div className='flex justify-between  w-[20vw]'>
+                                                                    <p className='font-montRegular px-4'> {value.add_on_name}</p>
+                                                                    <p className='font-montMedium pr-2'>{storeDetails?.currency_symbol}  {value.price}</p>
+
+                                                                </div>
+                                                            </Checkbox>
                                                         </div>
-                                                    </Checkbox>
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
+                                                    </div>
+                                                )
+                                            })
+                                            :
+
+                                            <TextArea rows={4} placeholder={item.add_on_description} maxLength={200} />
+                                    }
                                     {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
 
 
