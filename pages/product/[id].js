@@ -785,6 +785,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [customItemData, setCustomItemData] = useState()
     const [groupByTitle, setGroupByTitle] = useState({})
     const [addonCombination, setAddonCombination] = useState([])
+    const [addonsWithQty, setAddonsWithQty] = useState([])
 
     const handleAddonChange = (e) => {
         console.log('eeeccc', e, addonsAdded, customItemData, priceWithAddon)
@@ -792,11 +793,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         if (e.target.checked) {
             console.log('eeec helo worl')
             setAddonsAdded([...addonsAdded, e.target.value])
-            let data = addonsAdded
-            data.push(e.target.value)
+            let data = { qty: 1, addons: addonsAdded }
 
+            data.addons.push(e.target.value)
+
+            console.log('eeeecdataaa', data)
             setCustomItemData({ ...customItemData, addons: data })
-            console.log('combination', addonCombination)
+            setAddonsWithQty(data)
+
+            console.log('combination', customItemData, addonCombination)
         }
         else {
             const filterData = addonsAdded.filter((item, index) => {
@@ -865,9 +870,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                     setPriceWithAddon(data)
                 })
             })
-            addonsAdded.map((item, index) => {
+            // addonsAdded.map((item, index) => {
 
-            })
+            // })
 
 
         }
@@ -882,10 +887,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         // itemAddToCart(customIte)
         // setCustomItemData({ ...customItemData, addons: addonsAdded })
 
-        setAddonCombination([...addonCombination, addonsAdded])
+        setAddonCombination([...addonCombination, addonsWithQty])
 
         let data = addonCombination
-        data.push(addonsAdded)
+        data.push(addonsWithQty)
         let data1 = customItemData
         data1.addons = data
 
@@ -1909,10 +1914,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                     </div>
                     :
-                    <>
-                        {customItemData?.addons.map((cb, num) => {
+                    <div className='p-16'>
+                        {Object.keys(customItemData?.addons).map((cb, num) => {
+
+                            const itemMap = customItemData?.addons[cb].addons
+
+                            console.log('itemMap', itemMap)
+
                             return (
-                                <div className='p-16 w-full flex item-center  flex-col'>
+                                <div className='py-2 w-full flex item-center  flex-col'>
 
                                     {console.log('customItemData.addo', customItemData)}
                                     <div className='flex justify-between'>
@@ -1922,7 +1932,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                             <div className='flex flex-col pl-4'>
                                                 <p className='pl-4 -mt-3'></p>
-                                                {console.log('eeeec', customItemData)}
+                                                {console.log('eeeec', customItemData, cb)}
 
                                                 {/* <p className='font-montRegular px-1 -mt-3'> {item.name},</p> */}
 
@@ -1935,7 +1945,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                     (() => {
 
-                                                        const newVar = groupBy(customItemData?.addons, 'add_on_title')
+                                                        const newVar = groupBy(itemMap, 'add_on_title')
                                                         return Object.keys(newVar).map((item, index) => {
 
                                                             const addons = newVar[item]
@@ -1954,11 +1964,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name ? addon.add_on_name : addon.text},</p>
                                                                         )
                                                                     })}
-
                                                                 </div>
-
-
-
                                                             )
                                                             // })
 
@@ -2001,8 +2007,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                     }
 
                                                 })?.qty}</span>
-
-                                                <span onClick={() => adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                                {console.log('initiatsss', initialState, customItemData)}
+                                                <span onClick={() => adjustQty(customItemData?.addons?initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                                     if (initialState.defaultVariantItem) {
                                                         if (item.defaultVariantItem) {
                                                             if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
@@ -2111,11 +2117,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             return item
                                                                         }
                                                                     }
-
-
-
-
-
                                                                 }
                                                                 else {
                                                                     // message.error('Sorry, You Cannot add more items')
@@ -2283,7 +2284,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                         })}
 
-                        <div className='flex items-center mt-8 py-4 justify-center w'>
+                        <div className='flex items-center mt-8  justify-center w'>
 
                             <button className='px-10 mx-2 py-2 self-center ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { handleConfirmAddons() }}>
 
@@ -2294,7 +2295,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                 I'll Choose
                             </button>
                         </div>
-                    </>
+                    </div>
 
 
 
