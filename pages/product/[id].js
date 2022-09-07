@@ -794,7 +794,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             setAddonsAdded([...addonsAdded, e.target.value])
             let data = addonsAdded
             data.push(e.target.value)
-            
+
             setCustomItemData({ ...customItemData, addons: data })
             console.log('combination', addonCombination)
         }
@@ -884,10 +884,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
         setAddonCombination([...addonCombination, addonsAdded])
 
-        let data=addonCombination
+        let data = addonCombination
         data.push(addonsAdded)
-        let data1=customItemData
-        data1.addons=data
+        let data1 = customItemData
+        data1.addons = data
 
         console.log('combination', addonCombination)
         itemAddToCart(data1)
@@ -1909,370 +1909,381 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                     </div>
                     :
+                    <>
+                        {customItemData?.addons.map((cb, num) => {
+                            return (
+                                <div className='p-16 w-full flex item-center  flex-col'>
 
-                    <div className='p-16 w-full flex item-center  flex-col'>
+                                    {console.log('customItemData.addo', customItemData)}
+                                    <div className='flex justify-between'>
+                                        <div>
+                                            <p className='font-montMedium px-4 text-lg '> {customItemData.item_name}</p>
+                                            {customItemData?.defaultVariantItem ? <p className='font-montMedium px-4 -mt-6'>{customItemData?.defaultVariantItem?.variant_value_1?.variant_group_name}: {customItemData?.defaultVariantItem?.variant_value_1?.variant_value_name}, {customItemData?.defaultVariantItem?.variant_value_2?.variant_group_name}: {customItemData?.defaultVariantItem?.variant_value_2?.variant_value_name} </p> : ''}
 
-                        {console.log('customItemData.addo', customItemData)}
-                        <div className='flex justify-between'>
-                            <div>
-                                <p className='font-montMedium px-4 text-lg '> {customItemData.item_name}</p>
-                                {customItemData?.defaultVariantItem ? <p className='font-montMedium px-4 -mt-6'>{customItemData?.defaultVariantItem?.variant_value_1?.variant_group_name}: {customItemData?.defaultVariantItem?.variant_value_1?.variant_value_name}, {customItemData?.defaultVariantItem?.variant_value_2?.variant_group_name}: {customItemData?.defaultVariantItem?.variant_value_2?.variant_value_name} </p> : ''}
+                                            <div className='flex flex-col pl-4'>
+                                                <p className='pl-4 -mt-3'></p>
+                                                {console.log('eeeec', customItemData)}
 
-                                <div className='flex flex-col pl-4'>
-                                    <p className='pl-4 -mt-3'></p>
-                                    {console.log('eeeec', customItemData)}
+                                                {/* <p className='font-montRegular px-1 -mt-3'> {item.name},</p> */}
 
-                                    {/* <p className='font-montRegular px-1 -mt-3'> {item.name},</p> */}
-
-                                    {/* {console.log('eeeecx', customItemData?.addons, groupBy(customItemData?.addons, 'add_on_title'))}
-
-
- */}
-
-                                    {
-
-                                        (() => {
-
-                                            const newVar = groupBy(customItemData?.addons, 'add_on_title')
-                                            return Object.keys(newVar).map((item, index) => {
-
-                                                const addons = newVar[item]
-
-                                                // Object.keys(item).map((title, index) => {
-                                                return (
+                                                {/* {console.log('eeeecx', customItemData?.addons, groupBy(customItemData?.addons, 'add_on_title'))}
 
 
+*/}
 
-                                                    <div className='flex'>
-                                                        <p className='font-montMedium px-1 -mt-3'>{item}:</p>
+                                                {
 
+                                                    (() => {
 
-                                                        {addons.map((addon, num) => {
+                                                        const newVar = groupBy(customItemData?.addons, 'add_on_title')
+                                                        return Object.keys(newVar).map((item, index) => {
+
+                                                            const addons = newVar[item]
+
+                                                            // Object.keys(item).map((title, index) => {
                                                             return (
-                                                                <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name ? addon.add_on_name : addon.text},</p>
+
+
+
+                                                                <div className='flex'>
+                                                                    <p className='font-montMedium px-1 -mt-3'>{item}:</p>
+
+
+                                                                    {addons.map((addon, num) => {
+                                                                        return (
+                                                                            <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name ? addon.add_on_name : addon.text},</p>
+                                                                        )
+                                                                    })}
+
+                                                                </div>
+
+
+
                                                             )
-                                                        })}
-
-                                                    </div>
-
-
-
-                                                )
-                                                // })
+                                                            // })
 
 
 
 
-                                            })
-
-
-                                        })()
-
-                                    }
-                                </div>
-                            </div>
-
-                            <div className='flex flex-col'>
-                                <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                    <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
-                                        if (initialState.defaultVariantItem) {
-                                            if (item.defaultVariantItem) {
-                                                if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                    return item
-                                                }
-                                            }
-                                        }
-                                        else if (item.item_id == id) {
-                                            return item
-                                        }
-                                    }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
-                                    <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
-                                        if (initialState.defaultVariantItem) {
-                                            if (item.defaultVariantItem) {
-                                                if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                    return item
-                                                }
-                                            }
-                                        }
-                                        else if (item.item_id == id) {
-                                            return item
-                                        }
-
-                                    })?.qty}</span>
-
-                                    <span onClick={() => adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
-                                        if (initialState.defaultVariantItem) {
-                                            if (item.defaultVariantItem) {
-                                                if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                    let quantity = 0
-                                                    const value = item?.defaultVariantItem?.inventory_details
-
-                                                    if (value?.inventory_quantity == null) {
-                                                        if (value?.max_order_quantity == null)
-                                                            quantity = 15
-                                                        else {
-
-                                                            quantity = value.max_order_quantity
-
-                                                        }
-                                                        // if(maxmin)
-                                                    }
-                                                    else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                        quantity = value?.inventory_quantity
-                                                        console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
-                                                    }
-                                                    else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                        quantity = value?.inventory_quantity
-                                                        console.log('value?.max_order_quantity > value?.inventory_quantity',)
-
-                                                    }
-                                                    else if (value?.max_order_quantity < value?.inventory_quantity) {
-
-                                                        quantity = value.max_order_quantity
-                                                        console.log('value?.max_order_quantity < value?.inventory_quantity',)
-                                                    }
-
-                                                    if (quantity > 0) {
-
-                                                        const filter = cart.filter((c) => {
-                                                            if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
-                                                                return c
-                                                            }
                                                         })
 
-                                                        // if (filter[0].qty >= quantity) {
-                                                        //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
-                                                        //     item.qty = item.qty - 1
-                                                        //     return item
-                                                        // }
-                                                        // else {
-                                                        //     return item
-                                                        // }
 
+                                                    })()
 
+                                                }
+                                            </div>
+                                        </div>
 
-                                                        if (value?.inventory_quantity < value?.min_order_quantity) {
-
-                                                            if (filter[0].qty < value?.inventory_quantity) {
-                                                                return item
-
-                                                            }
-
-                                                            else if (filter[0].qty >= quantity) {
-                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                    position: "bottom-right",
-                                                                    autoClose: 1000,
-                                                                    hideProgressBar: false,
-                                                                    closeOnClick: true,
-                                                                    pauseOnHover: true,
-                                                                    draggable: true,
-                                                                    progress: undefined,
-                                                                });
-
-                                                                item.qty = item.qty - 1
-
-                                                                return item
-                                                            }
-                                                            else {
-
+                                        <div className='flex flex-col'>
+                                            <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                                <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                                    if (initialState.defaultVariantItem) {
+                                                        if (item.defaultVariantItem) {
+                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
                                                                 return item
                                                             }
                                                         }
-
-                                                        else {
-                                                            if (filter[0].qty < value?.min_order_quantity) {
-                                                                return item
-
-                                                            }
-
-                                                            else if (filter[0].qty >= quantity) {
-                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-
-                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                    position: "bottom-right",
-                                                                    autoClose: 1000,
-                                                                    hideProgressBar: false,
-                                                                    closeOnClick: true,
-                                                                    pauseOnHover: true,
-                                                                    draggable: true,
-                                                                    progress: undefined,
-                                                                });
-                                                                item.qty = item.qty - 1
-
-                                                                return item
-                                                            }
-                                                            else {
-
+                                                    }
+                                                    else if (item.item_id == id) {
+                                                        return item
+                                                    }
+                                                }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
+                                                <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
+                                                    if (initialState.defaultVariantItem) {
+                                                        if (item.defaultVariantItem) {
+                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
                                                                 return item
                                                             }
                                                         }
+                                                    }
+                                                    else if (item.item_id == id) {
+                                                        return item
+                                                    }
+
+                                                })?.qty}</span>
+
+                                                <span onClick={() => adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                                    if (initialState.defaultVariantItem) {
+                                                        if (item.defaultVariantItem) {
+                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                let quantity = 0
+                                                                const value = item?.defaultVariantItem?.inventory_details
+
+                                                                if (value?.inventory_quantity == null) {
+                                                                    if (value?.max_order_quantity == null)
+                                                                        quantity = 15
+                                                                    else {
+
+                                                                        quantity = value.max_order_quantity
+
+                                                                    }
+                                                                    // if(maxmin)
+                                                                }
+                                                                else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                                                                    quantity = value?.inventory_quantity
+                                                                    console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+                                                                }
+                                                                else if (value?.max_order_quantity > value?.inventory_quantity) {
+                                                                    quantity = value?.inventory_quantity
+                                                                    console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+                                                                }
+                                                                else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+                                                                    quantity = value.max_order_quantity
+                                                                    console.log('value?.max_order_quantity < value?.inventory_quantity',)
+                                                                }
+
+                                                                if (quantity > 0) {
+
+                                                                    const filter = cart.filter((c) => {
+                                                                        if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                                                                            return c
+                                                                        }
+                                                                    })
+
+                                                                    // if (filter[0].qty >= quantity) {
+                                                                    //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                    //     item.qty = item.qty - 1
+                                                                    //     return item
+                                                                    // }
+                                                                    // else {
+                                                                    //     return item
+                                                                    // }
+
+
+
+                                                                    if (value?.inventory_quantity < value?.min_order_quantity) {
+
+                                                                        if (filter[0].qty < value?.inventory_quantity) {
+                                                                            return item
+
+                                                                        }
+
+                                                                        else if (filter[0].qty >= quantity) {
+                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                position: "bottom-right",
+                                                                                autoClose: 1000,
+                                                                                hideProgressBar: false,
+                                                                                closeOnClick: true,
+                                                                                pauseOnHover: true,
+                                                                                draggable: true,
+                                                                                progress: undefined,
+                                                                            });
+
+                                                                            item.qty = item.qty - 1
+
+                                                                            return item
+                                                                        }
+                                                                        else {
+
+                                                                            return item
+                                                                        }
+                                                                    }
+
+                                                                    else {
+                                                                        if (filter[0].qty < value?.min_order_quantity) {
+                                                                            return item
+
+                                                                        }
+
+                                                                        else if (filter[0].qty >= quantity) {
+                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                position: "bottom-right",
+                                                                                autoClose: 1000,
+                                                                                hideProgressBar: false,
+                                                                                closeOnClick: true,
+                                                                                pauseOnHover: true,
+                                                                                draggable: true,
+                                                                                progress: undefined,
+                                                                            });
+                                                                            item.qty = item.qty - 1
+
+                                                                            return item
+                                                                        }
+                                                                        else {
+
+                                                                            return item
+                                                                        }
+                                                                    }
 
 
 
 
 
+                                                                }
+                                                                else {
+                                                                    // message.error('Sorry, You Cannot add more items')
+
+
+
+                                                                    toast.error('Sorry, You Cannot add more items', {
+                                                                        position: "bottom-right",
+                                                                        autoClose: 1000,
+                                                                        hideProgressBar: false,
+                                                                        closeOnClick: true,
+                                                                        pauseOnHover: true,
+                                                                        draggable: true,
+                                                                        progress: undefined,
+                                                                    });
+
+                                                                }
+
+
+                                                            }
+                                                        }
                                                     }
                                                     else {
-                                                        // message.error('Sorry, You Cannot add more items')
+                                                        if (initialState.data) {
+                                                            let quantity
+                                                            console.log('itemsms', item)
+                                                            if (initialState.data.item_id == item.item_id) {
+                                                                if (item.inventoryDetails == null) {
+
+                                                                    // addToCart(item)
+                                                                    console.log('')
+                                                                    quantity = 15
+                                                                    // if(maxmin)
+                                                                }
+                                                                else if (item.inventoryDetails.inventory_quantity == 0) {
+                                                                    // message.error('Sorry,The Item is not available at the moment')
+                                                                    quantity = 0
+
+
+                                                                }
+                                                                else if (item.inventoryDetails.inventory_quantity != 0) {
+
+                                                                    if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
+                                                                        quantity = item.inventoryDetails?.max_order_quantity
+                                                                    }
+
+                                                                    else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                                                                        // message.error('Sorry,The Item is not available at the moment')
+                                                                        quantity = item.inventoryDetails.inventory_quantity
+                                                                    }
+                                                                    else {
+                                                                        quantity = item.inventoryDetails?.inventory_quantity
+                                                                    }
+                                                                    // }
+                                                                }
+
+
+                                                                if (quantity > 0) {
 
 
 
-                                                        toast.error('Sorry, You Cannot add more items', {
-                                                            position: "bottom-right",
-                                                            autoClose: 1000,
-                                                            hideProgressBar: false,
-                                                            closeOnClick: true,
-                                                            pauseOnHover: true,
-                                                            draggable: true,
-                                                            progress: undefined,
-                                                        });
-
-                                                    }
-
-
-                                                }
-                                            }
-                                        }
-                                        else {
-                                            if (initialState.data) {
-                                                let quantity
-                                                console.log('itemsms', item)
-                                                if (initialState.data.item_id == item.item_id) {
-                                                    if (item.inventoryDetails == null) {
-
-                                                        // addToCart(item)
-                                                        console.log('')
-                                                        quantity = 15
-                                                        // if(maxmin)
-                                                    }
-                                                    else if (item.inventoryDetails.inventory_quantity == 0) {
-                                                        // message.error('Sorry,The Item is not available at the moment')
-                                                        quantity = 0
-
-
-                                                    }
-                                                    else if (item.inventoryDetails.inventory_quantity != 0) {
-
-                                                        if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
-                                                            quantity = item.inventoryDetails?.max_order_quantity
-                                                        }
-
-                                                        else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
-                                                            // message.error('Sorry,The Item is not available at the moment')
-                                                            quantity = item.inventoryDetails.inventory_quantity
-                                                        }
-                                                        else {
-                                                            quantity = item.inventoryDetails?.inventory_quantity
-                                                        }
-                                                        // }
-                                                    }
-
-
-                                                    if (quantity > 0) {
-
-
-
-                                                        const filter = cart.filter((c) => {
-                                                            if (c.item_id == item.item_id) {
-                                                                return c
-                                                            }
-                                                        })
+                                                                    const filter = cart.filter((c) => {
+                                                                        if (c.item_id == item.item_id) {
+                                                                            return c
+                                                                        }
+                                                                    })
 
 
 
 
-                                                        if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+                                                                    if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
 
-                                                            if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
-                                                                return item
+                                                                        if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                                                                            return item
 
-                                                            }
+                                                                        }
 
-                                                            else if (filter[0].qty >= quantity) {
-                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                        else if (filter[0].qty >= quantity) {
+                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
 
-                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                    position: "bottom-right",
-                                                                    autoClose: 1000,
-                                                                    hideProgressBar: false,
-                                                                    closeOnClick: true,
-                                                                    pauseOnHover: true,
-                                                                    draggable: true,
-                                                                    progress: undefined,
-                                                                });
-
-
-                                                                item.qty = item.qty - 1
-
-                                                                return item
-                                                            }
-                                                            else {
-
-                                                                return item
-                                                            }
-                                                        }
-
-                                                        else {
-                                                            if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
-                                                                return item
-
-                                                            }
-
-                                                            else if (filter[0].qty >= quantity) {
-                                                                // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                position: "bottom-right",
+                                                                                autoClose: 1000,
+                                                                                hideProgressBar: false,
+                                                                                closeOnClick: true,
+                                                                                pauseOnHover: true,
+                                                                                draggable: true,
+                                                                                progress: undefined,
+                                                                            });
 
 
+                                                                            item.qty = item.qty - 1
 
-                                                                toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                    position: "bottom-right",
-                                                                    autoClose: 1000,
-                                                                    hideProgressBar: false,
-                                                                    closeOnClick: true,
-                                                                    pauseOnHover: true,
-                                                                    draggable: true,
-                                                                    progress: undefined,
-                                                                });
+                                                                            return item
+                                                                        }
+                                                                        else {
 
-                                                                item.qty = item.qty - 1
+                                                                            return item
+                                                                        }
+                                                                    }
 
-                                                                return item
-                                                            }
-                                                            else {
+                                                                    else {
+                                                                        if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
+                                                                            return item
 
-                                                                return item
+                                                                        }
+
+                                                                        else if (filter[0].qty >= quantity) {
+                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                position: "bottom-right",
+                                                                                autoClose: 1000,
+                                                                                hideProgressBar: false,
+                                                                                closeOnClick: true,
+                                                                                pauseOnHover: true,
+                                                                                draggable: true,
+                                                                                progress: undefined,
+                                                                            });
+
+                                                                            item.qty = item.qty - 1
+
+                                                                            return item
+                                                                        }
+                                                                        else {
+
+                                                                            return item
+                                                                        }
+                                                                    }
+
+
+
+
+
+                                                                    // addToCart(item)
+                                                                    // return item
+                                                                }
+                                                                // else {
+                                                                //     message.error('Sorry, You Cannot add more items')
+                                                                // }
+                                                                // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
+                                                                // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+
+
                                                             }
                                                         }
 
-
-
-
-
-                                                        // addToCart(item)
-                                                        // return item
                                                     }
-                                                    // else {
-                                                    //     message.error('Sorry, You Cannot add more items')
-                                                    // }
-                                                    // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
-                                                    // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+                                                }).qty + 1)} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
 
 
-                                                }
-                                            }
+                                            </div>
+                                        </div>
 
-                                        }
-                                    }).qty + 1)} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
+
+                                    </div>
 
 
                                 </div>
-                            </div>
+
+                            )
 
 
-                        </div>
-                        <div className='flex items-center mt-8 justify-center w'>
+                        })}
+
+                        <div className='flex items-center mt-8 py-4 justify-center w'>
 
                             <button className='px-10 mx-2 py-2 self-center ' style={{ color: `${storeSettings.data ? storeSettings.data.navbar_color : 'white'}`, backgroundColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }} onClick={() => { handleConfirmAddons() }}>
 
@@ -2283,10 +2294,12 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                 I'll Choose
                             </button>
                         </div>
+                    </>
 
-                    </div>
+
 
                 }
+
             </Modal>
 
         </>
