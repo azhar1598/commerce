@@ -167,5 +167,7 @@ export const POLICIES="POLICIES"
 
 export const SET_POLICIES="SET_POLICIES"
 
+export const ADD_ADDON="ADD_ADDON"
+export const DECREASE_ADDON="DECREASE_ADDON"
 
 export default wishlistActionType

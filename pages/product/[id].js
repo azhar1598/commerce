@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from "next/router";
 
 import { connect } from 'react-redux'
-import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems, searchItems } from "../../actions";
+import { fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, adjustQty, removeFromCart, getStoreDetails, getStoreId, setVariantImages, setDefaultItem, getWishlistItems, searchItems, addAddon, decreaseAddon } from "../../actions";
 import { Image, message, Rate, Spin, Tooltip, Space, Carousel, Modal, Checkbox, Input } from 'antd';
 import Link from 'next/link'
 import ReactPlayer from 'react-player'
@@ -18,6 +18,7 @@ import LoginModal from '../../components/LoginModal/LoginModal';
 import PageWrapper from '../../components/PageWrapper/PageWrapper';
 import { useRef } from "react"
 import { toast, ToastContainer } from 'react-toastify';
+import crypto from 'crypto'
 
 
 const groupBy = function (arr, key) {
@@ -33,7 +34,7 @@ const groupBy = function (arr, key) {
 
 
 
-const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems }) => {
+const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems, dispatchAddAddon,dispatchDecreaseAddon }) => {
 
 
     const { TextArea } = Input;
@@ -832,10 +833,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         if (e.target.checked) {
             console.log('eeec helo worl')
             setAddonsAdded([...addonsAdded, e.target.value])
-            let data = { qty: 1, addons: addonsAdded }
+            let data = { qty: 1, addons: addonsAdded, id: crypto.randomBytes(16).toString("hex") }
 
             data.addons.push(e.target.value)
-
             console.log('eeeecdataaa', data, customItemData, addonQuantity)
             setCustomItemData({ ...customItemData, addons: data })
 
@@ -934,7 +934,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         let data1 = customItemData
         data1.addons = data
 
-
         const sum = qtySum(data1.addons, 'qty')
         setAddonQuantity(sum)
 
@@ -953,33 +952,49 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     console.log('custtt', customItemData)
 
 
-    const handleAddonsQuantity = (data) => {
+    const handleAddonsQuantity = (data, method) => {
 
-        console.log('addonsadata', data)
-        const separateValues = data.map((item, index) => {
-            return item.add_on_option_id
-        })
-        Object.keys(customItemData?.addons).map((cb, num) => {
+        console.log('addonsadata', data, customItemData.addons)
 
-            const itemMap = customItemData?.addons[cb].addons
+        // Bringing Addon Option Values in an Array
+        // const separateValues = data.map((item, index) => {
+        //     return item.add_on_option_id
+        // })
 
-            const newVar = groupBy(itemMap, 'add_on_title')
-            const separateValues1 = Object.keys(newVar).map((item, index) => {
-                
-                const addons = newVar[item]
+        if (method == 'add')
+            dispatchAddAddon(data)
+        else
+            dispatchDecreaseAddon(data)
 
-               return addons.map((addon, num) => {
-                    console.log('addonsopt', addon.add_on_option_id)
-                    return addon.add_on_option_id
-                })
-               
-            })
 
-            console.log('addonsseparate',separateValues1[0],separateValues,separateValues1,separateValues.equals(separateValues1[0]))
-            console.log('addonsadatagro', customItemData, separateValues,separateValues1)
-            console.log('addonsaitemMap', itemMap)
-        })
-      
+        // Object.keys(customItemData?.addons).map((cb, num) => {
+
+
+        //     const itemMap = customItemData?.addons[cb].addons
+        //     // Bringing All Addon Option Values , Grouping the addon_title
+        //     const newVar = groupBy(itemMap, 'add_on_title')
+        //     const separateValues1 = Object.keys(newVar).map((item, index) => {
+        //         console.log('addonspot', itemMap)
+        //         const addons = newVar[item]
+
+        //         return addons.map((addon, num) => {
+        //             console.log('addonsopt', addon.add_on_option_id)
+        //             return addon.add_on_option_id
+        //         })
+
+        //     })
+
+        //     if (separateValues.equals(separateValues1[0])) {
+
+
+        //     }
+
+
+        //     console.log('addonsseparate', separateValues1[0], separateValues, separateValues1, separateValues.equals(separateValues1[0]))
+        //     console.log('addonsadatagro', customItemData, separateValues, separateValues1)
+        //     console.log('addonsaitemMap', itemMap)
+        // })
+
 
     }
 
@@ -1993,6 +2008,12 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                         {Object.keys(customItemData?.addons).map((cb, num) => {
 
                             const itemMap = customItemData?.addons[cb].addons
+                            console.log('customItemData.id',customItemData.id)
+                            let Unique=customItemData?.addons[cb]
+
+                            console.log('id find',customItemData?.addons[cb])
+                             const uId = Unique.id
+
 
                             console.log('itemMap', itemMap)
 
@@ -2024,7 +2045,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         return Object.keys(newVar).map((item, index) => {
 
                                                             const addons = newVar[item]
-                                                            console.log('adddddons', addons)
+                                                            console.log('adddddons', addons, newVar)
 
                                                             // Object.keys(item).map((title, index) => {
                                                             return (
@@ -2331,7 +2352,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                         }
 
                                                                                     }
-                                                                                }).qty + 1) : handleAddonsQuantity(addons)} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
+                                                                                }).qty + 1) : handleAddonsQuantity(uId, 'add')} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
 
 
                                                                         </div>
@@ -2436,6 +2457,8 @@ const mapDispatchToProps = dispatch => {
         setVariantImages: (data) => dispatch(setVariantImages(data)),
         setDefaultItem: (data) => dispatch(setDefaultItem(data)),
         dispatchWishlist: (payload) => dispatch(getWishlistItems(payload)),
+        dispatchAddAddon: (payload) => dispatch(addAddon(payload)),
+        dispatchDecreaseAddon: (payload) => dispatch(decreaseAddon(payload)),
     }
 }
 
