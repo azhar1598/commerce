@@ -29,12 +29,14 @@ const groupBy = function (arr, key) {
     }, {});
 };
 
+let actualQuantity
 
 
 
 
 
-const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems, dispatchAddAddon,dispatchDecreaseAddon }) => {
+
+const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems, dispatchAddAddon, dispatchDecreaseAddon }) => {
 
 
     const { TextArea } = Input;
@@ -199,6 +201,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist)
     const [visible, setVisible] = useState(false)
     const [wishlistId, setWishlistId] = useState()
+    const[addon]
 
 
     const [rgbaBackground, setRgbaBackground] = useState('')
@@ -2008,11 +2011,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                         {Object.keys(customItemData?.addons).map((cb, num) => {
 
                             const itemMap = customItemData?.addons[cb].addons
-                            console.log('customItemData.id',customItemData.id)
-                            let Unique=customItemData?.addons[cb]
+                            console.log('customItemData.id', customItemData.id)
+                            let Unique = customItemData?.addons[cb]
 
-                            console.log('id find',customItemData?.addons[cb])
-                             const uId = Unique.id
+                            console.log('id find', customItemData?.addons[cb])
+                            const uId = Unique.id
 
 
                             console.log('itemMap', itemMap)
@@ -2076,19 +2079,52 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                     return item
                                                                                 }
                                                                             }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
-                                                                            <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
-                                                                                if (initialState.defaultVariantItem) {
-                                                                                    if (item.defaultVariantItem) {
-                                                                                        if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                                                            return item
+
+                                                                            <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{!customItemData.addons ?
+                                                                                cart.find(function (item) {
+                                                                                    if (initialState.defaultVariantItem) {
+                                                                                        if (item.defaultVariantItem) {
+                                                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                                                return item
+                                                                                            }
                                                                                         }
                                                                                     }
-                                                                                }
-                                                                                else if (item.item_id == id) {
-                                                                                    return item
-                                                                                }
+                                                                                    else if (item.item_id == id) {
+                                                                                        return item
+                                                                                    }
 
-                                                                            })?.qty}</span>
+                                                                                })?.qty :
+                                                                                cart.find(function (item) {
+                                                                                    if (initialState.defaultVariantItem) {
+                                                                                        if (item.defaultVariantItem) {
+                                                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                                                return item
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    else if (item.item_id == id) {
+
+                                                                                        item.addons.find(addon => {
+
+                                                                                            console.log('addddonc', addon.qty, addon, addon.id, uId)
+                                                                                            if (addon.id == uId) {
+
+                                                                                                return addon.qty
+
+                                                                                            }
+
+                                                                                        })
+                                                                                    }
+
+                                                                                })
+
+
+
+
+
+
+
+                                                                            }</span>
                                                                             {console.log('initiatsss', initialState, customItemData)}
                                                                             <span onClick={() => !customItemData.addons ?
 
