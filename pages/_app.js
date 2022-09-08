@@ -50,7 +50,7 @@ function MyApp({ Component, pageProps }) {
     // compare lengths - can save a lot of time 
     if (this.length != array.length)
       return false;
-    
+
 
     for (var i = 0; i < this.length; i++) {
       // Check if we have nested arrays
@@ -75,7 +75,7 @@ function MyApp({ Component, pageProps }) {
   Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
 
- 
+
 
 
   return (

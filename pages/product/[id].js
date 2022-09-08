@@ -955,11 +955,31 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
     const handleAddonsQuantity = (data) => {
 
-        console.log('addonsadata',data)
-        const separateValues=data.map((item,index)=>{
+        console.log('addonsadata', data)
+        const separateValues = data.map((item, index) => {
             return item.add_on_option_id
         })
-        console.log('addonsadatagro',separateValues)
+        Object.keys(customItemData?.addons).map((cb, num) => {
+
+            const itemMap = customItemData?.addons[cb].addons
+
+            const newVar = groupBy(itemMap, 'add_on_title')
+            const separateValues1 = Object.keys(newVar).map((item, index) => {
+                
+                const addons = newVar[item]
+
+               return addons.map((addon, num) => {
+                    console.log('addonsopt', addon.add_on_option_id)
+                    return addon.add_on_option_id
+                })
+               
+            })
+
+            console.log('addonsseparate',separateValues1[0],separateValues,separateValues1,separateValues.equals(separateValues1[0]))
+            console.log('addonsadatagro', customItemData, separateValues,separateValues1)
+            console.log('addonsaitemMap', itemMap)
+        })
+      
 
     }
 
