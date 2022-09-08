@@ -30,6 +30,9 @@ const groupBy = function (arr, key) {
 
 
 
+
+
+
 const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, fetchSpecification, fetchAdditionalInfo, fetchRelatedItems, addToCart, cart, adjustQty, storeSettings, getStoreId, getStoreDetails, storeDetails, setVariantImages, setDefaultItem, stateCustomerDetails, stateWishlistItems, dispatchWishlist, dispatchSearchItems }) => {
 
 
@@ -50,7 +53,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [addonsAdded, setAddonsAdded] = useState([])
     const [priceWithAddon, setPriceWithAddon] = useState(initialState.defaultVariantItem ? initialState.defaultVariantItem.sale_price : initialState.data ? initialState.data.sale_price : "")
 
+    const [addonQuantity, setAddonQuantity] = useState()
+    const [customItemData, setCustomItemData] = useState()
+
     const [showCustomItemData, setShowCustomItemData] = useState(false)
+
+    const [groupByTitle, setGroupByTitle] = useState({})
+    const [addonCombination, setAddonCombination] = useState([])
+    const [addonsWithQty, setAddonsWithQty] = useState([])
+
     const [addons, setAddons] = useState(
         [{
 
@@ -192,6 +203,36 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [rgbaBackground, setRgbaBackground] = useState('')
 
     const [rgbaColor, setRgbaColor] = useState()
+
+    const qtySum = function (items, prop) {
+
+        console.log('sumqtyitems', items, prop, addonQuantity)
+        return items.reduce(function (a, b) {
+            return a + b[prop];
+        }, 0);
+    };
+
+
+
+
+
+    useEffect(() => {
+        console.log('sumQtiqua', addonQuantity)
+
+        // customItemData?.addons && Object.keys(customItemData?.addons).map((cb, num) => {
+        //     console.log('sumcbbb', cb, customItemData?.addons[cb])
+        //     if (cb == 'qty') {
+        //         const item = customItemData?.addons[cb]
+        //         sum = sum + item
+        //         console.log('sum',sum)   
+        //     } 
+        // })
+        // if(customItemData?.addons && addonCombination){
+        //        const sum= qtySum(addonCombination,'qty')
+        //        setAddonQuantity(sum)
+        //        console.log('customItemDataSum',customItemData,sum)
+        // }
+    }, [addonQuantity])
 
 
 
@@ -782,10 +823,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         setAddonsAdded([])
     }
 
-    const [customItemData, setCustomItemData] = useState()
-    const [groupByTitle, setGroupByTitle] = useState({})
-    const [addonCombination, setAddonCombination] = useState([])
-    const [addonsWithQty, setAddonsWithQty] = useState([])
+
+
 
     const handleAddonChange = (e) => {
         console.log('eeeccc', e, addonsAdded, customItemData, priceWithAddon)
@@ -797,8 +836,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
             data.addons.push(e.target.value)
 
-            console.log('eeeecdataaa', data)
+            console.log('eeeecdataaa', data, customItemData, addonQuantity)
             setCustomItemData({ ...customItemData, addons: data })
+
             setAddonsWithQty(data)
 
             console.log('combination', customItemData, addonCombination)
@@ -894,7 +934,11 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         let data1 = customItemData
         data1.addons = data
 
-        console.log('combination', addonCombination)
+
+        const sum = qtySum(data1.addons, 'qty')
+        setAddonQuantity(sum)
+
+        console.log('combination', addonCombination, sum)
         itemAddToCart(data1)
 
         setAddonVisible(false)
@@ -909,7 +953,15 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     console.log('custtt', customItemData)
 
 
+    const handleAddonsQuantity = (data) => {
 
+        console.log('addonsadata',data)
+        const separateValues=data.map((item,index)=>{
+            return item.add_on_option_id
+        })
+        console.log('addonsadatagro',separateValues)
+
+    }
 
 
 
@@ -1067,6 +1119,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                     :
                                                     <div className='flex flex-col'>
                                                         <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+
                                                             <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                                                 if (initialState.defaultVariantItem) {
                                                                     if (item.defaultVariantItem) {
@@ -1079,7 +1132,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                     return item
                                                                 }
                                                             }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
-                                                            <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
+                                                            {console.log('summinitioatstat', initialState)}
+                                                            <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{!addonQuantity ? cart.find(function (item) {
                                                                 if (initialState.defaultVariantItem) {
                                                                     if (item.defaultVariantItem) {
                                                                         if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
@@ -1092,7 +1146,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                 }
 
 
-                                                            }).qty}</span>
+                                                            }).qty : addonQuantity}</span>
+
                                                             <span onClick={() => customization ? handleCustomizationModal(initialState.data) : adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
                                                                 if (initialState.defaultVariantItem) {
                                                                     if (item.defaultVariantItem) {
@@ -1949,6 +2004,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                         return Object.keys(newVar).map((item, index) => {
 
                                                             const addons = newVar[item]
+                                                            console.log('adddddons', addons)
 
                                                             // Object.keys(item).map((title, index) => {
                                                             return (
@@ -1964,6 +2020,305 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                             <p className='font-montRegular px-1 -mt-3'>{addon.add_on_name ? addon.add_on_name : addon.text},</p>
                                                                         )
                                                                     })}
+
+                                                                    <div className='flex flex-col'>
+                                                                        <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
+                                                                            <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+                                                                                if (initialState.defaultVariantItem) {
+                                                                                    if (item.defaultVariantItem) {
+                                                                                        if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                                            return item
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                else if (item.item_id == id) {
+                                                                                    return item
+                                                                                }
+                                                                            }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
+                                                                            <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
+                                                                                if (initialState.defaultVariantItem) {
+                                                                                    if (item.defaultVariantItem) {
+                                                                                        if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                                            return item
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                else if (item.item_id == id) {
+                                                                                    return item
+                                                                                }
+
+                                                                            })?.qty}</span>
+                                                                            {console.log('initiatsss', initialState, customItemData)}
+                                                                            <span onClick={() => !customItemData.addons ?
+
+                                                                                adjustQty(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
+
+                                                                                    if (initialState.defaultVariantItem) {
+                                                                                        if (item.defaultVariantItem) {
+                                                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
+                                                                                                let quantity = 0
+                                                                                                const value = item?.defaultVariantItem?.inventory_details
+
+                                                                                                if (value?.inventory_quantity == null) {
+                                                                                                    if (value?.max_order_quantity == null)
+                                                                                                        quantity = 15
+                                                                                                    else {
+
+                                                                                                        quantity = value.max_order_quantity
+
+                                                                                                    }
+                                                                                                    // if(maxmin)
+                                                                                                }
+                                                                                                else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
+                                                                                                    quantity = value?.inventory_quantity
+                                                                                                    console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
+                                                                                                }
+                                                                                                else if (value?.max_order_quantity > value?.inventory_quantity) {
+                                                                                                    quantity = value?.inventory_quantity
+                                                                                                    console.log('value?.max_order_quantity > value?.inventory_quantity',)
+
+                                                                                                }
+                                                                                                else if (value?.max_order_quantity < value?.inventory_quantity) {
+
+                                                                                                    quantity = value.max_order_quantity
+                                                                                                    console.log('value?.max_order_quantity < value?.inventory_quantity',)
+                                                                                                }
+
+                                                                                                if (quantity > 0) {
+
+                                                                                                    const filter = cart.filter((c) => {
+                                                                                                        if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
+                                                                                                            return c
+                                                                                                        }
+                                                                                                    })
+
+                                                                                                    // if (filter[0].qty >= quantity) {
+                                                                                                    //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                                                                                    //     item.qty = item.qty - 1
+                                                                                                    //     return item
+                                                                                                    // }
+                                                                                                    // else {
+                                                                                                    //     return item
+                                                                                                    // }
+
+
+
+                                                                                                    if (value?.inventory_quantity < value?.min_order_quantity) {
+
+                                                                                                        if (filter[0].qty < value?.inventory_quantity) {
+                                                                                                            return item
+
+                                                                                                        }
+
+                                                                                                        else if (filter[0].qty >= quantity) {
+                                                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                                                position: "bottom-right",
+                                                                                                                autoClose: 1000,
+                                                                                                                hideProgressBar: false,
+                                                                                                                closeOnClick: true,
+                                                                                                                pauseOnHover: true,
+                                                                                                                draggable: true,
+                                                                                                                progress: undefined,
+                                                                                                            });
+
+                                                                                                            item.qty = item.qty - 1
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                        else {
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    else {
+                                                                                                        if (filter[0].qty < value?.min_order_quantity) {
+                                                                                                            return item
+
+                                                                                                        }
+
+                                                                                                        else if (filter[0].qty >= quantity) {
+                                                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+                                                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                                                position: "bottom-right",
+                                                                                                                autoClose: 1000,
+                                                                                                                hideProgressBar: false,
+                                                                                                                closeOnClick: true,
+                                                                                                                pauseOnHover: true,
+                                                                                                                draggable: true,
+                                                                                                                progress: undefined,
+                                                                                                            });
+                                                                                                            item.qty = item.qty - 1
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                        else {
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                else {
+                                                                                                    // message.error('Sorry, You Cannot add more items')
+
+
+
+                                                                                                    toast.error('Sorry, You Cannot add more items', {
+                                                                                                        position: "bottom-right",
+                                                                                                        autoClose: 1000,
+                                                                                                        hideProgressBar: false,
+                                                                                                        closeOnClick: true,
+                                                                                                        pauseOnHover: true,
+                                                                                                        draggable: true,
+                                                                                                        progress: undefined,
+                                                                                                    });
+
+                                                                                                }
+
+
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    else {
+                                                                                        if (initialState.data) {
+                                                                                            let quantity
+                                                                                            console.log('itemsms', item)
+                                                                                            if (initialState.data.item_id == item.item_id) {
+                                                                                                if (item.inventoryDetails == null) {
+
+                                                                                                    // addToCart(item)
+                                                                                                    console.log('')
+                                                                                                    quantity = 15
+                                                                                                    // if(maxmin)
+                                                                                                }
+                                                                                                else if (item.inventoryDetails.inventory_quantity == 0) {
+                                                                                                    // message.error('Sorry,The Item is not available at the moment')
+                                                                                                    quantity = 0
+
+
+                                                                                                }
+                                                                                                else if (item.inventoryDetails.inventory_quantity != 0) {
+
+                                                                                                    if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
+                                                                                                        quantity = item.inventoryDetails?.max_order_quantity
+                                                                                                    }
+
+                                                                                                    else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
+                                                                                                        // message.error('Sorry,The Item is not available at the moment')
+                                                                                                        quantity = item.inventoryDetails.inventory_quantity
+                                                                                                    }
+                                                                                                    else {
+                                                                                                        quantity = item.inventoryDetails?.inventory_quantity
+                                                                                                    }
+                                                                                                    // }
+                                                                                                }
+
+
+                                                                                                if (quantity > 0) {
+
+
+
+                                                                                                    const filter = cart.filter((c) => {
+                                                                                                        if (c.item_id == item.item_id) {
+                                                                                                            return c
+                                                                                                        }
+                                                                                                    })
+
+
+
+
+                                                                                                    if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
+
+                                                                                                        if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
+                                                                                                            return item
+
+                                                                                                        }
+
+                                                                                                        else if (filter[0].qty >= quantity) {
+                                                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                                                position: "bottom-right",
+                                                                                                                autoClose: 1000,
+                                                                                                                hideProgressBar: false,
+                                                                                                                closeOnClick: true,
+                                                                                                                pauseOnHover: true,
+                                                                                                                draggable: true,
+                                                                                                                progress: undefined,
+                                                                                                            });
+
+
+                                                                                                            item.qty = item.qty - 1
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                        else {
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    else {
+                                                                                                        if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
+                                                                                                            return item
+
+                                                                                                        }
+
+                                                                                                        else if (filter[0].qty >= quantity) {
+                                                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+
+
+                                                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
+                                                                                                                position: "bottom-right",
+                                                                                                                autoClose: 1000,
+                                                                                                                hideProgressBar: false,
+                                                                                                                closeOnClick: true,
+                                                                                                                pauseOnHover: true,
+                                                                                                                draggable: true,
+                                                                                                                progress: undefined,
+                                                                                                            });
+
+                                                                                                            item.qty = item.qty - 1
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                        else {
+
+                                                                                                            return item
+                                                                                                        }
+                                                                                                    }
+
+
+
+
+
+                                                                                                    // addToCart(item)
+                                                                                                    // return item
+                                                                                                }
+                                                                                                // else {
+                                                                                                //     message.error('Sorry, You Cannot add more items')
+                                                                                                // }
+                                                                                                // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
+                                                                                                // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+
+
+                                                                                            }
+                                                                                        }
+
+                                                                                    }
+                                                                                }).qty + 1) : handleAddonsQuantity(addons)} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
+
+
+                                                                        </div>
+                                                                    </div>
+
+
+
                                                                 </div>
                                                             )
                                                             // })
@@ -1980,298 +2335,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                             </div>
                                         </div>
 
-                                        <div className='flex flex-col'>
-                                            <div className='border space-x-9  flex items-center mt-3' style={{ backgroundColor: "white", color: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}>
-                                                <span onClick={() => handleDecreaseQuantity(initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
-                                                    if (initialState.defaultVariantItem) {
-                                                        if (item.defaultVariantItem) {
-                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                                return item
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (item.item_id == id) {
-                                                        return item
-                                                    }
-                                                }).qty - 1)} className={`px-3 py-2 text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><MinusOutlined /></span>
-                                                <span className={` text-2xl `} style={{ color: `${storeSettings.data ? storeSettings.data.primary_color : 'white'}`, }}>{cart.find(function (item) {
-                                                    if (initialState.defaultVariantItem) {
-                                                        if (item.defaultVariantItem) {
-                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                                return item
-                                                            }
-                                                        }
-                                                    }
-                                                    else if (item.item_id == id) {
-                                                        return item
-                                                    }
-
-                                                })?.qty}</span>
-                                                {console.log('initiatsss', initialState, customItemData)}
-                                                <span onClick={() => adjustQty(customItemData?.addons?initialState.defaultVariantItem ? initialState.defaultVariantItem.variant_item_id : id, cart.find(function (item) {
-                                                    if (initialState.defaultVariantItem) {
-                                                        if (item.defaultVariantItem) {
-                                                            if (item.defaultVariantItem.variant_item_id == initialState.defaultVariantItem.variant_item_id) {
-                                                                let quantity = 0
-                                                                const value = item?.defaultVariantItem?.inventory_details
-
-                                                                if (value?.inventory_quantity == null) {
-                                                                    if (value?.max_order_quantity == null)
-                                                                        quantity = 15
-                                                                    else {
-
-                                                                        quantity = value.max_order_quantity
-
-                                                                    }
-                                                                    // if(maxmin)
-                                                                }
-                                                                else if (value?.inventory_quantity != null && value?.max_order_quantity == null) {
-                                                                    quantity = value?.inventory_quantity
-                                                                    console.log('value?.inventory_quantity != null && value?.max_order_quantity == null',)
-                                                                }
-                                                                else if (value?.max_order_quantity > value?.inventory_quantity) {
-                                                                    quantity = value?.inventory_quantity
-                                                                    console.log('value?.max_order_quantity > value?.inventory_quantity',)
-
-                                                                }
-                                                                else if (value?.max_order_quantity < value?.inventory_quantity) {
-
-                                                                    quantity = value.max_order_quantity
-                                                                    console.log('value?.max_order_quantity < value?.inventory_quantity',)
-                                                                }
-
-                                                                if (quantity > 0) {
-
-                                                                    const filter = cart.filter((c) => {
-                                                                        if (c.defaultVariantItem?.variant_item_id == item.defaultVariantItem.variant_item_id) {
-                                                                            return c
-                                                                        }
-                                                                    })
-
-                                                                    // if (filter[0].qty >= quantity) {
-                                                                    //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
-                                                                    //     item.qty = item.qty - 1
-                                                                    //     return item
-                                                                    // }
-                                                                    // else {
-                                                                    //     return item
-                                                                    // }
-
-
-
-                                                                    if (value?.inventory_quantity < value?.min_order_quantity) {
-
-                                                                        if (filter[0].qty < value?.inventory_quantity) {
-                                                                            return item
-
-                                                                        }
-
-                                                                        else if (filter[0].qty >= quantity) {
-                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                                position: "bottom-right",
-                                                                                autoClose: 1000,
-                                                                                hideProgressBar: false,
-                                                                                closeOnClick: true,
-                                                                                pauseOnHover: true,
-                                                                                draggable: true,
-                                                                                progress: undefined,
-                                                                            });
-
-                                                                            item.qty = item.qty - 1
-
-                                                                            return item
-                                                                        }
-                                                                        else {
-
-                                                                            return item
-                                                                        }
-                                                                    }
-
-                                                                    else {
-                                                                        if (filter[0].qty < value?.min_order_quantity) {
-                                                                            return item
-
-                                                                        }
-
-                                                                        else if (filter[0].qty >= quantity) {
-                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-
-                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                                position: "bottom-right",
-                                                                                autoClose: 1000,
-                                                                                hideProgressBar: false,
-                                                                                closeOnClick: true,
-                                                                                pauseOnHover: true,
-                                                                                draggable: true,
-                                                                                progress: undefined,
-                                                                            });
-                                                                            item.qty = item.qty - 1
-
-                                                                            return item
-                                                                        }
-                                                                        else {
-
-                                                                            return item
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else {
-                                                                    // message.error('Sorry, You Cannot add more items')
-
-
-
-                                                                    toast.error('Sorry, You Cannot add more items', {
-                                                                        position: "bottom-right",
-                                                                        autoClose: 1000,
-                                                                        hideProgressBar: false,
-                                                                        closeOnClick: true,
-                                                                        pauseOnHover: true,
-                                                                        draggable: true,
-                                                                        progress: undefined,
-                                                                    });
-
-                                                                }
-
-
-                                                            }
-                                                        }
-                                                    }
-                                                    else {
-                                                        if (initialState.data) {
-                                                            let quantity
-                                                            console.log('itemsms', item)
-                                                            if (initialState.data.item_id == item.item_id) {
-                                                                if (item.inventoryDetails == null) {
-
-                                                                    // addToCart(item)
-                                                                    console.log('')
-                                                                    quantity = 15
-                                                                    // if(maxmin)
-                                                                }
-                                                                else if (item.inventoryDetails.inventory_quantity == 0) {
-                                                                    // message.error('Sorry,The Item is not available at the moment')
-                                                                    quantity = 0
-
-
-                                                                }
-                                                                else if (item.inventoryDetails.inventory_quantity != 0) {
-
-                                                                    if (item.inventoryDetails.inventory_quantity > item.inventoryDetails?.max_order_quantity) {
-                                                                        quantity = item.inventoryDetails?.max_order_quantity
-                                                                    }
-
-                                                                    else if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
-                                                                        // message.error('Sorry,The Item is not available at the moment')
-                                                                        quantity = item.inventoryDetails.inventory_quantity
-                                                                    }
-                                                                    else {
-                                                                        quantity = item.inventoryDetails?.inventory_quantity
-                                                                    }
-                                                                    // }
-                                                                }
-
-
-                                                                if (quantity > 0) {
-
-
-
-                                                                    const filter = cart.filter((c) => {
-                                                                        if (c.item_id == item.item_id) {
-                                                                            return c
-                                                                        }
-                                                                    })
-
-
-
-
-                                                                    if (item.inventoryDetails?.inventory_quantity < item.inventoryDetails?.min_order_quantity) {
-
-                                                                        if (filter[0].qty < item.inventoryDetails.inventory_quantity) {
-                                                                            return item
-
-                                                                        }
-
-                                                                        else if (filter[0].qty >= quantity) {
-                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                                position: "bottom-right",
-                                                                                autoClose: 1000,
-                                                                                hideProgressBar: false,
-                                                                                closeOnClick: true,
-                                                                                pauseOnHover: true,
-                                                                                draggable: true,
-                                                                                progress: undefined,
-                                                                            });
-
-
-                                                                            item.qty = item.qty - 1
-
-                                                                            return item
-                                                                        }
-                                                                        else {
-
-                                                                            return item
-                                                                        }
-                                                                    }
-
-                                                                    else {
-                                                                        if (filter[0].qty < item.inventoryDetails?.min_order_quantity) {
-                                                                            return item
-
-                                                                        }
-
-                                                                        else if (filter[0].qty >= quantity) {
-                                                                            // message.error(`Sorry, You Cannot add more than ${quantity} items`)
-
-
-
-                                                                            toast.error(`Sorry, You Cannot add more than ${quantity} items`, {
-                                                                                position: "bottom-right",
-                                                                                autoClose: 1000,
-                                                                                hideProgressBar: false,
-                                                                                closeOnClick: true,
-                                                                                pauseOnHover: true,
-                                                                                draggable: true,
-                                                                                progress: undefined,
-                                                                            });
-
-                                                                            item.qty = item.qty - 1
-
-                                                                            return item
-                                                                        }
-                                                                        else {
-
-                                                                            return item
-                                                                        }
-                                                                    }
-
-
-
-
-
-                                                                    // addToCart(item)
-                                                                    // return item
-                                                                }
-                                                                // else {
-                                                                //     message.error('Sorry, You Cannot add more items')
-                                                                // }
-                                                                // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
-                                                                // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
-
-
-                                                            }
-                                                        }
-
-                                                    }
-                                                }).qty + 1)} className={`py-2  px-5   text-xl cursor-pointer`} style={{ backgroundColor: `${storeSettings.data ? rgbaBackground : 'black'}`, color: `${storeSettings.data ? rgbaColor : 'white'}`, borderColor: `${storeSettings.data ? storeSettings.data.secondary_color : 'black'}` }}><PlusOutlined className='' /></span>
-
-
-                                            </div>
-                                        </div>
 
 
                                     </div>
