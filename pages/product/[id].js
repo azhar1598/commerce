@@ -29,7 +29,7 @@ const groupBy = function (arr, key) {
     }, {});
 };
 
-let actualQuantity
+
 
 
 
@@ -201,7 +201,6 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist)
     const [visible, setVisible] = useState(false)
     const [wishlistId, setWishlistId] = useState()
-    const[addon]
 
 
     const [rgbaBackground, setRgbaBackground] = useState('')
@@ -212,7 +211,7 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
         console.log('sumqtyitems', items, prop, addonQuantity)
         return items.reduce(function (a, b) {
-            return a + b[prop];
+            return parseInt(a) + parseInt(b[prop]);
         }, 0);
     };
 
@@ -834,12 +833,17 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
         console.log('eeeccc', e, addonsAdded, customItemData, priceWithAddon)
 
         if (e.target.checked) {
-            console.log('eeec helo worl')
+            console.log('eeec helo worl',addonsAdded)
             setAddonsAdded([...addonsAdded, e.target.value])
             let data = { qty: 1, addons: addonsAdded, id: crypto.randomBytes(16).toString("hex") }
 
             data.addons.push(e.target.value)
             console.log('eeeecdataaa', data, customItemData, addonQuantity)
+
+            const quantitySum = qtySum(data.addons, 'price')
+
+            setPriceWithAddon(parseInt(initialState.defaultVariantItem ? initialState.defaultVariantItem.sale_price : initialState.data ? initialState.data.sale_price : "")+quantitySum)
+
             setCustomItemData({ ...customItemData, addons: data })
 
             setAddonsWithQty(data)
@@ -852,6 +856,10 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
             })
             let data = filterData
             setAddonsAdded(filterData)
+console.log('filterDataaa',filterData)
+
+            const quantitySum = filterData?qtySum(filterData, 'price'):0
+            setPriceWithAddon(parseInt(initialState.defaultVariantItem ? initialState.defaultVariantItem.sale_price : initialState.data ? initialState.data.sale_price : "")+quantitySum)
 
             setCustomItemData({ ...customItemData, addons: data })
             console.log('eeecc filter', filterData)
@@ -904,15 +912,17 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
     useEffect(() => {
 
         if (addonsAdded.length != 0) {
-            Object.keys(addons1).map((mapId, index) => {
-                const item = addons1[mapId]
+            // Object.keys(addons1).map((mapId, index) => {
+            //     const item = addons1[mapId]
 
-                item.add_on_options?.map((value, index) => {
-                    let data = value.price + parseInt(priceWithAddon)
-                    console.log(typeof (priceWithAddon))
-                    setPriceWithAddon(data)
-                })
-            })
+            //     item.add_on_options?.map((value, index) => {
+            //         let data = value.price + parseInt(priceWithAddon)
+            //         console.log(typeof (priceWithAddon))
+            //         setPriceWithAddon(data)
+
+            // qtySum()
+            //     })
+            // })
             // addonsAdded.map((item, index) => {
 
             // })
@@ -2093,7 +2103,9 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
                                                                                         return item
                                                                                     }
 
-                                                                                })?.qty :
+                                                                                })?.qty 
+                                                                                :
+                                                                                
                                                                                 cart.find(function (item) {
                                                                                     if (initialState.defaultVariantItem) {
                                                                                         if (item.defaultVariantItem) {
@@ -2108,8 +2120,8 @@ const Index = ({ removeFromCart, initialState, fetchItemDetails, fetchVariants, 
 
                                                                                             console.log('addddonc', addon.qty, addon, addon.id, uId)
                                                                                             if (addon.id == uId) {
-
-                                                                                                return addon.qty
+                                                                                                
+                                                                                                return 10
 
                                                                                             }
 
