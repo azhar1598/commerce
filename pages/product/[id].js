@@ -413,7 +413,7 @@ const Index = ({
           }
         })
         .filter(Boolean);
-      debugger;
+      
 
       const selectedDefaultVariant = defaultVar.map((e) => e.variant_value_id);
       const selectedVariants = defaultVar.map(
@@ -868,12 +868,15 @@ const Index = ({
     variantValueId,
     variant_value_name
   ) => {
-    debugger;
+    
     selectedVariantStyle[indices - 1] = variantValueId;
     setselectedVariant({
       variant_value_id: variantValueId,
       variant_value_name,
     });
+
+   const filteredAdds = customItemData?.addons.filter(item => item.variant_value_id === variantValueId) || [];
+    !filteredAdds.length >0 && setShowCustomItemData(false);
     let variantvalue = {};
     variantvalue[`variant_value_${indices}`] = variantValueId;
     const allVariants = await fetchVariantItemById(id, variantvalue);
@@ -1107,7 +1110,7 @@ const Index = ({
 
   const handleAddonChange = (e) => {
     if (e.target.checked) {
-      debugger;
+      
       const sortedAddons = addonsAdded.sort((a, b) =>
         a.add_on_name > b.add_on_name ? 1 : -1
       );
@@ -1216,7 +1219,7 @@ const Index = ({
     setAddonsWithQty(addWithQty);
   };
 
-  const handleCustomizationModal = (data) => {
+  const handleCustomizationModal = (data = []) => {
     setCustomItemData(confrmAddonCombination);
     const addonConfirm = confrmAddonCombination?.addons || [];
     setAddonCombination(addonConfirm);
@@ -1440,13 +1443,35 @@ const Index = ({
     // })
   };
 
+  const getAddonQuantity = () => {
+
+    let qty = 0;
+
+    if(initialState?.defaultVariantItem)
+    {
+      const filter = confrmAddonCombination?.addons?.filter(item => variantFilter(item))
+
+      const quantity = qtySum(filter, "qty");
+
+      qty = quantity;
+
+
+    }
+    else
+    {
+      qty = qtySum(confrmAddonCombination?.addons, "qty");
+    }
+
+    return qty
+  }
+
   console.log(
     "selected variant >>>>>>>>>>>>>>",
     selectedVariant,
-    "addoon combination",
-    addonCombination,
+    "initial data",
+    initialState,
     " customitem data",
-    customItemData
+    customItemData, 'addons added >>>>>>>>>>>>>>>>>>', addonsAdded
   );
   return initialState && !initialState.loading && !loadingVariants ? (
     <>
@@ -1773,7 +1798,6 @@ const Index = ({
               {isDesktopOrLaptop ? (
                 <div className="flex">
                   <div className="flex items-center space-x-5">
-                    {console.log("initialSTtae", initialState)}
                     {(initialState.defaultVariantItem &&
                       initialState.defaultVariantItem.variant_item_status ==
                         "UNAVAILABLE") ||
@@ -1859,30 +1883,7 @@ const Index = ({
                           }}
                         >
                           <span
-                            onClick={() =>
-                              handleDecreaseQuantity(
-                                initialState.defaultVariantItem
-                                  ? initialState.defaultVariantItem
-                                      .variant_item_id
-                                  : id,
-                                cart.find(function (item) {
-                                  if (initialState.defaultVariantItem) {
-                                    if (item.defaultVariantItem) {
-                                      if (
-                                        item.defaultVariantItem
-                                          .variant_item_id ==
-                                        initialState.defaultVariantItem
-                                          .variant_item_id
-                                      ) {
-                                        return item;
-                                      }
-                                    }
-                                  } else if (item.item_id == id) {
-                                    return item;
-                                  }
-                                }).qty - 1
-                              )
-                            }
+                            onClick={customization ? handleCustomizationModal: adjustQty }
                             className={`px-3 py-2 text-xl cursor-pointer`}
                             style={{
                               backgroundColor: `${
@@ -1928,7 +1929,7 @@ const Index = ({
                                     return item;
                                   }
                                 }).qty
-                              : addonQuantity}
+                              : getAddonQuantity()}
                           </span>
 
                           <span
@@ -3079,7 +3080,7 @@ const Index = ({
                 }`,
               }}
               onClick={
-                addonsAdded.length < 2
+                (addonsAdded?.filter(item => item.add_on_title === "Toppings on the Pizza") || []).length < 2
                   ? () => {
                       message.error("addons should be more than 1");
                     }
@@ -3122,12 +3123,14 @@ const Index = ({
 
                             {customItemData?.defaultVariantItem ? (
                               <p className="font-montMedium px-4 -mt-6">
-                                {
+                                 {
                                   customItemData?.defaultVariantItem
                                     ?.variant_value_1?.variant_group_name
                                 }
                                 :{" "}
-                                {
+                                
+
+                                {/* {
                                   customItemData?.defaultVariantItem
                                     ?.variant_value_1?.variant_value_name
                                 }
@@ -3140,7 +3143,10 @@ const Index = ({
                                 {
                                   customItemData?.defaultVariantItem
                                     ?.variant_value_2?.variant_value_name
-                                }{" "}
+                                }{" "} */}
+                                {
+                                  itemMap?.variant_value_name
+                                }
                               </p>
                             ) : (
                               ""
