@@ -841,10 +841,7 @@ const Index = ({ storeSettings, addToCart, removeFromCart, adjustQty, cart, chec
                                                 <span className='text-black-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_3?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : ''}</p> : ''}
 
 
-                                                {item.defaultVariantItem ? <p className='text-sm font-montSemiBold -mt-4'>
-                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_1?.variant_group_name}:` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_1?.variant_value_name : ''}
-                                                <span className='text-gray-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_2?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_2?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_2?.variant_value_name : ''}
-                                                <span className='text-black-500'>{item.defaultVariantItem ? `${item.defaultVariantItem.variant_value_3?.variant_group_name ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:` : ''}` : ''}</span> {item.defaultVariantItem ? item.defaultVariantItem.variant_value_3?.variant_value_name : ''}</p> : ''}
+                                              
 
 
                                                 

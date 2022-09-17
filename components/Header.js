@@ -19,7 +19,7 @@ import { toast, ToastContainer } from 'react-toastify'
 
 
 
-const Header = ({ cart, isLoggedIn, storeSettings, searchItems, storeDetails, storeDetailsReducer, customerDetails, stateMobileSearch, dispatchMobileSearch, searchedItem }) => {
+const Header = ({ cart=[], isLoggedIn, storeSettings, searchItems, storeDetails, storeDetailsReducer, customerDetails, stateMobileSearch, dispatchMobileSearch, searchedItem }) => {
 
     const cartQuantity = cart.map(item => item.qty).reduce((partialSum, a) => partialSum + a, 0);
 

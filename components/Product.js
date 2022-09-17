@@ -1330,7 +1330,7 @@ export const Product = (props) => {
  */}
 
 
-                                    {props.cart.find(product => product.item_id == props.item.item_id) ?
+                                    {(props.cart || []).find(product => product.item_id == props.item.item_id) ?
 
 
 
@@ -1369,7 +1369,7 @@ export const Product = (props) => {
  */}
 
 
-                                {props.cart.find(product => product.item_id == props.item.item_id) ?
+                                {props.cart?.find(product => product.item_id == props.item.item_id) ?
 
 
 
