@@ -19,7 +19,7 @@ import {
   searchItems,
   addAddon,
   decreaseAddon,
-  addBulkCart
+  addBulkCart,
 } from "../../actions";
 import {
   Image,
@@ -124,7 +124,7 @@ const Index = ({
   const [addonQuantity, setAddonQuantity] = useState();
   const [customItemData, setCustomItemData] = useState();
 
-  const [showCustomItemData, setShowCustomItemData] = useState(true);
+  const [showCustomItemData, setShowCustomItemData] = useState();
 
   const [groupByTitle, setGroupByTitle] = useState({});
   const [addonCombination, setAddonCombination] = useState([]);
@@ -347,19 +347,22 @@ const Index = ({
       console.log(
         "selected cart item",
         item,
+        initialState.defaultVariantItem?.variant_item_id,
+        item.defaultVariantItem?.variant_item_id,
         item.defaultVariantItem != null &&
           item.defaultVariantItem?.variant_item_id ==
             initialState.defaultVariantItem?.variant_item_id,
         item.item_id == initialState.data?.item_id
       );
-
-      if (
-        item.defaultVariantItem != null &&
-        item.defaultVariantItem.variant_item_id ==
-          initialState?.defaultVariantItem?.variant_item_id
-      ) {
-        console.log("selected te def", item);
-        return item;
+      if (initialState.defaultVariantItem) {
+        if (
+          item.defaultVariantItem != null &&
+          item.defaultVariantItem.variant_item_id ==
+            initialState?.defaultVariantItem?.variant_item_id
+        ) {
+          console.log("selected te def", item);
+          return item;
+        }
       } else if (item.item_id == initialState.data?.item_id) {
         console.log("selected te", item);
         return item;
@@ -407,7 +410,6 @@ const Index = ({
 
   useEffect(() => {
     if (initialState?.defaultVariantItem) {
-      ;
       const defaultVar = Object.keys(initialState.defaultVariantItem)
         .map((key) => {
           if (key.includes("variant_value")) {
@@ -439,52 +441,62 @@ const Index = ({
 
   // ========================================= ON CART UPDATE ASSIGN ADDONS TO ADDONCOMBINATION ================================ //
 
-  useEffect(() => {
-    const selectedItem = cart?.find((item) => {
-      if (
-        item.defaultVariantItem != null &&
-        item.defaultVariantItem.variant_item_id ==
-          initialState?.defaultVariantItem?.variant_item_id
-      ) {
-        console.log("selected te def", item);
-        return item;
-      } else if (item.item_id == initialState.data?.item_id) {
-        console.log("selected te", item);
-        setAddonCombination(selectedItem?.addons || []);
+  //   useEffect(() => {
+  //     console.log("naviiiis", cart);
+  //     const selectedItem = cart?.find((item) => {
+  //         console.log("naviiii", item,cart);
+  //         if (item.item_id == initialState.data?.item_id) {
+  //             if (initialState?.defaultVariantItem) {
+  //                 if (
+  //                     item.defaultVariantItem.variant_item_id ==
+  //                     initialState?.defaultVariantItem?.variant_item_id
+  //                 ) {
 
-        return item;
-      }
-    });
+  //                     return true;
+  //                 } else {
+  //                     return false;
+  //                 }
 
-    setAddonCombination(selectedItem?.addons || []);
-    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+  //             } else {
+  //                 console.log("selected te", item, selectedItem);
+  //                 //   setAddonCombination(selectedItem?.addons || []);
+  //                 return true;
+  //             }
+  //         } else {
+  //             return false;
+  //         }
+  //     });
 
-    console.log("selected Item", initialState, selectedItem, cart);
-  }, [cart]);
+  //     console.log("selectedItem,,,,", selectedItem);
+  //     setAddonCombination(selectedItem?.addons || []);
+  //     setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+
+  //     console.log("selected Item", initialState, selectedItem, cart);
+  // }, [initialState,cart])
 
   // ========================================= ON FIRST TIME ASSIGN ADDONS TO ADDONCOMBINATION ================================ //
-  useEffect(() => {
-    const selectedItem = cart?.find((item) => {
-      if (
-        item.defaultVariantItem != null &&
-        item.defaultVariantItem.variant_item_id ==
-          initialState?.defaultVariantItem?.variant_item_id
-      ) {
-        console.log("selected te def", item);
-        return item;
-      } else if (item.item_id == initialState.data?.item_id) {
-        console.log("selected te", item);
-        setAddonCombination(selectedItem?.addons || []);
+  //   useEffect(() => {
+  //     const selectedItem = cart?.find((item) => {
+  //       if (
+  //         item.defaultVariantItem != null &&
+  //         item.defaultVariantItem.variant_item_id ==
+  //         initialState?.defaultVariantItem?.variant_item_id
+  //       ) {
+  //         console.log("selected te def", item);
+  //         return item;
+  //       } else if (item.item_id == initialState.data?.item_id) {
+  //         console.log("selected te", item);
+  //         setAddonCombination(selectedItem?.addons || []);
 
-        return item;
-      }
-    });
+  //         return item;
+  //       }
+  //     });
 
-    setAddonCombination(selectedItem?.addons || []);
-    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+  //     setAddonCombination(selectedItem?.addons || []);
+  //     setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
 
-    console.log("selected Item", initialState, selectedItem, cart);
-  }, []);
+  //     console.log("selected Item", initialState, selectedItem, cart);
+  //   }, []);
 
   const colorVariants = [
     "COLOUR",
@@ -506,17 +518,19 @@ const Index = ({
 
   const getUpdatedAddonsFromCart = () => {
     const selectedItem = cart?.find((item) => {
-      if (
-        item.defaultVariantItem != null &&
-        item.defaultVariantItem.variant_item_id ==
-          selectedVariant.variant_item_id
-      ) {
-        console.log("selected te def", item);
-        return item;
-      } else if (item.item_id == initialState.data?.item_id) {
-        console.log("selected te", item);
-        setAddonCombination(selectedItem?.addons || []);
+      if (initialState.variants.length > 0) {
+        if (
+          item.defaultVariantItem != null &&
+          item.defaultVariantItem.variant_item_id ==
+            selectedVariant.variant_item_id
+        ) {
+          console.log("has variant", item);
 
+          return item;
+        }
+      } else if (item.item_id == initialState.data?.item_id) {
+        console.log("doesn't have variant", item);
+        setAddonCombination(selectedItem?.addons || []);
         return item;
       }
     });
@@ -939,7 +953,6 @@ const Index = ({
     variantValueId,
     variant_value_name
   ) => {
-    ;
     selectedVariantStyle[indices - 1] = variantValueId;
     // setselectedVariant({
     //   variant_value_id: variantValueId,
@@ -1187,9 +1200,12 @@ const Index = ({
       const sortedAddons = addonsAdded.sort((a, b) =>
         a.add_on_name > b.add_on_name ? 1 : -1
       );
+
+      console.log("sortedAddons", sortedAddons);
+
       setAddonsAdded([...sortedAddons, e.target.value]);
 
-      if (initialState.variants.length && initialState.variants.length > 0) {
+      if (initialState?.variants?.length && initialState.variants.length > 0) {
         let data = {
           qty: 1,
           variant_item_id: selectedVariant?.variant_item_id,
@@ -1332,7 +1348,6 @@ const Index = ({
   };
 
   const isDuplicateCart = (addons, duplicate) => {
-    ;
     console.log("duplicate");
     const addonsCombin = addons.map((addon) => {
       return addon?.id === duplicate?.id
@@ -1363,74 +1378,73 @@ const Index = ({
     // setCustomItemData({ ...customItemData, addons: addonsAdded })
     let getAddons = getUpdatedAddonsFromCart() || [];
 
+    console.log("getAddons", getAddons, addonCombination);
+
     if (addonCombination.length || getAddons?.length) {
       let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
       let addonCombinationGroupby;
-      ;
       console.log("length greater than 1");
       if (initialState.variants.length) {
-        let duplicate = getAddons
-          .filter((item) => variantFilter(item))
-          .find((item) => {
-            addonCombinationGroupby = groupBy(item.addons, "add_on_title");
-            return (
-              JSON.stringify(addonCombinationGroupby) ===
-              JSON.stringify(groupByaddonsWithQty)
-            );
-          });
+        // let duplicate = getAddons
+        //   .filter((item) => variantFilter(item))
+        //   .find((item) => {
+        //     addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+        //     return (
+        //       JSON.stringify(addonCombinationGroupby) ===
+        //       JSON.stringify(groupByaddonsWithQty)
+        //     );
+        //   });
 
-        // ========================================= IN CASE OF VARIANT ================================================= //
+        // // ========================================= IN CASE OF VARIANT ================================================= //
 
-        if (duplicate) {
-          console.log("duplicate");
-          const addonsCombin = getAddons.map((addon) => {
-            return addon?.id === duplicate?.id &&
-              addon.variant_item_id === selectedVariant?.variant_item_id
-              ? { ...addon, qty: addon.qty + 1 }
-              : addon;
-          });
+        // if (duplicate) {
+        //   console.log("duplicate");
+        //   const addonsCombin = getAddons.map((addon) => {
+        //     return addon?.id === duplicate?.id &&
+        //       addon.variant_item_id === selectedVariant?.variant_item_id
+        //       ? { ...addon, qty: addon.qty + 1 }
+        //       : addon;
+        //   });
 
-          setAddonCombination([...addonsCombin]);
-          let data = addonsCombin;
-          let data1 = customItemData;
-          data1.addons = data;
-          data1.defaultVariantItem = selectedVariant;
+        //   setAddonCombination([...addonsCombin]);
+        //   let data = addonsCombin;
+        //   let data1 = customItemData;
+        //   data1.addons = data;
+        //   data1.defaultVariantItem = selectedVariant;
 
-          const quantity = qtySum(customItemData.addons, "qty");
-          data1.qty = quantity;
-          setAddonQuantity(quantity);
-          setCustomItemData(data1);
-          setconfrmAddonCombination(data1);
+        //   const quantity = qtySum(customItemData.addons, "qty");
+        //   data1.qty = quantity;
+        //   setAddonQuantity(quantity);
+        //   setCustomItemData(data1);
+        //   setconfrmAddonCombination(data1);
 
-          console.log("combination", addonCombination, quantity);
-          addToCart(data1);
+        //   console.log("combination", addonCombination, quantity);
+        //   addToCart(data1);
 
-          setAddonVisible(false);
-          console.log(duplicate, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> duplicate");
-        } else {
-          console.log("not duplicated");
+        //   setAddonVisible(false);
+        //   console.log(duplicate, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> duplicate");
+        // }
+        // else {
+        //   console.log("not duplicated");
 
-          let data = [...getAddons, addonsWithQty];
-          setAddonCombination(data);
-          let data1 = customItemData;
-          data1.addons = [addonsWithQty];
-          data1.defaultVariantItem = selectedVariant;
-          data1.variant_item_id = selectedVariant?.variant_item_id;
+        //   let data = [...getAddons, addonsWithQty];
+        //   setAddonCombination(data);
+        //   let data1 = customItemData;
+        //   data1.addons = [addonsWithQty];
+        //   data1.defaultVariantItem = selectedVariant;
+        //   data1.variant_item_id = selectedVariant?.variant_item_id;
 
+        //   const quantity = qtySum(data, "qty");
+        //   data1.qty = qtySum(data1.addons, "qty");
+        //   setAddonQuantity(quantity);
+        //   setCustomItemData(data1);
+        //   setconfrmAddonCombination(data1);
 
-          const quantity = qtySum(data, "qty");
-          data1.qty = qtySum(data1.addons, "qty");
-          setAddonQuantity(quantity);
-          setCustomItemData(data1);
-          setconfrmAddonCombination(data1);
+        //   console.log("combination", addonCombination, quantity);
+        //   // addBulkItemToCart(data1);
 
-          console.log("combination", addonCombination, quantity);
-          addBulkItemToCart(data1);
-
-          setAddonVisible(false);
-        }
-      } else {
-        ;
+        //   setAddonVisible(false);
+        // }
 
         let duplicate = getAddons.find((item) => {
           addonCombinationGroupby = groupBy(item.addons, "add_on_title");
@@ -1442,8 +1456,37 @@ const Index = ({
         if (duplicate) {
           isDuplicateCart(getAddons, duplicate);
         } else {
-          ;
+          console.log("not duplicated");
 
+          let data = [...getAddons, addonsWithQty];
+          setAddonCombination(data);
+          let data1 = customItemData;
+          data1.addons = data;
+
+          const quantity = qtySum(data, "qty");
+          data1.qty = quantity;
+
+          setAddonQuantity(quantity);
+          setCustomItemData(data1);
+          setconfrmAddonCombination(data1);
+
+          console.log("combination", addonCombination, quantity);
+
+          addToCart(data1);
+
+          setAddonVisible(false);
+        }
+      } else {
+        let duplicate = getAddons.find((item) => {
+          addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+          return (
+            JSON.stringify(addonCombinationGroupby) ===
+            JSON.stringify(groupByaddonsWithQty)
+          );
+        });
+        if (duplicate) {
+          isDuplicateCart(getAddons, duplicate);
+        } else {
           console.log("not duplicated");
 
           let data = [...getAddons, addonsWithQty];
@@ -1465,7 +1508,6 @@ const Index = ({
       }
     } else {
       console.log("lengt not");
-      ;
       // let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
       // let addonCombinationGroupby;
       // ;
@@ -1518,56 +1560,62 @@ const Index = ({
   };
 
   const updateCartRecordafter = () => {
-    if(initialState?.variants)
-    {
+    if (initialState?.variants) {
       const quantity = qtySum(customItemData.addons, "qty");
       setAddonQuantity(quantity);
       let data = customItemData;
-      
+
       data.defaultVariantItem = selectedVariant;
 
       setAddonVisible(false);
-  
+
       data.addons = customItemData?.addons || [];
       data.qty = quantity;
       addToCart(data);
-  
+
+      setconfrmAddonCombination(data);
+    } else {
+      const quantity = qtySum(customItemData.addons, "qty");
+      setAddonQuantity(quantity);
+      let data = customItemData;
+
+      setAddonVisible(false);
+
+      data.addons = customItemData?.addons || [];
+      data.qty = quantity;
+      addToCart(data);
+
       setconfrmAddonCombination(data);
     }
-   else {
-    ;
-    const quantity = qtySum(customItemData.addons, "qty");
-    setAddonQuantity(quantity);
-    let data = customItemData;
-    
-    setAddonVisible(false);
-
-    data.addons = customItemData?.addons || [];
-    data.qty = quantity;
-    addToCart(data);
-
-    setconfrmAddonCombination(data);
-   }
   };
 
   useEffect(() => {
     const selectedItem = cart?.find((item) => {
-      if (
-        item.defaultVariantItem != null &&
-        item.defaultVariantItem.variant_item_id ==
-          (initialState?.defaultVariantItem?.variant_item_id || selectedVariant?.variant_item_id)
-      ) {
-        console.log("selected te def", item);
-        return item;
-      } else if (item.item_id == initialState.data?.item_id) {
-        console.log("selected te", item);
-        setAddonCombination(selectedItem?.addons || []);
-
-        return item;
+      console.log("naviiii", item, cart);
+      if (item.item_id == initialState.data?.item_id) {
+        if (initialState?.defaultVariantItem) {
+          if (
+            item.defaultVariantItem.variant_item_id ==
+            initialState?.defaultVariantItem?.variant_item_id
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          console.log("selected te", item, selectedItem);
+          //   setAddonCombination(selectedItem?.addons || []);
+          return true;
+        }
+      } else {
+        return false;
       }
     });
+    if (selectedItem?.addons) {
+      setShowCustomItemData(true);
+    }
 
-    // setCustomItemData({...customItemData, addons: selectedItem?.addons})
+    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
 
     setCustomItemData({
       ...customItemData,
@@ -1576,9 +1624,9 @@ const Index = ({
     });
   }, [initialState, cart]);
 
-  // useEffect(() => {
-  //   setAddonsAdded([]);
-  // }, [addonCombination]);
+  useEffect(() => {
+    setAddonsAdded([]);
+  }, [addonCombination]);
 
   console.log("custtt", customItemData);
 
@@ -1627,6 +1675,7 @@ const Index = ({
         variantFilter(item)
       );
 
+      console.log("filterrrrrrrrrrrrrrrrr", filter, confrmAddonCombination);
       const quantity = qtySum(filter, "qty");
 
       qty = quantity;
@@ -1647,6 +1696,10 @@ const Index = ({
   // );
   // console.log('initialState >>>>>>>>>>>>>>>>>>>', initialState.data, 'selected style>>',selectedVariantStyle);
   console.log("selected variant>>>>>>>>", selectedVariant);
+
+  {
+    console.log("customItemDataaa>>>>", customItemData);
+  }
   return initialState && !initialState.loading && !loadingVariants ? (
     <>
       {/* <Head>
@@ -2003,10 +2056,17 @@ const Index = ({
                       </div>
                     ) : !cart?.find((item) =>
                         initialState.defaultVariantItem
-                          ? item.defaultVariantItem?.variant_item_id ==
-                              initialState.defaultVariantItem.variant_item_id ||
-                            item.defaultVariantItem?.variant_item_id ===
-                              selectedVariant?.variant_item_id
+                          ? item?.addons
+                            ? item.addons[0]?.variant_item_id ==
+                                initialState.defaultVariantItem
+                                  .variant_item_id ||
+                              item.addons[0]?.variant_item_id ===
+                                selectedVariant?.variant_item_id
+                            : item.defaultVariantItem?.variant_item_id ==
+                                initialState.defaultVariantItem
+                                  .variant_item_id ||
+                              item.defaultVariantItem?.variant_item_id ===
+                                selectedVariant?.variant_item_id
                           : item.item_id == id
                       ) ? (
                       <div className="flex flex-col">
@@ -2060,29 +2120,30 @@ const Index = ({
                         >
                           <span
                             onClick={() => {
-                              // handleDecreaseQuantity(
-                              //   initialState.defaultVariantItem
-                              //     ? initialState.defaultVariantItem
-                              //         .variant_item_id
-                              //     : id,
-                              //   cart.find(function (item) {
-                              //     if (initialState.defaultVariantItem) {
-                              //       if (item.defaultVariantItem) {
-                              //         if (
-                              //           item.defaultVariantItem
-                              //             .variant_item_id ==
-                              //           initialState.defaultVariantItem
-                              //             .variant_item_id
-                              //         ) {
-                              //           return item;
-                              //         }
-                              //       }
-                              //     } else if (item.item_id == id) {
-                              //       return item;
-                              //     }
-                              //   }).qty - 1
-                              // )
-                              setAddonVisible(true);
+                              customization
+                                ? setAddonVisible(true)
+                                : handleDecreaseQuantity(
+                                    initialState.defaultVariantItem
+                                      ? initialState.defaultVariantItem
+                                          .variant_item_id
+                                      : id,
+                                    cart.find(function (item) {
+                                      if (initialState.defaultVariantItem) {
+                                        if (item.defaultVariantItem) {
+                                          if (
+                                            item.defaultVariantItem
+                                              .variant_item_id ==
+                                            initialState.defaultVariantItem
+                                              .variant_item_id
+                                          ) {
+                                            return item;
+                                          }
+                                        }
+                                      } else if (item.item_id == id) {
+                                        return item;
+                                      }
+                                    }).qty - 1
+                                  );
                             }}
                             className={`px-3 py-2 text-xl cursor-pointer`}
                             style={{
@@ -2112,32 +2173,96 @@ const Index = ({
                               }`,
                             }}
                           >
-                            {!addonQuantity
-                              ? cart.find(function (item) {
-                                  if (initialState.defaultVariantItem) {
-                                    if (item.defaultVariantItem) {
+                            {
+                              // !addonQuantity
+                              //   ?
+                              //   cart.find(function (item) {
+                              //     if (initialState.defaultVariantItem) {
+                              //       if (item.defaultVariantItem) {
+                              //           console.log('item.defaultVariantItem.variant_item_id ==initialState.defaultVariantItem.variant_item_id',    item.defaultVariantItem
+                              //           .variant_item_id ==
+                              //         initialState.defaultVariantItem
+                              //           .variant_item_id ,item.defaultVariantItem
+                              //           .variant_item_id , initialState.defaultVariantItem
+                              //           .variant_item_id )
+                              //         if (
+                              //           item.defaultVariantItem
+                              //             .variant_item_id ==
+                              //           initialState.defaultVariantItem
+                              //             .variant_item_id
+                              //         ) {
+                              //           return item;
+                              //         }
+                              //       }
+                              //     } else if (item.item_id == id) {
+                              //       return item;
+                              //     }
+                              //   })
+                              cart?.find((item) => {
+                                console.log("naviiii", item, cart);
+                                if (
+                                  item.item_id == initialState.data?.item_id
+                                ) {
+                                  console.log(
+                                    "item.item_id == initialState.data?.item_id",
+                                    item.item_id == initialState.data?.item_id
+                                  );
+                                  if (initialState?.defaultVariantItem) {
+                                    console.log(
+                                      "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem ",
+                                      initialState?.defaultVariantItem
+                                    );
+                                    if (item?.addons) {
+                                      if (
+                                        item.addons[0].variant_item_id ==
+                                        initialState?.defaultVariantItem
+                                          ?.variant_item_id
+                                      ) {
+                                        console.log(
+                                          "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem with  item.defaultVariantItem.variant_item_id ==initialState?.defaultVariantItem?.variant_item_id ",
+                                          item.defaultVariantItem
+                                            .variant_item_id ==
+                                            initialState?.defaultVariantItem
+                                              ?.variant_item_id
+                                        );
+                                        return true;
+                                      } else {
+                                        return false;
+                                      }
+                                    } else {
                                       if (
                                         item.defaultVariantItem
                                           .variant_item_id ==
-                                          initialState.defaultVariantItem
-                                            .variant_item_id ||
-                                        item.defaultVariantItem
-                                          ?.variant_item_id ===
-                                          selectedVariant?.variant_item_id
+                                        initialState?.defaultVariantItem
+                                          ?.variant_item_id
                                       ) {
-                                        return item;
+                                        console.log(
+                                          "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem with  item.defaultVariantItem.variant_item_id ==initialState?.defaultVariantItem?.variant_item_id ",
+                                          item.defaultVariantItem
+                                            .variant_item_id ==
+                                            initialState?.defaultVariantItem
+                                              ?.variant_item_id
+                                        );
+                                        return true;
+                                      } else {
+                                        return false;
                                       }
                                     }
-                                  } else if (item.item_id == id) {
-                                    return item;
+                                  } else {
+                                    //   setAddonCombination(selectedItem?.addons || []);
+                                    return true;
                                   }
-                                })?.qty
-                              : getAddonQuantity()}
+                                } else {
+                                  return false;
+                                }
+                              })?.qty
+                              //   : getAddonQuantity()
+                            }
+                            asxbca
                           </span>
 
                           <span
-                            onClick={() => setAddonVisible(true)}
-                            className={`py-2  px-5   text-xl cursor-pointer`}
+                            className={`px-3 py-2 text-xl cursor-pointer`}
                             style={{
                               backgroundColor: `${
                                 storeSettings.data ? rgbaBackground : "black"
@@ -2151,8 +2276,321 @@ const Index = ({
                                   : "black"
                               }`,
                             }}
+                            onClick={() =>
+                              customization
+                                ? setAddonVisible(true)
+                                : adjustQty(
+                                    initialState.defaultVariantItem
+                                      ? initialState.defaultVariantItem
+                                          .variant_item_id
+                                      : id,
+                                    cart.find(function (item) {
+                                      if (initialState.defaultVariantItem) {
+                                        if (item.defaultVariantItem) {
+                                          if (
+                                            item.defaultVariantItem
+                                              .variant_item_id ==
+                                            initialState.defaultVariantItem
+                                              .variant_item_id
+                                          ) {
+                                            let quantity = 0;
+                                            const value =
+                                              item?.defaultVariantItem
+                                                ?.inventory_details;
+
+                                            if (
+                                              value?.inventory_quantity == null
+                                            ) {
+                                              if (
+                                                value?.max_order_quantity ==
+                                                null
+                                              )
+                                                quantity = 15;
+                                              else {
+                                                quantity =
+                                                  value.max_order_quantity;
+                                              }
+                                              // if(maxmin)
+                                            } else if (
+                                              value?.inventory_quantity !=
+                                                null &&
+                                              value?.max_order_quantity == null
+                                            ) {
+                                              quantity =
+                                                value?.inventory_quantity;
+                                              console.log(
+                                                "value?.inventory_quantity != null && value?.max_order_quantity == null"
+                                              );
+                                            } else if (
+                                              value?.max_order_quantity >
+                                              value?.inventory_quantity
+                                            ) {
+                                              quantity =
+                                                value?.inventory_quantity;
+                                              console.log(
+                                                "value?.max_order_quantity > value?.inventory_quantity"
+                                              );
+                                            } else if (
+                                              value?.max_order_quantity <
+                                              value?.inventory_quantity
+                                            ) {
+                                              quantity =
+                                                value.max_order_quantity;
+                                              console.log(
+                                                "value?.max_order_quantity < value?.inventory_quantity"
+                                              );
+                                            }
+
+                                            if (quantity > 0) {
+                                              const filter = cart.filter(
+                                                (c) => {
+                                                  if (
+                                                    c.defaultVariantItem
+                                                      ?.variant_item_id ==
+                                                    item.defaultVariantItem
+                                                      .variant_item_id
+                                                  ) {
+                                                    return c;
+                                                  }
+                                                }
+                                              );
+
+                                              // if (filter[0].qty >= quantity) {
+                                              //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                                              //     item.qty = item.qty - 1
+                                              //     return item
+                                              // }
+                                              // else {
+                                              //     return item
+                                              // }
+
+                                              if (
+                                                value?.inventory_quantity <
+                                                value?.min_order_quantity
+                                              ) {
+                                                if (
+                                                  filter[0].qty <
+                                                  value?.inventory_quantity
+                                                ) {
+                                                  return item;
+                                                } else if (
+                                                  filter[0].qty >= quantity
+                                                ) {
+                                                  // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                  toast.error(
+                                                    `Sorry, You Cannot add more than ${quantity} items`,
+                                                    {
+                                                      position: "bottom-right",
+                                                      autoClose: 1000,
+                                                      hideProgressBar: false,
+                                                      closeOnClick: true,
+                                                      pauseOnHover: true,
+                                                      draggable: true,
+                                                      progress: undefined,
+                                                    }
+                                                  );
+
+                                                  item.qty = item.qty - 1;
+
+                                                  return item;
+                                                } else {
+                                                  return item;
+                                                }
+                                              } else {
+                                                if (
+                                                  filter[0].qty <
+                                                  value?.min_order_quantity
+                                                ) {
+                                                  return item;
+                                                } else if (
+                                                  filter[0].qty >= quantity
+                                                ) {
+                                                  // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                  toast.error(
+                                                    `Sorry, You Cannot add more than ${quantity} items`,
+                                                    {
+                                                      position: "bottom-right",
+                                                      autoClose: 1000,
+                                                      hideProgressBar: false,
+                                                      closeOnClick: true,
+                                                      pauseOnHover: true,
+                                                      draggable: true,
+                                                      progress: undefined,
+                                                    }
+                                                  );
+                                                  item.qty = item.qty - 1;
+
+                                                  return item;
+                                                } else {
+                                                  return item;
+                                                }
+                                              }
+                                            } else {
+                                              // message.error('Sorry, You Cannot add more items')
+
+                                              toast.error(
+                                                "Sorry, You Cannot add more items",
+                                                {
+                                                  position: "bottom-right",
+                                                  autoClose: 1000,
+                                                  hideProgressBar: false,
+                                                  closeOnClick: true,
+                                                  pauseOnHover: true,
+                                                  draggable: true,
+                                                  progress: undefined,
+                                                }
+                                              );
+                                            }
+                                          }
+                                        }
+                                      } else {
+                                        if (initialState.data) {
+                                          let quantity;
+                                          console.log("itemsms", item);
+                                          if (
+                                            initialState.data.item_id ==
+                                            item.item_id
+                                          ) {
+                                            if (item.inventoryDetails == null) {
+                                              // addToCart(item)
+                                              console.log("");
+                                              quantity = 15;
+                                              // if(maxmin)
+                                            } else if (
+                                              item.inventoryDetails
+                                                .inventory_quantity == 0
+                                            ) {
+                                              // message.error('Sorry,The Item is not available at the moment')
+                                              quantity = 0;
+                                            } else if (
+                                              item.inventoryDetails
+                                                .inventory_quantity != 0
+                                            ) {
+                                              if (
+                                                item.inventoryDetails
+                                                  .inventory_quantity >
+                                                item.inventoryDetails
+                                                  ?.max_order_quantity
+                                              ) {
+                                                quantity =
+                                                  item.inventoryDetails
+                                                    ?.max_order_quantity;
+                                              } else if (
+                                                item.inventoryDetails
+                                                  .inventory_quantity <
+                                                item.inventoryDetails
+                                                  .min_order_quantity
+                                              ) {
+                                                // message.error('Sorry,The Item is not available at the moment')
+                                                quantity =
+                                                  item.inventoryDetails
+                                                    .inventory_quantity;
+                                              } else {
+                                                quantity =
+                                                  item.inventoryDetails
+                                                    ?.inventory_quantity;
+                                              }
+                                              // }
+                                            }
+
+                                            if (quantity > 0) {
+                                              const filter = cart.filter(
+                                                (c) => {
+                                                  if (
+                                                    c.item_id == item.item_id
+                                                  ) {
+                                                    return c;
+                                                  }
+                                                }
+                                              );
+
+                                              if (
+                                                item.inventoryDetails
+                                                  ?.inventory_quantity <
+                                                item.inventoryDetails
+                                                  ?.min_order_quantity
+                                              ) {
+                                                if (
+                                                  filter[0].qty <
+                                                  item.inventoryDetails
+                                                    .inventory_quantity
+                                                ) {
+                                                  return item;
+                                                } else if (
+                                                  filter[0].qty >= quantity
+                                                ) {
+                                                  // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                  toast.error(
+                                                    `Sorry, You Cannot add more than ${quantity} items`,
+                                                    {
+                                                      position: "bottom-right",
+                                                      autoClose: 1000,
+                                                      hideProgressBar: false,
+                                                      closeOnClick: true,
+                                                      pauseOnHover: true,
+                                                      draggable: true,
+                                                      progress: undefined,
+                                                    }
+                                                  );
+
+                                                  item.qty = item.qty - 1;
+
+                                                  return item;
+                                                } else {
+                                                  return item;
+                                                }
+                                              } else {
+                                                if (
+                                                  filter[0].qty <
+                                                  item.inventoryDetails
+                                                    ?.min_order_quantity
+                                                ) {
+                                                  return item;
+                                                } else if (
+                                                  filter[0].qty >= quantity
+                                                ) {
+                                                  // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                                                  toast.error(
+                                                    `Sorry, You Cannot add more than ${quantity} items`,
+                                                    {
+                                                      position: "bottom-right",
+                                                      autoClose: 1000,
+                                                      hideProgressBar: false,
+                                                      closeOnClick: true,
+                                                      pauseOnHover: true,
+                                                      draggable: true,
+                                                      progress: undefined,
+                                                    }
+                                                  );
+
+                                                  item.qty = item.qty - 1;
+
+                                                  return item;
+                                                } else {
+                                                  return item;
+                                                }
+                                              }
+
+                                              // addToCart(item)
+                                              // return item
+                                            }
+                                            // else {
+                                            //     message.error('Sorry, You Cannot add more items')
+                                            // }
+                                            // item['store_name'] = storeDetails.data ? storeDetails.data.store_name : "";
+                                            // item['store_logo'] = storeDetails.data ? storeDetails.data.logo_img_url : "";
+                                          }
+                                        }
+                                      }
+                                    }).qty + 1
+                                  )
+                            }
                           >
-                            <PlusOutlined className="" />
+                            <PlusOutlined />
                           </span>
                         </div>
                         {customization ? (
@@ -2992,8 +3430,7 @@ const Index = ({
           <div className="p-16">
             {initialState.variants?.length > 0
               ? customItemData?.addons
-                  ?.filter(
-                    (item) =>variantFilter(item))
+                  ?.filter((item) => variantFilter(item))
                   .map((itemMap) => {
                     return (
                       <div className="py-2 w-full flex item-center  flex-col">

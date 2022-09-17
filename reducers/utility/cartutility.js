@@ -31,70 +31,141 @@
 // }
 
 export const addItemToCart = (cart, cartItem) => {
-    let itemExist = cart?.find((item) => item.item_id == cartItem.item_id);
-    console.log("carttttitem", cartItem);
-  
-  
-    if (itemExist) {
-      let data = cart.reduce((acc, item) => {
-        if (item.item_id == cartItem.item_id) {
-          if (item.defaultVariantItem) {
-            console.log(
-              "cartItem.defaultVariantItem?.variant_item_id",
-              item.defaultVariantItem?.variant_item_id ==
-                cartItem.defaultVariantItem?.variant_item_id
-            );
-            if (
-              item.defaultVariantItem?.variant_item_id ==
-              cartItem.defaultVariantItem?.variant_item_id
-            ) {
-              console.log("carttttttuuuuu");
-              acc.push(cartItem);
-              return acc;
-            } else {
-              console.log("cartttttttttttttttttt");
-              acc.push(item);
-              return acc;
-            }
+  // let itemExist = cart?.find((item) => item.item_id == cartItem.item_id);
+
+  let index = -1;
+
+  if (cartItem?.addons) {
+    const itemExist = cart?.find((item, num) => {
+      console.log("naviiii", item, cart);
+      let variant_id;
+      let cart_variant_id;
+
+      if (cartItem?.addons && cartItem.addons.length>0) {
+        variant_id = cartItem?.addons[0].variant_item_id;
+      } else {
+        variant_id == cartItem?.defaultVariantItem.variant_id;
+      }
+
+      if (item?.addons) {
+        cart_variant_id = item?.addons[0].variant_item_id;
+      } else {
+        cart_variant_id == item?.defaultVariantItem.variant_id;
+      }
+
+      if (item.item_id == cartItem.item_id) {
+        if (item?.defaultVariantItem && cartItem.defaultVariantItem) {
+          if (cart_variant_id == variant_id) {
+            index = num;
+            return true;
           } else {
-            console.log("cartggg");
-            acc.push(cartItem);
-            return acc;
+            return false;
           }
         } else {
-          acc.push(item);
-          return acc;
+          //   setAddonCombination(selectedItem?.addons || []);
+          index = num;
+          return true;
         }
-      }, []);
-     
-  
-      console.log("returned data", data);
-      return data;
-    } else {
-      return [...cart, cartItem];
-    }
-  };
-  
-  export const convertToAddonsArray = (cart,cartItem) => {
- 
-      return [...cart,cartItem]
+      } else {
+        return false;
+      }
+    });
+
+    console.log("carttttitem", cartItem);
+
+    ;
+    if (itemExist) cart[index] = cartItem;
+    else cart.push(cartItem);
+    return cart || [];
+  } else {
+    const item = cartItem;
+    console.log(item, "starte");
+    // const inCart = state.cart.find(item => item.item.item_id === action.payload.item_id ? true : false)
+    return  [...cart, { ...item, qty: 1 }]
+
+      // cart: inCart ? state.cart.map(item => item.item.item_id === action.payload.item_id ? { ...item, qty: item.qty + 1 } : item) : [...state.cart, { item, qty: 1 }]
     
-  };
-  
-  // if (item.item_id == cartItem.item_id) {
-  //     if (item.defaultVariantItem?.variant_item_id == cartItem.defaultVariantItem?.variant_item_id) {
-  // console.log('carttttttuuuuu')
-  //         acc.push(cartItem)
-  //         return acc
-  //     }
-  //     else {
-  //         console.log('cartttttttttttttttttt')
-  
-  //         acc.push(cartItem)
-  //         return acc
-  //     }
-  // }
-  // else {
-  //     acc.push(item)
-  //     return acc
-  // }
+  }
+
+  //   if (itemExist) {
+  //     let data = cart.reduce((acc, item) => {
+  //       // if (item.item_id == cartItem.item_id) {
+  //       //   if (item.defaultVariantItem) {
+  //       //     if (
+  //       //       item.defaultVariantItem?.variant_item_id ==
+  //       //       itemExist
+  //       //     ) {
+  //       //       console.log("carttttttuuuuu");
+  //       //       acc.push(cartItem);
+  //       //       return acc;
+  //       //     } else {
+  //       //       console.log("cartttttttttttttttttt");
+  //       //       acc.push(item);
+  //       //       return acc;
+  //       //     }
+  //       //   } else {
+  //       //     console.log("cartggg");
+  //       //     acc.push(cartItem);
+  //       //     return acc;
+  //       //   }
+  //       // } else {
+  //       //   acc.push(item);
+  //       //   return acc;
+  //       // }
+
+  //       let variant_id;
+  //       let cart_variant_id;
+
+  //       if (cartItem?.addons) {
+  //         variant_id = cartItem.addons[0].variant_item_id;
+  //       } else {
+  //         variant_id == cartItem?.defaultVariantItem.variant_id;
+  //       }
+
+  //       if (item?.addons) {
+  //         cart_variant_id = item?.addons[0].variant_item_id;
+  //       } else {
+  //         cart_variant_id == item?.defaultVariantItem.variant_id;
+  //       }
+
+  // console.log('itemExistssss',itemExist)
+
+  //       if (item.item_id == cartItem.item_id) {
+  //         if (item?.defaultVariantItem) {
+  //             
+  //           if (cart_variant_id == variant_id) {
+  //             acc.push(cartItem);
+  //             return acc;
+  //           } else {
+  //             acc.push(item);
+  //             acc.push(cartItem);
+  //             return acc
+  //           }
+  //         }
+  //          else {
+  //           console.log("selected te", item, selectedItem);
+  //           //   setAddonCombination(selectedItem?.addons || []);
+  //          acc.push(cartItem)
+  //           return acc;
+  //         }
+
+  //       }
+  //       else {
+  //           acc.push(item)
+  //           acc.push(cartItem)
+  //         return acc;
+  //       }
+  //     }, []);
+
+  //     console.log("returned data", data);
+  //     return data;
+  //   } else {
+  //     return [...cart, cartItem];
+  //   }
+};
+
+export const convertToAddonsArray = (cart, cartItem) => {
+  return [...cart, cartItem];
+};
+
+
