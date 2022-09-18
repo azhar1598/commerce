@@ -47,7 +47,9 @@ const cartReducer = (state = initialState, action) => {
       return {
         ...state,
         cart: state.cart.filter((item) =>
-          item.defaultVariantItem
+          item.addons
+            ? item.id == action.payload
+            : item.defaultVariantItem
             ? item.defaultVariantItem.variant_item_id !== action.payload.id
             : item.item_id !== action.payload.id
         ),

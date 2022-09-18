@@ -21,7 +21,11 @@ import { toast, ToastContainer } from 'react-toastify'
 
 const Header = ({ cart=[], isLoggedIn, storeSettings, searchItems, storeDetails, storeDetailsReducer, customerDetails, stateMobileSearch, dispatchMobileSearch, searchedItem }) => {
 
-    const cartQuantity = cart.map(item => item.qty).reduce((partialSum, a) => partialSum + a, 0);
+    const cartQuantity = cart.cart.map(item => item.qty).reduce((partialSum, a) => partialSum + a, 0);
+
+
+
+    console.log('carttttQuantity',cart.cart,cartQuantity)
 
     const [input, setInput] = useState({ input: data?.search ? data.search : '' })
 
@@ -418,7 +422,7 @@ const Header = ({ cart=[], isLoggedIn, storeSettings, searchItems, storeDetails,
 
 const mapStateToProps = (state) => ({
     storeSettings: state.storeSettingsReducer,
-    cart: state.cartReducer.cart,
+    cart: state.cartReducer,
     isLoggedIn: state.customerDetailsReducer,
     storeDetailsReducer: state.storeDetailsReducer,
     stateMobileSearch: state.mobileHeaderReducer.data,

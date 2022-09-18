@@ -74,7 +74,17 @@ export const addItemToCart = (cart, cartItem) => {
     console.log("carttttitem", cartItem);
 
     ;
-    if (itemExist) cart[index] = cartItem;
+    if (itemExist)
+    {
+        if(index>-1 && itemExist?.qty==0){
+            debugger
+            cart.splice(index,1)
+            return cart
+        }
+        else{
+         cart[index] = cartItem;
+        }
+    }
     else cart.push(cartItem);
     return cart || [];
   } else {

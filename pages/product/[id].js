@@ -146,7 +146,7 @@ const Index = ({
           fetchAddons(payload)
        
       } else {
-        setCustomization(false);
+        setCustomization(true);
       }
     }
   }, [initialState?.data?.is_add_on_available, id]);
@@ -351,13 +351,13 @@ const Index = ({
 
   useEffect(()=>{
     console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length )    
-    if(customItemData?.addons?.length==0 || [] || customItemData?.addons?.length==undefined){
+    if(customItemData?.addons?.length==0  || customItemData?.addons?.length==undefined){
 
 console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length==0 )
 
         setShowCustomItemData(false)
     }
-  },[changeVariantAddon])
+  },[changeVariantAddon,customItemData])
 
   useEffect(() => {
     setRgbaBackground(
@@ -1422,6 +1422,7 @@ setSelectedVariantValue(variantValueId)
 
   const isDuplicateCart = (addons, duplicate) => {
     console.log("duplicate");
+    debugger
     const addonsCombin = addons.map((addon) => {
       return addon?.id === duplicate?.id
         ? { ...addon, qty: addon.qty + 1 }
@@ -1550,6 +1551,7 @@ setSelectedVariantValue(variantValueId)
           setAddonVisible(false);
         }
       } else {
+          debugger
         let duplicate = getAddons.find((item) => {
           addonCombinationGroupby = groupBy(item.addons, "add_on_title");
           return (
@@ -1558,6 +1560,7 @@ setSelectedVariantValue(variantValueId)
           );
         });
         if (duplicate) {
+            
           isDuplicateCart(getAddons, duplicate);
         } else {
           console.log("not duplicated");
@@ -2128,6 +2131,7 @@ setSelectedVariantValue(variantValueId)
                         UNAVAILABLE
                       </div>
                     ) : !cart?.find((item) =>
+
                         initialState.defaultVariantItem
                           ? item?.addons
                             ? item.addons[0]?.variant_item_id ==
@@ -2140,7 +2144,9 @@ setSelectedVariantValue(variantValueId)
                                   .variant_item_id ||
                               item.defaultVariantItem?.variant_item_id ===
                                 selectedVariant?.variant_item_id
-                          : item.item_id == id
+                          :
+                          
+                           item.item_id == id
                       ) ? (
                       <div className="flex flex-col">
                         <div
@@ -2163,7 +2169,7 @@ setSelectedVariantValue(variantValueId)
                             }`,
                           }}
                         >
-                          Add to Cart
+                          Add to Cartd
                         </div>
                         {customization ? (
                           <p className="text-black font-montMedium ">
@@ -3395,8 +3401,8 @@ setSelectedVariantValue(variantValueId)
               const item = addons1[mapId];
 
 
-              {/* {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
-                const item = initialState?.addons[mapId]; */}
+             {/* {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
+                const item = initialState?.addons[mapId];  */}
 
               return (
                 <div className="px-12 py-2">
