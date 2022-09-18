@@ -6,7 +6,7 @@ import {
   LoadingOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
-import { message, Spin } from "antd";
+import { Checkbox, message, Modal, Spin } from "antd";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -31,6 +31,7 @@ import PageWrapper from "../../components/PageWrapper/PageWrapper";
 import { useMediaQuery } from "react-responsive";
 import { toast, ToastContainer } from "react-toastify";
 import { convenienceFlag } from "../../services/apiServices";
+import TextArea from "antd/lib/input/TextArea";
 
 const groupBy = function (arr, key) {
   return arr.reduce(function (rv, x) {
@@ -41,10 +42,10 @@ const groupBy = function (arr, key) {
 };
 
 const qtySum = function (items, prop) {
-    return items.reduce(function (a, b) {
-      return parseInt(a) + parseInt(b[prop]);
-    }, 0);
-  };
+  return items.reduce(function (a, b) {
+    return parseInt(a) + parseInt(b[prop]);
+  }, 0);
+};
 
 const Index = ({
   storeSettings,
@@ -73,10 +74,69 @@ const Index = ({
   const [minProduct, setMinProduct] = useState();
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 });
 
-  const[cartUpdate,setCartUpdate]=useState(false)
+  const [cartUpdate, setCartUpdate] = useState(false);
 
   const [rgbaBackground, setRgbaBackground] = useState("");
   const [rgbaColor, setRgbaColor] = useState();
+
+  const [showEditAddon, setShowEditAddon] = useState(false);
+  const [addonsData, setAddonsData] = useState({
+    "3ebb31825aea7b4fb8c9f8065eb4bbda": {
+      item_id: 12345,
+      add_on_title: "Toppings on the Pizza",
+      add_on_description: "Select min of 2 and max of 5",
+      variant_group_id: 3340,
+      variant_value_id: 7064,
+      status: "ACTIVE",
+      entry_id: 35,
+      add_on_group_id: 12,
+      add_on_group_type: "CHEKLIST",
+      is_mandatory: "Y",
+      min_qty: 2,
+      max_qty: 5,
+      price: null,
+      add_on_options: [
+        {
+          add_on_option_id: 24,
+          add_on_name: "Onion",
+          price: "30.00",
+          option_status: "AVAILABLE",
+        },
+        {
+          add_on_option_id: 25,
+          add_on_name: "Jalapeno",
+          price: "60.00",
+          option_status: "AVAILABLE",
+        },
+        {
+          add_on_option_id: 26,
+          add_on_name: "Olives",
+          price: "60.00",
+          option_status: "AVAILABLE",
+        },
+      ],
+    },
+
+    "6445a0d6cd01e8b7086c5b0f34409dd9": {
+      item_id: 12345,
+      add_on_title: "Cooking Instructions",
+      add_on_description: "Min of 10 characters to 200 characters",
+      variant_group_id: null,
+      variant_value_id: null,
+      status: "ACTIVE",
+      entry_id: 38,
+      add_on_group_id: 11,
+      add_on_group_type: "SHORT_TEXT",
+      is_mandatory: "Y",
+      min_qty: 0,
+      max_qty: 100,
+      price: 1.0,
+    },
+  });
+
+  const [addonSelected, setAddonSelected] = useState();
+
+  const [addonInstructions, setAddonInstructions] = useState();
 
   const router = useRouter();
 
@@ -131,7 +191,7 @@ const Index = ({
       }
     }
     deliveryAddress();
-  }, [cart, customerDetails,cartUpdate]);
+  }, [cart, customerDetails, cartUpdate]);
 
   useEffect(() => {
     cart.map((item) => {
@@ -185,7 +245,7 @@ const Index = ({
         // }
       }
     });
-  }, [cart,cartUpdate]);
+  }, [cart, cartUpdate]);
 
   useEffect(() => {
     if (checkout.backendCart?.purchase_id && !enableBulkAPI) {
@@ -303,30 +363,29 @@ const Index = ({
   const handleDecreaseQuantity = (item, qty) => {
     const data = readyCartData(cart);
     // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
-        if (item?.addons) {
-            let selectedAddon
-            let selectedProduct = cart.find((product) => {
-              return selectedAddon = product.addons.find((addon) => {
-                if (addon.id == item.id) {
-                  addon.qty = addon.qty - 1;
-                  return true;
-                }
-              });
-              // addToCart();
-              console.log("selectedAddonnnn", selectedAddon);
-            });
-            const quantity = qtySum(selectedProduct.addons, "qty");
+    if (item?.addons) {
+      let selectedAddon;
+      let selectedProduct = cart.find((product) => {
+        return (selectedAddon = product.addons.find((addon) => {
+          if (addon.id == item.id) {
+            addon.qty = addon.qty - 1;
+            return true;
+          }
+        }));
+        // addToCart();
+        console.log("selectedAddonnnn", selectedAddon);
+      });
+      const quantity = qtySum(selectedProduct.addons, "qty");
 
-            console.log('quantityyyy',quantity)
-          
-            let data = selectedProduct;
-      
-      
-            data.addons = selectedProduct?.addons || [];
-            data.qty = quantity;
-      
-            addToCart(data)
-            setCartUpdate(!cartUpdate)
+      console.log("quantityyyy", quantity);
+
+      let data = selectedProduct;
+
+      data.addons = selectedProduct?.addons || [];
+      data.qty = quantity;
+
+      addToCart(data);
+      setCartUpdate(!cartUpdate);
     } else {
       if (item.defaultVariantItem) {
         const filter = cart.filter((c) => {
@@ -504,31 +563,30 @@ const Index = ({
 
   const handleIncreaseQuantity = (item) => {
     console.log("itenmmmm", item);
-    let selectedAddon 
+    let selectedAddon;
     if (item?.addons) {
       let selectedProduct = cart.find((product) => {
-        return selectedAddon = product.addons.find((addon) => {
+        return (selectedAddon = product.addons.find((addon) => {
           if (addon.id == item.id) {
             addon.qty = addon.qty + 1;
             return true;
           }
-        });
+        }));
         // addToCart();
         console.log("selectedAddonnnn", selectedAddon);
       });
 
       const quantity = qtySum(selectedProduct.addons, "qty");
 
-      console.log('quantityyyy',quantity)
-    
-      let data = selectedProduct;
+      console.log("quantityyyy", quantity);
 
+      let data = selectedProduct;
 
       data.addons = selectedProduct?.addons || [];
       data.qty = quantity;
 
-      addToCart(data)
-      setCartUpdate(!cartUpdate)
+      addToCart(data);
+      setCartUpdate(!cartUpdate);
 
       console.log("selectedProducttt", selectedProduct);
     } else {
@@ -810,6 +868,98 @@ const Index = ({
     // setCustomBorder(hex2rgba('#212B36' , 0.25))
   }, [rgbaBackground == ""]);
 
+  const editAddonModal = (addon) => {
+    setShowEditAddon(true);
+    // debugger
+    setAddonSelected(addon);
+    // setAddonsAdded();
+  };
+
+  const handleAddonCancel = () => {
+    setShowEditAddon(false);
+  };
+
+  const handleAddonClose = () => {};
+
+  const handleAddonOk = () => {};
+
+  const handleAddonInstructions = (
+    e,
+    add_on_group_id,
+    add_on_title,
+    addonSelected,
+    mapId
+  ) => {
+    let instructions = {
+      add_on_group_id,
+      add_on_title,
+      mapId,
+      text: e.target.value,
+    };
+
+    let findSelectedAddon;
+    let addonText;
+
+    let selectedProduct = cart.find((product) => {
+      findSelectedAddon = product.addons.find((addon) => {
+        console.log("addddon", addonSelected, addon);
+        if (addonSelected.id == addon.id) {
+          addonText =
+            addonSelected &&
+            addonSelected?.addons?.find((element) => {
+ 
+              if (element?.add_on_group_id == add_on_group_id) {
+                // console.log('product?.add_on_group_id==add_on_group_id)',product?.add_on_group_id==add_on_group_id)
+                // console.log('product?.add_on_group_id==add_on_group_id',product?.add_on_group_id==add_on_group_id)
+                return true
+              } else {
+                return false;
+              }
+            });
+            console.log('addonText',addonText)
+            addonText.text=e.target.value
+        }
+      });
+    });
+    // addToCart();
+    // console.log("selectedAddonnnn", selectedAddon);
+
+    //   const quantity = qtySum(selectedProduct.addons, "qty");
+
+    //   console.log("quantityyyy", quantity);
+
+    //   let data = selectedProduct;
+
+    //   data.addons = selectedProduct?.addons || [];
+    //   data.qty = quantity;
+
+    //   addToCart(data);
+    //   setCartUpdate(!cartUpdate);
+
+    console.log("jelll", e.target.name, e.target.value);
+
+    // setAddonInstructions({...instructions,[e.target.name]:e.target.value});
+
+    // let filter = addonsAdded.filter((item, index) => {
+    //   if (item.add_on_group_id != instructions.add_on_group_id) {
+    //     return item;
+    //   }
+    // });
+
+    // filter.push(instructions);
+    // const sortedFilters = filter.sort((a, b) =>
+    //   a.add_on_name > b.add_on_name ? 1 : -1
+    // );
+
+    // setAddonsAdded(sortedFilters);
+    // const addWithQty = addonsWithQty;
+
+    // addWithQty.addons = filter.sort((a, b) =>
+    //   a.add_on_name > b.add_on_name ? 1 : -1
+    // );
+    // setAddonsWithQty(addWithQty);
+  };
+
   return (
     <>
       {/* <Head>
@@ -953,15 +1103,25 @@ const Index = ({
                         </div>
 
                         <div className="flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24">
-                          <p
-                            className="text-lg font-montSemiBold "
-                            onClick={() => {
-                              fetchItemDetails("", "");
-                              router.push(`/product/${item.item_id}`);
-                            }}
-                          >
-                            {item.item_name}
-                          </p>
+                          <div className="flex">
+                            <p
+                              className="text-lg font-montSemiBold "
+                              onClick={() => {
+                                fetchItemDetails("", "");
+                                router.push(`/product/${item.item_id}`);
+                              }}
+                            >
+                              {item.item_name}
+                            </p>
+                            <p
+                              className="font-montMedium px-2 text-blue-500"
+                              onClick={() => {
+                                editAddonModal(addon);
+                              }}
+                            >
+                              Edit
+                            </p>
+                          </div>
                           {item.defaultVariantItem ? (
                             <p className="text-sm font-montSemiBold -mt-4">
                               <span className="text-gray-500">
@@ -1192,6 +1352,7 @@ const Index = ({
                       >
                         {item.item_name}
                       </p>
+
                       {item.defaultVariantItem ? (
                         <p className="text-sm font-montSemiBold -mt-4">
                           <span className="text-gray-500">
@@ -1530,6 +1691,165 @@ const Index = ({
         </div>
       )}
       <ToastContainer />
+
+      <Modal
+        visible={showEditAddon}
+        onOk={handleAddonOk}
+        afterClose={handleAddonClose}
+        destroyOnClose={true}
+        onCancel={handleAddonCancel}
+        footer={null}
+        okButtonProps={{ disabled: true }}
+        cancelButtonProps={{ disabled: true }}
+        width={800}
+        style={{ height: "100px" }}
+      >
+        <div className="p-4 w-full flex item-center  flex-col">
+          <p
+            className="font-montBold text-lg self-center py-4"
+            style={{
+              color: storeSettings.data
+                ? storeSettings.data.secondary_color
+                : "black",
+            }}
+          >
+            You can customize this item !!
+          </p>
+
+          {Object.keys(addonsData).map((mapId, index) => {
+            const item = addonsData[mapId];
+
+            console.log("itemmmmmmmmm", item);
+
+            return (
+              <div className="px-12 py-2">
+                <p className="text-black font-montMedium ">
+                  {item.add_on_title}
+                  {item.mandatory ? (
+                    <span className="font-montSemiBold text-red-600 px-2">
+                      *
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </p>
+                <p className="text-gray text-sm font-montMedium ">
+                  {item.add_on_group_type == "CHEKLIST"
+                    ? item.add_on_description
+                    : ""}
+                </p>
+                {item.add_on_group_type == "CHEKLIST" ? (
+                  item.add_on_options?.map((value, index) => {
+                    return (
+                      <div className=" w-1/2 flex">
+                        <div className="flex ">
+                          <Checkbox
+                            //   onChange={(e) => {
+                            //     handleAddonChange(e);
+                            //   }}
+                            defaultChecked={false}
+                            name={item.add_on_group_id}
+                            checked={
+                              addonSelected &&
+                              addonSelected?.addons?.find((product) => {
+                                if (
+                                  product?.add_on_option_id ==
+                                  value.add_on_option_id
+                                ) {
+                                  return true;
+                                } else {
+                                  return false;
+                                }
+                              })
+                            }
+                            // checked={addonsAdded?.some(item =>
+
+                            //     item.add_on_option_id == value.add_on_option_id
+
+                            // )
+                            // }
+                            value={{
+                              ...value,
+                              add_on_group_id: item.add_on_group_id,
+                              add_on_title: item.add_on_title,
+                              add_on_mapping_id: mapId,
+                            }}
+                            style={{ color: "black" }}
+                          >
+                            <div className="flex justify-between  w-[20vw]">
+                              <p className="font-montRegular px-4">
+                                {" "}
+                                {value.add_on_name}
+                              </p>
+                              <p className="font-montMedium pr-2">
+                                {stateStoreDetails?.currency_symbol}{" "}
+                                {value.price}
+                              </p>
+                            </div>
+                          </Checkbox>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <TextArea
+                    rows={4}
+                    placeholder={item.add_on_description}
+                    maxLength={200}
+                    name="addon_instructions"
+                    value={
+                      addonSelected &&
+                      addonSelected?.addons?.find((product) => {
+                        if (product?.add_on_group_id == item.add_on_group_id) {
+                          return true;
+                        } else {
+                          return false;
+                        }
+                      })?.text
+                    }
+                    onChange={(e) => {
+                      handleAddonInstructions(
+                        e,
+                        item.add_on_group_id,
+                        item.add_on_title,
+                        addonSelected,
+
+                        mapId
+                      );
+                    }}
+                  />
+                )}
+                {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
+              </div>
+            );
+          })}
+          <button
+            className="px-10 py-2 self-center "
+            style={{
+              color: `${
+                storeSettings.data ? storeSettings.data.navbar_color : "white"
+              }`,
+              backgroundColor: `${
+                storeSettings.data
+                  ? storeSettings.data.secondary_color
+                  : "black"
+              }`,
+            }}
+            //   onClick={
+            //     addonsAdded.filter(
+            //       (item) => item.add_on_title === "Toppings on the Pizza"
+            //     )?.length < 2
+            //       ? () => {
+            //           message.error("addons should be more than 1");
+            //         }
+            //       : handleConfirmAddons
+            //   }
+          >
+            Confirm
+            <span className="pl-12"> {stateStoreDetails?.currency_symbol}</span>
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };
