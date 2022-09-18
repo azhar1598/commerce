@@ -81,6 +81,7 @@ import wishlistActionType, {
   ADD_BULK_TO_CART,
   GET_ADDONS,
   SET_ADDONS,
+  EDIT_ADDONS,
 } from "../constants/actionTypes";
 
 export const getStoreSettings = (storeId) => {
@@ -303,6 +304,7 @@ export const setVariants = (data) => {
 
 
 export const fetchAddons = (payload) => {
+  console.log('payloaddd',payload)
   return {
     type: GET_ADDONS,
     payload:payload,
@@ -313,6 +315,13 @@ export const setAddons = (data) => {
   return {
     type: SET_ADDONS,
     addons: data,
+  };
+};
+
+export const editAddons = (payload) => {
+  return {
+    type: EDIT_ADDONS,
+    payload: data,
   };
 };
 

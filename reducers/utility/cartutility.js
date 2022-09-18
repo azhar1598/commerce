@@ -50,7 +50,7 @@ export const addItemToCart = (cart, cartItem) => {
       if (item?.addons) {
         cart_variant_id = item?.addons[0].variant_item_id;
       } else {
-        cart_variant_id == item?.defaultVariantItem.variant_id;
+        cart_variant_id == item?.defaultVariantItem?.variant_id;
       }
 
       if (item.item_id == cartItem.item_id) {

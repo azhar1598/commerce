@@ -20,6 +20,7 @@ import {
   addAddon,
   decreaseAddon,
   addBulkCart,
+  fetchAddons,
 } from "../../actions";
 import {
   Image,
@@ -79,6 +80,7 @@ const Index = ({
   initialState,
   fetchItemDetails,
   fetchVariants,
+  fetchAddons,
   fetchSpecification,
   fetchAdditionalInfo,
   fetchRelatedItems,
@@ -113,6 +115,8 @@ const Index = ({
   const [customization, setCustomization] = useState();
   const [addonVisible, setAddonVisible] = useState();
   const [addonsAdded, setAddonsAdded] = useState([]);
+  const[changeVariantAddon,setChangeVariantAddon]=useState()
+  
   const [priceWithAddon, setPriceWithAddon] = useState(
     initialState.defaultVariantItem
       ? initialState.defaultVariantItem.sale_price
@@ -121,19 +125,47 @@ const Index = ({
       : ""
   );
 
-  console.log("initialState?.data?.is_add_on_available=='Y'",customization,initialState?.data,initialState?.data?.is_add_on_available=='Y')
+  console.log(
+    "initialState?.data?.is_add_on_available=='Y'",
+    customization,
+    initialState?.data,
+    initialState?.data?.is_add_on_available == "Y"
+  );
+
+  useEffect(() => {
+    if (id) {
+      if (initialState?.data?.is_add_on_available == "Y") {
+        setCustomization(true);
+
+       
+          const payload = {
+            itemId: id,
+            variantValueId: initialState?.defaultVariantItem?selectedVariantValue?selectedVariantValue:selectedVariant.variant_value_1?.variant_value_id:null,
+          };
+          
+          fetchAddons(payload)
+       
+      } else {
+        setCustomization(false);
+      }
+    }
+  }, [initialState?.data?.is_add_on_available, id]);
 
   useEffect(()=>{
+ 
+    if (initialState?.data?.is_add_on_available == "Y") {
+        setCustomization(true);
 
-if(initialState?.data?.is_add_on_available=='Y'){
-    
-    setCustomization(true)
-}
-else{
-    setCustomization(false)
-}
+       console.log('hello wordl')
+          const payload = {
+            itemId: id,
+            variantValueId: initialState?.defaultVariantItem?selectedVariantValue?selectedVariantValue:selectedVariant.variant_value_1?.variant_value_id:null,
+          };
+          
+          fetchAddons(payload)
+        }
 
-  },[initialState?.data?.is_add_on_available])
+  },[selectedVariantValue,selectedVariant,changeVariantAddon])
 
   const [addonQuantity, setAddonQuantity] = useState();
   const [customItemData, setCustomItemData] = useState();
@@ -148,6 +180,8 @@ else{
   // variats
 
   const [selectedVariant, setselectedVariant] = useState({});
+
+  const[selectedVariantValue,setSelectedVariantValue]=useState()
 
   // cart addons count
 
@@ -226,7 +260,7 @@ else{
       status: "ACTIVE",
       entry_id: 35,
       add_on_group_id: 12,
-      add_on_group_type: "CHEKLIST",
+      add_on_group_type: "CHECKLIST",
       is_mandatory: "Y",
       min_qty: 2,
       max_qty: 5,
@@ -270,6 +304,9 @@ else{
     },
   });
 
+
+  
+
   const [separateAddons, setSeparateAddons] = useState();
 
   const [active, setActive] = useState(0);
@@ -310,6 +347,17 @@ else{
     //        console.log('customItemDataSum',customItemData,sum)
     // }
   }, [addonQuantity]);
+
+
+  useEffect(()=>{
+    console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length )    
+    if(customItemData?.addons?.length==0 || [] || customItemData?.addons?.length==undefined){
+
+console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length==0 )
+
+        setShowCustomItemData(false)
+    }
+  },[changeVariantAddon])
 
   useEffect(() => {
     setRgbaBackground(
@@ -433,6 +481,10 @@ else{
         .filter(Boolean);
 
       const selectedDefaultVariant = defaultVar.map((e) => e.variant_value_id);
+
+
+console.log('selectedDefaultVarianttt',selectedDefaultVariant)
+
       // const selectedVariants = defaultVar.map(
       //   ({ variant_value_id, variant_value_name }) => {
       //     return {
@@ -968,6 +1020,13 @@ else{
     variant_value_name
   ) => {
     selectedVariantStyle[indices - 1] = variantValueId;
+    setChangeVariantAddon(!changeVariantAddon)
+
+
+
+console.log('variantValueIdddd',variantValueId)
+setSelectedVariantValue(variantValueId)
+
     // setselectedVariant({
     //   variant_value_id: variantValueId,
     //   variant_value_name,
@@ -1709,7 +1768,7 @@ else{
   //   customItemData
   // );
   // console.log('initialState >>>>>>>>>>>>>>>>>>>', initialState.data, 'selected style>>',selectedVariantStyle);
-  console.log("selected variant>>>>>>>>", selectedVariant);
+  console.log("selected variant>>>>>>>>", selectedVariant,selectedVariantStyle);
 
   {
     console.log("customItemDataaa>>>>", customItemData);
@@ -3335,6 +3394,10 @@ else{
             {Object.keys(addons1).map((mapId, index) => {
               const item = addons1[mapId];
 
+
+              {/* {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
+                const item = initialState?.addons[mapId]; */}
+
               return (
                 <div className="px-12 py-2">
                   <p className="text-black font-montMedium ">
@@ -3348,11 +3411,11 @@ else{
                     )}
                   </p>
                   <p className="text-gray text-sm font-montMedium ">
-                    {item.add_on_group_type == "CHEKLIST"
+                    {item.add_on_group_type == "CHECKLIST"
                       ? item.add_on_description
                       : ""}
                   </p>
-                  {item.add_on_group_type == "CHEKLIST" ? (
+                  {item.add_on_group_type == "CHECKLIST" ? (
                     item.add_on_options?.map((value, index) => {
                       return (
                         <div className=" w-1/2 flex">
@@ -3423,13 +3486,19 @@ else{
                 }`,
               }}
               onClick={
+
+
+                
                 addonsAdded.filter(
-                  (item) => item.add_on_title === "Toppings on the Pizza"
-                )?.length < 2
+                  (item) => item.add_on_group_type === "CHECKLIST"
+                )?.length <  addonsAdded.find(
+                    (item) => item=='CHECKLIST'
+                  )?.min_qty
                   ? () => {
                       message.error("addons should be more than 1");
                     }
-                  : handleConfirmAddons
+                  : 
+                  handleConfirmAddons
               }
             >
               Confirm
@@ -3696,6 +3765,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchItemDetails: (customerId, itemId) =>
       dispatch(fetchItemDetails(customerId, itemId)),
     fetchVariants: (id) => dispatch(fetchVariants(id)),
+    fetchAddons: (payload) => dispatch(fetchAddons(payload)),
     fetchSpecification: (id) => dispatch(fetchSpecification(id)),
     fetchAdditionalInfo: (id) => dispatch(fetchAdditionalInfo(id)),
     fetchRelatedItems: (id) => dispatch(fetchRelatedItems(id)),

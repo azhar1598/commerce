@@ -1,5 +1,5 @@
 import { purchaseDetails, setAdditionalInfo, setAddressAction, setBackendCart, setItemDetails, setPurchaseDetails, setSocialProfileAction, setSpecification, setStoreDetails, setStoreDisplaySettings, setStoreSettings, setVariants, setWalletInfoAction, setWishlistDetails, setWishlistItems, setShopWidgets, getShopSeoSuccess, shippingCharges, setPolicies, setAddons } from "../actions";
-import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI, setDeliveryAddressFlag, convenienceFlag, handlePoliciesAPI, getAddonsAPI } from "../services/apiServices";
+import { addAddress, cancelOrder, couponApply, customerLogIn, customerSignUp, deleteFromWishlist, editAddressAPI, filterApi, forgotPasswordAPI, getAddressList, getBannerImages, getCartDetails, getCategoricalItems, getCategories, getFeaturedProducts, getInitialItems, getItemDetails, getItemInfo, getItemSpecification, getItemVariants, getNewArrivals, getPurchaseDetails, getSearchItems, getSimilarItems, getSocialProfile, getStoreDetailsAPI, getStoreDisplaySettingsAPI, getStoreSettingsAPI, getWalletAmount, getWalletTransactions, getWishlistAPI, removeCoupon, resetPasswordAPI, verifyForgotOtp, verifyOtpAPI, handleGetShopWidgets, handleSEO, setDeliveryAPI, setParcelAPI, setDeliveryAddressFlag, convenienceFlag, handlePoliciesAPI, getAddonsAPI, editAddonsAPI } from "../services/apiServices";
 import { put } from "redux-saga/effects"
 import store from "../config/store";
 import wishlistActionType, { FETCH_FILTER_GROUPS } from "../constants/actionTypes";
@@ -246,6 +246,17 @@ export function* handleFetchAddons({ payload }) {
         const { data } = response;
 
         yield put(setAddons(data))
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+export function* handleEditAddons({ payload }) {
+    try {
+        const response = yield editAddonsAPI(payload)
+        const { data } = response;
 
     } catch (error) {
         console.log(error)
