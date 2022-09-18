@@ -1308,7 +1308,7 @@ const Index = ({
                         </div>
                         {console.log("item...id", item)}
 
-                        <CloseOutlined
+                        {/* <CloseOutlined
                           className="p-4"
                           onClick={() =>
                             removeFromCart(
@@ -1324,7 +1324,7 @@ const Index = ({
                               // : item.item_id
                             )
                           }
-                        />
+                        /> */}
                       </div>
                     ))}
                   </>
@@ -1516,7 +1516,7 @@ const Index = ({
                       </p>
                     </div>
 
-                    <CloseOutlined
+                    {/* <CloseOutlined
                       className="p-4"
                       onClick={() =>
                         removeFromCart(
@@ -1525,7 +1525,7 @@ const Index = ({
                             : item.item_id
                         )
                       }
-                    />
+                    /> */}
                   </div>
                 )
               )}
@@ -1705,7 +1705,7 @@ const Index = ({
                       </div>
                     )}
                   </div>
-                  <CloseOutlined
+                  {/* <CloseOutlined
                     className="p-4"
                     onClick={() =>
                       removeFromCart(
@@ -1714,7 +1714,7 @@ const Index = ({
                           : item.item_id
                       )
                     }
-                  />
+                  /> */}
                 </div>
               ))}
             </div>
