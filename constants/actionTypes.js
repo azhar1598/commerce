@@ -174,6 +174,7 @@ export const DECREASE_ADDON="DECREASE_ADDON"
 
 
 export const GET_ADDONS="GET_ADDONS"
+export const SET_ADDONS="SET_ADDONS"
 export const EDIT_ADDONS="EDIT_ADDONS"
 
 export default wishlistActionType

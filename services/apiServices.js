@@ -260,4 +260,8 @@ export const filterApi = (payload) =>
     callAPI('GET', `catalog-search/get-filter-groups&storeId=${STORE_ID}`)
 
 
+    export const getAddonsAPI=(payload)=>
+    callAPI('GET',`catalog-customization/get-add-ons-by-item&itemId=12345&variantValueId=7064`)
+
+
 

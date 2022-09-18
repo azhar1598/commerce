@@ -79,6 +79,8 @@ import wishlistActionType, {
   ADD_ADDON,
   DECREASE_ADDON,
   ADD_BULK_TO_CART,
+  GET_ADDONS,
+  SET_ADDONS,
 } from "../constants/actionTypes";
 
 export const getStoreSettings = (storeId) => {
@@ -275,6 +277,9 @@ export const fetchItemDetails = (customerId, itemId) => {
   };
 };
 
+
+
+
 export const setItemDetails = (data) => {
   return {
     type: SET_ITEM_DETAILS,
@@ -295,6 +300,23 @@ export const setVariants = (data) => {
     variants: data,
   };
 };
+
+
+export const fetchAddons = (payload) => {
+  return {
+    type: GET_ADDONS,
+    payload:payload,
+  };
+};
+
+export const setAddons = (data) => {
+  return {
+    type: SET_ADDONS,
+    addons: data,
+  };
+};
+
+
 
 export const fetchSpecification = (id) => {
   return {

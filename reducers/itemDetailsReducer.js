@@ -6,6 +6,7 @@ import {
   FETCH_VARIANTS,
   GET_ADDONS,
   SET_ADDITIONAL_INFO,
+  SET_ADDONS,
   SET_DEFAULT_ITEM,
   SET_ITEM_DETAILS,
   SET_RELATED_ITEMS,
@@ -117,12 +118,20 @@ const itemDetailsReducer = (state = initialState, action) => {
     }
 
     case GET_ADDONS: {
-      const addons = action.payload;
-      return {
-        ...state,
-        addons,
-      };
-    }
+        return {
+          ...state,
+          addons: [],
+        };
+      }
+  
+      case SET_ADDONS: {
+        const { addons } = action;
+  
+        return {
+          ...state,
+          addons,
+        };
+      }
 
     default:
       return state;
