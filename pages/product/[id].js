@@ -110,8 +110,8 @@ const Index = ({
   const ref = useRef(null);
 
   // Product Addons
-  const [customization, setCustomization] = useState(true);
-  const [addonVisible, setAddonVisible] = useState(false);
+  const [customization, setCustomization] = useState();
+  const [addonVisible, setAddonVisible] = useState();
   const [addonsAdded, setAddonsAdded] = useState([]);
   const [priceWithAddon, setPriceWithAddon] = useState(
     initialState.defaultVariantItem
@@ -120,6 +120,20 @@ const Index = ({
       ? initialState.data.sale_price
       : ""
   );
+
+  console.log("initialState?.data?.is_add_on_available=='Y'",customization,initialState?.data,initialState?.data?.is_add_on_available=='Y')
+
+  useEffect(()=>{
+
+if(initialState?.data?.is_add_on_available=='Y'){
+    
+    setCustomization(true)
+}
+else{
+    setCustomization(false)
+}
+
+  },[initialState?.data?.is_add_on_available])
 
   const [addonQuantity, setAddonQuantity] = useState();
   const [customItemData, setCustomItemData] = useState();
