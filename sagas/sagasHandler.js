@@ -244,19 +244,22 @@ export function* handleFetchAddons({ payload }) {
     try {
         const response = yield getAddonsAPI(payload)
         const { data } = response;
-
+console.log('geeeeeeeee',data)
+debugger
         yield put(setAddons(data))
 
     } catch (error) {
         console.log(error)
     }
-
 }
 
 export function* handleEditAddons({ payload }) {
+
     try {
+    
         const response = yield editAddonsAPI(payload)
         const { data } = response;
+        
 
     } catch (error) {
         console.log(error)

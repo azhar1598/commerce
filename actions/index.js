@@ -305,6 +305,7 @@ export const setVariants = (data) => {
 
 export const fetchAddons = (payload) => {
   console.log('payloaddd',payload)
+  debugger
   return {
     type: GET_ADDONS,
     payload:payload,

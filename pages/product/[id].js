@@ -1248,14 +1248,7 @@ setSelectedVariantValue(variantValueId)
     // dispatchWishlist({ payload })
   };
 
-  const removeFromWishlist = (primaryKey) => {
-    const payload = {
-      primaryKey,
-      setState: props.setState,
-      state: props.state,
-      message,
-    };
-  };
+ 
 
   const handleAddonOk = () => {
     setAddonVisible(true);
@@ -1284,7 +1277,9 @@ setSelectedVariantValue(variantValueId)
       if (initialState?.variants?.length && initialState.variants.length > 0) {
         let data = {
           qty: 1,
-          variant_item_id: selectedVariant?.variant_item_id,
+          variant_item_id: selectedVariant?.variant_item_id || null,
+          variantValueId:selectedVariantValue || null,
+          variantDetails:selectedVariant || [],
           addons: addonsAdded,
           id: crypto.randomBytes(16).toString("hex"),
         };
@@ -1781,14 +1776,7 @@ setSelectedVariantValue(variantValueId)
   }
   return initialState && !initialState.loading && !loadingVariants ? (
     <>
-      {/* <Head>
-                <title>{initialState.data ? initialState.data.item_name : ""} </title>
-                <link rel="icon" href={storeDetails ? storeDetails?.logo_img_url : 'favicon.ico'} />
-                <meta name="description" content={`${initialState.data && initialState.data.item_name + ', ' + initialState.data && initialState.data.item_desc}, Amazon.in: Online Shopping India - Buy mobiles, laptops, cameras, books, watches, apparel, shoes and e-Gift Cards. Free Shipping &amp; Cash on Delivery Available. `} />
-                <meta property="og:description"
-                    content={`${initialState.data && initialState.data.item_name + ', ' + initialState.data && initialState.data.item_desc}, The pizzeria is the largest pizza restaurant chain in the Country with multiple outlets in and around. The pizzeria is known for its fresh pizzas made using organic produce and local ingredients.`} />
-                <meta name="keywords" content={`${initialState.data && initialState.data.item_name + ', ' + initialState.data && initialState.data.item_desc} , Amazon.in, Amazon, Online Shopping, online shopping india, india shopping online, amazon india, amazn, buy online, buy mobiles online, buy books online, buy movie dvd's online, kindle, kindle fire hd, kindle e-readers, ebooks, computers, laptop, toys, trimmers, watches, fashion jewellery, home, kitchen, small appliances, beauty, Sports, Fitness &amp; Outdoors`} />
-            </Head> */}
+    
 
       <div className="relative min-h-screen mt-16  lg:min-h-0 lg:mb-28 lg:mt-24">
         {/* {!isDesktopOrLaptop?<div className='bg-white sticky top-0 shadow-2xl  p-2 h-10'><ArrowLeftOutlined onClick={() => router.push(`/`)} /></div>:""} */}
@@ -1801,35 +1789,7 @@ setSelectedVariantValue(variantValueId)
                 <div className="lg:col-span-1 lg:order-2 ">
                   {isDesktopOrLaptop ? (
                     <div className="w-full h-96">
-                      {/* <ReactImageMagnify {...{
-                                                    smallImage: {
-                                                        alt: 'product',
-                                                        isFluidWidth: false,
-                                                        src: initialState.images ? initialState.images[active] != null ? initialState.images[active] : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png` : "",
-                                                        width: 300,
-                                                        height: 400
-                                                    },
-                                                    largeImage: {
-                                                        src: initialState.images ? initialState.images[active] != null ? initialState.images[active] : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png` : "",
-                                                        width: 600,
-                                                        height: 600
-                                                    },
-                                                    enlargedImageContainerStyle: { background: '#fff', zIndex: 9 },
-                                                    enlargedImageContainerDimensions: {
-                                                        width: '200%',
-                                                        height: '100%'
-                                                    }
-                                                }} /> */}
 
-                      {console.log(
-                        "initiate.images",
-                        initialState,
-                        initialState.images,
-                        initialState?.defaultVariantItem?.variant_value_1
-                          ?.variant_value_images
-                      )}
-
-                      {/* <Magnify images={initialState.images}/> */}
                       <Magnify
                         images={
                           initialState.images?.length != 0
@@ -1900,9 +1860,9 @@ setSelectedVariantValue(variantValueId)
                                       ? initialState.defaultVariantItem
                                           ?.variant_value_3
                                           ?.variant_value_images
-                                      : dummyImage
+                                          : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`
                                   )
-                                : dummyImage
+                                  : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`
                             ).map((key, idx) => {
                               console.log("key", key, idx);
 

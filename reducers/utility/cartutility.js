@@ -34,6 +34,7 @@ export const addItemToCart = (cart, cartItem) => {
   // let itemExist = cart?.find((item) => item.item_id == cartItem.item_id);
 
   let index = -1;
+  debugger
 
   if (cartItem?.addons) {
     const itemExist = cart?.find((item, num) => {

@@ -1,20 +1,25 @@
 import { Checkbox, Modal } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { addToCart } from "../../actions";
 
 export const AddonModal = ({
   setAddonCombination,
+  addonCombination,
   addonSelected,
   setAddonSelected,
+  selectedCartItem,
   setSelectedCartItem,
   addToCart,
   setShowEditAddon,
   showEditAddon,
   storeSettings,
   stateStoreDetails,
-  addonsData
+    addonsData
 }) => {
+
+   
   const handleAddonCancel = () => {
     setShowEditAddon(false);
   };
@@ -103,6 +108,7 @@ export const AddonModal = ({
   const confirmUpdateCart = () => {
     // let selectedItem = {...addonSelected,addons: selectedaddon };
     // let item = {...selectedCartItem, addons: [addonSelected]}
+    debugger
     let item = {
       ...selectedCartItem,
       addons: selectedCartItem.addons.map((item) =>
@@ -127,10 +133,16 @@ export const AddonModal = ({
     setSelectedCartItem(item);
 
     // ;
+    
     addToCart(item);
 
     setShowEditAddon(false);
   };
+
+
+ 
+
+
 
   return (
     <Modal
@@ -159,7 +171,7 @@ export const AddonModal = ({
 
         {Object.keys(addonsData).map((mapId, index) => {
           const item = addonsData[mapId];
-          console.log("itemmmmmmmmm", item);
+          console.log("itemmmmmmmmm", item, addonsData);
 
           return (
             <div className="px-12 py-2">
@@ -172,11 +184,11 @@ export const AddonModal = ({
                 )}
               </p>
               <p className="text-gray text-sm font-montMedium ">
-                {item.add_on_group_type == "CHEKLIST"
+                {item.add_on_group_type == "CHECKLIST"
                   ? item.add_on_description
                   : ""}
               </p>
-              {item.add_on_group_type == "CHEKLIST" ? (
+              {item.add_on_group_type == "CHECKLIST" ? (
                 item.add_on_options?.map((value, index) => {
                   return (
                     <div className=" w-1/2 flex">
@@ -289,8 +301,21 @@ export const AddonModal = ({
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+    storeSettings: state.storeSettingsReducer,
+    cart: state.cartReducer.cart,
+    checkout: state.checkoutReducer,
+    customerDetails: state.customerDetailsReducer,
+    stateStoreDetails: state.storeDetailsReducer.data,
+    addonsData: state.itemDetailsReducer.addons,
+    
+  });
+  
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = dispatch=>{
+    return{
+        addToCart: (data) => dispatch(addToCart(data)),
+    }
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddonModal);

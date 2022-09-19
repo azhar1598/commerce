@@ -1,103 +1,120 @@
 import { SyncOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { isEmpty } from "@firebase/util";
-
+import { useRouter } from "next/router";
+import AddonModal from "./AddonModal";
+import { fetchAddons, fetchItemDetails } from "../../actions";
 
 const groupBy = function (arr, key) {
-    return arr.reduce(function (rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-  
-      return rv;
-    }, {});
-  };
-  
-  const qtySum = function (items, prop) {
-    return items.reduce(function (a, b) {
-      return parseInt(a) + parseInt(b[prop]);
-    }, 0);
-  };
-  
-  const getValuesByKey = (arrayOfObjects, key) => {
-    if (!Array.isArray(arrayOfObjects) || !key) return [];
-    return arrayOfObjects.map((item) => item[key]);
-  };
+  return arr.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
 
+    return rv;
+  }, {});
+};
 
+const qtySum = function (items, prop) {
+  return items.reduce(function (a, b) {
+    return parseInt(a) + parseInt(b[prop]);
+  }, 0);
+};
+
+const getValuesByKey = (arrayOfObjects, key) => {
+  if (!Array.isArray(arrayOfObjects) || !key) return [];
+  return arrayOfObjects.map((item) => item[key]);
+};
 
 export const CartAddons = ({
   item,
   fetchItemDetails,
   checkout,
   storeSettings,
-  editAddonModal,
   stateStoreDetails,
   setCartUpdate,
   addToCart,
-  rgbaBackground
+  rgbaBackground,
 }) => {
+  const router = useRouter();
+
+
+  const [showEditAddon, setShowEditAddon] = useState(false);
+  const [selectedCartItem, setSelectedCartItem] = useState({});
+  const [addonSelected, setAddonSelected] = useState();
+  const [addonCombination, setAddonCombination] = useState([]);
 
 
 
-    const handleIncreaseQuantity = (item) => {
-      
-        let selectedAddon;
-      
-          let selectedProduct = cart.find((product) => {
-            return (selectedAddon = product.addons.find((addon) => {
-              if (addon.id == item.id) {
-                addon.qty = addon.qty + 1;
-                return true;
-              }
-            }));
-            // addToCart();
-            console.log("selectedAddonnnn", selectedAddon);
-          });
-    
-          const quantity = qtySum(selectedProduct.addons, "qty");
-    
-    
-          let data = selectedProduct;
-    
-          data.addons = selectedProduct?.addons || [];
-          data.qty = quantity;
-    
-          addToCart(data);
-          setCartUpdate(!cartUpdate);
-       
-      };
+  const handleIncreaseQuantity = (item) => {
+    let selectedAddon;
 
-      const handleDecreaseQuantity = (item, qty) => {
-        const datas = readyCartData(cart);
-        // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
-      
-          let selectedAddon;
-          let selectedProduct = cart.find((product) => {
-            return (selectedAddon = product.addons.find((addon) => {
-              if (addon.id == item.id) {
-                addon.qty = addon.qty - 1;
-                return true;
-              }
-            }));
-            // addToCart();
-            console.log("selectedAddonnnn", selectedAddon);
-          });
-          const quantity = qtySum(selectedProduct.addons, "qty");
-    
-          console.log("quantityyyy", quantity);
-    
-          let data = selectedProduct;
-    
-          data.addons = selectedProduct?.addons || [];
-          data.qty = quantity;
-    
-          addToCart(data);
-          setCartUpdate(!cartUpdate);
-        
-      };
+    let selectedProduct = cart.find((product) => {
+      return (selectedAddon = product.addons.find((addon) => {
+        if (addon.id == item.id) {
+          addon.qty = addon.qty + 1;
+          return true;
+        }
+      }));
+      // addToCart();
+      console.log("selectedAddonnnn", selectedAddon);
+    });
+
+    const quantity = qtySum(selectedProduct.addons, "qty");
+
+    let data = selectedProduct;
+
+    data.addons = selectedProduct?.addons || [];
+    data.qty = quantity;
+
+    addToCart(data);
+    setCartUpdate(!cartUpdate);
+  };
+
+  const handleDecreaseQuantity = (item, qty) => {
+    const datas = readyCartData(cart);
+    // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
+
+    let selectedAddon;
+    let selectedProduct = cart.find((product) => {
+      return (selectedAddon = product.addons.find((addon) => {
+        if (addon.id == item.id) {
+          addon.qty = addon.qty - 1;
+          return true;
+        }
+      }));
+      // addToCart();
+      console.log("selectedAddonnnn", selectedAddon);
+    });
+    const quantity = qtySum(selectedProduct.addons, "qty");
+
+    console.log("quantityyyy", quantity);
+
+    let data = selectedProduct;
+
+    data.addons = selectedProduct?.addons || [];
+    data.qty = quantity;
+
+    addToCart(data);
+    setCartUpdate(!cartUpdate);
+  };
 
 
 
+  const editAddonModal = (addon, cartItem) => {
+    console.log("edittt", addon, cartItem);
+    const payload = {
+      itemId: cartItem.item_id,
+      variantValueId: addon?.variantValueId || null,
+    };
+    fetchAddons(payload);
+
+    setShowEditAddon(true);
+    setSelectedCartItem(cartItem);
+    setAddonSelected(addon);
+    setAddonCombination(addon?.addons);
+
+    // setAddonsAdded();
+  };
 
   return (
     <>
@@ -115,7 +132,6 @@ export const CartAddons = ({
               }
               className="w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow "
               onClick={() => {
-                
                 router.push(`/product/${item.item_id}`);
               }}
             />
@@ -211,7 +227,6 @@ export const CartAddons = ({
               <p
                 className="text-lg font-montSemiBold "
                 onClick={() => {
-                  
                   router.push(`/product/${item.item_id}`);
                 }}
               >
@@ -226,52 +241,15 @@ export const CartAddons = ({
                 Edit
               </p>
             </div>
-            {item.defaultVariantItem ? (
-              <p className="text-sm font-montSemiBold -mt-4">
-                <span className="text-gray-500">
-                  {item.defaultVariantItem
-                    ? `${item.defaultVariantItem.variant_value_1?.variant_group_name}:`
-                    : ""}
-                </span>{" "}
-                {item.defaultVariantItem
-                  ? item.defaultVariantItem.variant_value_1?.variant_value_name
-                  : ""}
-                <span className="text-gray-500">
-                  {item.defaultVariantItem
-                    ? `${
-                        item.defaultVariantItem.variant_value_2
-                          ?.variant_group_name
-                          ? `, ${item.defaultVariantItem.variant_value_2?.variant_group_name}:`
-                          : ""
-                      }`
-                    : ""}
-                </span>{" "}
-                {item.defaultVariantItem
-                  ? item.defaultVariantItem.variant_value_2?.variant_value_name
-                  : ""}
-                <span className="text-black-500">
-                  {item.defaultVariantItem
-                    ? `${
-                        item.defaultVariantItem.variant_value_3
-                          ?.variant_group_name
-                          ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:`
-                          : ""
-                      }`
-                    : ""}
-                </span>{" "}
-                {item.defaultVariantItem
-                  ? item.defaultVariantItem.variant_value_3?.variant_value_name
-                  : ""}
-              </p>
-            ) : (
-              ""
-            )}
 
             {(() => {
               const newVar = groupBy(addon?.addons || [], "add_on_title");
               console.log("grooooo", newVar);
               return Object.keys(newVar).map((item, index) => {
                 const addons = newVar[item];
+
+                console.log;
+
                 if (
                   item == "Cooking Instructions" &&
                   isEmpty(addons[0]["text"])
@@ -279,16 +257,67 @@ export const CartAddons = ({
                   return "";
                 } else
                   return (
-                    <div className="flex ">
-                      <p className="font-montMedium px-1 -mt-3">{item}:</p>
-                      {addons.map((addon, num) => {
-                        return (
-                          <p className="font-montRegular px-1 -mt-3">
-                            {addon.add_on_name ? addon.add_on_name : addon.text}
-                            ,
-                          </p>
-                        );
-                      })}
+                    <div className="flex flex-col">
+                      <div className="flex">
+                        <p className="font-montMedium px-1 -mt-3">{item}:</p>
+                        {addons.map((value, num) => {
+                          console.log("adddddons", addons);
+                          return (
+                            <>
+                              <p className="font-montRegular px-1 -mt-3">
+                                {value.add_on_name
+                                  ? value.add_on_name
+                                  : value.text}
+                                ,
+                              </p>
+                            </>
+                          );
+                        })}
+                      </div>
+
+                      {addon?.variantDetails ? (
+                        <p className="text-sm font-montSemiBold -mt-4">
+                          <span className="text-gray-500">
+                            {addon?.variantDetails
+                              ? `${addon.variantDetails?.variant_value_1?.variant_group_name}:`
+                              : ""}
+                          </span>{" "}
+                          {addon?.variantDetails
+                            ? addon.variantDetails?.variant_value_1
+                                ?.variant_value_name
+                            : ""}
+                          <span className="text-gray-500">
+                            {addon?.variantDetails
+                              ? `${
+                                  addon.variantDetails?.variant_value_2
+                                    ?.variant_group_name
+                                    ? `, ${addon.variantDetails?.variant_value_2?.variant_group_name}:`
+                                    : ""
+                                }`
+                              : ""}
+                          </span>{" "}
+                          {addon?.variantDetails
+                            ? addon.variantDetails?.variant_value_2
+                                ?.variant_value_name
+                            : ""}
+                          <span className="text-black-500">
+                            {addon?.variantDetails
+                              ? `${
+                                  addon?.variantDetails.variant_value_3
+                                    ?.variant_group_name
+                                    ? `, ${addon.variantDetails?.variant_value_3?.variant_group_name}:`
+                                    : ""
+                                }`
+                              : ""}
+                          </span>{" "}
+                          {addon?.variantDetails
+                            ? addon.variantDetails?.variant_value_3
+                                ?.variant_value_name
+                            : ""}
+                        </p>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   );
                 // })
@@ -339,14 +368,41 @@ export const CartAddons = ({
         /> */}
         </div>
       ))}
+
+     {/*Addon Modal  */}
+
+     <AddonModal
+
+        setAddonCombination={setAddonCombination}
+        addonCombination={addonCombination}
+        addonSelected={addonSelected}
+        setAddonSelected={setAddonSelected}
+        selectedCartItem={selectedCartItem}
+        setSelectedCartItem={setSelectedCartItem}
+        showEditAddon={showEditAddon}
+        setShowEditAddon={setShowEditAddon}
+        
+      />
+
+
     </>
+
+
+
+
   );
 };
 
 const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    fetchItemDetails: (customerId, itemId) =>
+    dispatch(fetchItemDetails(customerId, itemId)),
+fetchAddons: (payload) => dispatch(fetchAddons(payload)),
+addToCart: (data) => dispatch(addToCart(data)),
+
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartAddons);
