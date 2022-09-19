@@ -33,7 +33,9 @@ import { useMediaQuery } from "react-responsive";
 import { toast, ToastContainer } from "react-toastify";
 import { convenienceFlag } from "../../services/apiServices";
 import TextArea from "antd/lib/input/TextArea";
-import { isEmpty } from "@firebase/util";
+
+import CartAddons from "../../components/Addons/CartAddons";
+import AddonModal from "../../components/Addons/AddonModal";
 
 const groupBy = function (arr, key) {
   return arr.reduce(function (rv, x) {
@@ -47,6 +49,11 @@ const qtySum = function (items, prop) {
   return items.reduce(function (a, b) {
     return parseInt(a) + parseInt(b[prop]);
   }, 0);
+};
+
+const getValuesByKey = (arrayOfObjects, key) => {
+  if (!Array.isArray(arrayOfObjects) || !key) return [];
+  return arrayOfObjects.map((item) => item[key]);
 };
 
 const Index = ({
@@ -188,6 +195,20 @@ const Index = ({
           data
         );
         setEnableBulkAPI(false);
+
+        let postData = [];
+        let cartData = cart.map((item, index) => {
+          if (item.addons) {
+            item.addons?.map((addon, num) => {
+              if (postData) {
+                // postData?.addons=addon
+              }
+              postData.push(item);
+            });
+          }
+        });
+
+        console.log("postDataa", postData);
 
         // }
         // else{
@@ -368,30 +389,7 @@ const Index = ({
   const handleDecreaseQuantity = (item, qty) => {
     const data = readyCartData(cart);
     // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
-    if (item?.addons) {
-      let selectedAddon;
-      let selectedProduct = cart.find((product) => {
-        return (selectedAddon = product.addons.find((addon) => {
-          if (addon.id == item.id) {
-            addon.qty = addon.qty - 1;
-            return true;
-          }
-        }));
-        // addToCart();
-        console.log("selectedAddonnnn", selectedAddon);
-      });
-      const quantity = qtySum(selectedProduct.addons, "qty");
-
-      console.log("quantityyyy", quantity);
-
-      let data = selectedProduct;
-
-      data.addons = selectedProduct?.addons || [];
-      data.qty = quantity;
-
-      addToCart(data);
-      setCartUpdate(!cartUpdate);
-    } else {
+   
       if (item.defaultVariantItem) {
         const filter = cart.filter((c) => {
           if (
@@ -527,7 +525,7 @@ const Index = ({
           }
         }
       }
-    }
+    
 
     // if (checkout.backendCart?.purchase_id || state) {
     //     fetchBackendCart(customerDetails?.data?.customer_id, 'storeDetails.group_id', checkout.backendCart?.purchase_id, data)
@@ -570,28 +568,43 @@ const Index = ({
         barcode_id: null,
         quantity: x.qty,
         variant_item_id: x.defaultVariantItem?.variant_item_id | null,
-        add_on_details:
-          [{add_on_mapping_id:x?.addons[0]?.addons[0]?.add_on_mapping_id,
-              add_on_group_id:x?.addons[0]?.addons[0]?.add_on_group_id,add_on_values:10}]
-        //   x?.addons.map((addon, index) => {
-        //     console.log("addonsst", addon);
+        add_on_details:[]
+          // [{add_on_mapping_id:x?.addons[0]?.addons[0]?.add_on_mapping_id,
+          //     add_on_group_id:x?.addons[0]?.addons[0]?.add_on_group_id,add_on_values:
 
-        //    addon.addons.map((item) => {
-        //        data.push({
-        //           a:2
-        //         // add_on_mapping_id: x?.addons[0]?.addons[0]?.add_on_mapping_id,
-        //         // add_on_group_id: x?.addons[0]?.addons[0]?.add_on_group_id,
-        //         // add_on_values: groupBy(x?.addons, "add_on_option_id"),
-        //       });
+          //     getValuesByKey(
+          //       Object.values(groupBy(x?.addons,"id")).map((addon=>addon.addons))
+          //      ,"add_on_option_id")}]
 
-        //       console.log('aaab c',data)
-              
+        // temporary Commenting start
 
-              // setAddonDetails([...addonDetails,{add_on_mapping_id:x?.addons[0]?.addons[0]?.add_on_mapping_id,
-              //     add_on_group_id:x?.addons[0]?.addons[0]?.add_on_group_id,}])
-              // groupBy(x?.addons, "add_on_option_id")
-        //     });
-        //   }),
+        // x?.addons.map((addon, index) => {
+        //   console.log("addonsst", addon);
+        //   let addonPost = {
+        //     add_on_mapping_id: addon.addons[index]?.add_on_mapping_id,
+        //     add_on_group_id: addon.addons[index]?.add_on_group_id,
+        //     addon_on_values: [],
+        //   };
+
+        //   addon.addons.map((item) => {
+        //     addonPost.addon_on_values = getValuesByKey(
+        //       addon.addons,
+        //       "add_on_option_id"
+        //     );
+
+        //     // add_on_mapping_id: x?.addons[0]?.addons[0]?.add_on_mapping_id,
+        //     // add_on_group_id: x?.addons[0]?.addons[0]?.add_on_group_id,
+        //     // add_on_values: groupBy(x?.addons, "add_on_option_id"),
+        //   });
+
+        //   return addonPost;
+        // }),
+
+        // temporary commenting end
+
+
+
+
 
         // }]
       });
@@ -601,33 +614,8 @@ const Index = ({
 
   const handleIncreaseQuantity = (item) => {
     console.log("itenmmmm", item);
-    let selectedAddon;
-    if (item?.addons) {
-      let selectedProduct = cart.find((product) => {
-        return (selectedAddon = product.addons.find((addon) => {
-          if (addon.id == item.id) {
-            addon.qty = addon.qty + 1;
-            return true;
-          }
-        }));
-        // addToCart();
-        console.log("selectedAddonnnn", selectedAddon);
-      });
-
-      const quantity = qtySum(selectedProduct.addons, "qty");
-
-      console.log("quantityyyy", quantity);
-
-      let data = selectedProduct;
-
-      data.addons = selectedProduct?.addons || [];
-      data.qty = quantity;
-
-      addToCart(data);
-      setCartUpdate(!cartUpdate);
-
-      console.log("selectedProducttt", selectedProduct);
-    } else {
+   
+    
       if (item.defaultVariantItem) {
         let quantity = 0;
         const value = item?.defaultVariantItem?.inventory_details;
@@ -882,7 +870,7 @@ const Index = ({
           });
         }
       }
-    }
+    
   };
 
   const hex2rgba = (hex, alpha = 1) => {
@@ -914,122 +902,7 @@ const Index = ({
     // setAddonsAdded();
   };
 
-  const handleAddonCancel = () => {
-    setShowEditAddon(false);
-  };
 
-  const handleAddonClose = () => {};
-
-  const handleAddonOk = () => {};
-
-  const handleAddonChange = (e) => {
-    let selectedaddon;
-
-    if (e.target.checked) {
-      setAddonCombination([...addonCombination, e.target.value]);
-      selectedaddon = [...addonCombination, e.target.value];
-    } else {
-      setAddonCombination(
-        addonCombination.filter(
-          (item) => item.add_on_option_id !== e.target?.value?.add_on_option_id
-        )
-      );
-      selectedaddon = [
-        ...addonCombination.filter(
-          (item) => item.add_on_option_id !== e.target?.value?.add_on_option_id
-        ),
-      ];
-    }
-    setAddonSelected({ ...addonSelected, addons: selectedaddon });
-  };
-
-  const handleAddonInstructions = (
-    e,
-    add_on_group_id,
-    add_on_title,
-    addonSelected,
-    mapId
-  ) => {
-    let instructions = {
-      add_on_group_id,
-      add_on_title,
-      mapId,
-      text: e.target.value,
-    };
-    setAddonCombination([...addonCombination, e.target.value]);
-
-    let isCookingInstr = addonCombination.find(
-      (item) => item.add_on_title === "Cooking Instructions"
-    );
-
-    if (!isCookingInstr) {
-      // setAddonSelected({...addonSelected,{...instructions} )
-      setAddonCombination([...addonCombination, instructions]);
-      // setAddonSelected({...addonSelected,addons: [addonText] })
-    } else {
-      let addonText = addonCombination.map((item) => {
-        return item?.add_on_title === add_on_title ? instructions : item;
-      });
-
-      setAddonCombination(addonText);
-      setAddonSelected({ ...addonSelected, addons: addonText });
-    }
-
-    // let selectedProduct = cart.find((product) => {
-    //   findSelectedAddon = product.addons.find((addon) => {
-    //     console.log("addddon", addonSelected, addon);
-    //     if (addonSelected.id == addon.id) {
-    //       addonText =
-    //         addonSelected &&
-    //         addonSelected?.addons?.find((element) => {
-
-    //           if (element?.add_on_group_id == add_on_group_id) {
-    //             return true
-    //           } else {
-    //             return false;
-    //           }
-    //         });
-    //         console.log('addonText',addonText)
-    //         addonText.text=e.target.value
-    //     }
-    //   });
-    // });
-    // setAddonCombination(addonCombination.filter(item => item.add_on_option_id === e.target?.value?.add_on_option_id))
-
-    // console.log("jelll", e.target.name, e.target.value);
-  };
-
-  const confirmUpdateCart = () => {
-    // let selectedItem = {...addonSelected,addons: selectedaddon };
-    // let item = {...selectedCartItem, addons: [addonSelected]}
-    let item = {
-      ...selectedCartItem,
-      addons: selectedCartItem.addons.map((item) =>
-        item.id === addonSelected.id ? addonSelected : item
-      ),
-    };
-
-    // let  addonCombinationGroupby
-    // let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
-    //   debugger
-
-    //   let duplicate = item.addons.find((item) => {
-    //     addonCombinationGroupby = groupBy(item.addons, "add_on_title");
-    //     return (
-    //       JSON.stringify(addonCombinationGroupby) ===
-    //       JSON.stringify(groupByaddonsWithQty)
-    //     );
-    //   });
-
-    //   console.log('selecyed',duplicate,selectedCartItem.addons)
-
-    setSelectedCartItem(item);
-
-    // ;
-    addToCart(item);
-
-    setShowEditAddon(false);
-  };
 
   console.log(
     "addons>>>>>>>>>",
@@ -1049,15 +922,20 @@ const Index = ({
               </Head> */}
 
       {cart.length != 0 ? (
+        // If Cart Length is more than 0
+
         <div className="lg:bg-[#F6F6F6] lg:mt-24 md:-mt-4 lg:h-full md:h-screen flex flex-col lg:flex-row md:flex-row items-start lg:p-2 md:p-2 lg:min-h-screen">
           <div className="mt-20 lg:mt-16 md:mt-4 flex flex-col items-start justify-between  lg:ml-24 lg:mr-24 md:ml-24 md:mr-24 w-full lg:w-[50vw] lg:border-b-2 lg:border-slate-[200] cursor-pointer mb-24 lg:mb-0 bg-white">
+            {/* Cart Heading Web View Start */}
             <p className="hidden lg:block md:block font-montBold text-2xl py-6 px-5">
               Cart
               <span className="text-gray-500 font-montSemiBold text-lg px-3">
                 {cart.length} {cart.length > 1 ? "items" : "item"}
               </span>
             </p>
+            {/* Cart Heading Web View End */}
 
+            {/* Cart Mobile Heading Start */}
             <div className="lg:hidden px-5 flex items-start border-b-2 border-slate-200 w-full mb-2">
               <LeftOutlined className="mt-2 pr-2" />
 
@@ -1068,272 +946,31 @@ const Index = ({
                 </span>
               </p>
             </div>
+            {/* Cart Mobile Heading End */}
 
-            <div className="hidden lg:flex flex-col bg-white w-full justify-between items-start px-5 lg:mb-12">
+            {/*Cart-List Web View Start  */}
+            <div className="hidden lg:flex flex-col lg:bg-white w-full justify-between items-start lg:px-5 lg:mb-12">
               {cart.map((item, idx) =>
                 item.addons ? (
-                  <>
-                    {item.addons.map((addon, index) => (
-                      <div
-                        className="flex items-start text-left w-full border-2 border-slate-300 mb-2 rounded lg:pl-8 px-3 pb-2 md:pl-8 lg: md:pt-3"
-                        key={idx}
-                      >
-                        <div className="flex flex-col item-center">
-                          <img
-                            src={
-                              item?.primary_img
-                                ? item?.primary_img
-                                : "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png"
-                            }
-                            className="w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow "
-                            onClick={() => {
-                              fetchItemDetails("", "");
-                              router.push(`/product/${item.item_id}`);
-                            }}
-                          />
+                  <CartAddons
+                    item={item}
+                    fetchItemDetails={fetchItemDetails}
+                    checkout={checkout}
+                    storeSettings={storeSettings}
+                    editAddonModal={editAddonModal}
+                    stateStoreDetails={stateStoreDetails}
+                    rgbaBackground={rgbaBackground}
+                    setCartUpdate={setCartUpdate}
+                    addToCart={addToCart}
 
-                          {checkout.backendCart?.purchase_id != undefined ||
-                          Object.keys(checkout).length == 0 ? (
-                            <div className="flex -mt-5  gap-4 ">
-                              <div
-                                className="border border-gray-400 space-x-4 mb-2 w-32 mx-4 flex items-center rounded"
-                                style={{
-                                  backgroundColor: "white",
-                                  color: `${
-                                    storeSettings.data
-                                      ? storeSettings.data.secondary_color
-                                      : "black"
-                                  }`,
-                                  borderColor: `${
-                                    storeSettings.data
-                                      ? storeSettings.data.secondary_color
-                                      : "black"
-                                  }`,
-                                }}
-                              >
-                                <span
-                                  onClick={() => handleDecreaseQuantity(addon)}
-                                  className={`px-4   py-1 text-xl cursor-pointer`}
-                                  style={{
-                                    backgroundColor: `${
-                                      storeSettings.data
-                                        ? rgbaBackground
-                                        : "black"
-                                    }`,
-                                    color: `${
-                                      storeSettings.data
-                                        ? storeSettings.data.navbar_color
-                                        : "white"
-                                    }`,
-                                    borderColor: `${
-                                      storeSettings.data
-                                        ? storeSettings.data.secondary_color
-                                        : "black"
-                                    }`,
-                                  }}
-                                >
-                                  -
-                                </span>
-                                <span
-                                  className="font-montSemiBold"
-                                  style={{
-                                    color: `${
-                                      !storeSettings.data
-                                        ? storeSettings.data.primary_color
-                                        : "black"
-                                    }`,
-                                  }}
-                                >
-                                  {addon.qty}
-                                </span>
-
-                                <span
-                                  onClick={() => {
-                                    handleIncreaseQuantity(addon);
-                                  }}
-                                  className={`px-4  text-xl cursor-pointer py-1`}
-                                  style={{
-                                    backgroundColor: `${
-                                      storeSettings.data
-                                        ? rgbaBackground
-                                        : "black"
-                                    }`,
-                                    color: `${
-                                      storeSettings.data
-                                        ? storeSettings.data.navbar_color
-                                        : "white"
-                                    }`,
-                                    borderColor: `${
-                                      storeSettings.data
-                                        ? storeSettings.data.secondary_color
-                                        : "black"
-                                    }`,
-                                  }}
-                                >
-                                  +
-                                </span>
-                              </div>
-                              {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
-                            </div>
-                          ) : (
-                            <div className=" w-full  flex items-center justify-center">
-                              <SyncOutlined style={{ fontSize: 24 }} spin />
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24">
-                          <div className="flex">
-                            <p
-                              className="text-lg font-montSemiBold "
-                              onClick={() => {
-                                fetchItemDetails("", "");
-                                router.push(`/product/${item.item_id}`);
-                              }}
-                            >
-                              {item.item_name}
-                            </p>
-                            <p
-                              className="font-montMedium px-2 text-blue-500"
-                              onClick={() => {
-                                editAddonModal(addon, item);
-                              }}
-                            >
-                              Edit
-                            </p>
-                          </div>
-                          {item.defaultVariantItem ? (
-                            <p className="text-sm font-montSemiBold -mt-4">
-                              <span className="text-gray-500">
-                                {item.defaultVariantItem
-                                  ? `${item.defaultVariantItem.variant_value_1?.variant_group_name}:`
-                                  : ""}
-                              </span>{" "}
-                              {item.defaultVariantItem
-                                ? item.defaultVariantItem.variant_value_1
-                                    ?.variant_value_name
-                                : ""}
-                              <span className="text-gray-500">
-                                {item.defaultVariantItem
-                                  ? `${
-                                      item.defaultVariantItem.variant_value_2
-                                        ?.variant_group_name
-                                        ? `, ${item.defaultVariantItem.variant_value_2?.variant_group_name}:`
-                                        : ""
-                                    }`
-                                  : ""}
-                              </span>{" "}
-                              {item.defaultVariantItem
-                                ? item.defaultVariantItem.variant_value_2
-                                    ?.variant_value_name
-                                : ""}
-                              <span className="text-black-500">
-                                {item.defaultVariantItem
-                                  ? `${
-                                      item.defaultVariantItem.variant_value_3
-                                        ?.variant_group_name
-                                        ? `, ${item.defaultVariantItem.variant_value_3?.variant_group_name}:`
-                                        : ""
-                                    }`
-                                  : ""}
-                              </span>{" "}
-                              {item.defaultVariantItem
-                                ? item.defaultVariantItem.variant_value_3
-                                    ?.variant_value_name
-                                : ""}
-                            </p>
-                          ) : (
-                            ""
-                          )}
-
-                          {(() => {
-                            const newVar = groupBy(
-                              addon?.addons || [],
-                              "add_on_title"
-                            );
-                            console.log("grooooo", newVar);
-                            return Object.keys(newVar).map((item, index) => {
-                              const addons = newVar[item];
-                              if (
-                                item == "Cooking Instructions" &&
-                                isEmpty(addons[0]["text"])
-                              ) {
-                                return "";
-                              } else
-                                return (
-                                  <div className="flex ">
-                                    <p className="font-montMedium px-1 -mt-3">
-                                      {item}:
-                                    </p>
-                                    {addons.map((addon, num) => {
-                                      return (
-                                        <p className="font-montRegular px-1 -mt-3">
-                                          {addon.add_on_name
-                                            ? addon.add_on_name
-                                            : addon.text}
-                                          ,
-                                        </p>
-                                      );
-                                    })}
-                                  </div>
-                                );
-                              // })
-                            });
-                          })()}
-
-                          <p className="text-[#212B3680] hidden">
-                            {item.item_desc}
-                          </p>
-                          <p className="text-lg font-montSemiBold flex items-start -mt-3">
-                            {stateStoreDetails?.currency_symbol}{" "}
-                            {item.defaultVariantItem
-                              ? item.defaultVariantItem.sale_price
-                              : item.sale_price}
-                            <span className="line-through px-1 text-sm hidden lg:flex mt-1 ml-2">
-                              {item.price - item.sale_price != 0
-                                ? `${stateStoreDetails?.currency_symbol} ${item.price}`
-                                : ""}
-                            </span>
-                            <span className="text-green-500 text-sm hidden lg:flex mt-1 ml-2">
-                              {item.price - item.sale_price != 0
-                                ? `Save ${stateStoreDetails?.currency_symbol}${
-                                    item.defaultVariantItem
-                                      ? item.defaultVariantItem.list_price -
-                                        item.defaultVariantItem.sale_price
-                                      : item.price - item.sale_price
-                                  }`
-                                : ""}
-                            </span>
-                          </p>
-                        </div>
-                        {console.log("item...id", item)}
-
-                        {/* <CloseOutlined
-                          className="p-4"
-                          onClick={() =>
-                            removeFromCart(
-                              {
-                                addonId: item?.id || null,
-                                variantId:
-                                  item?.defaultVariantItem?.variant_item_id ||
-                                  null,
-                                itemId: item.item_id,
-                              }
-                              // item.defaultVariantItem
-                              // ? item.defaultVariantItem.variant_item_id
-                              // : item.item_id
-                            )
-                          }
-                        /> */}
-                      </div>
-                    ))}
-                  </>
+                   
+                  />
                 ) : (
                   <div
-                    className="flex items-start text-left w-full border-2 border-slate-300 mb-2 rounded lg:pl-8 px-3 pb-2 md:pl-8 lg: md:pt-3"
+                    className="flex items-start text-left w-full lg:border-2 border-b-2 border-slate-300 mb-2 rounded lg:pl-8 lg:px-3 pb-2 md:pl-8 lg: md:pt-3"
                     key={idx}
                   >
-                    <div className="flex flex-col item-center">
+                    <div className="flex flex-col px-2  lg:px-0 item-center">
                       <img
                         src={
                           item?.primary_img
@@ -1530,162 +1167,125 @@ const Index = ({
                 )
               )}
             </div>
+            {/* Cart-List Web View End */}
 
+            {/* Cart-List Mobile View Start */}
             <div className=" lg:hidden flex  flex-col w-full justify-between items-start  lg:mb-12">
-              {cart.map((item, idx) => (
-                <div
-                  className="flex items-start text-left w-full border-b-2 border-slate-300 mb-2 rounded  pb-2 : md:pt-3"
-                  key={idx}
-                >
-                  <div className="flex flex-col px-2 item-center">
-                    <img
-                      src={
-                        item?.primary_img
-                          ? item?.primary_img
-                          : "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png"
-                      }
-                      className="w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow "
-                      onClick={() => {
-                        fetchItemDetails("", "");
-                        router.push(`/product/${item.item_id}`);
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24">
-                    <div className="flex">
-                      {item.is_veg == "Y" ? (
-                        <img src="/veg.svg" className=" w-4 h-4 mt-1 mr-2" />
-                      ) : (
-                        <img src="/non-veg.png" className="w-4 h-4 mt-1 mr-2" />
-                      )}
-                      <p
-                        className="text-sm font-montMedium flex item-city"
+              {cart.map((item, idx) =>
+                item.addons ? (
+                  <CartAddons
+                    item={item}
+                    fetchItemDetails={fetchItemDetails}
+                    checkout={checkout}
+                    handleDecreaseQuantity={handleDecreaseQuantity}
+                    storeSettings={storeSettings}
+                    handleIncreaseQuantity={handleIncreaseQuantity}
+                    editAddonModal={editAddonModal}
+                    stateStoreDetails={stateStoreDetails}
+                    rgbaBackground={rgbaBackground}
+                  />
+                ) : (
+                  <div
+                    className="flex items-start text-left w-full border-b-2 border-slate-300 mb-2 rounded  pb-2 : md:pt-3"
+                    key={idx}
+                  >
+                    <div className="flex flex-col px-2 item-center">
+                      <img
+                        src={
+                          item?.primary_img
+                            ? item?.primary_img
+                            : "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png"
+                        }
+                        className="w-72 min-w-72 max-w-72 h-36 border border-blue-100 shadow "
                         onClick={() => {
                           fetchItemDetails("", "");
                           router.push(`/product/${item.item_id}`);
                         }}
-                      >
-                        {item.item_name}
-                      </p>
+                      />
                     </div>
-                    {item.defaultVariantItem ? (
-                      <p className="text-sm font-montSemiBold -mt-4">
-                        <span className="text-gray-500">Color:</span>{" "}
-                        {item.defaultVariantItem
-                          ? item.defaultVariantItem.variant_value_1
-                              ?.variant_value_name
-                          : ""}
-                        ,<span className="text-gray-500">Size:</span>{" "}
-                        {item.defaultVariantItem
-                          ? item.defaultVariantItem.variant_value_2
-                              ?.variant_value_name
-                          : ""}
-                        <span className="text-black-500">
-                          {" "}
-                          {item.defaultVariantItem.variant_value_3
-                            ?.variant_value_name
-                            ? ", Design No"
-                            : ""}
-                        </span>{" "}
-                        {item.defaultVariantItem
-                          ? item.defaultVariantItem.variant_value_3
-                              ?.variant_value_name
-                          : "No Design No"}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    <p className="text-[#212B3680] hidden">{item.item_desc}</p>
-                    <p className="text-lg font-montSemiBold flex items-start -mt-3">
-                      {stateStoreDetails?.currency_symbol}{" "}
-                      {item.defaultVariantItem
-                        ? item.defaultVariantItem.sale_price
-                        : item.sale_price}
-                      <span className="line-through px-1 text-sm hidden lg:flex mt-1 ml-2">
-                        {item.price - item.sale_price != 0
-                          ? `${stateStoreDetails?.currency_symbol} ${item.price}`
-                          : ""}
-                      </span>
-                      <span className="text-green-500 text-sm hidden lg:flex mt-1 ml-2">
-                        {item.price - item.sale_price != 0
-                          ? `Save ${stateStoreDetails?.currency_symbol}${
-                              item.defaultVariantItem
-                                ? item.defaultVariantItem.list_price -
-                                  item.defaultVariantItem.sale_price
-                                : item.price - item.sale_price
-                            }`
-                          : ""}
-                      </span>
-                    </p>
-
-                    {checkout.backendCart?.purchase_id != undefined ||
-                    Object.keys(checkout).length == 0 ? (
-                      <div className="flex -mt-5  gap-4 mt-5 ">
-                        <div
-                          className="border border-gray-400 space-x-4 mb-2 w-40 ml-2 flex items-center rounded"
-                          style={{
-                            backgroundColor: "white",
-                            color: `${
-                              storeSettings.data
-                                ? storeSettings.data.secondary_color
-                                : "black"
-                            }`,
-                            borderColor: `${
-                              storeSettings.data
-                                ? storeSettings.data.secondary_color
-                                : "black"
-                            }`,
+                    <div className="flex flex-col items-start w-full ml-3 lg:ml-24 md:ml-24">
+                      <div className="flex">
+                        {item.is_veg == "Y" ? (
+                          <img src="/veg.svg" className=" w-4 h-4 mt-1 mr-2" />
+                        ) : (
+                          <img
+                            src="/non-veg.png"
+                            className="w-4 h-4 mt-1 mr-2"
+                          />
+                        )}
+                        <p
+                          className="text-sm font-montMedium flex item-city"
+                          onClick={() => {
+                            fetchItemDetails("", "");
+                            router.push(`/product/${item.item_id}`);
                           }}
                         >
-                          <span
-                            onClick={() =>
-                              handleDecreaseQuantity(item, item.qty - 1)
-                            }
-                            className={`px-6   py-1 text-xl cursor-pointer`}
-                            style={{
-                              backgroundColor: `${
-                                storeSettings.data ? rgbaBackground : "black"
-                              }`,
-                              color: `${
-                                storeSettings.data
-                                  ? storeSettings.data.navbar_color
-                                  : "white"
-                              }`,
-                              borderColor: `${
-                                storeSettings.data
-                                  ? storeSettings.data.secondary_color
-                                  : "black"
-                              }`,
-                            }}
-                          >
-                            -
-                          </span>
-                          <span
-                            className="font-montSemiBold"
-                            style={{
-                              color: `${
-                                !storeSettings.data
-                                  ? storeSettings.data.primary_color
-                                  : "black"
-                              }`,
-                            }}
-                          >
-                            {item.qty}
-                          </span>
+                          {item.item_name}
+                        </p>
+                      </div>
+                      {item.defaultVariantItem ? (
+                        <p className="text-sm font-montSemiBold -mt-4">
+                          <span className="text-gray-500">Color:</span>{" "}
+                          {item.defaultVariantItem
+                            ? item.defaultVariantItem.variant_value_1
+                                ?.variant_value_name
+                            : ""}
+                          ,<span className="text-gray-500">Size:</span>{" "}
+                          {item.defaultVariantItem
+                            ? item.defaultVariantItem.variant_value_2
+                                ?.variant_value_name
+                            : ""}
+                          <span className="text-black-500">
+                            {" "}
+                            {item.defaultVariantItem.variant_value_3
+                              ?.variant_value_name
+                              ? ", Design No"
+                              : ""}
+                          </span>{" "}
+                          {item.defaultVariantItem
+                            ? item.defaultVariantItem.variant_value_3
+                                ?.variant_value_name
+                            : "No Design No"}
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      <p className="text-[#212B3680] hidden">
+                        {item.item_desc}
+                      </p>
+                      <p className="text-lg font-montSemiBold flex items-start -mt-3">
+                        {stateStoreDetails?.currency_symbol}{" "}
+                        {item.defaultVariantItem
+                          ? item.defaultVariantItem.sale_price
+                          : item.sale_price}
+                        <span className="line-through px-1 text-sm hidden lg:flex mt-1 ml-2">
+                          {item.price - item.sale_price != 0
+                            ? `${stateStoreDetails?.currency_symbol} ${item.price}`
+                            : ""}
+                        </span>
+                        <span className="text-green-500 text-sm hidden lg:flex mt-1 ml-2">
+                          {item.price - item.sale_price != 0
+                            ? `Save ${stateStoreDetails?.currency_symbol}${
+                                item.defaultVariantItem
+                                  ? item.defaultVariantItem.list_price -
+                                    item.defaultVariantItem.sale_price
+                                  : item.price - item.sale_price
+                              }`
+                            : ""}
+                        </span>
+                      </p>
 
-                          <span
-                            onClick={() => {
-                              handleIncreaseQuantity(item);
-                            }}
-                            className={`px-6  text-xl cursor-pointer py-1`}
+                      {checkout.backendCart?.purchase_id != undefined ||
+                      Object.keys(checkout).length == 0 ? (
+                        <div className="flex -mt-5  gap-4 mt-5 ">
+                          <div
+                            className="border border-gray-400 space-x-4 mb-2 w-40 ml-2 flex items-center rounded"
                             style={{
-                              backgroundColor: `${
-                                storeSettings.data ? rgbaBackground : "black"
-                              }`,
+                              backgroundColor: "white",
                               color: `${
                                 storeSettings.data
-                                  ? storeSettings.data.navbar_color
-                                  : "white"
+                                  ? storeSettings.data.secondary_color
+                                  : "black"
                               }`,
                               borderColor: `${
                                 storeSettings.data
@@ -1694,18 +1294,75 @@ const Index = ({
                               }`,
                             }}
                           >
-                            +
-                          </span>
+                            <span
+                              onClick={() =>
+                                handleDecreaseQuantity(item, item.qty - 1)
+                              }
+                              className={`px-6   py-1 text-xl cursor-pointer`}
+                              style={{
+                                backgroundColor: `${
+                                  storeSettings.data ? rgbaBackground : "black"
+                                }`,
+                                color: `${
+                                  storeSettings.data
+                                    ? storeSettings.data.navbar_color
+                                    : "white"
+                                }`,
+                                borderColor: `${
+                                  storeSettings.data
+                                    ? storeSettings.data.secondary_color
+                                    : "black"
+                                }`,
+                              }}
+                            >
+                              -
+                            </span>
+                            <span
+                              className="font-montSemiBold"
+                              style={{
+                                color: `${
+                                  !storeSettings.data
+                                    ? storeSettings.data.primary_color
+                                    : "black"
+                                }`,
+                              }}
+                            >
+                              {item.qty}
+                            </span>
+
+                            <span
+                              onClick={() => {
+                                handleIncreaseQuantity(item);
+                              }}
+                              className={`px-6  text-xl cursor-pointer py-1`}
+                              style={{
+                                backgroundColor: `${
+                                  storeSettings.data ? rgbaBackground : "black"
+                                }`,
+                                color: `${
+                                  storeSettings.data
+                                    ? storeSettings.data.navbar_color
+                                    : "white"
+                                }`,
+                                borderColor: `${
+                                  storeSettings.data
+                                    ? storeSettings.data.secondary_color
+                                    : "black"
+                                }`,
+                              }}
+                            >
+                              +
+                            </span>
+                          </div>
+                          {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
                         </div>
-                        {/* <div onClick={() => removeFromCart(item.defaultVariantItem ? item.defaultVariantItem.variant_item_id : item.item_id)} className='text-red-500 font-montMedium cursor-pointer'>Remove</div> */}
-                      </div>
-                    ) : (
-                      <div className=" w-full  flex items-center justify-center">
-                        <SyncOutlined style={{ fontSize: 24 }} spin />
-                      </div>
-                    )}
-                  </div>
-                  {/* <CloseOutlined
+                      ) : (
+                        <div className=" w-full  flex items-center justify-center">
+                          <SyncOutlined style={{ fontSize: 24 }} spin />
+                        </div>
+                      )}
+                    </div>
+                    {/* <CloseOutlined
                     className="p-4"
                     onClick={() =>
                       removeFromCart(
@@ -1715,10 +1372,14 @@ const Index = ({
                       )
                     }
                   /> */}
-                </div>
-              ))}
+                  </div>
+                )
+              )}
             </div>
+            {/* Cart-List Mobile View End */}
           </div>
+
+          {/* Billing and Coupon Components Start*/}
           <div className=" lg:block md:block mt-16  lg:ml-16 w-96">
             <Coupon
               storeSettings={storeSettings}
@@ -1740,8 +1401,10 @@ const Index = ({
               minProduct={minProduct}
             />
           </div>
+          {/* Billing and Coupon Components End */}
         </div>
       ) : (
+        // if Cart Length is Zero
         <div className="flex flex-col lg:mt-24 items-center justify-center p-24 ">
           {/* <img src="./images/undraw_empty_cart_co35.png" className='lg:h-80' /> */}
           <div className="hidden lg:block mb-8">
@@ -1783,166 +1446,25 @@ const Index = ({
           </p>
         </div>
       )}
+
+{/*Addon Modal  */}
+
+<AddonModal
+setAddonCombination={setAddonCombination}
+addonSelected={addonSelected}
+setAddonSelected={setAddonSelected}
+setSelectedCartItem={setSelectedCartItem}
+addToCart={addToCart}
+showEditAddon={showEditAddon}
+setShowEditAddon={setShowEditAddon}
+storeSettings={storeSettings}
+stateStoreDetails={stateStoreDetails}
+addonsData={addonsData}
+/>
+
+
       <ToastContainer />
 
-      <Modal
-        visible={showEditAddon}
-        onOk={handleAddonOk}
-        afterClose={handleAddonClose}
-        destroyOnClose={true}
-        onCancel={handleAddonCancel}
-        footer={null}
-        okButtonProps={{ disabled: true }}
-        cancelButtonProps={{ disabled: true }}
-        width={800}
-        style={{ height: "100px" }}
-      >
-        <div className="p-4 w-full flex item-center  flex-col">
-          <p
-            className="font-montBold text-lg self-center py-4"
-            style={{
-              color: storeSettings.data
-                ? storeSettings.data.secondary_color
-                : "black",
-            }}
-          >
-            You can customize this item !!
-          </p>
-
-          {Object.keys(addonsData).map((mapId, index) => {
-            const item = addonsData[mapId];
-            console.log("itemmmmmmmmm", item);
-
-            return (
-              <div className="px-12 py-2">
-                <p className="text-black font-montMedium ">
-                  {item.add_on_title}
-                  {item.mandatory ? (
-                    <span className="font-montSemiBold text-red-600 px-2">
-                      *
-                    </span>
-                  ) : (
-                    ""
-                  )}
-                </p>
-                <p className="text-gray text-sm font-montMedium ">
-                  {item.add_on_group_type == "CHEKLIST"
-                    ? item.add_on_description
-                    : ""}
-                </p>
-                {item.add_on_group_type == "CHEKLIST" ? (
-                  item.add_on_options?.map((value, index) => {
-                    return (
-                      <div className=" w-1/2 flex">
-                        <div className="flex ">
-                          <Checkbox
-                            onChange={(e) => {
-                              handleAddonChange(e);
-                            }}
-                            defaultChecked={false}
-                            name={item.add_on_group_id}
-                            checked={
-                              addonSelected &&
-                              addonSelected?.addons?.find((product) => {
-                                if (
-                                  product?.add_on_option_id ==
-                                  value.add_on_option_id
-                                ) {
-                                  return true;
-                                } else {
-                                  return false;
-                                }
-                              })
-                            }
-                            // checked={addonsAdded?.some(item =>
-
-                            //     item.add_on_option_id == value.add_on_option_id
-
-                            // )
-                            // }
-                            value={{
-                              ...value,
-                              add_on_group_id: item.add_on_group_id,
-                              add_on_title: item.add_on_title,
-                              add_on_mapping_id: mapId,
-                            }}
-                            style={{ color: "black" }}
-                          >
-                            <div className="flex justify-between  w-[20vw]">
-                              <p className="font-montRegular px-4">
-                                {" "}
-                                {value.add_on_name}
-                              </p>
-                              <p className="font-montMedium pr-2">
-                                {stateStoreDetails?.currency_symbol}{" "}
-                                {value.price}
-                              </p>
-                            </div>
-                          </Checkbox>
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <TextArea
-                    rows={4}
-                    placeholder={item.add_on_description}
-                    maxLength={200}
-                    name="addon_instructions"
-                    value={
-                      addonSelected &&
-                      addonSelected?.addons?.find((product) => {
-                        if (product?.add_on_group_id == item.add_on_group_id) {
-                          return true;
-                        } else {
-                          return false;
-                        }
-                      })?.text
-                    }
-                    onChange={(e) => {
-                      handleAddonInstructions(
-                        e,
-                        item.add_on_group_id,
-                        item.add_on_title,
-                        addonSelected,
-
-                        mapId
-                      );
-                    }}
-                  />
-                )}
-                {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
-              </div>
-            );
-          })}
-          <button
-            className="px-10 py-2 self-center "
-            style={{
-              color: `${
-                storeSettings.data ? storeSettings.data.navbar_color : "white"
-              }`,
-              backgroundColor: `${
-                storeSettings.data
-                  ? storeSettings.data.secondary_color
-                  : "black"
-              }`,
-            }}
-            onClick={confirmUpdateCart}
-            //   onClick={
-            //     addonsAdded.filter(
-            //       (item) => item.add_on_title === "Toppings on the Pizza"
-            //     )?.length < 2
-            //       ? () => {
-            //           message.error("addons should be more than 1");
-            //         }
-            //       : handleConfirmAddons
-            //   }
-          >
-            Confirm
-            <span className="pl-12"> {stateStoreDetails?.currency_symbol}</span>
-          </button>
-        </div>
-      </Modal>
     </>
   );
 };

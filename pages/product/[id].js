@@ -146,7 +146,7 @@ const Index = ({
           fetchAddons(payload)
        
       } else {
-        setCustomization(true);
+        setCustomization(false);
       }
     }
   }, [initialState?.data?.is_add_on_available, id]);
@@ -648,10 +648,11 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
       } else if (value?.max_order_quantity > value?.inventory_quantity) {
         quantity = value?.inventory_quantity;
         console.log("value?.max_order_quantity > value?.inventory_quantity");
-      } else if (value?.max_order_quantity < value?.inventory_quantity) {
+      } else if (value?.max_order_quantity < value?.inventory_quantity && value?.max_order_quantity!=null) {
         quantity = value.max_order_quantity;
         console.log("value?.max_order_quantity < value?.inventory_quantity");
       }
+      
 
       if (quantity > 0) {
         addToCart(item);
@@ -693,7 +694,7 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
 
         if (
           item.inventoryDetails.inventory_quantity >
-          item.inventoryDetails?.max_order_quantity
+          item.inventoryDetails?.max_order_quantity && item.inventoryDetails?.max_order_quantity!=null 
         ) {
           quantity = item.inventoryDetails?.max_order_quantity;
           console.log(
@@ -701,7 +702,9 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
             item.inventoryDetails.inventory_quantity >
               item.inventoryDetails?.max_order_quantity
           );
+
         }
+      
         // else {
         //     if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
         //         // message.error('Sorry,The Item is not available at the moment')
@@ -879,7 +882,7 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
                   } else if (item.inventoryDetails.inventory_quantity != 0) {
                     if (
                       item.inventoryDetails.inventory_quantity >
-                      item.inventoryDetails?.max_order_quantity
+                      item.inventoryDetails?.max_order_quantity && item.inventoryDetails?.max_order_quantity!=null
                     ) {
                       quantity = item.inventoryDetails?.max_order_quantity;
                     } else if (
@@ -2551,7 +2554,8 @@ setSelectedVariantValue(variantValueId)
                                                 item.inventoryDetails
                                                   .inventory_quantity >
                                                 item.inventoryDetails
-                                                  ?.max_order_quantity
+                                                  ?.max_order_quantity && item.inventoryDetails
+                                                  ?.max_order_quantity!=null 
                                               ) {
                                                 quantity =
                                                   item.inventoryDetails
@@ -3232,7 +3236,8 @@ setSelectedVariantValue(variantValueId)
                               ) {
                                 if (
                                   item.inventoryDetails.inventory_quantity >
-                                  item.inventoryDetails?.max_order_quantity
+                                  item.inventoryDetails?.max_order_quantity && item.inventoryDetails
+                                  ?.max_order_quantity!=null 
                                 ) {
                                   quantity =
                                     item.inventoryDetails?.max_order_quantity;
@@ -3397,12 +3402,12 @@ setSelectedVariantValue(variantValueId)
               You can customize this item !!
             </p>
 
-            {Object.keys(addons1).map((mapId, index) => {
-              const item = addons1[mapId];
+            {/* {Object.keys(addons1).map((mapId, index) => {
+              const item = addons1[mapId]; */}
 
 
-             {/* {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
-                const item = initialState?.addons[mapId];  */}
+             {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
+                const item = initialState?.addons[mapId]; 
 
               return (
                 <div className="px-12 py-2">
