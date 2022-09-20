@@ -49,10 +49,11 @@ export const CartAddons = ({
 
 
 
+
   const handleIncreaseQuantity = (item) => {
     let selectedAddon;
 
-    let selectedProduct = cart.find((product) => {
+    let selectedProduct = cart.cart.find((product) => {
       return (selectedAddon = product.addons.find((addon) => {
         if (addon.id == item.id) {
           addon.qty = addon.qty + 1;
@@ -75,12 +76,13 @@ export const CartAddons = ({
   };
 
   const handleDecreaseQuantity = (item, qty) => {
-    const datas = readyCartData(cart);
+    // const datas = readyCartData(cart?.cart);
     // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
 
     let selectedAddon;
-    let selectedProduct = cart.find((product) => {
+    let selectedProduct = cart.cart.find((product) => {
       return (selectedAddon = product.addons.find((addon) => {
+        debugger
         if (addon.id == item.id) {
           addon.qty = addon.qty - 1;
           return true;
@@ -97,6 +99,7 @@ export const CartAddons = ({
 
     data.addons = selectedProduct?.addons || [];
     data.qty = quantity;
+    
 
     addToCart(data);
     setCartUpdate(!cartUpdate);
@@ -396,7 +399,7 @@ export const CartAddons = ({
 };
 
 const mapStateToProps = (state) => ({
-  cart: state.cartReducer.cart,
+  cart: state.cartReducer
 
 });
 const mapDispatchToProps = (dispatch) => {

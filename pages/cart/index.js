@@ -62,7 +62,7 @@ const Index = ({
   addToCart,
   removeFromCart,
   adjustQty,
-  cart,
+  cart: stateCart,
   checkout,
   fetchBackendCart,
   fetchPurchaseDetails,
@@ -75,13 +75,14 @@ const Index = ({
   getStoreDetails,
   updateCartAddons,
   fetchAddons,
-  addonsData
-  
+  addonsData,
 }) => {
   const [state, setState] = useState(checkout.backendCart?.purchase_id);
   const [datas, setDatas] = useState([]);
   const [validCoupon, setValidCoupon] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  let cart = stateCart.cart;
 
   const [enableBulkAPI, setEnableBulkAPI] = useState(true);
   const [purchaseInvalid, setPurchaseInvalid] = useState("");
@@ -90,14 +91,9 @@ const Index = ({
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 });
 
   const [cartUpdate, setCartUpdate] = useState(false);
- 
 
   const [rgbaBackground, setRgbaBackground] = useState("");
   const [rgbaColor, setRgbaColor] = useState();
-
- 
-
- 
 
   const [addonInstructions, setAddonInstructions] = useState();
 
@@ -340,7 +336,7 @@ const Index = ({
   const handleDecreaseQuantity = (item, qty) => {
     const data = readyCartData(cart);
 
-    console.log('dataaaa',data)
+    console.log("dataaaa", data);
 
     // item.defaultVariantItem ? item.defaultVariantItem : item.item_id
 
@@ -515,50 +511,180 @@ const Index = ({
   const readyCartData = function (arr) {
     const key = "store_id";
     let data = [];
-    return arr.reduce(function (rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push({
-        item_id: x.item_id,
+
+    let newData = [];
+
+    arr.map((element) => {
+      let newItem = {
+        item_id: element.item_id,
         barcode_id: null,
-        quantity: x.qty,
-        variant_item_id: x.defaultVariantItem?.variant_item_id | null,
-        add_on_details: [],
-        // [{add_on_mapping_id:x?.addons[0]?.addons[0]?.add_on_mapping_id,
-        //     add_on_group_id:x?.addons[0]?.addons[0]?.add_on_group_id,add_on_values:
+        quantity: element.qty,
+        variant_item_id: element.defaultVariantItem?.variant_item_id || null,
+        // order_item_id:null,
+        add_on_details: null,
+      };
 
-        //     getValuesByKey(
-        //       Object.values(groupBy(x?.addons,"id")).map((addon=>addon.addons))
-        //      ,"add_on_option_id")}]
+      if (element?.addons) {
+        element?.addons?.map((addon) => {
+       //    let addonDetails = {
+       //      add_on_mapping_id: addon[0].add_on_mapping_id,
+       //      add_on_group_id: addon[0].add_on_group_id,
+       //      add_on_values: [],
+       //    };
 
-        // temporary Commenting start
+          let finalData = [];
+          let dummyAddonDetail = [];
 
-        // x?.addons.map((addon, index) => {
-        //   console.log("addonsst", addon);
-        //   let addonPost = {
-        //     add_on_mapping_id: addon.addons[index]?.add_on_mapping_id,
-        //     add_on_group_id: addon.addons[index]?.add_on_group_id,
-        //     addon_on_values: [],
-        //   };
+          addon.addons.map((option) => {
+            let indexNumber = finalData.findIndex(
+              (item) => item.add_on_group_id == option.add_on_group_id
+            );
 
-        //   addon.addons.map((item) => {
-        //     addonPost.addon_on_values = getValuesByKey(
-        //       addon.addons,
-        //       "add_on_option_id"
-        //     );
+            if (indexNumber > -1) {
+                   debugger
+              let oldData = finalData[indexNumber];
+              oldData.add_on_values.push(
+                option.add_on_option_id ? option.add_on_option_id : option.text
+              );
 
-        //     // add_on_mapping_id: x?.addons[0]?.addons[0]?.add_on_mapping_id,
-        //     // add_on_group_id: x?.addons[0]?.addons[0]?.add_on_group_id,
-        //     // add_on_values: groupBy(x?.addons, "add_on_option_id"),
-        //   });
+              finalData[indexNumber] = oldData;
 
-        //   return addonPost;
-        // }),
+              // finalData.push(addonDetails);
+            } else {
+                   debugger
+              let data = {
+                add_on_mapping_id: option.add_on_mapping_id?option.add_on_mapping_id:option.mapId,
+                add_on_group_id: option.add_on_group_id,
+                add_on_values: [
+                  option.add_on_option_id
+                    ? option.add_on_option_id
+                    : option.text,
+                ],
+              };
+              
+              finalData.push(data);
+            }
+          });
 
-        // temporary commenting end
+          newData.push({ ...newItem, add_on_details: finalData });
+          console.log('finalDatafinalData',finalData)
+        });
+       
+      } else {
+        newData.push(newItem);
+      }
+      
+    });
 
-        // }]
-      });
-      return rv;
-    }, {});
+console.log('finalDatafindalDatanewDataaaaa',newData)
+    
+    return newData
+
+
+
+    //     return arr.reduce(function (rv, x) {
+    //       (rv[x[key]] = rv[x[key]] || []).push({
+    //         item_id: x.item_id,
+    //         barcode_id: null,
+    //         quantity: x.qty,
+    //         variant_item_id: x.defaultVariantItem?.variant_item_id || null,
+    //         // order_item_id:null,
+    //         add_on_details: (() => {
+    //           let editData = [];
+    //           let addonValues = [];
+    //           let finalEditData = [];
+
+    //           x?.addons?.map((addon, index) => {
+    //             addon.addons.map((element) => {
+    //               console.log(
+    //                 "Object.keys(editData).length>0",
+    //                 Object.keys(editData).length > 0
+    //               );
+
+    //               if (editData.length > 0) {
+    //                 editData?.map((ed, index) => {
+    //                   if (ed.add_on_group_id == element.add_on_group_id) {
+    //                     addonValues.push(
+    //                       element.add_on_option_id
+    //                         ? element.add_on_option_id
+    //                         : element.text
+    //                     );
+    //                   } else {
+    //                     console.log("itemmmmmmmfinalDatasa", finalEditData);
+    //                     let data = {
+    //                       add_on_mapping_id: element.mapId,
+
+    //                       add_on_group_id: element.add_on_group_id,
+    //                       add_on_values: [element.text],
+    //                     };
+
+    //                     finalEditData.push(data);
+    //                   }
+    //                 });
+
+    //                 console.log(
+    //                   "itemmmmmmmmelement.add_on_option_idddd",
+    //                   element.add_on_option_id
+    //                 );
+
+    //                 // Object.keys(editData['add_on_details']).
+
+    //                 console.log("itemmmmmmeditDataaa");
+    //               } else {
+    //                 addonValues = [element.add_on_option_id];
+
+    //                 editData = [
+    //                   {
+    //                     add_on_mapping_id: element.add_on_mapping_id,
+
+    //                     add_on_group_id: element.add_on_group_id,
+    //                     add_on_values: addonValues,
+    //                   },
+    //                 ];
+
+    //                 finalEditData.push(editData[0]);
+    //               }
+    //             }) || null;
+    //           });
+    //           return finalEditData;
+    //         })(),
+    //         // [{add_on_mapping_id:x?.addons[0]?.addons[0]?.add_on_mapping_id,
+    //         //     add_on_group_id:x?.addons[0]?.addons[0]?.add_on_group_id,add_on_values:
+
+    //         //     getValuesByKey(
+    //         //       Object.values(groupBy(x?.addons,"id")).map((addon=>addon.addons))
+    //         //      ,"add_on_option_id")}]
+
+    //         // temporary Commenting start
+
+    //         // x?.addons.map((addon, index) => {
+    //         //   console.log("addonsst", addon);
+    //         //   let addonPost = {
+    //         //     add_on_mapping_id: addon.addons[index]?.add_on_mapping_id,
+    //         //     add_on_group_id: addon.addons[index]?.add_on_group_id,
+    //         //     addon_on_values: [],
+    //         //   };
+
+    //         //   addon.addons.map((item) => {
+    //         //     addonPost.addon_on_values = getValuesByKey(
+    //         //       addon.addons,
+    //         //       "add_on_option_id"
+    //         //     );
+
+    //         //     // add_on_mapping_id: x?.addons[0]?.addons[0]?.add_on_mapping_id,
+    //         //     // add_on_group_id: x?.addons[0]?.addons[0]?.add_on_group_id,
+    //         //     // add_on_values: groupBy(x?.addons, "add_on_option_id"),
+    //         //   });
+
+    //         //   return addonPost;
+    //         // }),
+
+    //         // temporary commenting end
+
+    //         // }]
+    //       });
+    //       return rv;
+    //     }, {});
   };
 
   const handleIncreaseQuantity = (item) => {
@@ -837,8 +963,6 @@ const Index = ({
     // setCustomBorder(hex2rgba('#212B36' , 0.25))
   }, [rgbaBackground == ""]);
 
-  
-
   return (
     <>
       {/* <Head>
@@ -887,7 +1011,6 @@ const Index = ({
                     setCartUpdate={setCartUpdate}
                     cartUpdate={cartUpdate}
                     readyCartData={readyCartData}
-                       
                   />
                 ) : (
                   <div
@@ -1370,8 +1493,6 @@ const Index = ({
         </div>
       )}
 
- 
-
       <ToastContainer />
     </>
   );
@@ -1379,7 +1500,7 @@ const Index = ({
 
 const mapStateToProps = (state) => ({
   storeSettings: state.storeSettingsReducer,
-  cart: state.cartReducer.cart,
+  cart: state.cartReducer,
   checkout: state.checkoutReducer,
   customerDetails: state.customerDetailsReducer,
   stateStoreDetails: state.storeDetailsReducer.data,

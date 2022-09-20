@@ -4,8 +4,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { addToCart } from "../../actions";
 
-
-
 const groupBy = function (arr, key) {
   return arr.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -24,7 +22,6 @@ const getValuesByKey = (arrayOfObjects, key) => {
   if (!Array.isArray(arrayOfObjects) || !key) return [];
   return arrayOfObjects.map((item) => item[key]);
 };
-
 
 export const AddonModal = ({
   setAddonCombination,
@@ -151,26 +148,26 @@ export const AddonModal = ({
     //   console.log('selecyed',duplicate,selectedCartItem.addons)
 
     setSelectedCartItem(item);
-    let editData = {};
+    let editData = [];
     let addonValues = [];
     let finalEditData = [];
 
     item.addons?.map((addon, index) => {
       console.log("itemmmmmmmmmmmmaddonnn", addon);
 
-let checkkk=groupBy(addon.addons,"add_on_group_id")
-let values=[]
-// checkkk.map((item,index)=>{
-//   if(item.add_on_option_id){
-//   values.push(item.add_on_option_id)
-//   }
-// })
+      let checkkk = groupBy(addon.addons, "add_on_group_id");
+      let values = [];
+      // checkkk.map((item,index)=>{
+      //   if(item.add_on_option_id){
+      //   values.push(item.add_on_option_id)
+      //   }
+      // })
 
-// let tekk=getValuesByKey(addon.addons,"")
+      // let tekk=getValuesByKey(addon.addons,"")
 
-let chek={}
+      let chek = {};
 
-console.log('chekkkkk',values,checkkk,Object.values(checkkk))
+      console.log("chekkkkk", values, checkkk, Object.values(checkkk));
 
       addon.addons.map((element) => {
         console.log(
@@ -186,20 +183,26 @@ console.log('chekkkkk',values,checkkk,Object.values(checkkk))
               element.add_on_group_id,
               ed.add_on_group_id == element.add_on_group_id
             );
+
             if (ed.add_on_group_id == element.add_on_group_id) {
-              debugger;
+              ;
               addonValues.push(
                 element.add_on_option_id
                   ? element.add_on_option_id
                   : element.text
               );
             } else {
-              debugger;
+              ;
 
               console.log("itemmmmmmmfinalDatasa", finalEditData);
-
-              finalEditData.push(element);
+              let data=   {
+                add_on_mapping_id: element.mapId,                
   
+                add_on_group_id: element.add_on_group_id,
+                add_on_values: [element.text]
+              }
+
+              finalEditData.push(data);
             }
           });
 
@@ -212,17 +215,20 @@ console.log('chekkkkk',values,checkkk,Object.values(checkkk))
 
           console.log("itemmmmmmeditDataaa");
         } else {
-          debugger;
-          (editData = [
+          ;
+
+          addonValues = [element.add_on_option_id];
+
+          editData = [
             {
-              add_on_mapping_id: element.add_on_mapping_id
-                ? element.add_on_mapping_id
-                : element?.mapId,
+              add_on_mapping_id: element.add_on_mapping_id,
+
               add_on_group_id: element.add_on_group_id,
               add_on_values: addonValues,
             },
-          ]),
-            finalEditData.push(editData);
+          ];
+
+          finalEditData.push(editData[0]);
         }
       });
     });
