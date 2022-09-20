@@ -885,6 +885,8 @@ const Index = ({
                     stateStoreDetails={stateStoreDetails}
                     rgbaBackground={rgbaBackground}
                     setCartUpdate={setCartUpdate}
+                    cartUpdate={cartUpdate}
+                    readyCartData={readyCartData}
                        
                   />
                 ) : (

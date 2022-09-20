@@ -4,6 +4,28 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { addToCart } from "../../actions";
 
+
+
+const groupBy = function (arr, key) {
+  return arr.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+
+    return rv;
+  }, {});
+};
+
+const qtySum = function (items, prop) {
+  return items.reduce(function (a, b) {
+    return parseInt(a) + parseInt(b[prop]);
+  }, 0);
+};
+
+const getValuesByKey = (arrayOfObjects, key) => {
+  if (!Array.isArray(arrayOfObjects) || !key) return [];
+  return arrayOfObjects.map((item) => item[key]);
+};
+
+
 export const AddonModal = ({
   setAddonCombination,
   addonCombination,
@@ -16,10 +38,8 @@ export const AddonModal = ({
   showEditAddon,
   storeSettings,
   stateStoreDetails,
-    addonsData
+  addonsData,
 }) => {
-
-   
   const handleAddonCancel = () => {
     setShowEditAddon(false);
   };
@@ -108,7 +128,7 @@ export const AddonModal = ({
   const confirmUpdateCart = () => {
     // let selectedItem = {...addonSelected,addons: selectedaddon };
     // let item = {...selectedCartItem, addons: [addonSelected]}
-    debugger
+
     let item = {
       ...selectedCartItem,
       addons: selectedCartItem.addons.map((item) =>
@@ -131,18 +151,90 @@ export const AddonModal = ({
     //   console.log('selecyed',duplicate,selectedCartItem.addons)
 
     setSelectedCartItem(item);
+    let editData = {};
+    let addonValues = [];
+    let finalEditData = [];
+
+    item.addons?.map((addon, index) => {
+      console.log("itemmmmmmmmmmmmaddonnn", addon);
+
+let checkkk=groupBy(addon.addons,"add_on_group_id")
+let values=[]
+// checkkk.map((item,index)=>{
+//   if(item.add_on_option_id){
+//   values.push(item.add_on_option_id)
+//   }
+// })
+
+// let tekk=getValuesByKey(addon.addons,"")
+
+let chek={}
+
+console.log('chekkkkk',values,checkkk,Object.values(checkkk))
+
+      addon.addons.map((element) => {
+        console.log(
+          "Object.keys(editData).length>0",
+          Object.keys(editData).length > 0
+        );
+
+        if (editData.length > 0) {
+          editData?.map((ed, index) => {
+            console.log(
+              "itemmmmmmmmgroup_id.add_on_group_id==element.add_on_group_id)",
+              ed.add_on_group_id,
+              element.add_on_group_id,
+              ed.add_on_group_id == element.add_on_group_id
+            );
+            if (ed.add_on_group_id == element.add_on_group_id) {
+              debugger;
+              addonValues.push(
+                element.add_on_option_id
+                  ? element.add_on_option_id
+                  : element.text
+              );
+            } else {
+              debugger;
+
+              console.log("itemmmmmmmfinalDatasa", finalEditData);
+
+              finalEditData.push(element);
+  
+            }
+          });
+
+          console.log(
+            "itemmmmmmmmelement.add_on_option_idddd",
+            element.add_on_option_id
+          );
+
+          // Object.keys(editData['add_on_details']).
+
+          console.log("itemmmmmmeditDataaa");
+        } else {
+          debugger;
+          (editData = [
+            {
+              add_on_mapping_id: element.add_on_mapping_id
+                ? element.add_on_mapping_id
+                : element?.mapId,
+              add_on_group_id: element.add_on_group_id,
+              add_on_values: addonValues,
+            },
+          ]),
+            finalEditData.push(editData);
+        }
+      });
+    });
 
     // ;
-    
+
+    console.log("itemmmmmconfirm", finalEditData, item, editData);
+
     addToCart(item);
 
     setShowEditAddon(false);
   };
-
-
- 
-
-
 
   return (
     <Modal
@@ -171,7 +263,7 @@ export const AddonModal = ({
 
         {Object.keys(addonsData).map((mapId, index) => {
           const item = addonsData[mapId];
-          console.log("itemmmmmmmmm", item, addonsData);
+          // console.log("itemmmmmmmmm", item, addonsData);
 
           return (
             <div className="px-12 py-2">
@@ -302,20 +394,17 @@ export const AddonModal = ({
 };
 
 const mapStateToProps = (state) => ({
-    storeSettings: state.storeSettingsReducer,
-    cart: state.cartReducer.cart,
-    checkout: state.checkoutReducer,
-    customerDetails: state.customerDetailsReducer,
-    stateStoreDetails: state.storeDetailsReducer.data,
-    addonsData: state.itemDetailsReducer.addons,
-    
-  });
-  
+  storeSettings: state.storeSettingsReducer,
+  cart: state.cartReducer.cart,
+  checkout: state.checkoutReducer,
+  customerDetails: state.customerDetailsReducer,
+  stateStoreDetails: state.storeDetailsReducer.data,
+});
 
-const mapDispatchToProps = dispatch=>{
-    return{
-        addToCart: (data) => dispatch(addToCart(data)),
-    }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (data) => dispatch(addToCart(data)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddonModal);

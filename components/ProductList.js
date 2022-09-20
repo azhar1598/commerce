@@ -611,21 +611,9 @@ export const ProductList = ({
                               {/* {console.log('item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1', item.defaultVariantItem?.variant_value_1?.variant_value_images != undefined ? JSON.parse(item.defaultVariantItem?.variant_value_1?.variant_value_images).img_url_1 : '')} */}
 
                               <Product
-                                image={
-                                  item.primary_img != "" &&
-                                  item.primary_img != null
-                                    ? item.primary_img
-                                    : item.defaultVariantItem?.variant_value_1
-                                        ?.variant_value_images?.img_url_1
-                                    ? item.defaultVariantItem?.variant_value_1
-                                        ?.variant_value_images?.img_url_1
-                                    : item.defaultVariantItem?.variant_value_2
-                                        ?.variant_value_images?.img_url_1
-                                    ? item.defaultVariantItem?.variant_value_2
-                                        ?.variant_value_images?.img_url_1
-                                    : item.defaultVariantItem?.variant_value_3
-                                        ?.variant_value_images?.img_url_1
-                                }
+                               image={(item.primary_img != '' && item.primary_img != null) ? item.primary_img :
+                               item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1?item.defaultVariantItem?.variant_value_1?.variant_value_images?.img_url_1:item.defaultVariantItem?.variant_value_2?.variant_value_images?.img_url_1?item.defaultVariantItem?.variant_value_2?.variant_value_images?.img_url_1:item.defaultVariantItem?.variant_value_3?.variant_value_images?.img_url_1}
+                               
                                 name={item.item_name}
                                 desc={item.item_desc}
                                 price={item.price}

@@ -116,6 +116,8 @@ const Index = ({
   const [addonVisible, setAddonVisible] = useState();
   const [addonsAdded, setAddonsAdded] = useState([]);
   const[changeVariantAddon,setChangeVariantAddon]=useState()
+  const[addonMinQty,setAddonMinQty]=useState()
+  const[addonMaxQty,setAddonMaxQty]=useState()
   
   const [priceWithAddon, setPriceWithAddon] = useState(
     initialState.defaultVariantItem
@@ -124,6 +126,9 @@ const Index = ({
       ? initialState.data.sale_price
       : ""
   );
+
+
+  const dummyImage = ['https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png']
 
   console.log(
     "initialState?.data?.is_add_on_available=='Y'",
@@ -1264,12 +1269,14 @@ setSelectedVariantValue(variantValueId)
     setAddonsAdded([]);
   };
 
-  const handleAddonChange = (e) => {
+  const handleAddonChange = (e,min_qty,max_qty) => {
     if (e.target.checked) {
       const sortedAddons = addonsAdded.sort((a, b) =>
         a.add_on_name > b.add_on_name ? 1 : -1
       );
 
+      setAddonMinQty(min_qty)
+      setAddonMaxQty(max_qty)
       console.log("sortedAddons", sortedAddons);
 
       setAddonsAdded([...sortedAddons, e.target.value]);
@@ -1420,7 +1427,7 @@ setSelectedVariantValue(variantValueId)
 
   const isDuplicateCart = (addons, duplicate) => {
     console.log("duplicate");
-    debugger
+    
     const addonsCombin = addons.map((addon) => {
       return addon?.id === duplicate?.id
         ? { ...addon, qty: addon.qty + 1 }
@@ -1537,6 +1544,7 @@ setSelectedVariantValue(variantValueId)
 
           const quantity = qtySum(data, "qty");
           data1.qty = quantity;
+          data1.addon_data=initialState?.addons 
 
           setAddonQuantity(quantity);
           setCustomItemData(data1);
@@ -1549,7 +1557,7 @@ setSelectedVariantValue(variantValueId)
           setAddonVisible(false);
         }
       } else {
-          debugger
+          
         let duplicate = getAddons.find((item) => {
           addonCombinationGroupby = groupBy(item.addons, "add_on_title");
           return (
@@ -1570,9 +1578,11 @@ setSelectedVariantValue(variantValueId)
 
           const quantity = qtySum(data, "qty");
           data1.qty = quantity;
+          data1.addon_data=initialState?.addons 
           setAddonQuantity(quantity);
           setCustomItemData(data1);
           setconfrmAddonCombination(data1);
+          
 
           console.log("combination", addonCombination, quantity);
           addToCart(data1);
@@ -1602,6 +1612,7 @@ setSelectedVariantValue(variantValueId)
 
         const quantity = qtySum(data, "qty");
         data1.qty = quantity;
+        data1.addon_data=initialState?.addons 
         setAddonQuantity(quantity);
         setCustomItemData(data1);
         setconfrmAddonCombination(data1);
@@ -1619,6 +1630,7 @@ setSelectedVariantValue(variantValueId)
 
         const quantity = qtySum(data, "qty");
         data1.qty = quantity;
+        data1.addon_data=initialState?.addons 
         setAddonQuantity(quantity);
         setCustomItemData(data1);
         setconfrmAddonCombination(data1);
@@ -1791,34 +1803,12 @@ setSelectedVariantValue(variantValueId)
                     <div className="w-full h-96">
 
                       <Magnify
-                        images={
-                          initialState.images?.length != 0
-                            ? initialState.images
-                            : initialState?.defaultVariantItem
-                            ? Object.values(
-                                initialState?.defaultVariantItem
-                                  ?.variant_value_1?.variant_value_images !=
-                                  null
-                                  ? initialState.defaultVariantItem
-                                      ?.variant_value_1?.variant_value_images
-                                  : initialState.defaultVariantItem
-                                      ?.variant_value_2?.variant_value_images !=
-                                    null
-                                  ? initialState.defaultVariantItem
-                                      ?.variant_value_2?.variant_value_images
-                                  : initialState.defaultVariantItem
-                                      ?.variant_value_3?.variant_value_images !=
-                                    null
-                                  ? initialState.defaultVariantItem
-                                      ?.variant_value_3?.variant_value_images
-                                  : ""
-                              )
-                            : ""
-                        }
+                        images={initialState.images?.length != 0 ? initialState.images : initialState?.defaultVariantItem ?
+                          Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_3?.variant_value_images : '') : ''} 
                       />
                     </div>
                   ) : (
-                    <div className="w-[90vw] bg-red-600">
+                    <div className="w-[90vw] ">
                       <Carousel autoplay>
                         {initialState.images?.length != 0
                           ? initialState?.images?.map((key, idx) => {
@@ -1837,33 +1827,8 @@ setSelectedVariantValue(variantValueId)
                                 />
                               );
                             })
-                          : Object.values(
-                              initialState.images?.length != 0
-                                ? initialState.images
-                                : initialState?.defaultVariantItem
-                                ? Object.values(
-                                    initialState?.defaultVariantItem
-                                      ?.variant_value_1?.variant_value_images !=
-                                      null
-                                      ? initialState.defaultVariantItem
-                                          ?.variant_value_1
-                                          ?.variant_value_images
-                                      : initialState.defaultVariantItem
-                                          ?.variant_value_2
-                                          ?.variant_value_images
-                                      ? initialState.defaultVariantItem
-                                          ?.variant_value_2
-                                          ?.variant_value_images
-                                      : initialState.defaultVariantItem
-                                          ?.variant_value_3
-                                          ?.variant_value_images != null
-                                      ? initialState.defaultVariantItem
-                                          ?.variant_value_3
-                                          ?.variant_value_images
-                                          : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`
-                                  )
-                                  : `https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png`
-                            ).map((key, idx) => {
+                          : 
+                          Object.values(initialState.images?.length != 0 ? initialState.images : initialState?.defaultVariantItem ? Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_3?.variant_value_images : dummyImage) : dummyImage).map((key, idx) => {
                               console.log("key", key, idx);
 
                               return (
@@ -3393,7 +3358,7 @@ setSelectedVariantValue(variantValueId)
                           <div className="flex ">
                             <Checkbox
                               onChange={(e) => {
-                                handleAddonChange(e);
+                                handleAddonChange(e,item?.min_qty,item.max_qty);
                               }}
                               defaultChecked={false}
                               name={item.add_on_group_id}

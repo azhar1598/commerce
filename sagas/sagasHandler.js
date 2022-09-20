@@ -245,7 +245,7 @@ export function* handleFetchAddons({ payload }) {
         const response = yield getAddonsAPI(payload)
         const { data } = response;
 console.log('geeeeeeeee',data)
-debugger
+
         yield put(setAddons(data))
 
     } catch (error) {

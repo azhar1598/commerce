@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { isEmpty } from "@firebase/util";
 import { useRouter } from "next/router";
 import AddonModal from "./AddonModal";
-import { fetchAddons, fetchItemDetails } from "../../actions";
+import { addToCart, fetchAddons, fetchItemDetails } from "../../actions";
 
 const groupBy = function (arr, key) {
   return arr.reduce(function (rv, x) {
@@ -31,9 +31,12 @@ export const CartAddons = ({
   checkout,
   storeSettings,
   stateStoreDetails,
+  cartUpdate,
   setCartUpdate,
   addToCart,
   rgbaBackground,
+  cart,
+  readyCartData
 }) => {
   const router = useRouter();
 
@@ -42,6 +45,7 @@ export const CartAddons = ({
   const [selectedCartItem, setSelectedCartItem] = useState({});
   const [addonSelected, setAddonSelected] = useState();
   const [addonCombination, setAddonCombination] = useState([]);
+  const[addonsData,setAddonsData]=useState({})
 
 
 
@@ -102,13 +106,10 @@ export const CartAddons = ({
 
   const editAddonModal = (addon, cartItem) => {
     console.log("edittt", addon, cartItem);
-    const payload = {
-      itemId: cartItem.item_id,
-      variantValueId: addon?.variantValueId || null,
-    };
-    fetchAddons(payload);
+   
 
     setShowEditAddon(true);
+    setAddonsData(cartItem.addon_data)
     setSelectedCartItem(cartItem);
     setAddonSelected(addon);
     setAddonCombination(addon?.addons);
@@ -381,6 +382,7 @@ export const CartAddons = ({
         setSelectedCartItem={setSelectedCartItem}
         showEditAddon={showEditAddon}
         setShowEditAddon={setShowEditAddon}
+        addonsData={addonsData}
         
       />
 
@@ -393,8 +395,10 @@ export const CartAddons = ({
   );
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  cart: state.cartReducer.cart,
 
+});
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchItemDetails: (customerId, itemId) =>

@@ -204,9 +204,9 @@ export const Categories = ({
 
                       <div
                         className="hidden absolute bg-white w-[250px] bg-opacity-40 backdrop-blur-lg  border-blue-100 shadow mt-8 px-5 left-[50%] -translate-x-[50%] others-menu "
-                        onMouseLeave={() => {
-                          setShowOthers(!showOthers);
-                        }}
+                        // onMouseLeave={() => {
+                        //   setShowOthers(!showOthers);
+                        // }}
                       >
                         {categories.map((item, key) => {
                           return (
