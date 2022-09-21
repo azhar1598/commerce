@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
 
   // You can remove all consoles at once
 
-  // console.log = function() {}
+  console.log = function() {}
 
   const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 })
   const isTabletOrMobile = useMediaQuery({ query: ' (max-width: 992px)' })

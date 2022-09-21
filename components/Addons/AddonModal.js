@@ -248,7 +248,7 @@ export const AddonModal = ({
           // console.log("itemmmmmmmmm", item, addonsData);
 
           return (
-            <div className="px-12 py-2">
+            <div className="px-12 py-2" key={index}>
               <p className="text-black font-montMedium ">
                 {item.add_on_title}
                 {item.mandatory ? (
@@ -265,7 +265,7 @@ export const AddonModal = ({
               {item.add_on_group_type == "CHECKLIST" ? (
                 item.add_on_options?.map((value, index) => {
                   return (
-                    <div className=" w-1/2 flex">
+                    <div className=" w-1/2 flex" key={index}>
                       <div className="flex ">
                         <Checkbox
                           onChange={(e) => {
@@ -368,7 +368,7 @@ export const AddonModal = ({
           //   }
         >
           Confirm
-          <span className="pl-12"> {stateStoreDetails?.currency_symbol}</span>
+          {/* <span className="pl-12"> {stateStoreDetails?.currency_symbol}</span> */}
         </button>
       </div>
     </Modal>

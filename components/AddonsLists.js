@@ -18,11 +18,11 @@ const AddonsLists = ({ itemMap }) => {
           const addons = newVar[item];
 
           return (
-            <div className="flex w-100">
+            <div className="flex w-100" key={index}>
               <p className="font-montMedium px-1 -mt-3">{item}:</p>
               {addons.map((addon, num) => {
                 return (
-                  <p className="font-montRegular px-1 -mt-3">
+                  <p className="font-montRegular px-1 -mt-3" key={num}>
                     {addon.add_on_name ? addon.add_on_name : addon.text}
                   </p>
                 );

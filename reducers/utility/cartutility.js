@@ -85,10 +85,12 @@ export const addItemToCart = (cart, cartItem) => {
         else{
           debugger
 
-//          let filteredData=itemExist?.addons?.filter(item=>{
-//           return item.qty>0
-//          })
-// console.log('filteredDataaaaaaaaaa',filteredData)
+         let filteredData=cartItem?.addons?.filter(item=>{
+          return item.qty>0
+         })
+console.log('filteredDataaaaaaaaaa',filteredData,cartItem,itemExist)
+
+cartItem.addons=filteredData
 
 
          cart[index] = cartItem;

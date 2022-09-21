@@ -68,6 +68,7 @@ import AddonsLists from "../../components/addonsLists";
 import { select } from "redux-saga/effects";
 
 const groupBy = function (arr, key) {
+  console.log('arrrr',arr)
   return arr.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
 
@@ -115,62 +116,9 @@ const Index = ({
   const [customization, setCustomization] = useState();
   const [addonVisible, setAddonVisible] = useState();
   const [addonsAdded, setAddonsAdded] = useState([]);
-  const[changeVariantAddon,setChangeVariantAddon]=useState()
-  const[addonMinQty,setAddonMinQty]=useState()
-  const[addonMaxQty,setAddonMaxQty]=useState()
-  
-  const [priceWithAddon, setPriceWithAddon] = useState(
-    initialState.defaultVariantItem
-      ? initialState.defaultVariantItem.sale_price
-      : initialState.data
-      ? initialState.data.sale_price
-      : ""
-  );
-
-
-  const dummyImage = ['https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png']
-
-  console.log(
-    "initialState?.data?.is_add_on_available=='Y'",
-    customization,
-    initialState?.data,
-    initialState?.data?.is_add_on_available == "Y"
-  );
-
-  useEffect(() => {
-    if (id) {
-      if (initialState?.data?.is_add_on_available == "Y") {
-        setCustomization(true);
-
-       
-          const payload = {
-            itemId: id,
-            variantValueId: initialState?.defaultVariantItem?selectedVariantValue?selectedVariantValue:selectedVariant.variant_value_1?.variant_value_id:null,
-          };
-          
-          fetchAddons(payload)
-       
-      } else {
-        setCustomization(false);
-      }
-    }
-  }, [initialState?.data?.is_add_on_available, id]);
-
-  useEffect(()=>{
- 
-    if (initialState?.data?.is_add_on_available == "Y") {
-        setCustomization(true);
-
-       console.log('hello wordl')
-          const payload = {
-            itemId: id,
-            variantValueId: initialState?.defaultVariantItem?selectedVariantValue?selectedVariantValue:selectedVariant.variant_value_1?.variant_value_id:null,
-          };
-          
-          fetchAddons(payload)
-        }
-
-  },[selectedVariantValue,selectedVariant,changeVariantAddon])
+  const [changeVariantAddon, setChangeVariantAddon] = useState();
+  const [addonMinQty, setAddonMinQty] = useState();
+  const [addonMaxQty, setAddonMaxQty] = useState();
 
   const [addonQuantity, setAddonQuantity] = useState();
   const [customItemData, setCustomItemData] = useState();
@@ -182,78 +130,30 @@ const Index = ({
   const [addonsWithQty, setAddonsWithQty] = useState([]);
   const [confrmAddonCombination, setconfrmAddonCombination] = useState([]);
 
+  const [addonInstructions, setAddonInstructions] = useState();
+
   // variats
 
   const [selectedVariant, setselectedVariant] = useState({});
 
-  const[selectedVariantValue,setSelectedVariantValue]=useState()
+  const [selectedVariantValue, setSelectedVariantValue] = useState();
 
-  // cart addons count
+  const [separateAddons, setSeparateAddons] = useState();
 
-  // const [addons, setAddons] = useState(
-  //     [{
+  const [active, setActive] = useState(0);
+  const [highlightDefault, setHighLightDefault] = useState([]);
+  const [selectedVariantStyle, setSelectedVariantStyle] = useState([]);
+  const [keepVariants, setKeepVariants] = useState([]);
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 });
+  const [loadingVariants, setLoadingVariants] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
+  const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist);
+  const [visible, setVisible] = useState(false);
+  const [wishlistId, setWishlistId] = useState();
 
-  //         id: 0,
-  //         name: 'Toppings',
-  //         description: '',
-  //         min: 1,
-  //         mandatory: false,
-  //         values: [
-  //             {
-  //                 id: 0,
-  //                 price: 40,
-  //                 name: 'Cheese',
-  //                 important: false,
-  //                 category: 'Toppings'
-  //             },
-  //             {
-  //                 id: 1,
-  //                 price: 25,
-  //                 name: 'Corn',
-  //                 important: false,
-  //                 category: 'Toppings'
-  //             },
-  //             {
-  //                 id: 2,
-  //                 price: 15,
-  //                 name: 'Onion',
-  //                 important: false,
-  //                 category: 'Toppings'
-  //             }
-  //         ]
-  //     },
-  //     {
-  //         id: 1,
-  //         name: 'Toppings 2',
-  //         description: '',
-  //         min: 1,
-  //         mandatory: true,
-  //         values: [
-  //             {
-  //                 id: 10,
-  //                 price: 40,
-  //                 name: 'Cheese',
-  //                 important: true,
-  //                 category: 'Toppings2'
-  //             },
-  //             {
-  //                 id: 11,
-  //                 price: 25,
-  //                 name: 'Corn',
-  //                 important: false,
-  //                 category: 'Toppings2'
-  //             },
-  //             {
-  //                 id: 12,
-  //                 price: 15,
-  //                 name: 'Onion',
-  //                 important: false,
-  //                 important: false,
-  //                 category: 'Toppings2'
-  //             }
-  //         ]
-  //     },]
-  // )
+  const [rgbaBackground, setRgbaBackground] = useState("");
+
+  const [rgbaColor, setRgbaColor] = useState();
 
   const [addons1, setAddons1] = useState({
     "3ebb31825aea7b4fb8c9f8065eb4bbda": {
@@ -309,25 +209,63 @@ const Index = ({
     },
   });
 
+  const [priceWithAddon, setPriceWithAddon] = useState(
+    initialState.defaultVariantItem
+      ? initialState.defaultVariantItem.sale_price
+      : initialState.data
+      ? initialState.data.sale_price
+      : ""
+  );
 
-  
+  const dummyImage = [
+    "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png",
+  ];
 
-  const [separateAddons, setSeparateAddons] = useState();
+  console.log(
+    "initialState?.data?.is_add_on_available=='Y'",
+    customization,
+    initialState?.data,
+    initialState?.data?.is_add_on_available == "Y"
+  );
 
-  const [active, setActive] = useState(0);
-  const [highlightDefault, setHighLightDefault] = useState([]);
-  const [selectedVariantStyle, setSelectedVariantStyle] = useState([]);
-  const [keepVariants, setKeepVariants] = useState([]);
-  const isDesktopOrLaptop = useMediaQuery({ minWidth: 992 });
-  const [loadingVariants, setLoadingVariants] = useState(false);
-  const [wishlist, setWishlist] = useState([]);
-  const [heartIcon, setHeartIcon] = useState(initialState?.data?.wishlist);
-  const [visible, setVisible] = useState(false);
-  const [wishlistId, setWishlistId] = useState();
+  useEffect(() => {
+    if (id) {
+      if (initialState?.data?.is_add_on_available == "Y") {
+        setCustomization(true);
 
-  const [rgbaBackground, setRgbaBackground] = useState("");
+        const payload = {
+          itemId: id,
+          variantValueId: initialState?.defaultVariantItem
+            ? selectedVariantValue
+              ? selectedVariantValue
+              : selectedVariant.variant_value_1?.variant_value_id
+            : null,
+        };
 
-  const [rgbaColor, setRgbaColor] = useState();
+        fetchAddons(payload);
+      } else {
+        setCustomization(false);
+      }
+    }
+  }, [initialState?.data?.is_add_on_available, id]);
+
+  useEffect(() => {
+    if (initialState?.data?.is_add_on_available == "Y") {
+      setCustomization(true);
+
+      console.log("hello wordl");
+      const payload = {
+        itemId: id,
+        variantValueId: initialState?.defaultVariantItem
+          ? selectedVariantValue
+            ? selectedVariantValue
+            : selectedVariant.variant_value_1?.variant_value_id
+          : null,
+      };
+
+      fetchAddons(payload);
+    }
+  }, [selectedVariantValue, selectedVariant, changeVariantAddon]);
 
   const qtySum = function (items, prop) {
     return items.reduce(function (a, b) {
@@ -353,16 +291,23 @@ const Index = ({
     // }
   }, [addonQuantity]);
 
+  useEffect(() => {
+    console.log(
+      "customItemData?.addons?.length==0 ",
+      customItemData?.addons?.length
+    );
+    if (
+      customItemData?.addons?.length == 0 ||
+      customItemData?.addons?.length == undefined
+    ) {
+      console.log(
+        "customItemData?.addons?.length==0 ",
+        customItemData?.addons?.length == 0
+      );
 
-  useEffect(()=>{
-    console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length )    
-    if(customItemData?.addons?.length==0  || customItemData?.addons?.length==undefined){
-
-console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length==0 )
-
-        setShowCustomItemData(false)
+      setShowCustomItemData(false);
     }
-  },[changeVariantAddon,customItemData])
+  }, [changeVariantAddon, customItemData]);
 
   useEffect(() => {
     setRgbaBackground(
@@ -487,8 +432,7 @@ console.log('customItemData?.addons?.length==0 ',customItemData?.addons?.length=
 
       const selectedDefaultVariant = defaultVar.map((e) => e.variant_value_id);
 
-
-console.log('selectedDefaultVarianttt',selectedDefaultVariant)
+      console.log("selectedDefaultVarianttt", selectedDefaultVariant);
 
       // const selectedVariants = defaultVar.map(
       //   ({ variant_value_id, variant_value_name }) => {
@@ -653,11 +597,13 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
       } else if (value?.max_order_quantity > value?.inventory_quantity) {
         quantity = value?.inventory_quantity;
         console.log("value?.max_order_quantity > value?.inventory_quantity");
-      } else if (value?.max_order_quantity < value?.inventory_quantity && value?.max_order_quantity!=null) {
+      } else if (
+        value?.max_order_quantity < value?.inventory_quantity &&
+        value?.max_order_quantity != null
+      ) {
         quantity = value.max_order_quantity;
         console.log("value?.max_order_quantity < value?.inventory_quantity");
       }
-      
 
       if (quantity > 0) {
         addToCart(item);
@@ -699,7 +645,8 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
 
         if (
           item.inventoryDetails.inventory_quantity >
-          item.inventoryDetails?.max_order_quantity && item.inventoryDetails?.max_order_quantity!=null 
+            item.inventoryDetails?.max_order_quantity &&
+          item.inventoryDetails?.max_order_quantity != null
         ) {
           quantity = item.inventoryDetails?.max_order_quantity;
           console.log(
@@ -707,9 +654,8 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
             item.inventoryDetails.inventory_quantity >
               item.inventoryDetails?.max_order_quantity
           );
-
         }
-      
+
         // else {
         //     if (item.inventoryDetails.inventory_quantity < item.inventoryDetails.min_order_quantity) {
         //         // message.error('Sorry,The Item is not available at the moment')
@@ -887,7 +833,8 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
                   } else if (item.inventoryDetails.inventory_quantity != 0) {
                     if (
                       item.inventoryDetails.inventory_quantity >
-                      item.inventoryDetails?.max_order_quantity && item.inventoryDetails?.max_order_quantity!=null
+                        item.inventoryDetails?.max_order_quantity &&
+                      item.inventoryDetails?.max_order_quantity != null
                     ) {
                       quantity = item.inventoryDetails?.max_order_quantity;
                     } else if (
@@ -1010,6 +957,8 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
       });
       setCustomItemData({ ...customItemData, addons: updatedAdds });
       setAddonCombination(updatedAdds);
+      addons.length==1 && updateCartRecordafter()
+      
     } else {
       const updatedAdds = addons.map((item) => {
         return item.id === uid ? { ...item, qty: item.qty - 1 } : item;
@@ -1028,12 +977,10 @@ console.log('selectedDefaultVarianttt',selectedDefaultVariant)
     variant_value_name
   ) => {
     selectedVariantStyle[indices - 1] = variantValueId;
-    setChangeVariantAddon(!changeVariantAddon)
+    setChangeVariantAddon(!changeVariantAddon);
 
-
-
-console.log('variantValueIdddd',variantValueId)
-setSelectedVariantValue(variantValueId)
+    console.log("variantValueIdddd", variantValueId);
+    setSelectedVariantValue(variantValueId);
 
     // setselectedVariant({
     //   variant_value_id: variantValueId,
@@ -1253,8 +1200,6 @@ setSelectedVariantValue(variantValueId)
     // dispatchWishlist({ payload })
   };
 
- 
-
   const handleAddonOk = () => {
     setAddonVisible(true);
   };
@@ -1269,15 +1214,17 @@ setSelectedVariantValue(variantValueId)
     setAddonsAdded([]);
   };
 
-  const handleAddonChange = (e,min_qty,max_qty) => {
+  const handleAddonChange = (e, min_qty, max_qty) => {
     if (e.target.checked) {
       const sortedAddons = addonsAdded.sort((a, b) =>
         a.add_on_name > b.add_on_name ? 1 : -1
       );
 
-      setAddonMinQty(min_qty)
-      setAddonMaxQty(max_qty)
-      console.log("sortedAddons", sortedAddons);
+    
+
+      setAddonMinQty(min_qty);
+      setAddonMaxQty(max_qty);
+ 
 
       setAddonsAdded([...sortedAddons, e.target.value]);
 
@@ -1285,8 +1232,8 @@ setSelectedVariantValue(variantValueId)
         let data = {
           qty: 1,
           variant_item_id: selectedVariant?.variant_item_id || null,
-          variantValueId:selectedVariantValue || null,
-          variantDetails:selectedVariant || [],
+          variantValueId: selectedVariantValue || null,
+          variantDetails: selectedVariant || [],
           addons: addonsAdded,
           id: crypto.randomBytes(16).toString("hex"),
         };
@@ -1355,14 +1302,13 @@ setSelectedVariantValue(variantValueId)
     }
   };
 
-  const [addonInstruction, setAddonInstructions] = useState();
-
   const handleAddonInstructions = (e, add_on_group_id, add_on_title, mapId) => {
     let instructions = {
       add_on_group_id,
       add_on_title,
       mapId,
       text: e.target.value,
+      qty:1
     };
 
     setAddonInstructions(instructions);
@@ -1377,6 +1323,8 @@ setSelectedVariantValue(variantValueId)
     const sortedFilters = filter.sort((a, b) =>
       a.add_on_name > b.add_on_name ? 1 : -1
     );
+
+console.log('sorted')
 
     setAddonsAdded(sortedFilters);
     const addWithQty = addonsWithQty;
@@ -1427,7 +1375,7 @@ setSelectedVariantValue(variantValueId)
 
   const isDuplicateCart = (addons, duplicate) => {
     console.log("duplicate");
-    
+
     const addonsCombin = addons.map((addon) => {
       return addon?.id === duplicate?.id
         ? { ...addon, qty: addon.qty + 1 }
@@ -1460,6 +1408,7 @@ setSelectedVariantValue(variantValueId)
     console.log("getAddons", getAddons, addonCombination);
 
     if (addonCombination.length || getAddons?.length) {
+
       let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
       let addonCombinationGroupby;
       console.log("length greater than 1");
@@ -1544,7 +1493,7 @@ setSelectedVariantValue(variantValueId)
 
           const quantity = qtySum(data, "qty");
           data1.qty = quantity;
-          data1.addon_data=initialState?.addons 
+          data1.addon_data = initialState?.addons;
 
           setAddonQuantity(quantity);
           setCustomItemData(data1);
@@ -1557,7 +1506,6 @@ setSelectedVariantValue(variantValueId)
           setAddonVisible(false);
         }
       } else {
-          
         let duplicate = getAddons.find((item) => {
           addonCombinationGroupby = groupBy(item.addons, "add_on_title");
           return (
@@ -1566,7 +1514,6 @@ setSelectedVariantValue(variantValueId)
           );
         });
         if (duplicate) {
-            
           isDuplicateCart(getAddons, duplicate);
         } else {
           console.log("not duplicated");
@@ -1578,11 +1525,10 @@ setSelectedVariantValue(variantValueId)
 
           const quantity = qtySum(data, "qty");
           data1.qty = quantity;
-          data1.addon_data=initialState?.addons 
+          data1.addon_data = initialState?.addons;
           setAddonQuantity(quantity);
           setCustomItemData(data1);
           setconfrmAddonCombination(data1);
-          
 
           console.log("combination", addonCombination, quantity);
           addToCart(data1);
@@ -1612,7 +1558,7 @@ setSelectedVariantValue(variantValueId)
 
         const quantity = qtySum(data, "qty");
         data1.qty = quantity;
-        data1.addon_data=initialState?.addons 
+        data1.addon_data = initialState?.addons;
         setAddonQuantity(quantity);
         setCustomItemData(data1);
         setconfrmAddonCombination(data1);
@@ -1630,7 +1576,7 @@ setSelectedVariantValue(variantValueId)
 
         const quantity = qtySum(data, "qty");
         data1.qty = quantity;
-        data1.addon_data=initialState?.addons 
+        data1.addon_data = initialState?.addons;
         setAddonQuantity(quantity);
         setCustomItemData(data1);
         setconfrmAddonCombination(data1);
@@ -1698,6 +1644,7 @@ setSelectedVariantValue(variantValueId)
       }
     });
     if (selectedItem?.addons) {
+      // Here The Initial Custom Item Data List is Being Checked
       setShowCustomItemData(true);
     }
 
@@ -1781,15 +1728,17 @@ setSelectedVariantValue(variantValueId)
   //   customItemData
   // );
   // console.log('initialState >>>>>>>>>>>>>>>>>>>', initialState.data, 'selected style>>',selectedVariantStyle);
-  console.log("selected variant>>>>>>>>", selectedVariant,selectedVariantStyle);
+  console.log(
+    "selected variant>>>>>>>>",
+    selectedVariant,
+    selectedVariantStyle
+  );
 
   {
     console.log("customItemDataaa>>>>", customItemData);
   }
   return initialState && !initialState.loading && !loadingVariants ? (
     <>
-    
-
       <div className="relative min-h-screen mt-16  lg:min-h-0 lg:mb-28 lg:mt-24">
         {/* {!isDesktopOrLaptop?<div className='bg-white sticky top-0 shadow-2xl  p-2 h-10'><ArrowLeftOutlined onClick={() => router.push(`/`)} /></div>:""} */}
         <div className="lg:p-10 p-5 bg-white">
@@ -1801,10 +1750,31 @@ setSelectedVariantValue(variantValueId)
                 <div className="lg:col-span-1 lg:order-2 ">
                   {isDesktopOrLaptop ? (
                     <div className="w-full h-96">
-
                       <Magnify
-                        images={initialState.images?.length != 0 ? initialState.images : initialState?.defaultVariantItem ?
-                          Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_3?.variant_value_images : '') : ''} 
+                        images={
+                          initialState.images?.length != 0
+                            ? initialState.images
+                            : initialState?.defaultVariantItem
+                            ? Object.values(
+                                initialState?.defaultVariantItem
+                                  ?.variant_value_1?.variant_value_images !=
+                                  null
+                                  ? initialState.defaultVariantItem
+                                      ?.variant_value_1?.variant_value_images
+                                  : initialState.defaultVariantItem
+                                      ?.variant_value_2?.variant_value_images !=
+                                    null
+                                  ? initialState.defaultVariantItem
+                                      ?.variant_value_2?.variant_value_images
+                                  : initialState.defaultVariantItem
+                                      ?.variant_value_3?.variant_value_images !=
+                                    null
+                                  ? initialState.defaultVariantItem
+                                      ?.variant_value_3?.variant_value_images
+                                  : ""
+                              )
+                            : ""
+                        }
                       />
                     </div>
                   ) : (
@@ -1827,8 +1797,33 @@ setSelectedVariantValue(variantValueId)
                                 />
                               );
                             })
-                          : 
-                          Object.values(initialState.images?.length != 0 ? initialState.images : initialState?.defaultVariantItem ? Object.values(initialState?.defaultVariantItem?.variant_value_1?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_1?.variant_value_images : initialState.defaultVariantItem?.variant_value_2?.variant_value_images ? initialState.defaultVariantItem?.variant_value_2?.variant_value_images : initialState.defaultVariantItem?.variant_value_3?.variant_value_images != null ? initialState.defaultVariantItem?.variant_value_3?.variant_value_images : dummyImage) : dummyImage).map((key, idx) => {
+                          : Object.values(
+                              initialState.images?.length != 0
+                                ? initialState.images
+                                : initialState?.defaultVariantItem
+                                ? Object.values(
+                                    initialState?.defaultVariantItem
+                                      ?.variant_value_1?.variant_value_images !=
+                                      null
+                                      ? initialState.defaultVariantItem
+                                          ?.variant_value_1
+                                          ?.variant_value_images
+                                      : initialState.defaultVariantItem
+                                          ?.variant_value_2
+                                          ?.variant_value_images
+                                      ? initialState.defaultVariantItem
+                                          ?.variant_value_2
+                                          ?.variant_value_images
+                                      : initialState.defaultVariantItem
+                                          ?.variant_value_3
+                                          ?.variant_value_images != null
+                                      ? initialState.defaultVariantItem
+                                          ?.variant_value_3
+                                          ?.variant_value_images
+                                      : dummyImage
+                                  )
+                                : dummyImage
+                            ).map((key, idx) => {
                               console.log("key", key, idx);
 
                               return (
@@ -2059,7 +2054,6 @@ setSelectedVariantValue(variantValueId)
                         UNAVAILABLE
                       </div>
                     ) : !cart?.find((item) =>
-
                         initialState.defaultVariantItem
                           ? item?.addons
                             ? item.addons[0]?.variant_item_id ==
@@ -2072,9 +2066,7 @@ setSelectedVariantValue(variantValueId)
                                   .variant_item_id ||
                               item.defaultVariantItem?.variant_item_id ===
                                 selectedVariant?.variant_item_id
-                          :
-                          
-                           item.item_id == id
+                          : item.item_id == id
                       ) ? (
                       <div className="flex flex-col">
                         <div
@@ -2478,9 +2470,10 @@ setSelectedVariantValue(variantValueId)
                                               if (
                                                 item.inventoryDetails
                                                   .inventory_quantity >
+                                                  item.inventoryDetails
+                                                    ?.max_order_quantity &&
                                                 item.inventoryDetails
-                                                  ?.max_order_quantity && item.inventoryDetails
-                                                  ?.max_order_quantity!=null 
+                                                  ?.max_order_quantity != null
                                               ) {
                                                 quantity =
                                                   item.inventoryDetails
@@ -3161,8 +3154,9 @@ setSelectedVariantValue(variantValueId)
                               ) {
                                 if (
                                   item.inventoryDetails.inventory_quantity >
-                                  item.inventoryDetails?.max_order_quantity && item.inventoryDetails
-                                  ?.max_order_quantity!=null 
+                                    item.inventoryDetails?.max_order_quantity &&
+                                  item.inventoryDetails?.max_order_quantity !=
+                                    null
                                 ) {
                                   quantity =
                                     item.inventoryDetails?.max_order_quantity;
@@ -3330,85 +3324,91 @@ setSelectedVariantValue(variantValueId)
             {/* {Object.keys(addons1).map((mapId, index) => {
               const item = addons1[mapId]; */}
 
+            {initialState?.addons &&
+              Object.keys(initialState?.addons).map((mapId, index) => {
+                const item = initialState?.addons[mapId];
 
-             {initialState?.addons && Object.keys(initialState?.addons).map((mapId, index) => {
-                const item = initialState?.addons[mapId]; 
+                return (
+                  <div className="px-12 py-2" key={index}>
+                    <p className="text-black font-montMedium ">
+                      {item.add_on_title}
+                      {item.mandatory ? (
+                        <span className="font-montSemiBold text-red-600 px-2">
+                          *
+                        </span>
+                      ) : (
+                        ""
+                      )}
+                    </p>
+                    <p className="text-gray text-sm font-montMedium ">
+                      {item.add_on_group_type == "CHECKLIST"
+                        ? item.add_on_description
+                        : ""}
+                    </p>
+                    {item.add_on_group_type == "CHECKLIST" ? (
+                      item.add_on_options?.map((value, index) => {
+                        return (
+                          <div className=" w-1/2 flex" key={index}>
+                            <div className="flex ">
+                              <Checkbox
+                                onChange={(e) => {
+                                  handleAddonChange(
+                                    e,
+                                    item?.min_qty,
+                                    item.max_qty,
+                                    item.add_on_group_type
+                                  );
+                                }}
+                                defaultChecked={false}
+                                name={item.add_on_group_id}
+                                // checked={addonsAdded?.some(item =>
 
-              return (
-                <div className="px-12 py-2">
-                  <p className="text-black font-montMedium ">
-                    {item.add_on_title}
-                    {item.mandatory ? (
-                      <span className="font-montSemiBold text-red-600 px-2">
-                        *
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </p>
-                  <p className="text-gray text-sm font-montMedium ">
-                    {item.add_on_group_type == "CHECKLIST"
-                      ? item.add_on_description
-                      : ""}
-                  </p>
-                  {item.add_on_group_type == "CHECKLIST" ? (
-                    item.add_on_options?.map((value, index) => {
-                      return (
-                        <div className=" w-1/2 flex">
-                          <div className="flex ">
-                            <Checkbox
-                              onChange={(e) => {
-                                handleAddonChange(e,item?.min_qty,item.max_qty);
-                              }}
-                              defaultChecked={false}
-                              name={item.add_on_group_id}
-                              // checked={addonsAdded?.some(item =>
+                                //     item.add_on_option_id == value.add_on_option_id
 
-                              //     item.add_on_option_id == value.add_on_option_id
-
-                              // )
-                              // }
-                              value={{
-                                ...value,
-                                add_on_group_id: item.add_on_group_id,
-                                add_on_title: item.add_on_title,
-                                add_on_mapping_id: mapId,
-                              }}
-                              style={{ color: "black" }}
-                            >
-                              <div className="flex justify-between  w-[20vw]">
-                                <p className="font-montRegular px-4">
-                                  {" "}
-                                  {value.add_on_name}
-                                </p>
-                                <p className="font-montMedium pr-2">
-                                  {storeDetails?.currency_symbol} {value.price}
-                                </p>
-                              </div>
-                            </Checkbox>
+                                // )
+                                // }
+                                value={{
+                                  ...value,
+                                  add_on_group_id: item.add_on_group_id,
+                                  add_on_title: item.add_on_title,
+                                  add_on_mapping_id: mapId,
+                                }}
+                                style={{ color: "black" }}
+                              >
+                                <div className="flex justify-between  w-[20vw]">
+                                  <p className="font-montRegular px-4">
+                                    {" "}
+                                    {value.add_on_name}
+                                  </p>
+                                  <p className="font-montMedium pr-2">
+                                    {storeDetails?.currency_symbol}{" "}
+                                    {value.price}
+                                  </p>
+                                </div>
+                              </Checkbox>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <TextArea
-                      rows={4}
-                      placeholder={item.add_on_description}
-                      maxLength={200}
-                      onChange={(e) => {
-                        handleAddonInstructions(
-                          e,
-                          item.add_on_group_id,
-                          item.add_on_title,
-                          mapId
                         );
-                      }}
-                    />
-                  )}
-                  {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
-                </div>
-              );
-            })}
+                      })
+                    ) : (
+                      <TextArea
+                        rows={4}
+                        placeholder={item.add_on_description}
+                        maxLength={200}
+                        onChange={(e) => {
+                          handleAddonInstructions(
+                            e,
+                            item.add_on_group_id,
+                            item.add_on_title,
+                            mapId
+                          );
+                        }}
+                      />
+                    )}
+                    {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
+                  </div>
+                );
+              })}
             <button
               className="px-10 py-2 self-center "
               style={{
@@ -3422,19 +3422,21 @@ setSelectedVariantValue(variantValueId)
                 }`,
               }}
               onClick={
-
-
-                
-                addonsAdded.filter(
-                  (item) => item.add_on_group_type === "CHECKLIST"
-                )?.length <  addonsAdded.find(
-                    (item) => item=='CHECKLIST'
-                  )?.min_qty
+                addonsAdded.length==0 || addonsAdded.filter(
+                  (item) => item.add_on_title != "Cooking Instructions"
+                )?.length < addonMinQty
                   ? () => {
-                      message.error("addons should be more than 1");
+                      toast.error(` ${addonMinQty?`Minimum Addon Quantity is ${addonMinQty}`:`Please Add Minimum Quantity`}`, {
+                        position: "bottom-right",
+                        autoClose: 1000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                      });
                     }
-                  : 
-                  handleConfirmAddons
+                  : handleConfirmAddons
               }
             >
               Confirm
@@ -3450,9 +3452,12 @@ setSelectedVariantValue(variantValueId)
             {initialState.variants?.length > 0
               ? customItemData?.addons
                   ?.filter((item) => variantFilter(item))
-                  .map((itemMap) => {
+                  .map((itemMap, key) => {
                     return (
-                      <div className="py-2 w-full flex item-center  flex-col">
+                      <div
+                        className="py-2 w-full flex item-center  flex-col"
+                        key={key}
+                      >
                         <div>
                           <div>
                             {/* ----------------------------------------------------------- INCREMENT AND DECREMENT BUTTONS ---------------------------------------------------- */}
@@ -3511,13 +3516,19 @@ setSelectedVariantValue(variantValueId)
                                     const addons = newVar[item];
 
                                     return (
-                                      <div className="flex flex-wrap w-196">
+                                      <div
+                                        className="flex flex-wrap w-196"
+                                        key={0}
+                                      >
                                         <p className="font-montMedium px-1 -mt-3 whitespace-nowrap">
                                           {item}:
                                         </p>
                                         {addons.map((addon, num) => {
                                           return (
-                                            <p className="font-montRegular whitespace-nowrap break-words px-1 -mt-3">
+                                            <p
+                                              className="font-montRegular whitespace-nowrap break-words px-1 -mt-3"
+                                              key={num}
+                                            >
                                               {addon.add_on_name
                                                 ? addon.add_on_name
                                                 : addon.text}
@@ -3539,7 +3550,10 @@ setSelectedVariantValue(variantValueId)
                   })
               : (customItemData?.addons || []).map((itemMap) => {
                   return (
-                    <div className="py-2 w-full flex item-center  flex-col">
+                    <div
+                      className="py-2 w-full flex item-center  flex-col"
+                      key={0}
+                    >
                       <div>
                         <div>
                           {/* ----------------------------------------------------------- INCREMENT AND DECREMENT BUTTONS ---------------------------------------------------- */}
@@ -3596,13 +3610,19 @@ setSelectedVariantValue(variantValueId)
                                 const addons = newVar[item];
 
                                 return (
-                                  <div className="flex bg-red-400 w-100">
+                                  <div
+                                    className="flex bg-red-400 w-100"
+                                    key={index}
+                                  >
                                     <p className="font-montMedium px-1 -mt-3">
                                       {item}:
                                     </p>
                                     {addons.map((addon, num) => {
                                       return (
-                                        <p className="font-montRegular px-1 -mt-3">
+                                        <p
+                                          className="font-montRegular px-1 -mt-3"
+                                          key={num}
+                                        >
                                           {addon.add_on_name
                                             ? addon.add_on_name
                                             : addon.text}
@@ -3660,7 +3680,7 @@ setSelectedVariantValue(variantValueId)
                   setShowCustomItemData(false);
                 }}
               >
-                I'll Choose
+                I Will Choose
               </button>
             </div>
           </div>
