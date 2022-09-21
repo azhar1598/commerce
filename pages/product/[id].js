@@ -64,7 +64,7 @@ import { toast, ToastContainer } from "react-toastify";
 import crypto from "crypto";
 import IncreDecrButton from "../../components/IncreDecrButton";
 import Item from "antd/lib/list/Item";
-import AddonsLists from "../../components/addonsLists";
+// import AddonsLists from "../../components/addonsLists";
 import { select } from "redux-saga/effects";
 
 const groupBy = function (arr, key) {
