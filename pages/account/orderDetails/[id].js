@@ -343,19 +343,19 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                                                     <p className='text- font-montSemiBold w-56 lg:w-44   break-words'>{item.itemName}</p>
                                                 </div>
                                                 {item.customizationDetails &&
-                                                 <p className='text-[#212B3680]'><span className='text-black'>Color : </span>{item.customizationDetails ?
+                                                 <p className='text-[#212B3680]'><span className='text-black'> </span>{item.customizationDetails ?
                                                     item.customizationDetails?.variant_item_attributes.variant_value_1?.variant_value_name : ''},
 
-                                                    <span className='text-black'>Size : </span>{item.customizationDetails ?
+                                                    <span className='text-black'> </span>{item.customizationDetails ?
                                                         item.customizationDetails?.variant_item_attributes?.variant_value_2?.variant_value_name : ''},
 
                                                 </p>}
 
-                                                <p className='text-[#212B3680]'><span className='text-black'>Color : </span>Red,
+                                                {/* <p className='text-[#212B3680]'><span className='text-black'>Color : </span>Red,
 
-                                                    <span className='text-black'>Size : </span>M
-                                                    <span className='text-black' onClick={()=>{setAddonVisible(true)}}>..more </span>
-                                                </p>
+                                                    <span className='text-black'>Size : </span>M */}
+                                                    {/* <span className='text-black' onClick={()=>{setAddonVisible(true)}}>..more </span> */}
+                                                {/* </p> */}
                                                 <p className='text-lg font-montSemiBold'>{storeDetails?.currency_symbol}
 
 
@@ -547,7 +547,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
 
             <ToastContainer />
 
-            <Modal
+            {/* <Modal
                 visible={addonVisible}
                 onOk={handleAddonOk}
                 afterClose={handleAddonClose}
@@ -600,7 +600,7 @@ export const Index = ({ stateStoreSettings, dispatchCancelOrder, storeDetails, s
                              
 
 
-                </Modal>
+                </Modal> */}
 
 
         </div>

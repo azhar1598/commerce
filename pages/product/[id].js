@@ -2097,7 +2097,7 @@ setSelectedVariantValue(variantValueId)
                             }`,
                           }}
                         >
-                          Add to Cartd
+                          Add to Cart
                         </div>
                         {customization ? (
                           <p className="text-black font-montMedium ">
