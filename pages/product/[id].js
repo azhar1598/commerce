@@ -209,13 +209,13 @@ const Index = ({
     },
   });
 
-  const [priceWithAddon, setPriceWithAddon] = useState(
-    initialState.defaultVariantItem
-      ? initialState.defaultVariantItem.sale_price
-      : initialState.data
-      ? initialState.data.sale_price
-      : ""
-  );
+  // const [priceWithAddon, setPriceWithAddon] = useState(
+  //   initialState.defaultVariantItem
+  //     ? initialState.defaultVariantItem.sale_price
+  //     : initialState.data
+  //     ? initialState.data.sale_price
+  //     : ""
+  // );
 
   const dummyImage = [
     "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png",
@@ -3442,7 +3442,7 @@ console.log('sorted')
               Confirm
               <span className="pl-12">
                 {" "}
-                {storeDetails?.currency_symbol} {priceWithAddon}
+                {/* {storeDetails?.currency_symbol} {priceWithAddon} */}
               </span>
             </button>
           </div>
