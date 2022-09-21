@@ -3511,13 +3511,13 @@ setSelectedVariantValue(variantValueId)
                                     const addons = newVar[item];
 
                                     return (
-                                      <div className="flex w-100">
-                                        <p className="font-montMedium px-1 -mt-3">
+                                      <div className="flex flex-wrap w-196">
+                                        <p className="font-montMedium px-1 -mt-3 whitespace-nowrap">
                                           {item}:
                                         </p>
                                         {addons.map((addon, num) => {
                                           return (
-                                            <p className="font-montRegular px-1 -mt-3">
+                                            <p className="font-montRegular whitespace-nowrap break-words px-1 -mt-3">
                                               {addon.add_on_name
                                                 ? addon.add_on_name
                                                 : addon.text}
@@ -3596,7 +3596,7 @@ setSelectedVariantValue(variantValueId)
                                 const addons = newVar[item];
 
                                 return (
-                                  <div className="flex w-100">
+                                  <div className="flex bg-red-400 w-100">
                                     <p className="font-montMedium px-1 -mt-3">
                                       {item}:
                                     </p>

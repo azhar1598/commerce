@@ -843,22 +843,29 @@ export const Product = (props) => {
                                     {(props.cart || []).find(product => product.item_id == props.item.item_id) ?
 
 
+<p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() =>
+    router.push(`/product/${props.item.item_id}`)}
+    // itemAddToCart(props.item)}
+    style={{ background: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : "black"}` }}>+</p>
 
-                                        <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
-                                            <span onClick={() =>
-                                                //  handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
 
-                                                handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
+// UnComment it if you want to handle Increment and decrement in HomePage Start
+                                        // <div className='mt-2  lg:absolute  border rounded border-red-600 font-montSemiBold h-8  lg:-mt-4 lg:-ml-28 flex items-center space-x-2 bg-white' style={{ backgroundColor: "white", color: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}`, borderColor: `${props.storeSettings.data ? props.storeSettings.data.secondary_color : 'black'}` }}>
+                                        //     <span onClick={() =>
+                                        //         //  handleDecressQuantity(props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)} 
 
-                                                className={`px-3 text-2xl cursor-pointer`}>-</span>
-                                            <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
-                                            <span onClick={() =>
-                                                // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
+                                        //         handleDecreaseQuantity(props.item, props.cart.find(product => product.item_id == props.item.item_id)?.qty - 1)}
 
-                                                handleIncreaseQuantity(props.item)}
+                                        //         className={`px-3 text-2xl cursor-pointer`}>-</span>
+                                        //     <span className='text-black font-montMedium text-sm'>{props.cart.find(product => product.item_id == props.item.item_id)?.qty}</span>
+                                        //     <span onClick={() =>
+                                        //         // handleIncreseQuantity(props.item.inventoryDetails, props.item.item_id, props.cart.find(product => product.item_id == props.item.item_id)?.qty + 1)} 
 
-                                                className='px-3 text-xl cursor-pointer'>+</span>
-                                        </div>
+                                        //         handleIncreaseQuantity(props.item)}
+
+                                        //         className='px-3 text-xl cursor-pointer'>+</span>
+                                        // </div>
+// UnComment it if you want to handle Increment and decrement in HomePage Start
                                         :
                                         <p className='-mt-5 mr-3 rounded shadow border border-red-200 px-3 py-1' onClick={() =>
                                             router.push(`/product/${props.item.item_id}`)}

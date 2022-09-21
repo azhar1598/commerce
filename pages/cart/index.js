@@ -541,7 +541,7 @@ const Index = ({
             );
 
             if (indexNumber > -1) {
-                   debugger
+                   
               let oldData = finalData[indexNumber];
               oldData.add_on_values.push(
                 option.add_on_option_id ? option.add_on_option_id : option.text
@@ -551,7 +551,7 @@ const Index = ({
 
               // finalData.push(addonDetails);
             } else {
-                   debugger
+                   
               let data = {
                 add_on_mapping_id: option.add_on_mapping_id?option.add_on_mapping_id:option.mapId,
                 add_on_group_id: option.add_on_group_id,
@@ -577,8 +577,10 @@ const Index = ({
     });
 
 console.log('finalDatafindalDatanewDataaaaa',newData)
+
+let storeId=stateStoreDetails?.store_id
     
-    return newData
+    return {[storeId]:newData}
 
 
 

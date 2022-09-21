@@ -34,6 +34,7 @@ export const addItemToCart = (cart, cartItem) => {
   // let itemExist = cart?.find((item) => item.item_id == cartItem.item_id);
 
   let index = -1;
+  
 
   if (cartItem?.addons) {
     const itemExist = cart?.find((item, num) => {
@@ -41,7 +42,7 @@ export const addItemToCart = (cart, cartItem) => {
       let variant_id;
       let cart_variant_id;
 
-      if (cartItem?.addons && cartItem.addons.length > 0) {
+      if (cartItem?.addons && cartItem.addons.length>0) {
         variant_id = cartItem?.addons[0].variant_item_id;
       } else {
         variant_id == cartItem?.defaultVariantItem.variant_id;
@@ -73,33 +74,36 @@ export const addItemToCart = (cart, cartItem) => {
 
     console.log("carttttitem", cartItem);
 
-    if (itemExist) {
-      debugger;
-      if (index != -1 && itemExist?.qty == 0) {
-        debugger;
-        cart.splice(index, 1);
-        return cart;
-      } else {
-        let storeFilteredData = itemExist?.addons?.filter(
-          (item) => item.qty > 0
-        );
+    ;
+    if (itemExist)
+    {
+        if(index>-1 && itemExist?.qty==0){
+            debugger
+            cart.splice(index,1)
+            return cart
+        }
+        else{
+          debugger
 
-       cartItem.addons=storeFilteredData
+//          let filteredData=itemExist?.addons?.filter(item=>{
+//           return item.qty>0
+//          })
+// console.log('filteredDataaaaaaaaaa',filteredData)
 
 
-
-
-        cart[index] = cartItem;
-      }
-    } else cart.push(cartItem);
+         cart[index] = cartItem;
+        }
+    }
+    else cart.push(cartItem);
     return cart || [];
   } else {
     const item = cartItem;
     console.log(item, "starte");
     // const inCart = state.cart.find(item => item.item.item_id === action.payload.item_id ? true : false)
-    return [...cart, { ...item, qty: 1 }];
+    return  [...cart, { ...item, qty: 1 }]
 
-    // cart: inCart ? state.cart.map(item => item.item.item_id === action.payload.item_id ? { ...item, qty: item.qty + 1 } : item) : [...state.cart, { item, qty: 1 }]
+      // cart: inCart ? state.cart.map(item => item.item.item_id === action.payload.item_id ? { ...item, qty: item.qty + 1 } : item) : [...state.cart, { item, qty: 1 }]
+    
   }
 
   //   if (itemExist) {
@@ -147,7 +151,7 @@ export const addItemToCart = (cart, cartItem) => {
 
   //       if (item.item_id == cartItem.item_id) {
   //         if (item?.defaultVariantItem) {
-  //
+  //             
   //           if (cart_variant_id == variant_id) {
   //             acc.push(cartItem);
   //             return acc;
@@ -182,3 +186,5 @@ export const addItemToCart = (cart, cartItem) => {
 export const convertToAddonsArray = (cart, cartItem) => {
   return [...cart, cartItem];
 };
+
+

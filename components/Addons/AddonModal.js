@@ -128,10 +128,19 @@ export const AddonModal = ({
 
     let item = {
       ...selectedCartItem,
-      addons: selectedCartItem.addons.map((item) =>
-        item.id === addonSelected.id ? addonSelected : item
-      ),
+      addons: 
+      selectedCartItem.addons.map((item) => {
+        if (item.id === addonSelected.id) {
+          debugger
+          return addonSelected;
+        }  
+        else{
+          return item
+        }  
+          }),
     };
+
+    console.log("item.addonsss", item.addons);
 
     // let  addonCombinationGroupby
     // let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
@@ -151,87 +160,54 @@ export const AddonModal = ({
     let editData = [];
     let addonValues = [];
     let finalEditData = [];
+    let newData = [];
 
-    item.addons?.map((addon, index) => {
-      console.log("itemmmmmmmmmmmmaddonnn", addon);
+    if (item?.addons) {
+      item?.addons?.map((addon) => {
+        //    let addonDetails = {
+        //      add_on_mapping_id: addon[0].add_on_mapping_id,
+        //      add_on_group_id: addon[0].add_on_group_id,
+        //      add_on_values: [],
+        //    };
 
-      let checkkk = groupBy(addon.addons, "add_on_group_id");
-      let values = [];
-      // checkkk.map((item,index)=>{
-      //   if(item.add_on_option_id){
-      //   values.push(item.add_on_option_id)
-      //   }
-      // })
+        let finalData = [];
+        let dummyAddonDetail = [];
 
-      // let tekk=getValuesByKey(addon.addons,"")
-
-      let chek = {};
-
-      console.log("chekkkkk", values, checkkk, Object.values(checkkk));
-
-      addon.addons.map((element) => {
-        console.log(
-          "Object.keys(editData).length>0",
-          Object.keys(editData).length > 0
-        );
-
-        if (editData.length > 0) {
-          editData?.map((ed, index) => {
-            console.log(
-              "itemmmmmmmmgroup_id.add_on_group_id==element.add_on_group_id)",
-              ed.add_on_group_id,
-              element.add_on_group_id,
-              ed.add_on_group_id == element.add_on_group_id
-            );
-
-            if (ed.add_on_group_id == element.add_on_group_id) {
-              ;
-              addonValues.push(
-                element.add_on_option_id
-                  ? element.add_on_option_id
-                  : element.text
-              );
-            } else {
-              ;
-
-              console.log("itemmmmmmmfinalDatasa", finalEditData);
-              let data=   {
-                add_on_mapping_id: element.mapId,                
-  
-                add_on_group_id: element.add_on_group_id,
-                add_on_values: [element.text]
-              }
-
-              finalEditData.push(data);
-            }
-          });
-
-          console.log(
-            "itemmmmmmmmelement.add_on_option_idddd",
-            element.add_on_option_id
+        addon.addons.map((option) => {
+          let indexNumber = finalData.findIndex(
+            (item) => item.add_on_group_id == option.add_on_group_id
           );
 
-          // Object.keys(editData['add_on_details']).
+          if (indexNumber > -1) {
+            let oldData = finalData[indexNumber];
+            oldData.add_on_values.push(
+              option.add_on_option_id ? option.add_on_option_id : option.text
+            );
 
-          console.log("itemmmmmmeditDataaa");
-        } else {
-          ;
+            finalData[indexNumber] = oldData;
 
-          addonValues = [element.add_on_option_id];
+            // finalData.push(addonDetails);
+          } else {
+            let data = {
+              add_on_mapping_id: option.add_on_mapping_id
+                ? option.add_on_mapping_id
+                : option.mapId,
+              add_on_group_id: option.add_on_group_id,
+              add_on_values: [
+                option.add_on_option_id ? option.add_on_option_id : option.text,
+              ],
+            };
 
-          editData = [
-            {
-              add_on_mapping_id: element.add_on_mapping_id,
+            finalData.push(data);
+          }
+        });
 
-              add_on_group_id: element.add_on_group_id,
-              add_on_values: addonValues,
-            },
-          ];
-
-          finalEditData.push(editData[0]);
-        }
+        newData.push({ add_on_details: finalData });
+        console.log("finalDatafinalData", finalData);
       });
-    });
+    }
+
+    console.log("newDataaaaaaaa", newData);
 
     // ;
 
