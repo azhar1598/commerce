@@ -239,7 +239,7 @@ const Header = ({ cart=[], isLoggedIn, storeSettings, searchItems, storeDetails,
                             <p className='px-16 py-2 text-white mt-3' style={{ background: storeSettings?.data ? storeSettings.data.secondary_color : 'black' }} onClick={showModal}>Log in</p>
                             {/* <p className='' style={{ color: storeSettings?.data ? storeSettings.data.secondary_color : 'black' }} onClick={() => {
                               
-                                // debugger
+                                
                                 setShowSignUpTab(true)
                                 console.log('showSignUpTab',showSignUpTab)
                                 showModal()

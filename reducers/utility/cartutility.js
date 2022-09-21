@@ -78,12 +78,12 @@ export const addItemToCart = (cart, cartItem) => {
     if (itemExist)
     {
         if(index>-1 && itemExist?.qty==0){
-            debugger
+            
             cart.splice(index,1)
             return cart
         }
         else{
-          debugger
+          
 
          let filteredData=cartItem?.addons?.filter(item=>{
           return item.qty>0
