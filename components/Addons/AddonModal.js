@@ -131,7 +131,7 @@ export const AddonModal = ({
       addons: 
       selectedCartItem.addons.map((item) => {
         if (item.id === addonSelected.id) {
-          debugger
+          
           return addonSelected;
         }  
         else{

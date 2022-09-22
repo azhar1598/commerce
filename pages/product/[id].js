@@ -1245,15 +1245,15 @@ const Index = ({
 
         const quantitySum = qtySum(data.addons, "price");
 
-        setPriceWithAddon(
-          parseInt(
-            initialState.defaultVariantItem
-              ? initialState.defaultVariantItem.sale_price
-              : initialState.data
-              ? initialState.data.sale_price
-              : ""
-          ) + quantitySum
-        );
+        // setPriceWithAddon(
+        //   parseInt(
+        //     initialState.defaultVariantItem
+        //       ? initialState.defaultVariantItem.sale_price
+        //       : initialState.data
+        //       ? initialState.data.sale_price
+        //       : ""
+        //   ) + quantitySum
+        // );
 
         setAddonsWithQty(data);
       } else {
@@ -1270,15 +1270,15 @@ const Index = ({
 
         const quantitySum = qtySum(data.addons, "price");
 
-        setPriceWithAddon(
-          parseInt(
-            initialState.defaultVariantItem
-              ? initialState.defaultVariantItem.sale_price
-              : initialState.data
-              ? initialState.data.sale_price
-              : ""
-          ) + quantitySum
-        );
+        // setPriceWithAddon(
+        //   parseInt(
+        //     initialState.defaultVariantItem
+        //       ? initialState.defaultVariantItem.sale_price
+        //       : initialState.data
+        //       ? initialState.data.sale_price
+        //       : ""
+        //   ) + quantitySum
+        // );
 
         setAddonsWithQty(data);
       }
@@ -1290,15 +1290,15 @@ const Index = ({
       console.log("filterDataaa", filterData);
 
       const quantitySum = filterData ? qtySum(filterData, "price") : 0;
-      setPriceWithAddon(
-        parseInt(
-          initialState.defaultVariantItem
-            ? initialState.defaultVariantItem.sale_price
-            : initialState.data
-            ? initialState.data.sale_price
-            : ""
-        ) + quantitySum
-      );
+      // setPriceWithAddon(
+      //   parseInt(
+      //     initialState.defaultVariantItem
+      //       ? initialState.defaultVariantItem.sale_price
+      //       : initialState.data
+      //       ? initialState.data.sale_price
+      //       : ""
+      //   ) + quantitySum
+      // );
     }
   };
 
