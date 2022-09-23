@@ -352,7 +352,7 @@ export const filterApi = (payload) =>
 export const getAddonsAPI = (payload) =>
     callAPI(
         "GET",
-        `catalog-customization/get-add-ons-by-item&itemId=${payload.itemId}${payload.variantValueId ? `&variantValueId=${payload?.variantValueId}` : ""
+        `catalog-customization/get-add-ons-by-item&itemId=${payload.itemId}${payload.variantItemId ? `&variantItemId=${payload?.variantItemId}` : ""
         }`
     );
 

@@ -71,18 +71,23 @@ export const AddonModal = ({
     add_on_group_id,
     add_on_title,
     addonSelected,
-    mapId
+    mapId,
+    group_type
   ) => {
     let instructions = {
       add_on_group_id,
       add_on_title,
       mapId,
       text: e.target.value,
+      add_on_group_type:group_type
     };
     setAddonCombination([...addonCombination, e.target.value]);
 
+
+
+
     let isCookingInstr = addonCombination.find(
-      (item) => item.add_on_title === "Cooking Instructions"
+      (item) => item.add_on_group_type === "SHORT_TEXT" || item.add_on_group_type === "LONG_TEXT" 
     );
 
     if (!isCookingInstr) {
@@ -336,8 +341,9 @@ export const AddonModal = ({
                       item.add_on_group_id,
                       item.add_on_title,
                       addonSelected,
+                      mapId,
+                      item.add_on_group_type
 
-                      mapId
                     );
                   }}
                 />

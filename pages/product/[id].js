@@ -68,7 +68,7 @@ import Item from "antd/lib/list/Item";
 import { select } from "redux-saga/effects";
 
 const groupBy = function (arr, key) {
-  console.log('arrrr',arr)
+  console.log("arrrr", arr);
   return arr.reduce(function (rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
 
@@ -154,68 +154,8 @@ const Index = ({
   const [rgbaBackground, setRgbaBackground] = useState("");
 
   const [rgbaColor, setRgbaColor] = useState();
-
-  const [addons1, setAddons1] = useState({
-    "3ebb31825aea7b4fb8c9f8065eb4bbda": {
-      item_id: 12345,
-      add_on_title: "Toppings on the Pizza",
-      add_on_description: "Select min of 2 and max of 5",
-      variant_group_id: 3340,
-      variant_value_id: 7064,
-      status: "ACTIVE",
-      entry_id: 35,
-      add_on_group_id: 12,
-      add_on_group_type: "CHECKLIST",
-      is_mandatory: "Y",
-      min_qty: 2,
-      max_qty: 5,
-      price: null,
-      add_on_options: [
-        {
-          add_on_option_id: 24,
-          add_on_name: "Onion",
-          price: "30.00",
-          option_status: "AVAILABLE",
-        },
-        {
-          add_on_option_id: 25,
-          add_on_name: "Jalapeno",
-          price: "60.00",
-          option_status: "AVAILABLE",
-        },
-        {
-          add_on_option_id: 26,
-          add_on_name: "Olives",
-          price: "60.00",
-          option_status: "AVAILABLE",
-        },
-      ],
-    },
-
-    "6445a0d6cd01e8b7086c5b0f34409dd9": {
-      item_id: 12345,
-      add_on_title: "Cooking Instructions",
-      add_on_description: "Min of 10 characters to 200 characters",
-      variant_group_id: null,
-      variant_value_id: null,
-      status: "ACTIVE",
-      entry_id: 38,
-      add_on_group_id: 11,
-      add_on_group_type: "SHORT_TEXT",
-      is_mandatory: "Y",
-      min_qty: 0,
-      max_qty: 100,
-      price: 1.0,
-    },
-  });
-
-  // const [priceWithAddon, setPriceWithAddon] = useState(
-  //   initialState.defaultVariantItem
-  //     ? initialState.defaultVariantItem.sale_price
-  //     : initialState.data
-  //     ? initialState.data.sale_price
-  //     : ""
-  // );
+  const [addonValidation, setAddonValidation] = useState([]);
+  const [priceWithAddon, setPriceWithAddon] = useState();
 
   const dummyImage = [
     "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png",
@@ -228,39 +168,42 @@ const Index = ({
     initialState?.data?.is_add_on_available == "Y"
   );
 
+  // useEffect(() => {
+  //   if (id) {
+  //     if (initialState?.data?.is_add_on_available == "Y") {
+  //       setCustomization(true);
+
+  //       const payload = {
+  //         itemId: id,
+  //         // variantValueId: initialState?.defaultVariantItem
+  //         //   ? selectedVariantValue
+  //         //     ? selectedVariantValue
+  //         //     : selectedVariant.variant_value_1?.variant_value_id
+  //         //   : null,
+  //         variantItemId:initialState?.defaultVariantItem?selectedVariant?.variant_item_id:null
+  //       };
+
+  //       fetchAddons(payload);
+  //     } else {
+  //       setCustomization(false);
+  //     }
+  //   }
+  // }, [initialState?.data?.is_add_on_available, id]);
+
   useEffect(() => {
-    if (id) {
-      if (initialState?.data?.is_add_on_available == "Y") {
-        setCustomization(true);
-
-        const payload = {
-          itemId: id,
-          variantValueId: initialState?.defaultVariantItem
-            ? selectedVariantValue
-              ? selectedVariantValue
-              : selectedVariant.variant_value_1?.variant_value_id
-            : null,
-        };
-
-        fetchAddons(payload);
-      } else {
-        setCustomization(false);
-      }
-    }
-  }, [initialState?.data?.is_add_on_available, id]);
+    if (initialState.defaultVariantItem)
+      setPriceWithAddon(initialState.defaultVariantItem.sale_price);
+    else setPriceWithAddon(initialState.data?.sale_price);
+  }, [initialState.data,initialState.defaultVariantItem]);
 
   useEffect(() => {
     if (initialState?.data?.is_add_on_available == "Y") {
       setCustomization(true);
 
-      console.log("hello wordl");
+      console.log("hello wordl,selecte", selectedVariant);
       const payload = {
         itemId: id,
-        variantValueId: initialState?.defaultVariantItem
-          ? selectedVariantValue
-            ? selectedVariantValue
-            : selectedVariant.variant_value_1?.variant_value_id
-          : null,
+        variantItemId:initialState?.defaultVariantItem?selectedVariant?.variant_item_id:null
       };
 
       fetchAddons(payload);
@@ -957,8 +900,7 @@ const Index = ({
       });
       setCustomItemData({ ...customItemData, addons: updatedAdds });
       setAddonCombination(updatedAdds);
-      addons.length==1 && updateCartRecordafter()
-      
+      addons.length == 1 && updateCartRecordafter();
     } else {
       const updatedAdds = addons.map((item) => {
         return item.id === uid ? { ...item, qty: item.qty - 1 } : item;
@@ -1206,7 +1148,45 @@ const Index = ({
 
   const handleAddonCancel = () => {
     setAddonVisible(false);
+
+
     setAddonsAdded([]);
+
+    const selectedItem = cart?.find((item) => {
+      console.log("naviiii", item, cart);
+      if (item.item_id == initialState.data?.item_id) {
+        if (initialState?.defaultVariantItem) {
+          if (
+            item.defaultVariantItem.variant_item_id ==
+            initialState?.defaultVariantItem?.variant_item_id
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          console.log("selected te", item, selectedItem);
+          //   setAddonCombination(selectedItem?.addons || []);
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
+    if (selectedItem?.addons) {
+      // Here The Initial Custom Item Data List is Being Checked
+      setShowCustomItemData(true);
+    }
+
+    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+
+    setCustomItemData({
+      ...customItemData,
+      ...initialState?.data,
+      addons: selectedItem?.addons,
+    });
+
+
   };
 
   const handleAddonClose = () => {
@@ -1214,17 +1194,54 @@ const Index = ({
     setAddonsAdded([]);
   };
 
-  const handleAddonChange = (e, min_qty, max_qty) => {
+  const handleAddonChange = (e, min_qty, max_qty, group_id, is_mandatory,value) => {
     if (e.target.checked) {
       const sortedAddons = addonsAdded.sort((a, b) =>
         a.add_on_name > b.add_on_name ? 1 : -1
       );
+      const groupedAddons = groupBy(addonsAdded, "add_on_group_id");
+let data=Number(priceWithAddon)+Number(value.price)
+setPriceWithAddon(data)
 
-    
+      console.log(
+        "sortedAdddddons",
+        addonsAdded,
+        sortedAddons,
+        groupedAddons,
+        min_qty,
+        max_qty,
+        data,
+        priceWithAddon
+      );
+      // if(is_mandatory=='Y'){
+      Object.keys(groupedAddons).map((id) => {
+        console.log("idddd", id, group_id, Object.values(id).length);
+        if (group_id == id) {
+          console.log(
+            "idddd",
+            id,
+            group_id,
+            Object.values(groupedAddons[id]),
+            Object.values(groupedAddons[id]).length
+          );
+
+          if (Object.values(groupedAddons[id]).length < min_qty) {
+            setAddonValidation(false);
+          } else if (Object.values(groupedAddons[id]).length > max_qty) {
+            setAddonValidation(false);
+          } else {
+            setAddonValidation(true);
+          }
+        }
+      });
+
+      // }
+      // else{
+
+      // }
 
       setAddonMinQty(min_qty);
       setAddonMaxQty(max_qty);
- 
 
       setAddonsAdded([...sortedAddons, e.target.value]);
 
@@ -1290,25 +1307,33 @@ const Index = ({
       console.log("filterDataaa", filterData);
 
       const quantitySum = filterData ? qtySum(filterData, "price") : 0;
-      // setPriceWithAddon(
-      //   parseInt(
-      //     initialState.defaultVariantItem
-      //       ? initialState.defaultVariantItem.sale_price
-      //       : initialState.data
-      //       ? initialState.data.sale_price
-      //       : ""
-      //   ) + quantitySum
-      // );
+      setPriceWithAddon(
+        parseInt(
+          initialState.defaultVariantItem
+            ? initialState.defaultVariantItem.sale_price
+            : initialState.data
+            ? initialState.data.sale_price
+            : ""
+        ) + quantitySum
+      );
     }
   };
 
-  const handleAddonInstructions = (e, add_on_group_id, add_on_title, mapId) => {
+  const handleAddonInstructions = (e, add_on_group_id, add_on_title, mapId,group_type) => {
+    console.log("instructionssss", instructions);
     let instructions = {
       add_on_group_id,
       add_on_title,
       mapId,
       text: e.target.value,
-      qty:1
+      qty: 1,
+      add_on_group_type:group_type,
+      price:0,
+
+      // };
+
+      // qty:1,
+      // id: crypto.randomBytes(16).toString("hex"),
     };
 
     setAddonInstructions(instructions);
@@ -1324,7 +1349,7 @@ const Index = ({
       a.add_on_name > b.add_on_name ? 1 : -1
     );
 
-console.log('sorted')
+    console.log("sortedddddddddd", sortedFilters);
 
     setAddonsAdded(sortedFilters);
     const addWithQty = addonsWithQty;
@@ -1400,15 +1425,15 @@ console.log('sorted')
     console.log(duplicate, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> duplicate");
   };
 
-  const handleConfirmAddons = () => {
+  const handleConfirmAddons = (e) => {
+    e.preventDefault();
     // itemAddToCart(customIte)
     // setCustomItemData({ ...customItemData, addons: addonsAdded })
     let getAddons = getUpdatedAddonsFromCart() || [];
 
-    console.log("getAddons", getAddons, addonCombination);
+    console.log("getAddons", getAddons, addonCombination, addonValidation);
 
     if (addonCombination.length || getAddons?.length) {
-
       let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
       let addonCombinationGroupby;
       console.log("length greater than 1");
@@ -1538,6 +1563,7 @@ console.log('sorted')
       }
     } else {
       console.log("lengt not");
+
       // let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
       // let addonCombinationGroupby;
       // ;
@@ -1548,6 +1574,13 @@ console.log('sorted')
       //     JSON.stringify(groupByaddonsWithQty)
       //   );
       // });
+      console.log(
+        'typeof(addonsWithQty)=="object"',
+        addonsWithQty,
+        addonsWithQty?.addons,
+        addonsWithQty?.addons ? true : false,
+        typeof addonsWithQty == "object"
+      );
       if (initialState?.variants.length) {
         let data = [...getAddons, addonsWithQty];
         let data1 = customItemData;
@@ -1588,6 +1621,7 @@ console.log('sorted')
         setAddonVisible(false);
       }
     }
+    // Temporary to check instructions
     setShowCustomItemData(true);
   };
 
@@ -2198,14 +2232,9 @@ console.log('sorted')
                               //     }
                               //   })
                               cart?.find((item) => {
-                                console.log("naviiii", item, cart);
                                 if (
                                   item.item_id == initialState.data?.item_id
                                 ) {
-                                  console.log(
-                                    "item.item_id == initialState.data?.item_id",
-                                    item.item_id == initialState.data?.item_id
-                                  );
                                   if (initialState?.defaultVariantItem) {
                                     console.log(
                                       "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem ",
@@ -2217,13 +2246,6 @@ console.log('sorted')
                                         initialState?.defaultVariantItem
                                           ?.variant_item_id
                                       ) {
-                                        console.log(
-                                          "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem with  item.defaultVariantItem.variant_item_id ==initialState?.defaultVariantItem?.variant_item_id ",
-                                          item.defaultVariantItem
-                                            .variant_item_id ==
-                                            initialState?.defaultVariantItem
-                                              ?.variant_item_id
-                                        );
                                         return true;
                                       } else {
                                         return false;
@@ -2235,13 +2257,6 @@ console.log('sorted')
                                         initialState?.defaultVariantItem
                                           ?.variant_item_id
                                       ) {
-                                        console.log(
-                                          "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem with  item.defaultVariantItem.variant_item_id ==initialState?.defaultVariantItem?.variant_item_id ",
-                                          item.defaultVariantItem
-                                            .variant_item_id ==
-                                            initialState?.defaultVariantItem
-                                              ?.variant_item_id
-                                        );
                                         return true;
                                       } else {
                                         return false;
@@ -2257,11 +2272,10 @@ console.log('sorted')
                               })?.qty
                               //   : getAddonQuantity()
                             }
-                         
                           </span>
 
                           <span
-                            className={`px-3 py-2 text-xl cursor-pointer`}
+                            className={`px-4 py-2 text-xl cursor-pointer`}
                             style={{
                               backgroundColor: `${
                                 storeSettings.data ? rgbaBackground : "black"
@@ -3306,145 +3320,178 @@ console.log('sorted')
         width={800}
         style={{ height: "100px" }}
       >
+        <div className="max-h-[80vh] overflow-scroll">
         {!showCustomItemData ? (
           // =================================================================== 1ST MODAL ====================================================================//
 
-          <div className="p-4 w-full flex item-center  flex-col">
-            <p
-              className="font-montBold text-lg self-center py-4"
-              style={{
-                color: storeSettings.data
-                  ? storeSettings.data.secondary_color
-                  : "black",
+          <div className="p-4 w-full flex item-center  flex-col" >
+            <form
+              onSubmit={(e) => {
+                handleConfirmAddons(e);
               }}
+              id="form"
             >
-              You can customize this item !!
-            </p>
-
-            {/* {Object.keys(addons1).map((mapId, index) => {
-              const item = addons1[mapId]; */}
-
-            {initialState?.addons &&
-              Object.keys(initialState?.addons).map((mapId, index) => {
-                const item = initialState?.addons[mapId];
-
-                return (
-                  <div className="px-12 py-2" key={index}>
-                    <p className="text-black font-montMedium ">
-                      {item.add_on_title}
-                      {item.mandatory ? (
-                        <span className="font-montSemiBold text-red-600 px-2">
-                          *
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                    </p>
-                    <p className="text-gray text-sm font-montMedium ">
-                      {item.add_on_group_type == "CHECKLIST"
-                        ? item.add_on_description
-                        : ""}
-                    </p>
-                    {item.add_on_group_type == "CHECKLIST" ? (
-                      item.add_on_options?.map((value, index) => {
-                        return (
-                          <div className=" w-1/2 flex" key={index}>
-                            <div className="flex ">
-                              <Checkbox
-                                onChange={(e) => {
-                                  handleAddonChange(
-                                    e,
-                                    item?.min_qty,
-                                    item.max_qty,
-                                    item.add_on_group_type
-                                  );
-                                }}
-                                defaultChecked={false}
-                                name={item.add_on_group_id}
-                                // checked={addonsAdded?.some(item =>
-
-                                //     item.add_on_option_id == value.add_on_option_id
-
-                                // )
-                                // }
-                                value={{
-                                  ...value,
-                                  add_on_group_id: item.add_on_group_id,
-                                  add_on_title: item.add_on_title,
-                                  add_on_mapping_id: mapId,
-                                }}
-                                style={{ color: "black" }}
-                              >
-                                <div className="flex justify-between  w-[20vw]">
-                                  <p className="font-montRegular px-4">
-                                    {" "}
-                                    {value.add_on_name}
-                                  </p>
-                                  <p className="font-montMedium pr-2">
-                                    {storeDetails?.currency_symbol}{" "}
-                                    {value.price}
-                                  </p>
-                                </div>
-                              </Checkbox>
-                            </div>
-                          </div>
-                        );
-                      })
-                    ) : (
-                      <TextArea
-                        rows={4}
-                        placeholder={item.add_on_description}
-                        maxLength={200}
-                        onChange={(e) => {
-                          handleAddonInstructions(
-                            e,
-                            item.add_on_group_id,
-                            item.add_on_title,
-                            mapId
-                          );
-                        }}
-                      />
-                    )}
-                    {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
-                  </div>
-                );
-              })}
-            <button
-              className="px-10 py-2 self-center "
-              style={{
-                color: `${
-                  storeSettings.data ? storeSettings.data.navbar_color : "white"
-                }`,
-                backgroundColor: `${
-                  storeSettings.data
+              <p
+                className="font-montBold text-lg px-12 "
+                style={{
+                  color: storeSettings.data
                     ? storeSettings.data.secondary_color
-                    : "black"
-                }`,
-              }}
-              onClick={
-                addonsAdded.length==0 || addonsAdded.filter(
-                  (item) => item.add_on_title != "Cooking Instructions"
-                )?.length < addonMinQty
-                  ? () => {
-                      toast.error(` ${addonMinQty?`Minimum Addon Quantity is ${addonMinQty}`:`Please Add Minimum Quantity`}`, {
-                        position: "bottom-right",
-                        autoClose: 1000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                      });
-                    }
-                  : handleConfirmAddons
-              }
-            >
-              Confirm
-              <span className="pl-12">
-                {" "}
-                {/* {storeDetails?.currency_symbol} {priceWithAddon} */}
-              </span>
-            </button>
+                    : "black",
+                }}
+              >
+                {initialState.data ? initialState.data.item_name : ""}
+              </p>
+              <p className="font-montSemiBold text-[16px]  px-12 -mt-3">
+                Customize Your Product
+              </p>
+
+              {initialState?.addons &&
+                Object.keys(initialState?.addons).map((mapId, index) => {
+                  const item = initialState?.addons[mapId];
+
+                  return (
+                    <div className="px-12 py-2" key={index}>
+                      <p className="text-black font-montMedium ">
+                        {item.add_on_title}
+                        {item.is_mandatory == "Y" ? (
+                          <span className="font-montSemiBold text-red-600 px-2">
+                            *
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </p>
+                      <p className="text-slate-400 text-[12px] -mt-3 font-montMedium ">
+                        {item.add_on_description}
+                      </p>
+                      {item.add_on_group_type == "CHECKLIST" ? (
+                        item.add_on_options?.map((value, index) => {
+                          return (
+                            <div className=" w-1/2 flex" key={index}>
+                              <div className="flex ">
+                                <Checkbox
+                                  onChange={(e) => {
+                                    handleAddonChange(
+                                      e,
+                                      item?.min_qty,
+                                      item.max_qty,
+                                      item.add_on_group_id,
+                                      item._is_mandatory,
+                                      value
+                                    );
+                                  }}
+                                  defaultChecked={false}
+                                  name={item.add_on_group_id}
+                                  // checked={addonsAdded?.some(item =>
+
+                                  //     item.add_on_option_id == value.add_on_option_id
+
+                                  // )
+                                  // }
+                                  value={{
+                                    ...value,
+                                    add_on_group_id: item.add_on_group_id,
+                                    add_on_title: item.add_on_title,
+                                    add_on_mapping_id: mapId,
+                                  }}
+                                  style={{ color: "black" }}
+                                >
+                                  <div className="flex justify-between  w-[20vw]">
+                                    <p className="font-montRegular px-4">
+                                      {" "}
+                                      {value.add_on_name}
+                                    </p>
+                                    <p className="font-montMedium pr-2">
+                                      {storeDetails?.currency_symbol}{" "}
+                                      {value.price}
+                                    </p>
+                                  </div>
+                                </Checkbox>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : item.add_on_group_type == "LONG_TEXT" ? (
+                        <TextArea
+                          rows={4}
+                          maxLength={item?.max_qty ? item?.max_qty : 100}
+                          onChange={(e) => {
+                            handleAddonInstructions(
+                              e,
+                              item.add_on_group_id,
+                              item.add_on_title,
+                              mapId,
+                              item.add_on_group_type
+                            );
+                          }}
+                          title={item.add_on_description}
+                          required={item.is_mandatory == "Y" ? true : false}
+                        />
+                      ) : (
+                        <Input
+                          type="text"
+                          className=""
+                          maxLength={item?.max_qty ? item?.max_qty : 100}
+                          minLength={item?.min_qty ? item?.min_qty : ""}
+                          onChange={(e) => {
+                            handleAddonInstructions(
+                              e,
+                              item.add_on_group_id,
+                              item.add_on_title,
+                              mapId,
+                              item.add_on_group_type
+                            );
+                          }}
+                          title={item.add_on_description}
+                          required={item.is_mandatory == "Y" ? true : false}
+                        />
+                      )}
+                      {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
+                    </div>
+                  );
+                })}
+              <div className="w-full flex justify-center">
+                <button
+                  className="px-10 py-2 self-center "
+                  style={{
+                    color: `${
+                      storeSettings.data
+                        ? storeSettings.data.navbar_color
+                        : "white"
+                    }`,
+                    backgroundColor: `${
+                      storeSettings.data
+                        ? storeSettings.data.secondary_color
+                        : "black"
+                    }`,
+                  }}
+                  // onClick={
+                  //   // addonsAdded.length==0 || addonsAdded.filter(
+                  //   //   (item) => item.add_on_title != "Cooking Instructions"
+                  //   // )?.length < addonMinQty
+                  //   //   ? () => {
+                  //   //       toast.error(` ${addonMinQty?`Minimum Addon Quantity is ${addonMinQty}`:`Please Add Minimum Quantity`}`, {
+                  //   //         position: "bottom-right",
+                  //   //         autoClose: 1000,
+                  //   //         hideProgressBar: false,
+                  //   //         closeOnClick: true,
+                  //   //         pauseOnHover: true,
+                  //   //         draggable: true,
+                  //   //         progress: undefined,
+                  //   //       });
+                  //   //     }
+                  //   //   :
+
+                  // }
+                >
+                  Confirm
+                  <span className="pl-12">
+                    {" "}
+                    {storeDetails?.currency_symbol} {priceWithAddon}
+                  </span>
+                </button>
+              </div>
+            </form>
           </div>
         ) : (
           // =================================================================== 2nd MODAL ====================================================================//
@@ -3685,6 +3732,7 @@ console.log('sorted')
             </div>
           </div>
         )}
+        </div> 
       </Modal>
     </>
   ) : (

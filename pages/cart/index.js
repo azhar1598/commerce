@@ -97,12 +97,37 @@ const Index = ({
 
   const [addonInstructions, setAddonInstructions] = useState();
 
+  const[orderItemIds,setOrderItemIds]=useState([])
+
   const router = useRouter();
 
   useEffect(() => {
     checkout.backendCart?.purchase_id &&
       setParcelAction(checkout.backendCart?.purchase_id);
   }, []);
+
+
+
+  useEffect(()=>{
+
+if(checkout.purchaseDetails ){
+
+
+  console.log('checkout.backendCart.purchaseId',  Object.values(Object.keys(checkout.backendCart.orders[0])))
+  let storeId=Object.keys(checkout.backendCart.orders[0])
+
+  console.log('checkout.backendCart.orders[0]?.storeId',checkout.backendCart.orders[0][storeId].order_items)
+//   Object.values(Object.keys(checkout.backendCart.orders[0])).order_items.map(item=>{
+
+// console.log('checkout.backmappp',item)
+
+
+//   })
+
+
+}
+    
+  },[checkout?.purchaseDetails])
 
   // useEffect(() => {
   // if (customerDetails.data?.customer_id && cart.length != 0) {
@@ -520,6 +545,7 @@ const Index = ({
         barcode_id: null,
         quantity: element.qty,
         variant_item_id: element.defaultVariantItem?.variant_item_id || null,
+        order_item_id:null,
         // order_item_id:null,
         add_on_details: null,
       };
