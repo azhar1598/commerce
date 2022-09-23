@@ -102,7 +102,7 @@ export const AddonModalPdp = ({
           filterData,
           "add_on_group_type"
         );
-        let checkboxesLength = groupByGroupType["CHECKLIST"].length;
+        let checkboxesLength = groupByGroupType["CHECKLIST"]?.length?groupByGroupType["CHECKLIST"]?.length:0;
         setGivenCheckListQty(checkboxesLength);
         }
       let priceWithChecklist = Number(priceWithAddon) - Number(value.price);
