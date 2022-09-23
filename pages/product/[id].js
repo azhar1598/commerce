@@ -197,6 +197,10 @@ const Index = ({
   }, [initialState.data,initialState.defaultVariantItem]);
 
   useEffect(() => {
+    setAddonsAdded([]);
+  }, [addonCombination]);
+
+  useEffect(() => {
     if (initialState?.data?.is_add_on_available == "Y") {
       setCustomization(true);
 
@@ -216,23 +220,23 @@ const Index = ({
     }, 0);
   };
 
-  useEffect(() => {
-    console.log("sumQtiqua", addonQuantity);
+  // useEffect(() => {
+  //   console.log("sumQtiqua", addonQuantity);
 
-    // customItemData?.addons && Object.keys(customItemData?.addons).map((cb, num) => {
-    //     console.log('sumcbbb', cb, customItemData?.addons[cb])
-    //     if (cb == 'qty') {
-    //         const item = customItemData?.addons[cb]
-    //         sum = sum + item
-    //         console.log('sum',sum)
-    //     }
-    // })
-    // if(customItemData?.addons && addonCombination){
-    //        const sum= qtySum(addonCombination,'qty')
-    //        setAddonQuantity(sum)
-    //        console.log('customItemDataSum',customItemData,sum)
-    // }
-  }, [addonQuantity]);
+  //   // customItemData?.addons && Object.keys(customItemData?.addons).map((cb, num) => {
+  //   //     console.log('sumcbbb', cb, customItemData?.addons[cb])
+  //   //     if (cb == 'qty') {
+  //   //         const item = customItemData?.addons[cb]
+  //   //         sum = sum + item
+  //   //         console.log('sum',sum)
+  //   //     }
+  //   // })
+  //   // if(customItemData?.addons && addonCombination){
+  //   //        const sum= qtySum(addonCombination,'qty')
+  //   //        setAddonQuantity(sum)
+  //   //        console.log('customItemDataSum',customItemData,sum)
+  //   // }
+  // }, [addonQuantity]);
 
   useEffect(() => {
     console.log(
@@ -396,6 +400,14 @@ const Index = ({
       setWishlistId(initialState?.data?.wishlistId);
     }
   }, [initialState?.data?.wishlistId == undefined]);
+
+
+
+  
+
+
+
+
 
   // ========================================= ON CART UPDATE ASSIGN ADDONS TO ADDONCOMBINATION ================================ //
 
@@ -1378,21 +1390,21 @@ setPriceWithAddon(data)
     }
   };
 
-  useEffect(() => {
-    if (addonsAdded.length != 0) {
-      // Object.keys(addons1).map((mapId, index) => {
-      //     const item = addons1[mapId]
-      //     item.add_on_options?.map((value, index) => {
-      //         let data = value.price + parseInt(priceWithAddon)
-      //         console.log(typeof (priceWithAddon))
-      //         setPriceWithAddon(data)
-      // qtySum()
-      //     })
-      // })
-      // addonsAdded.map((item, index) => {
-      // })
-    }
-  }, [addonsAdded]);
+  // useEffect(() => {
+  //   if (addonsAdded.length != 0) {
+  //     // Object.keys(addons1).map((mapId, index) => {
+  //     //     const item = addons1[mapId]
+  //     //     item.add_on_options?.map((value, index) => {
+  //     //         let data = value.price + parseInt(priceWithAddon)
+  //     //         console.log(typeof (priceWithAddon))
+  //     //         setPriceWithAddon(data)
+  //     // qtySum()
+  //     //     })
+  //     // })
+  //     // addonsAdded.map((item, index) => {
+  //     // })
+  //   }
+  // }, [addonsAdded]);
 
   const variantFilter = (item) => {
     return item.variant_item_id === selectedVariant?.variant_item_id;
@@ -1655,45 +1667,7 @@ setPriceWithAddon(data)
     }
   };
 
-  useEffect(() => {
-    const selectedItem = cart?.find((item) => {
-      console.log("naviiii", item, cart);
-      if (item.item_id == initialState.data?.item_id) {
-        if (initialState?.defaultVariantItem) {
-          if (
-            item.defaultVariantItem.variant_item_id ==
-            initialState?.defaultVariantItem?.variant_item_id
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          console.log("selected te", item, selectedItem);
-          //   setAddonCombination(selectedItem?.addons || []);
-          return true;
-        }
-      } else {
-        return false;
-      }
-    });
-    if (selectedItem?.addons) {
-      // Here The Initial Custom Item Data List is Being Checked
-      setShowCustomItemData(true);
-    }
-
-    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
-
-    setCustomItemData({
-      ...customItemData,
-      ...initialState?.data,
-      addons: selectedItem?.addons,
-    });
-  }, [initialState, cart]);
-
-  useEffect(() => {
-    setAddonsAdded([]);
-  }, [addonCombination]);
+ 
 
   console.log("custtt", customItemData);
 
