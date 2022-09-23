@@ -61,13 +61,20 @@ import LoginModal from "../../components/LoginModal/LoginModal";
 import PageWrapper from "../../components/PageWrapper/PageWrapper";
 import { useRef } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import crypto from "crypto";
 import IncreDecrButton from "../../components/IncreDecrButton";
 import Item from "antd/lib/list/Item";
-import AddonModalPdp from "../../components/Addons/AddonModalPdp";
 // import AddonsLists from "../../components/addonsLists";
+import { select } from "redux-saga/effects";
 
+const groupBy = function (arr, key) {
+  console.log("arrrr", arr);
+  return arr.reduce(function (rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
 
-
+    return rv;
+  }, {});
+};
 
 const Index = ({
   removeFromCart,
@@ -100,35 +107,39 @@ const Index = ({
   const { id } = router.query;
 
   const [loadingWishlist, setLoadingWishlist] = useState(false);
-
+  // const [page, setPage] = useState(2)
   const [minQtyMsg, setMinQtyMsg] = useState(false);
 
   const ref = useRef(null);
 
   // Product Addons
-  // const [customization, setCustomization] = useState();
+  const [customization, setCustomization] = useState();
   const [addonVisible, setAddonVisible] = useState();
-  // const [addonsAdded, setAddonsAdded] = useState([]);
-  // const [changeVariantAddon, setChangeVariantAddon] = useState();
-  // const [addonMinQty, setAddonMinQty] = useState();
-  // const [addonMaxQty, setAddonMaxQty] = useState();
+  const [addonsAdded, setAddonsAdded] = useState([]);
+  const [changeVariantAddon, setChangeVariantAddon] = useState();
+  const [addonMinQty, setAddonMinQty] = useState();
+  const [addonMaxQty, setAddonMaxQty] = useState();
 
-  // const [addonQuantity, setAddonQuantity] = useState();
-  // const [customItemData, setCustomItemData] = useState();
+  const [addonQuantity, setAddonQuantity] = useState();
+  const [customItemData, setCustomItemData] = useState();
 
-  // const [showCustomItemData, setShowCustomItemData] = useState();
+  const [showCustomItemData, setShowCustomItemData] = useState();
 
-  // const [groupByTitle, setGroupByTitle] = useState({});
-  // const [addonCombination, setAddonCombination] = useState([]);
-  // const [addonsWithQty, setAddonsWithQty] = useState([]);
-  // const [confrmAddonCombination, setconfrmAddonCombination] = useState([]);
+  const [groupByTitle, setGroupByTitle] = useState({});
+  const [addonCombination, setAddonCombination] = useState([]);
+  const [addonsWithQty, setAddonsWithQty] = useState([]);
+  const [confrmAddonCombination, setconfrmAddonCombination] = useState([]);
 
-  // const [addonInstructions, setAddonInstructions] = useState();
-  // const [priceWithAddon, setPriceWithAddon] = useState();
+  const [addonInstructions, setAddonInstructions] = useState();
 
   // variats
 
-  const [selectedVariant, setSelectedVariant] = useState({});
+  const [selectedVariant, setselectedVariant] = useState({});
+
+  const [selectedVariantValue, setSelectedVariantValue] = useState();
+
+  const [separateAddons, setSeparateAddons] = useState();
+
   const [active, setActive] = useState(0);
   const [highlightDefault, setHighLightDefault] = useState([]);
   const [selectedVariantStyle, setSelectedVariantStyle] = useState([]);
@@ -143,16 +154,107 @@ const Index = ({
   const [rgbaBackground, setRgbaBackground] = useState("");
 
   const [rgbaColor, setRgbaColor] = useState();
- 
+  const [addonValidation, setAddonValidation] = useState([]);
+  const [priceWithAddon, setPriceWithAddon] = useState();
 
   const dummyImage = [
     "https://dsa0i94r8ef09.cloudfront.net/widgets/dummyfood.png",
   ];
 
- 
+  console.log(
+    "initialState?.data?.is_add_on_available=='Y'",
+    customization,
+    initialState?.data,
+    initialState?.data?.is_add_on_available == "Y"
+  );
 
+  // useEffect(() => {
+  //   if (id) {
+  //     if (initialState?.data?.is_add_on_available == "Y") {
+  //       setCustomization(true);
 
-  
+  //       const payload = {
+  //         itemId: id,
+  //         // variantValueId: initialState?.defaultVariantItem
+  //         //   ? selectedVariantValue
+  //         //     ? selectedVariantValue
+  //         //     : selectedVariant.variant_value_1?.variant_value_id
+  //         //   : null,
+  //         variantItemId:initialState?.defaultVariantItem?selectedVariant?.variant_item_id:null
+  //       };
+
+  //       fetchAddons(payload);
+  //     } else {
+  //       setCustomization(false);
+  //     }
+  //   }
+  // }, [initialState?.data?.is_add_on_available, id]);
+
+  useEffect(() => {
+    if (initialState.defaultVariantItem)
+      setPriceWithAddon(initialState.defaultVariantItem.sale_price);
+    else setPriceWithAddon(initialState.data?.sale_price);
+  }, [initialState.data,initialState.defaultVariantItem]);
+
+  useEffect(() => {
+    setAddonsAdded([]);
+  }, [addonCombination]);
+
+  useEffect(() => {
+    if (initialState?.data?.is_add_on_available == "Y") {
+      setCustomization(true);
+
+      console.log("hello wordl,selecte", selectedVariant);
+      const payload = {
+        itemId: id,
+        variantItemId:initialState?.defaultVariantItem?selectedVariant?.variant_item_id:null
+      };
+
+      fetchAddons(payload);
+    }
+  }, [selectedVariantValue, selectedVariant, changeVariantAddon]);
+
+  const qtySum = function (items, prop) {
+    return items.reduce(function (a, b) {
+      return parseInt(a) + parseInt(b[prop]);
+    }, 0);
+  };
+
+  // useEffect(() => {
+  //   console.log("sumQtiqua", addonQuantity);
+
+  //   // customItemData?.addons && Object.keys(customItemData?.addons).map((cb, num) => {
+  //   //     console.log('sumcbbb', cb, customItemData?.addons[cb])
+  //   //     if (cb == 'qty') {
+  //   //         const item = customItemData?.addons[cb]
+  //   //         sum = sum + item
+  //   //         console.log('sum',sum)
+  //   //     }
+  //   // })
+  //   // if(customItemData?.addons && addonCombination){
+  //   //        const sum= qtySum(addonCombination,'qty')
+  //   //        setAddonQuantity(sum)
+  //   //        console.log('customItemDataSum',customItemData,sum)
+  //   // }
+  // }, [addonQuantity]);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "customItemData?.addons?.length==0 ",
+  //     customItemData?.addons?.length
+  //   );
+  //   if (
+  //     customItemData?.addons?.length == 0 ||
+  //     customItemData?.addons?.length == undefined
+  //   ) {
+  //     console.log(
+  //       "customItemData?.addons?.length==0 ",
+  //       customItemData?.addons?.length == 0
+  //     );
+
+  //     setShowCustomItemData(false);
+  //   }
+  // }, [changeVariantAddon, customItemData]);
 
   useEffect(() => {
     setRgbaBackground(
@@ -179,34 +281,17 @@ const Index = ({
 
   useEffect(() => {
     const condition = () => {
-
-      if (id && router.isReady) {
+      if (id) {
         fetchItemDetails(stateCustomerDetails?.data?.customer_id, id);
         fetchVariants(id);
         fetchSpecification(id);
         fetchAdditionalInfo(id);
         fetchRelatedItems(id);
         getStoreDetails(router.query.storeId);
-        
       }
     };
     condition();
   }, [id]);
-
-
-
-// Calling Addons Action 
-  useEffect(() => {
-    if (initialState?.data?.is_add_on_available == "Y") {  
-      const payload = {
-        itemId: id,
-        variantItemId:initialState?.defaultVariantItem?selectedVariant?selectedVariant?.variant_item_id:initialState?.defaultVariantItem?.variant_item_id:null
-      };
-
-      fetchAddons(payload);
-    }
-  }, [selectedVariant]);
-
 
   useEffect(() => {
     import("@lottiefiles/lottie-player");
@@ -304,7 +389,7 @@ const Index = ({
       //     };
       //   }
       // );
-      setSelectedVariant(initialState?.defaultVariantItem);
+      setselectedVariant(initialState?.defaultVariantItem);
 
       setSelectedVariantStyle(selectedDefaultVariant);
     }
@@ -318,7 +403,70 @@ const Index = ({
 
 
 
+  
 
+
+
+
+
+  // ========================================= ON CART UPDATE ASSIGN ADDONS TO ADDONCOMBINATION ================================ //
+
+  //   useEffect(() => {
+  //     console.log("naviiiis", cart);
+  //     const selectedItem = cart?.find((item) => {
+  //         console.log("naviiii", item,cart);
+  //         if (item.item_id == initialState.data?.item_id) {
+  //             if (initialState?.defaultVariantItem) {
+  //                 if (
+  //                     item.defaultVariantItem.variant_item_id ==
+  //                     initialState?.defaultVariantItem?.variant_item_id
+  //                 ) {
+
+  //                     return true;
+  //                 } else {
+  //                     return false;
+  //                 }
+
+  //             } else {
+  //                 console.log("selected te", item, selectedItem);
+  //                 //   setAddonCombination(selectedItem?.addons || []);
+  //                 return true;
+  //             }
+  //         } else {
+  //             return false;
+  //         }
+  //     });
+
+  //     console.log("selectedItem,,,,", selectedItem);
+  //     setAddonCombination(selectedItem?.addons || []);
+  //     setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+
+  //     console.log("selected Item", initialState, selectedItem, cart);
+  // }, [initialState,cart])
+
+  // ========================================= ON FIRST TIME ASSIGN ADDONS TO ADDONCOMBINATION ================================ //
+  //   useEffect(() => {
+  //     const selectedItem = cart?.find((item) => {
+  //       if (
+  //         item.defaultVariantItem != null &&
+  //         item.defaultVariantItem.variant_item_id ==
+  //         initialState?.defaultVariantItem?.variant_item_id
+  //       ) {
+  //         console.log("selected te def", item);
+  //         return item;
+  //       } else if (item.item_id == initialState.data?.item_id) {
+  //         console.log("selected te", item);
+  //         setAddonCombination(selectedItem?.addons || []);
+
+  //         return item;
+  //       }
+  //     });
+
+  //     setAddonCombination(selectedItem?.addons || []);
+  //     setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+
+  //     console.log("selected Item", initialState, selectedItem, cart);
+  //   }, []);
 
   const colorVariants = [
     "COLOUR",
@@ -338,7 +486,27 @@ const Index = ({
     setVisible(true);
   };
 
+  const getUpdatedAddonsFromCart = () => {
+    const selectedItem = cart?.find((item) => {
+      if (initialState.variants.length > 0) {
+        if (
+          item.defaultVariantItem != null &&
+          item.defaultVariantItem.variant_item_id ==
+            selectedVariant.variant_item_id
+        ) {
+          console.log("has variant", item);
 
+          return item;
+        }
+      } else if (item.item_id == initialState.data?.item_id) {
+        console.log("doesn't have variant", item);
+        setAddonCombination(selectedItem?.addons || []);
+        return item;
+      }
+    });
+
+    return selectedItem?.addons;
+  };
 
   const handleDecreaseQuantity = (itemid, qty) => {
     if (qty == 0) {
@@ -394,7 +562,7 @@ const Index = ({
 
       if (quantity > 0) {
         addToCart(item);
-
+        setShowCustomItemData(true);
       } else {
         // message.error('Sorry, You Cannot add more items')
 
@@ -455,7 +623,7 @@ const Index = ({
       }
       if (quantity > 0) {
         addToCart(item);
-    
+        setShowCustomItemData(true);
       } else {
         // message.error('Sorry, sYou Cannot add more items')
 
@@ -474,14 +642,289 @@ const Index = ({
     }
   };
 
- 
+  const oldIncrementFunction = () => {
+    !customItemData.addons
+      ? adjustQty(
+          initialState.defaultVariantItem
+            ? initialState.defaultVariantItem.variant_item_id
+            : id,
+          cart.find(function (item) {
+            if (initialState.defaultVariantItem) {
+              if (item.defaultVariantItem) {
+                if (
+                  item.defaultVariantItem.variant_item_id ==
+                  initialState.defaultVariantItem.variant_item_id
+                ) {
+                  let quantity = 0;
+                  const value = item?.defaultVariantItem?.inventory_details;
+
+                  if (value?.inventory_quantity == null) {
+                    if (value?.max_order_quantity == null) quantity = 15;
+                    else {
+                      quantity = value.max_order_quantity;
+                    }
+                    // if(maxmin)
+                  } else if (
+                    value?.inventory_quantity != null &&
+                    value?.max_order_quantity == null
+                  ) {
+                    quantity = value?.inventory_quantity;
+                    console.log(
+                      "value?.inventory_quantity != null && value?.max_order_quantity == null"
+                    );
+                  } else if (
+                    value?.max_order_quantity > value?.inventory_quantity
+                  ) {
+                    quantity = value?.inventory_quantity;
+                    console.log(
+                      "value?.max_order_quantity > value?.inventory_quantity"
+                    );
+                  } else if (
+                    value?.max_order_quantity < value?.inventory_quantity
+                  ) {
+                    quantity = value.max_order_quantity;
+                    console.log(
+                      "value?.max_order_quantity < value?.inventory_quantity"
+                    );
+                  }
+
+                  if (quantity > 0) {
+                    const filter = cart.filter((c) => {
+                      if (
+                        c.defaultVariantItem?.variant_item_id ==
+                        item.defaultVariantItem.variant_item_id
+                      ) {
+                        return c;
+                      }
+                    });
+
+                    // if (filter[0].qty >= quantity) {
+                    //     message.error(`Sorry, You Cannot add more than ${quantity} items`)
+                    //     item.qty = item.qty - 1
+                    //     return item
+                    // }
+                    // else {
+                    //     return item
+                    // }
+
+                    if (value?.inventory_quantity < value?.min_order_quantity) {
+                      if (filter[0].qty < value?.inventory_quantity) {
+                        return item;
+                      } else if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        toast.error(
+                          `Sorry, You Cannot add more than ${quantity} items`,
+                          {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          }
+                        );
+
+                        item.qty = item.qty - 1;
+
+                        return item;
+                      } else {
+                        return item;
+                      }
+                    } else {
+                      if (filter[0].qty < value?.min_order_quantity) {
+                        return item;
+                      } else if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        toast.error(
+                          `Sorry, You Cannot add more than ${quantity} items`,
+                          {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          }
+                        );
+                        item.qty = item.qty - 1;
+
+                        return item;
+                      } else {
+                        return item;
+                      }
+                    }
+                  } else {
+                    // message.error('Sorry, You Cannot add more items')
+
+                    toast.error("Sorry, You Cannot add more items", {
+                      position: "bottom-right",
+                      autoClose: 1000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  }
+                }
+              }
+            } else {
+              if (initialState.data) {
+                let quantity;
+                console.log("itemsms", item);
+                if (initialState.data.item_id == item.item_id) {
+                  if (item.inventoryDetails == null) {
+                    // addToCart(item)
+                    console.log("");
+                    quantity = 15;
+                    // if(maxmin)
+                  } else if (item.inventoryDetails.inventory_quantity == 0) {
+                    // message.error('Sorry,The Item is not available at the moment')
+                    quantity = 0;
+                  } else if (item.inventoryDetails.inventory_quantity != 0) {
+                    if (
+                      item.inventoryDetails.inventory_quantity >
+                        item.inventoryDetails?.max_order_quantity &&
+                      item.inventoryDetails?.max_order_quantity != null
+                    ) {
+                      quantity = item.inventoryDetails?.max_order_quantity;
+                    } else if (
+                      item.inventoryDetails.inventory_quantity <
+                      item.inventoryDetails.min_order_quantity
+                    ) {
+                      // message.error('Sorry,The Item is not available at the moment')
+                      quantity = item.inventoryDetails.inventory_quantity;
+                    } else {
+                      quantity = item.inventoryDetails?.inventory_quantity;
+                    }
+                    // }
+                  }
+
+                  if (quantity > 0) {
+                    const filter = cart.filter((c) => {
+                      if (c.item_id == item.item_id) {
+                        return c;
+                      }
+                    });
+
+                    if (
+                      item.inventoryDetails?.inventory_quantity <
+                      item.inventoryDetails?.min_order_quantity
+                    ) {
+                      if (
+                        filter[0].qty < item.inventoryDetails.inventory_quantity
+                      ) {
+                        return item;
+                      } else if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        toast.error(
+                          `Sorry, You Cannot add more than ${quantity} items`,
+                          {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          }
+                        );
+
+                        item.qty = item.qty - 1;
+
+                        return item;
+                      } else {
+                        return item;
+                      }
+                    } else {
+                      if (
+                        filter[0].qty <
+                        item.inventoryDetails?.min_order_quantity
+                      ) {
+                        return item;
+                      } else if (filter[0].qty >= quantity) {
+                        // message.error(`Sorry, You Cannot add more than ${quantity} items`)
+
+                        toast.error(
+                          `Sorry, You Cannot add more than ${quantity} items`,
+                          {
+                            position: "bottom-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          }
+                        );
+
+                        item.qty = item.qty - 1;
+
+                        return item;
+                      } else {
+                        return item;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }).qty + 1
+        )
+      : handleAddonsQuantity(uId, "add");
+  };
 
   const fetchVariantItemById = async (itemid, variantvalueid) => {
     setLoadingVariants(true);
+
     const res = await getVariantByItemId(itemid, variantvalueid);
     setLoadingVariants(false);
     return res.data;
   };
+
+  //   ================================================================= METHOD TO INCREASE COUNTS OF ADDON ============================================================================//
+
+  const incrAddQty = (uid) => {
+    const addons = customItemData?.addons;
+
+    const updatedAdds = addons.map((item) => {
+      return item.id === uid ? { ...item, qty: item.qty + 1 } : item;
+    });
+    console.log("updated adddons >>>>>>>>>>>>>>>>>>", updatedAdds);
+    setCustomItemData({ ...customItemData, addons: updatedAdds });
+    setAddonCombination(updatedAdds);
+  };
+
+  //   ================================================================= METHOD TO DECREASE COUNTS OF ADDON ============================================================================//
+
+  const decrAddQty = (e, uid) => {
+    const addons = customItemData?.addons;
+    const addonsItem = addons.find((item) => item.id === uid);
+
+    if (addonsItem?.qty == 1) {
+      const updatedAdds = addons.filter((item) => {
+        return item.id !== uid;
+      });
+      setCustomItemData({ ...customItemData, addons: updatedAdds });
+      setAddonCombination(updatedAdds);
+      addons.length == 1 && updateCartRecordafter();
+    } else {
+      const updatedAdds = addons.map((item) => {
+        return item.id === uid ? { ...item, qty: item.qty - 1 } : item;
+      });
+      console.log("updated adddons >>>>>>>>>>>>>>>>>>", updatedAdds);
+      setCustomItemData({ ...customItemData, addons: updatedAdds });
+      setAddonCombination(updatedAdds);
+    }
+  };
+
+
+
 
 
   const handleVariantOnChange = async (
@@ -492,16 +935,21 @@ const Index = ({
     variant_value_name
   ) => {
     selectedVariantStyle[indices - 1] = variantValueId;
-    
+    setChangeVariantAddon(!changeVariantAddon);
 
+    console.log("variantValueIdddd", variantValueId);
+    setSelectedVariantValue(variantValueId);
 
-
-    // setSelectedVariant({
+    // setselectedVariant({
     //   variant_value_id: variantValueId,
     //   variant_value_name,
     // });
 
- 
+    const filteredAdds =
+      customItemData?.addons?.filter(
+        (item) => item.variant_value_id === variantValueId
+      ) || [];
+    !filteredAdds.length > 0 && setShowCustomItemData(false);
     let variantvalue = {};
     variantvalue[`variant_value_${indices}`] = variantValueId;
     const allVariants = await fetchVariantItemById(id, variantvalue);
@@ -710,24 +1158,597 @@ const Index = ({
     // dispatchWishlist({ payload })
   };
 
- 
+  const handleAddonOk = () => {
+    setAddonVisible(true);
+  };
 
+  const handleAddonCancel = () => {
+    setAddonVisible(false);
+
+
+    setAddonsAdded([]);
+
+    const selectedItem = cart?.find((item) => {
+      console.log("naviiii", item, cart);
+      if (item.item_id == initialState.data?.item_id) {
+        if (initialState?.defaultVariantItem) {
+          if (
+            item.defaultVariantItem.variant_item_id ==
+            initialState?.defaultVariantItem?.variant_item_id
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          console.log("selected te", item, selectedItem);
+          //   setAddonCombination(selectedItem?.addons || []);
+          return true;
+        }
+      } else {
+        return false;
+      }
+    });
+    if (selectedItem?.addons) {
+      // Here The Initial Custom Item Data List is Being Checked
+      setShowCustomItemData(true);
+    }
+
+    setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
+
+    setCustomItemData({
+      ...customItemData,
+      ...initialState?.data,
+      addons: selectedItem?.addons,
+    });
+
+
+  };
+
+  const handleAddonClose = () => {
+    // setAddonVisible(false)
+    setAddonsAdded([]);
+  };
+
+  const handleAddonChange = (e, min_qty, max_qty, group_id, is_mandatory,value) => {
+    if (e.target.checked) {
+      const sortedAddons = addonsAdded.sort((a, b) =>
+        a.add_on_name > b.add_on_name ? 1 : -1
+      );
+      const groupedAddons = groupBy(addonsAdded, "add_on_group_id");
+let data=Number(priceWithAddon)+Number(value.price)
+setPriceWithAddon(data)
+
+      console.log(
+        "sortedAdddddons",
+        addonsAdded,
+        sortedAddons,
+        groupedAddons,
+        min_qty,
+        max_qty,
+        data,
+        priceWithAddon
+      );
+      // if(is_mandatory=='Y'){
+      Object.keys(groupedAddons).map((id) => {
+        console.log("idddd", id, group_id, Object.values(id).length);
+        if (group_id == id) {
+          console.log(
+            "idddd",
+            id,
+            group_id,
+            Object.values(groupedAddons[id]),
+            Object.values(groupedAddons[id]).length
+          );
+
+          if (Object.values(groupedAddons[id]).length < min_qty) {
+            setAddonValidation(false);
+          } else if (Object.values(groupedAddons[id]).length > max_qty) {
+            setAddonValidation(false);
+          } else {
+            setAddonValidation(true);
+          }
+        }
+      });
+
+      // }
+      // else{
+
+      // }
+
+      setAddonMinQty(min_qty);
+      setAddonMaxQty(max_qty);
+
+      setAddonsAdded([...sortedAddons, e.target.value]);
+
+      if (initialState?.variants?.length && initialState.variants.length > 0) {
+        let data = {
+          qty: 1,
+          variant_item_id: selectedVariant?.variant_item_id || null,
+          variantValueId: selectedVariantValue || null,
+          variantDetails: selectedVariant || [],
+          addons: addonsAdded,
+          id: crypto.randomBytes(16).toString("hex"),
+        };
+
+        data.addons.push(e.target.value);
+        data.addons = data.addons.sort((a, b) =>
+          a.add_on_name > b.add_on_name ? 1 : -1
+        );
+
+        const quantitySum = qtySum(data.addons, "price");
+
+        // setPriceWithAddon(
+        //   parseInt(
+        //     initialState.defaultVariantItem
+        //       ? initialState.defaultVariantItem.sale_price
+        //       : initialState.data
+        //       ? initialState.data.sale_price
+        //       : ""
+        //   ) + quantitySum
+        // );
+
+        setAddonsWithQty(data);
+      } else {
+        let data = {
+          qty: 1,
+          addons: addonsAdded,
+          id: crypto.randomBytes(16).toString("hex"),
+        };
+
+        data.addons.push(e.target.value);
+        data.addons = data.addons.sort((a, b) =>
+          a.add_on_name > b.add_on_name ? 1 : -1
+        );
+
+        const quantitySum = qtySum(data.addons, "price");
+
+        // setPriceWithAddon(
+        //   parseInt(
+        //     initialState.defaultVariantItem
+        //       ? initialState.defaultVariantItem.sale_price
+        //       : initialState.data
+        //       ? initialState.data.sale_price
+        //       : ""
+        //   ) + quantitySum
+        // );
+
+        setAddonsWithQty(data);
+      }
+    } else {
+      const filterData = addonsAdded.filter((item, index) => {
+        return item.add_on_option_id != e.target.value.add_on_option_id;
+      });
+      setAddonsAdded(filterData);
+      console.log("filterDataaa", filterData);
+
+      const quantitySum = filterData ? qtySum(filterData, "price") : 0;
+      setPriceWithAddon(
+        parseInt(
+          initialState.defaultVariantItem
+            ? initialState.defaultVariantItem.sale_price
+            : initialState.data
+            ? initialState.data.sale_price
+            : ""
+        ) + quantitySum
+      );
+    }
+  };
+
+  const handleAddonInstructions = (e, add_on_group_id, add_on_title, mapId,group_type) => {
+    console.log("instructionssss", instructions);
+    let instructions = {
+      add_on_group_id,
+      add_on_title,
+      mapId,
+      text: e.target.value,
+      qty: 1,
+      add_on_group_type:group_type,
+      price:0,
+
+      // };
+
+      // qty:1,
+      // id: crypto.randomBytes(16).toString("hex"),
+    };
+
+    setAddonInstructions(instructions);
+
+    let filter = addonsAdded.filter((item, index) => {
+      if (item.add_on_group_id != instructions.add_on_group_id) {
+        return item;
+      }
+    });
+
+    filter.push(instructions);
+    const sortedFilters = filter.sort((a, b) =>
+      a.add_on_name > b.add_on_name ? 1 : -1
+    );
+
+    console.log("sortedddddddddd", sortedFilters);
+
+    setAddonsAdded(sortedFilters);
+    const addWithQty = addonsWithQty;
+
+    addWithQty.addons = filter.sort((a, b) =>
+      a.add_on_name > b.add_on_name ? 1 : -1
+    );
+    setAddonsWithQty(addWithQty);
+  };
+
+  const handleCustomizationModal = (data) => {
+    // ;
+    // setCustomItemData(confrmAddonCombination);
+    const addonConfirm = confrmAddonCombination?.addons || [];
+    // setAddonCombination(addonConfirm);
+    setAddonVisible(true);
+    console.log("addonasss", addonsAdded);
+    if (!customItemData) {
+      console.log(
+        "BLUNDER>>>>>>>>>>>>>>>>>>>>>",
+        data,
+        "custom dta",
+        customItemData
+      );
+      setCustomItemData({ ...customItemData, ...data });
+    }
+  };
+
+  // useEffect(() => {
+  //   if (addonsAdded.length != 0) {
+  //     // Object.keys(addons1).map((mapId, index) => {
+  //     //     const item = addons1[mapId]
+  //     //     item.add_on_options?.map((value, index) => {
+  //     //         let data = value.price + parseInt(priceWithAddon)
+  //     //         console.log(typeof (priceWithAddon))
+  //     //         setPriceWithAddon(data)
+  //     // qtySum()
+  //     //     })
+  //     // })
+  //     // addonsAdded.map((item, index) => {
+  //     // })
+  //   }
+  // }, [addonsAdded]);
 
   const variantFilter = (item) => {
     return item.variant_item_id === selectedVariant?.variant_item_id;
   };
 
+  const isDuplicateCart = (addons, duplicate) => {
+    console.log("duplicate");
 
-  const handleAddonsModal=()=>{
-    setAddonVisible(true)
+    const addonsCombin = addons.map((addon) => {
+      return addon?.id === duplicate?.id
+        ? { ...addon, qty: addon.qty + 1 }
+        : addon;
+    });
 
+    setAddonCombination([...addonsCombin]);
+    let data = addonsCombin;
+    let data1 = customItemData;
+    data1.addons = data;
+
+    const quantity = qtySum(data, "qty");
+    data1.qty = quantity;
+
+    setAddonQuantity(quantity);
+    setCustomItemData(data1);
+    setconfrmAddonCombination(data1);
+
+    itemAddToCart(data1);
+
+    setAddonVisible(false);
+    console.log(duplicate, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> duplicate");
+  };
+
+  const handleConfirmAddons = (e) => {
+    e.preventDefault();
+    // itemAddToCart(customIte)
+    // setCustomItemData({ ...customItemData, addons: addonsAdded })
+    let getAddons = getUpdatedAddonsFromCart() || [];
+
+    console.log("getAddons", getAddons, addonCombination, addonValidation);
+
+    if (addonCombination.length || getAddons?.length) {
+      let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
+      let addonCombinationGroupby;
+      console.log("length greater than 1");
+      if (initialState.variants.length) {
+        // let duplicate = getAddons
+        //   .filter((item) => variantFilter(item))
+        //   .find((item) => {
+        //     addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+        //     return (
+        //       JSON.stringify(addonCombinationGroupby) ===
+        //       JSON.stringify(groupByaddonsWithQty)
+        //     );
+        //   });
+
+        // // ========================================= IN CASE OF VARIANT ================================================= //
+
+        // if (duplicate) {
+        //   console.log("duplicate");
+        //   const addonsCombin = getAddons.map((addon) => {
+        //     return addon?.id === duplicate?.id &&
+        //       addon.variant_item_id === selectedVariant?.variant_item_id
+        //       ? { ...addon, qty: addon.qty + 1 }
+        //       : addon;
+        //   });
+
+        //   setAddonCombination([...addonsCombin]);
+        //   let data = addonsCombin;
+        //   let data1 = customItemData;
+        //   data1.addons = data;
+        //   data1.defaultVariantItem = selectedVariant;
+
+        //   const quantity = qtySum(customItemData.addons, "qty");
+        //   data1.qty = quantity;
+        //   setAddonQuantity(quantity);
+        //   setCustomItemData(data1);
+        //   setconfrmAddonCombination(data1);
+
+        //   console.log("combination", addonCombination, quantity);
+        //   addToCart(data1);
+
+        //   setAddonVisible(false);
+        //   console.log(duplicate, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> duplicate");
+        // }
+        // else {
+        //   console.log("not duplicated");
+
+        //   let data = [...getAddons, addonsWithQty];
+        //   setAddonCombination(data);
+        //   let data1 = customItemData;
+        //   data1.addons = [addonsWithQty];
+        //   data1.defaultVariantItem = selectedVariant;
+        //   data1.variant_item_id = selectedVariant?.variant_item_id;
+
+        //   const quantity = qtySum(data, "qty");
+        //   data1.qty = qtySum(data1.addons, "qty");
+        //   setAddonQuantity(quantity);
+        //   setCustomItemData(data1);
+        //   setconfrmAddonCombination(data1);
+
+        //   console.log("combination", addonCombination, quantity);
+        //   // addBulkItemToCart(data1);
+
+        //   setAddonVisible(false);
+        // }
+
+        let duplicate = getAddons.find((item) => {
+          addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+          return (
+            JSON.stringify(addonCombinationGroupby) ===
+            JSON.stringify(groupByaddonsWithQty)
+          );
+        });
+        if (duplicate) {
+          isDuplicateCart(getAddons, duplicate);
+        } else {
+          console.log("not duplicated");
+
+          let data = [...getAddons, addonsWithQty];
+          setAddonCombination(data);
+          let data1 = customItemData;
+          data1.addons = data;
+
+          const quantity = qtySum(data, "qty");
+          data1.qty = quantity;
+          data1.addon_data = initialState?.addons;
+
+          setAddonQuantity(quantity);
+          setCustomItemData(data1);
+          setconfrmAddonCombination(data1);
+
+          console.log("combination", addonCombination, quantity);
+
+          addToCart(data1);
+
+          setAddonVisible(false);
+        }
+      } else {
+        let duplicate = getAddons.find((item) => {
+          addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+          return (
+            JSON.stringify(addonCombinationGroupby) ===
+            JSON.stringify(groupByaddonsWithQty)
+          );
+        });
+        if (duplicate) {
+          isDuplicateCart(getAddons, duplicate);
+        } else {
+          console.log("not duplicated");
+
+          let data = [...getAddons, addonsWithQty];
+          setAddonCombination(data);
+          let data1 = customItemData;
+          data1.addons = data;
+
+          const quantity = qtySum(data, "qty");
+          data1.qty = quantity;
+          data1.addon_data = initialState?.addons;
+          setAddonQuantity(quantity);
+          setCustomItemData(data1);
+          setconfrmAddonCombination(data1);
+
+          console.log("combination", addonCombination, quantity);
+          addToCart(data1);
+
+          setAddonVisible(false);
+        }
+      }
+    } else {
+      console.log("lengt not");
+
+      // let groupByaddonsWithQty = groupBy(addonsWithQty.addons, "add_on_title");
+      // let addonCombinationGroupby;
+      // ;
+      // let duplicate = getAddons.find((item) => {
+      //   addonCombinationGroupby = groupBy(item.addons, "add_on_title");
+      //   return (
+      //     JSON.stringify(addonCombinationGroupby) ===
+      //     JSON.stringify(groupByaddonsWithQty)
+      //   );
+      // });
+      console.log(
+        'typeof(addonsWithQty)=="object"',
+        addonsWithQty,
+        addonsWithQty?.addons,
+        addonsWithQty?.addons ? true : false,
+        typeof addonsWithQty == "object"
+      );
+      if (initialState?.variants.length) {
+        let data = [...getAddons, addonsWithQty];
+        let data1 = customItemData;
+        data1.addons = data;
+        data1.defaultVariantItem = selectedVariant;
+
+        setAddonCombination(data);
+
+        const quantity = qtySum(data, "qty");
+        data1.qty = quantity;
+        data1.addon_data = initialState?.addons;
+        setAddonQuantity(quantity);
+        setCustomItemData(data1);
+        setconfrmAddonCombination(data1);
+
+        console.log("combination", addonCombination, quantity);
+        // itemAddToCart(data1)
+        addToCart(data1);
+
+        setAddonVisible(false);
+      } else {
+        let data = [...getAddons, addonsWithQty];
+        let data1 = customItemData;
+        data1.addons = data;
+        setAddonCombination(data);
+
+        const quantity = qtySum(data, "qty");
+        data1.qty = quantity;
+        data1.addon_data = initialState?.addons;
+        setAddonQuantity(quantity);
+        setCustomItemData(data1);
+        setconfrmAddonCombination(data1);
+
+        console.log("combination", addonCombination, quantity);
+        // itemAddToCart(data1)
+        addToCart(data1);
+
+        setAddonVisible(false);
+      }
+    }
+    // Temporary to check instructions
+    setShowCustomItemData(true);
+  };
+
+  const updateCartRecordafter = () => {
+    if (initialState?.variants) {
+      const quantity = qtySum(customItemData.addons, "qty");
+      setAddonQuantity(quantity);
+      let data = customItemData;
+
+      data.defaultVariantItem = selectedVariant;
+
+      setAddonVisible(false);
+
+      data.addons = customItemData?.addons || [];
+      data.qty = quantity;
+      addToCart(data);
+
+      setconfrmAddonCombination(data);
+    } else {
+      const quantity = qtySum(customItemData.addons, "qty");
+      setAddonQuantity(quantity);
+      let data = customItemData;
+
+      setAddonVisible(false);
+
+      data.addons = customItemData?.addons || [];
+      data.qty = quantity;
+      addToCart(data);
+
+      setconfrmAddonCombination(data);
+    }
+  };
+
+ 
+
+  console.log("custtt", customItemData);
+
+  const handleAddonsQuantity = (data, method) => {
+    console.log("addonsadata", data, customItemData.addons);
+
+    // Bringing Addon Option Values in an Array
+    // const separateValues = data.map((item, index) => {
+    //     return item.add_on_option_id
+    // })
+
+    if (method == "add") dispatchAddAddon(data);
+    else dispatchDecreaseAddon(data);
+
+    // Object.keys(customItemData?.addons).map((cb, num) => {
+
+    //     const itemMap = customItemData?.addons[cb].addons
+    //     // Bringing All Addon Option Values , Grouping the addon_title
+    //     const newVar = groupBy(itemMap, 'add_on_title')
+    //     const separateValues1 = Object.keys(newVar).map((item, index) => {
+    //         console.log('addonspot', itemMap)
+    //         const addons = newVar[item]
+
+    //         return addons.map((addon, num) => {
+    //             console.log('addonsopt', addon.add_on_option_id)
+    //             return addon.add_on_option_id
+    //         })
+
+    //     })
+
+    //     if (separateValues.equals(separateValues1[0])) {
+
+    //     }
+
+    //     console.log('addonsseparate', separateValues1[0], separateValues, separateValues1, separateValues.equals(separateValues1[0]))
+    //     console.log('addonsadatagro', customItemData, separateValues, separateValues1)
+    //     console.log('addonsaitemMap', itemMap)
+    // })
+  };
+
+  const getAddonQuantity = () => {
+    let qty = 0;
+
+    if (initialState?.defaultVariantItem) {
+      const filter = confrmAddonCombination?.addons?.filter((item) =>
+        variantFilter(item)
+      );
+
+      console.log("filterrrrrrrrrrrrrrrrr", filter, confrmAddonCombination);
+      const quantity = qtySum(filter, "qty");
+
+      qty = quantity;
+    } else {
+      qty = qtySum(confrmAddonCombination?.addons, "qty");
+    }
+
+    return qty;
+  };
+
+  // console.log(
+  //   "selected variant >>>>>>>>>>>>>>",
+  //   selectedVariant,
+  //   "initial data",
+  //   initialState,
+  //   " customitem data",
+  //   customItemData
+  // );
+  // console.log('initialState >>>>>>>>>>>>>>>>>>>', initialState.data, 'selected style>>',selectedVariantStyle);
+  console.log(
+    "selected variant>>>>>>>>",
+    selectedVariant,
+    selectedVariantStyle
+  );
+
+  {
+    console.log("customItemDataaa>>>>", customItemData);
   }
-
-
-
-
-
-
   return initialState && !initialState.loading && !loadingVariants ? (
     <>
       <div className="relative min-h-screen mt-16  lg:min-h-0 lg:mb-28 lg:mt-24">
@@ -1046,22 +2067,24 @@ const Index = ({
                       </div>
                     ) : !cart?.find((item) =>
                         initialState.defaultVariantItem
-                       
-                            ?
-                          item.defaultVariantItem?.variant_item_id ==
+                          ? item?.addons
+                            ? item.addons[0]?.variant_item_id ==
+                                initialState.defaultVariantItem
+                                  .variant_item_id ||
+                              item.addons[0]?.variant_item_id ===
+                                selectedVariant?.variant_item_id
+                            : item.defaultVariantItem?.variant_item_id ==
                                 initialState.defaultVariantItem
                                   .variant_item_id ||
                               item.defaultVariantItem?.variant_item_id ===
                                 selectedVariant?.variant_item_id
-
-
                           : item.item_id == id
                       ) ? (
                       <div className="flex flex-col">
                         <div
                           onClick={() =>
-                            initialState?.addons
-                              ? handleAddonsModal()
+                            customization
+                              ? handleCustomizationModal(initialState.data)
                               : itemAddToCart(initialState.data)
                           }
                           className="text-lg py-2 px-7 border cursor-pointer mt-3"
@@ -1080,7 +2103,7 @@ const Index = ({
                         >
                           Add to Cart
                         </div>
-                        {initialState?.addons ? (
+                        {customization ? (
                           <p className="text-black font-montMedium ">
                             * Customization Available
                           </p>
@@ -1108,7 +2131,7 @@ const Index = ({
                         >
                           <span
                             onClick={() => {
-                              initialState?.addons
+                              customization
                                 ? setAddonVisible(true)
                                 : handleDecreaseQuantity(
                                     initialState.defaultVariantItem
@@ -1190,7 +2213,22 @@ const Index = ({
                                 if (
                                   item.item_id == initialState.data?.item_id
                                 ) {
-                                  if (initialState?.defaultVariantItem) {        
+                                  if (initialState?.defaultVariantItem) {
+                                    console.log(
+                                      "item.item_id == initialState.data?.item_id with initialState?.defaultVariantItem ",
+                                      initialState?.defaultVariantItem
+                                    );
+                                    if (item?.addons) {
+                                      if (
+                                        item.addons[0].variant_item_id ==
+                                        initialState?.defaultVariantItem
+                                          ?.variant_item_id
+                                      ) {
+                                        return true;
+                                      } else {
+                                        return false;
+                                      }
+                                    } else {
                                       if (
                                         item.defaultVariantItem
                                           .variant_item_id ==
@@ -1200,10 +2238,11 @@ const Index = ({
                                         return true;
                                       } else {
                                         return false;
-                                      }                 
-                                  } 
-                                  else{
-                                    return true
+                                      }
+                                    }
+                                  } else {
+                                    //   setAddonCombination(selectedItem?.addons || []);
+                                    return true;
                                   }
                                 } else {
                                   return false;
@@ -1229,7 +2268,7 @@ const Index = ({
                               }`,
                             }}
                             onClick={() =>
-                              initialState?.addons
+                              customization
                                 ? setAddonVisible(true)
                                 : adjustQty(
                                     initialState.defaultVariantItem
@@ -1547,7 +2586,7 @@ const Index = ({
                             <PlusOutlined />
                           </span>
                         </div>
-                        {initialState?.addons ? (
+                        {customization ? (
                           <p className="text-black font-montMedium ">
                             * Customization Available
                           </p>
@@ -2247,14 +3286,432 @@ const Index = ({
         showModal={showModal}
       />
 
-      <AddonModalPdp
-      addonVisible={addonVisible}
-      setAddonVisible={setAddonVisible}
-      selectedVariant={selectedVariant}
-      
-      
-      />
-    
+      <Modal
+        visible={addonVisible}
+        onOk={handleAddonOk}
+        afterClose={handleAddonClose}
+        destroyOnClose={true}
+        onCancel={handleAddonCancel}
+        footer={null}
+        okButtonProps={{ disabled: true }}
+        cancelButtonProps={{ disabled: true }}
+        width={800}
+        style={{ height: "100px" }}
+      >
+        <div className="max-h-[80vh] overflow-scroll">
+        {!showCustomItemData ? (
+          // =================================================================== 1ST MODAL ====================================================================//
+
+          <div className="p-4 w-full flex item-center  flex-col" >
+            <form
+              onSubmit={(e) => {
+                handleConfirmAddons(e);
+              }}
+              id="form"
+            >
+              <p
+                className="font-montBold text-lg px-12 "
+                style={{
+                  color: storeSettings.data
+                    ? storeSettings.data.secondary_color
+                    : "black",
+                }}
+              >
+                {initialState.data ? initialState.data.item_name : ""}
+              </p>
+              <p className="font-montSemiBold text-[16px]  px-12 -mt-3">
+                Customize Your Product
+              </p>
+
+              {initialState?.addons &&
+                Object.keys(initialState?.addons).map((mapId, index) => {
+                  const item = initialState?.addons[mapId];
+
+                  return (
+                    <div className="px-12 py-2" key={index}>
+                      <p className="text-black font-montMedium ">
+                        {item.add_on_title}
+                        {item.is_mandatory == "Y" ? (
+                          <span className="font-montSemiBold text-red-600 px-2">
+                            *
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </p>
+                      <p className="text-slate-400 text-[12px] -mt-3 font-montMedium ">
+                        {item.add_on_description}
+                      </p>
+                      {item.add_on_group_type == "CHECKLIST" ? (
+                        item.add_on_options?.map((value, index) => {
+                          return (
+                            <div className=" w-1/2 flex" key={index}>
+                              <div className="flex ">
+                                <Checkbox
+                                  onChange={(e) => {
+                                    handleAddonChange(
+                                      e,
+                                      item?.min_qty,
+                                      item.max_qty,
+                                      item.add_on_group_id,
+                                      item._is_mandatory,
+                                      value
+                                    );
+                                  }}
+                                  defaultChecked={false}
+                                  name={item.add_on_group_id}
+                                  // checked={addonsAdded?.some(item =>
+
+                                  //     item.add_on_option_id == value.add_on_option_id
+
+                                  // )
+                                  // }
+                                  value={{
+                                    ...value,
+                                    add_on_group_id: item.add_on_group_id,
+                                    add_on_title: item.add_on_title,
+                                    add_on_mapping_id: mapId,
+                                  }}
+                                  style={{ color: "black" }}
+                                >
+                                  <div className="flex justify-between  w-[20vw]">
+                                    <p className="font-montRegular px-4">
+                                      {" "}
+                                      {value.add_on_name}
+                                    </p>
+                                    <p className="font-montMedium pr-2">
+                                      {storeDetails?.currency_symbol}{" "}
+                                      {value.price}
+                                    </p>
+                                  </div>
+                                </Checkbox>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : item.add_on_group_type == "LONG_TEXT" ? (
+                        <TextArea
+                          rows={4}
+                          maxLength={item?.max_qty ? item?.max_qty : 100}
+                          onChange={(e) => {
+                            handleAddonInstructions(
+                              e,
+                              item.add_on_group_id,
+                              item.add_on_title,
+                              mapId,
+                              item.add_on_group_type
+                            );
+                          }}
+                          title={item.add_on_description}
+                          required={item.is_mandatory == "Y" ? true : false}
+                        />
+                      ) : (
+                        <Input
+                          type="text"
+                          className=""
+                          maxLength={item?.max_qty ? item?.max_qty : 100}
+                          minLength={item?.min_qty ? item?.min_qty : ""}
+                          onChange={(e) => {
+                            handleAddonInstructions(
+                              e,
+                              item.add_on_group_id,
+                              item.add_on_title,
+                              mapId,
+                              item.add_on_group_type
+                            );
+                          }}
+                          title={item.add_on_description}
+                          required={item.is_mandatory == "Y" ? true : false}
+                        />
+                      )}
+                      {/* {item.mandatory ? <p className='text-red-600 font-montMedium py-2'>Addon {index + 1} is mandatory.Cannot add this product without it. Kindly choose to proceed</p> : ''} */}
+                    </div>
+                  );
+                })}
+              <div className="w-full flex justify-center">
+                <button
+                  className="px-10 py-2 self-center "
+                  style={{
+                    color: `${
+                      storeSettings.data
+                        ? storeSettings.data.navbar_color
+                        : "white"
+                    }`,
+                    backgroundColor: `${
+                      storeSettings.data
+                        ? storeSettings.data.secondary_color
+                        : "black"
+                    }`,
+                  }}
+                  // onClick={
+                  //   // addonsAdded.length==0 || addonsAdded.filter(
+                  //   //   (item) => item.add_on_title != "Cooking Instructions"
+                  //   // )?.length < addonMinQty
+                  //   //   ? () => {
+                  //   //       toast.error(` ${addonMinQty?`Minimum Addon Quantity is ${addonMinQty}`:`Please Add Minimum Quantity`}`, {
+                  //   //         position: "bottom-right",
+                  //   //         autoClose: 1000,
+                  //   //         hideProgressBar: false,
+                  //   //         closeOnClick: true,
+                  //   //         pauseOnHover: true,
+                  //   //         draggable: true,
+                  //   //         progress: undefined,
+                  //   //       });
+                  //   //     }
+                  //   //   :
+
+                  // }
+                >
+                  Confirm
+                  <span className="pl-12">
+                    {" "}
+                    {storeDetails?.currency_symbol} {priceWithAddon}
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          // =================================================================== 2nd MODAL ====================================================================//
+          <div className="p-16">
+            {initialState.variants?.length > 0
+              ? customItemData?.addons
+                  ?.filter((item) => variantFilter(item))
+                  .map((itemMap, key) => {
+                    return (
+                      <div
+                        className="py-2 w-full flex item-center  flex-col"
+                        key={key}
+                      >
+                        <div>
+                          <div>
+                            {/* ----------------------------------------------------------- INCREMENT AND DECREMENT BUTTONS ---------------------------------------------------- */}
+
+                            <IncreDecrButton
+                              storeSettings={storeSettings}
+                              decrAddQty={decrAddQty}
+                              incrAddQty={incrAddQty}
+                              uId={itemMap.id}
+                              rgbaBackground={rgbaBackground}
+                              addQty={itemMap.qty}
+                              rgbaColor={rgbaColor}
+                              item_name={customItemData.item_name}
+                            />
+
+                            {customItemData?.defaultVariantItem ? (
+                              <p className="font-montMedium px-4 -mt-6">
+                                {
+                                  customItemData?.defaultVariantItem
+                                    ?.variant_value_1?.variant_group_name
+                                }
+                                :{" "}
+                                {
+                                  customItemData?.defaultVariantItem
+                                    ?.variant_value_1?.variant_value_name
+                                }
+                                ,{" "}
+                                {
+                                  customItemData?.defaultVariantItem
+                                    ?.variant_value_2?.variant_group_name
+                                }
+                                :{" "}
+                                {
+                                  customItemData?.defaultVariantItem
+                                    ?.variant_value_2?.variant_value_name
+                                }{" "}
+                                {itemMap?.variant_value_name}
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {/* --------------------------------------------------- Addons Lists ------------------------------------------------ */}
+
+                            <div
+                              className="flex flex-col pl-4 mt-4"
+                              style={{ width: "100%" }}
+                            >
+                              <p className="pl-4 -mt-3"></p>
+                              {(() => {
+                                const newVar = groupBy(
+                                  itemMap?.addons || [],
+                                  "add_on_title"
+                                );
+                                return Object.keys(newVar).map(
+                                  (item, index) => {
+                                    const addons = newVar[item];
+
+                                    return (
+                                      <div
+                                        className="flex flex-wrap w-196"
+                                        key={0}
+                                      >
+                                        <p className="font-montMedium px-1 -mt-3 whitespace-nowrap">
+                                          {item}:
+                                        </p>
+                                        {addons.map((addon, num) => {
+                                          return (
+                                            <p
+                                              className="font-montRegular whitespace-nowrap break-words px-1 -mt-3"
+                                              key={num}
+                                            >
+                                              {addon.add_on_name
+                                                ? addon.add_on_name
+                                                : addon.text}
+                                              ,
+                                            </p>
+                                          );
+                                        })}
+                                      </div>
+                                    );
+                                    // })
+                                  }
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+              : (customItemData?.addons || []).map((itemMap) => {
+                  return (
+                    <div
+                      className="py-2 w-full flex item-center  flex-col"
+                      key={0}
+                    >
+                      <div>
+                        <div>
+                          {/* ----------------------------------------------------------- INCREMENT AND DECREMENT BUTTONS ---------------------------------------------------- */}
+
+                          <IncreDecrButton
+                            storeSettings={storeSettings}
+                            decrAddQty={decrAddQty}
+                            incrAddQty={incrAddQty}
+                            uId={itemMap.id}
+                            rgbaBackground={rgbaBackground}
+                            addQty={itemMap.qty}
+                            rgbaColor={rgbaColor}
+                            item_name={customItemData.item_name}
+                          />
+
+                          {customItemData?.defaultVariantItem ? (
+                            <p className="font-montMedium px-4 -mt-6">
+                              {
+                                customItemData?.defaultVariantItem
+                                  ?.variant_value_1?.variant_group_name
+                              }
+                              :{" "}
+                              {
+                                customItemData?.defaultVariantItem
+                                  ?.variant_value_1?.variant_value_name
+                              }
+                              ,{" "}
+                              {
+                                customItemData?.defaultVariantItem
+                                  ?.variant_value_2?.variant_group_name
+                              }
+                              :{" "}
+                              {
+                                customItemData?.defaultVariantItem
+                                  ?.variant_value_2?.variant_value_name
+                              }{" "}
+                            </p>
+                          ) : (
+                            ""
+                          )}
+                          {/* --------------------------------------------------- Addons Lists ------------------------------------------------ */}
+
+                          <div
+                            className="flex flex-col pl-4 mt-4"
+                            style={{ width: "100%" }}
+                          >
+                            <p className="pl-4 -mt-3"></p>
+                            {(() => {
+                              const newVar = groupBy(
+                                itemMap?.addons || [],
+                                "add_on_title"
+                              );
+                              return Object.keys(newVar).map((item, index) => {
+                                const addons = newVar[item];
+
+                                return (
+                                  <div
+                                    className="flex bg-red-400 w-100"
+                                    key={index}
+                                  >
+                                    <p className="font-montMedium px-1 -mt-3">
+                                      {item}:
+                                    </p>
+                                    {addons.map((addon, num) => {
+                                      return (
+                                        <p
+                                          className="font-montRegular px-1 -mt-3"
+                                          key={num}
+                                        >
+                                          {addon.add_on_name
+                                            ? addon.add_on_name
+                                            : addon.text}
+                                          ,
+                                        </p>
+                                      );
+                                    })}
+                                  </div>
+                                );
+                                // })
+                              });
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+            <div className="flex items-center mt-8  justify-center w">
+              <button
+                className="px-10 mx-2 py-2 self-center "
+                style={{
+                  color: `${
+                    storeSettings.data
+                      ? storeSettings.data.navbar_color
+                      : "white"
+                  }`,
+                  backgroundColor: `${
+                    storeSettings.data
+                      ? storeSettings.data.secondary_color
+                      : "black"
+                  }`,
+                }}
+                onClick={updateCartRecordafter}
+              >
+                Confirm
+              </button>
+
+              <button
+                className="px-10 py-2 self-center "
+                style={{
+                  color: `${
+                    storeSettings.data
+                      ? storeSettings.data.navbar_color
+                      : "white"
+                  }`,
+                  backgroundColor: `${
+                    storeSettings.data
+                      ? storeSettings.data.secondary_color
+                      : "black"
+                  }`,
+                }}
+                onClick={() => {
+                  setShowCustomItemData(false);
+                }}
+              >
+                I Will Choose
+              </button>
+            </div>
+          </div>
+        )}
+        </div> 
+      </Modal>
     </>
   ) : (
     <div className="flex justify-center items-center bg-white h-screen">

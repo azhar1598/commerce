@@ -43,13 +43,13 @@ export const addItemToCart = (cart, cartItem) => {
       let cart_variant_id;
 
       if (cartItem?.addons && cartItem.addons.length>0) {
-        variant_id = cartItem?.addons[0].variant_item_id;
+        variant_id = cartItem?.variantDetails?.variant_item_id;
       } else {
         variant_id == cartItem?.defaultVariantItem.variant_id;
       }
 
       if (item?.addons) {
-        cart_variant_id = item?.addons[0].variant_item_id;
+        cart_variant_id = item?.variantDetails?.variant_item_id;
       } else {
         cart_variant_id == item?.defaultVariantItem?.variant_id;
       }
