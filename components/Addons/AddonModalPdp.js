@@ -15,7 +15,7 @@ export const AddonModalPdp = ({
   storeDetails,
   selectedVariant,
   addToCart,
-  cart
+  cart,
 }) => {
   const [addonsAdded, setAddonsAdded] = useState([]);
   const [addonsFullInfo, setAddonsFullInfo] = useState({});
@@ -34,12 +34,18 @@ export const AddonModalPdp = ({
 
   const [addonCombination, setAddonCombination] = useState([]);
   const [confrmAddonCombination, setconfrmAddonCombination] = useState([]);
-
+  const[customItemData,setCustomItemData]=useState({})
 
   const handleAddonOk = () => {};
 
   const handleAddonClose = () => {
     // setAddonVisible(false)
+    setGivenCheckListQty(0);
+    setAddonsAdded([]);
+
+    // setSelectedItemWithAddonInCart()
+    // setAddonCombination([])
+    // setconfrmAddonCombination([])
   };
 
   const handleAddonCancel = () => {
@@ -47,22 +53,32 @@ export const AddonModalPdp = ({
   };
 
   useEffect(() => {
-    if (initialState?.defaultVariant)
+
+    console.log('cartttitem.defaultVariant,,,',initialState.defaultVariantItem?true:false)
+
+    if (initialState?.defaultVariantItem){
       setPriceWithAddon(initialState.defaultVariantItem.sale_price);
+    }
     else setPriceWithAddon(initialState.data?.sale_price);
-  }, [initialState.data, initialState.defaultVariant]);
+
+    setCustomItemData(initialState?.data)
+  }, [initialState.data, initialState.defaultVariantItem]);
 
   useEffect(() => {
     const selectedItem = cart?.find((item) => {
+      
       console.log("naviiii", item, cart);
       if (item.item_id == initialState.data?.item_id) {
         if (initialState?.defaultVariantItem) {
           if (
-            item.defaultVariantItem.variant_item_id ==
-            initialState?.defaultVariantItem?.variant_item_id
+            item.defaultVariantItem != null &&
+            item.addons[0].variantDetails.variant_item_id ==
+              selectedVariant.variant_item_id
           ) {
+            
             return true;
           } else {
+            
             return false;
           }
         } else {
@@ -74,10 +90,19 @@ export const AddonModalPdp = ({
         return false;
       }
     });
+
+
+console.log('selectedItemmmmm',selectedItem)
+debugger
+
     if (selectedItem) {
       setSelectedItemWithAddonInCart(selectedItem);
+      setCustomItemData({ ...customItemData, addons: selectedItem?.addons });
     }
-  }, [initialState?.data, initialState?.defaultVariant]);
+   
+
+
+  }, [initialState?.data, initialState?.defaultVariantItem]);
 
   //   Function to handle all the CHECKLIST Group
   const handleCheckList = (
@@ -185,25 +210,31 @@ export const AddonModalPdp = ({
   };
 
   const searchAddonInCart = () => {
+    console.log("cartttt", cart,selectedItem);
+
     const selectedItem = cart?.find((item) => {
-      if (initialState.variants.length > 0) {
+
+console.log('cartttitem.defaultVariant,,,',item.defaultVariantItem?true:false)
+
+      if (item.defaultVariantItem) {
         if (
           item.defaultVariantItem != null &&
-          item.defaultVariantItem.variant_item_id ==
+          item.addons[0].variantDetails.variant_item_id ==
             selectedVariant.variant_item_id
         ) {
-          return item;
+          return true;
+        } else {
+          return false;
         }
-      } else if (item.item_id == initialState.data?.item_id) {
-        return item;
-      }
+      } else if (item.item_id == initialState.data?.item_id) return true;
+      else return false;
     });
+if(selectedItem){
     return selectedItem?.addons;
+}
   };
 
   const isDuplicateCart = (addons, duplicate) => {
-
-
     const addonsCombin = addons.map((addon) => {
       return addon?.id === duplicate?.id
         ? { ...addon, qty: addon.qty + 1 }
@@ -212,7 +243,7 @@ export const AddonModalPdp = ({
 
     setAddonCombination([...addonsCombin]);
     let data = addonsCombin;
-    let data1 = customItemData;
+    let data1 = selectedItemWithAddonInCart;
     data1.addons = data;
 
     const quantity = qtySum(data, "qty");
@@ -228,11 +259,17 @@ export const AddonModalPdp = ({
 
   const confirmAddonCombination = (e) => {
     e.preventDefault();
-    console.log("addd", addonsAdded, addonsFullInfo);
+    console.log("addd", cart, addonsAdded, addonsFullInfo);
+    
+
 
     let item = initialState?.data;
 
     let getAddons = searchAddonInCart() || [];
+
+
+
+    console.log('cartttgetaddons',getAddons)
 
     // item.addons=[addonsFullInfo]
     // item.qty=addonsFullInfo.qty
@@ -243,11 +280,13 @@ export const AddonModalPdp = ({
 
     // console.log("getAddons", getAddons, addonCombination, addonValidation);
 
-    if ( getAddons?.length) {
+    if (getAddons?.length) {
       let groupByaddonsWithQty = groupBy(addonsFullInfo.addons, "add_on_title");
       let addonCombinationGroupby;
+      debugger;
       console.log("length greater than 1");
       if (initialState.variants.length) {
+        debugger;
 
         let duplicate = getAddons.find((item) => {
           addonCombinationGroupby = groupBy(item.addons, "add_on_title");
@@ -257,26 +296,24 @@ export const AddonModalPdp = ({
           );
         });
         if (duplicate) {
+          debugger;
           isDuplicateCart(getAddons, duplicate);
         } else {
-    
-
+          debugger;
           let data = [...getAddons, addonsFullInfo];
           setAddonCombination(data);
-          let data1 = addonsFullInfo;
+          let data1 = selectedItemWithAddonInCart;
           data1.addons = data;
 
-    
-          data1.qty = qtySum(data, "qty");;
+          data1.qty = qtySum(data, "qty");
           data1.addon_data = initialState?.addons;
 
-         
           setSelectedItemWithAddonInCart(data1);
           setconfrmAddonCombination(data1);
 
-          console.log("combination", addonCombination);
+          console.log("combinationasc", data1, addonCombination);
 
-          addToCart(data1);
+          // addToCart(data1);
 
           setAddonVisible(false);
         }
@@ -291,14 +328,12 @@ export const AddonModalPdp = ({
         if (duplicate) {
           isDuplicateCart(getAddons, duplicate);
         } else {
-    
-
           let data = [...getAddons, addonsFullInfo];
           setAddonCombination(data);
           let data1 = selectedItemWithAddonInCart;
           data1.addons = data;
 
-          data1.qty = qtySum(data, "qty");;
+          data1.qty = qtySum(data, "qty");
           data1.addon_data = initialState?.addons;
           setSelectedItemWithAddonInCart(data1);
           setconfrmAddonCombination(data1);
@@ -306,50 +341,65 @@ export const AddonModalPdp = ({
           console.log("combination", addonCombination);
           addToCart(data1);
 
-          handleAddonCancel()
+          handleAddonCancel();
         }
       }
     } else {
-
       if (initialState?.variants.length) {
         let data = [...getAddons, addonsFullInfo];
-        let data1 = selectedItemWithAddonInCart;
-        data1.addons = data;
+
+console.log('addd yaha check kar cart',cart,data)
+
+        debugger
+
+// Looks Like Problem Lies From Here Start
+
+        // let data1 = selectedItemWithAddonInCart;
+
+
+// This Line has problem
+        let data1 = customItemData
+// End
+
+        data1.addons = data
+       
+
+        console.log("yahaaa lag raha hai",initialState?.data, data1, cart);
+
         data1.defaultVariantItem = selectedVariant;
 
-        setAddonCombination(data);
+        // setAddonCombination(data);
 
-    
-        data1.qty = qtySum(data, "qty");;
-        data1.addon_data = initialState?.addons;
+        // data1.qty = qtySum(data, "qty");
+        // data1.addon_data = initialState?.addons;
 
-        setSelectedItemWithAddonInCart(data1);
-        setconfrmAddonCombination(data1);
+        // setSelectedItemWithAddonInCart(data1);
+        // setconfrmAddonCombination(data1);
 
+        // console.log("helllllo", data1, cart);
+
+        // Till Here End
 
         addToCart(data1);
 
-        handleAddonCancel()
+        handleAddonCancel();
       } else {
         let data = [...getAddons, addonsWithQty];
         let data1 = selectedItemWithAddonInCart;
         data1.addons = data;
         setAddonCombination(data);
 
-        data1.qty = qtySum(data, "qty");;
+        data1.qty = qtySum(data, "qty");
         data1.addon_data = initialState?.addons;
-    
+
         setSelectedItemWithAddonInCart(data1);
         setconfrmAddonCombination(data1);
 
-        
-     
         addToCart(data1);
 
-        handleClose()
+        handleAddonClose();
       }
     }
-      
   };
 
   return (

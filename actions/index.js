@@ -162,6 +162,10 @@ export const setStoreSettings = (data) => {
 };
 
 export const addToCart = (item) => {
+
+  console.log('itemmmm in action',item)
+debugger
+
   return {
     type: ADD_TO_CART,
     payload: item,
@@ -169,6 +173,7 @@ export const addToCart = (item) => {
 };
 
 export const addBulkCart = (item) => {
+  debugger
   return {
     type: ADD_BULK_TO_CART,
     payload: item,

@@ -34,22 +34,28 @@ export const addItemToCart = (cart, cartItem) => {
   // let itemExist = cart?.find((item) => item.item_id == cartItem.item_id);
 
   let index = -1;
+
+  debugger
+  console.log('cartttddd',cart,cartItem)
   
 
   if (cartItem?.addons) {
+    debugger
     const itemExist = cart?.find((item, num) => {
       console.log("naviiii", item, cart);
       let variant_id;
       let cart_variant_id;
 
       if (cartItem?.addons && cartItem.addons.length>0) {
-        variant_id = cartItem?.variantDetails?.variant_item_id;
+        debugger
+        variant_id = cartItem?.addons[0].variantDetails.variant_item_id;
       } else {
         variant_id == cartItem?.defaultVariantItem.variant_id;
       }
 
       if (item?.addons) {
-        cart_variant_id = item?.variantDetails?.variant_item_id;
+        debugger
+        cart_variant_id = item?.addons[0].variantDetails.variant_item_id;
       } else {
         cart_variant_id == item?.defaultVariantItem?.variant_id;
       }
@@ -58,13 +64,16 @@ export const addItemToCart = (cart, cartItem) => {
         if (item?.defaultVariantItem && cartItem.defaultVariantItem) {
           if (cart_variant_id == variant_id) {
             index = num;
+            debugger
             return true;
           } else {
+            debugger
             return false;
           }
         } else {
           //   setAddonCombination(selectedItem?.addons || []);
           index = num;
+          debugger
           return true;
         }
       } else {
@@ -85,12 +94,12 @@ export const addItemToCart = (cart, cartItem) => {
         else{
           
 
-         let filteredData=cartItem?.addons?.filter(item=>{
-          return item.qty>0
-         })
-console.log('filteredDataaaaaaaaaa',filteredData,cartItem,itemExist)
+//          let filteredData=cartItem?.addons?.filter(item=>{
+//           return item.qty>0
+//          })
+// console.log('filteredDataaaaaaaaaa',filteredData,cartItem,itemExist)
 
-cartItem.addons=filteredData
+// cartItem.addons=filteredData
 
 
          cart[index] = cartItem;
