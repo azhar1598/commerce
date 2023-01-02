@@ -50,6 +50,7 @@ export const Categories = ({
     dispatchSearchItems("");
 
     setCategoryKey(id);
+    
 
     // if (subCategories || subCategories == undefined) {
     //     subCategories.length == 0 &&

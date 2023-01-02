@@ -628,3 +628,10 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddonModalPdp);
+
+
+// swapcase = function swapcase(str) {
+//   return str.replace(/([a-z]+)|([A-Z]+)/g, function(match, chr) {
+//       return chr ? match.toUpperCase() : match.toLowerCase();
+//   });
+// }

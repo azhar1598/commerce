@@ -1101,7 +1101,7 @@ export const Product = (props) => {
                                         <button className='capitalize font-montMedium text-[#0000007F]'>{!props.wishlistPage ? wishlistId ? 'Added to wishlist' : 'Add to wishlist' : 'Added to wishlist'}</button>
                                     </div>
                                     :
-                                    <div className='w-52  ml-20 -pt-3'>
+                                    <divF className='w-52  ml-20 -pt-3'>
                                         {/* <SyncOutlined spin /> */}
 
 
@@ -1120,7 +1120,7 @@ export const Product = (props) => {
                                                 <SyncOutlined spin />
                                             </div>
                                         }
-                                    </div>}
+                                    </divF>}
                             </div>
 
                             {/* End of wishlist feature for web */}
@@ -1135,6 +1135,7 @@ export const Product = (props) => {
 
 
             }
+            
             <ToastContainer />
 
         </>

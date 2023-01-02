@@ -84,7 +84,6 @@ const cartReducer = (state = initialState, action) => {
     //         }
     //     })
     //     // cart: state.cart.filter(item => item.defaultVariantItem ? item.defaultVariantItem.variant_item_id !== action.payload.id : item.item_id !== action.payload.id)
-
     // }
 
     case DECREASE_ADDON:
